@@ -12,6 +12,9 @@ import android.widget.TextView;
 //todo hacer en el trabajo guaindose de https://developer.android.com/training/material/lists-cards.html
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.CustomViewHolder> {
+
+    private Pais[] listaDePaises;
+
     @Override
     public MyRecyclerAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;
