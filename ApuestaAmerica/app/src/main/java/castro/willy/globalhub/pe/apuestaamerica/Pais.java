@@ -23,6 +23,11 @@ public class Pais {
         this.imagenBitmap = imagenBitmap;
     }
 
+    public Pais(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
     public String getNombre() {
         return nombre;
     }

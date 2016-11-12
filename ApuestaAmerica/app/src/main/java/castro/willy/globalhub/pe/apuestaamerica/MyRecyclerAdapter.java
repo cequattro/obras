@@ -1,6 +1,7 @@
 package castro.willy.globalhub.pe.apuestaamerica;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,27 +16,43 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Cu
 
     private Pais[] listaDePaises;
 
+    public MyRecyclerAdapter(Pais[] lista)
+    {
+        listaDePaises=lista;
+    }
+
     @Override
     public MyRecyclerAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row, parent, false);
+        CustomViewHolder vh = new CustomViewHolder(v);
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(MyRecyclerAdapter.CustomViewHolder holder, int position) {
-
+        holder.txtPais.setText(listaDePaises[position].getNombre());
+        holder.txtUbicacion.setText(listaDePaises[position].getDescripcion());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaDePaises.length;
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public static class CustomViewHolder extends RecyclerView.ViewHolder {
         public TextView txtPais;
-        public TextView txtContinente;
+        public TextView txtUbicacion;
 
-        public CustomViewHolder(View itemView) {
+        public CustomViewHolder(View itemView) {//, TextView continente
             super(itemView);
+
+
+            txtPais = (TextView) itemView.findViewById(R.id.txtPais);
+            txtUbicacion = (TextView) itemView.findViewById(R.id.txtUbicacion);
+            //txtUbicacion=continente;
         }
     }
+
 }
