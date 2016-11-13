@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    View row;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         //crear adapter de recycler view y pasarle la lista de paises
+
+
     }
 
     @Override
@@ -70,6 +74,30 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.opSaldo) {
+            Snackbar.make(getCurrentFocus(), "Saldo", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        }
+
+        if (id == R.id.opApostar) {
+            Snackbar.make(getCurrentFocus(), "Apostar", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        }
+
+        if (id == R.id.opProgramacion) {
+            Snackbar.make(getCurrentFocus(), "Programacion", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        }
+
+        if (id == R.id.opApuestas) {
+            Snackbar.make(getCurrentFocus(), "Apuestas", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
             return true;
         }
 

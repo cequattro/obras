@@ -17,5 +17,20 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CuadroTextoGenerico">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+    </style>
+
+    <style name="CuadroTextoStandar" parent="CuadroTextoGenerico">
+        <item name="android:textColor">@color/colorTextStandar</item>
+    </style>
+
+    <style name="CuadroTextoResaltado" parent="CuadroTextoGenerico">
+        <item name="android:textColor">@color/colorBl</item>
+    </style>
+
 
 </resources>
