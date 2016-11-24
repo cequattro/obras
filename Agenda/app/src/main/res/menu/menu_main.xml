@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="agenda.castro.willy.globalhub.com.agenda.MainActivity">
+    <item
+        android:id="@+id/opSaldo"
+        android:orderInCategory="100"
+        android:title="Ver Saldo"
+        android:icon="@drawable/ic_view_module_black_18dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/opApostar"
+        android:orderInCategory="100"
+        android:title="Apostar"
+        android:icon="@drawable/ic_star_black_48dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/opProgramacion"
+        android:orderInCategory="100"
+        android:title="Ver Programacion"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opApuestas"
+        android:orderInCategory="100"
+        android:title="Ver Apuestas"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="agenda.castro.willy.globalhub.com.agenda.DetalleActivity">
+    <item
+        android:id="@+id/opGuardar"
+        android:orderInCategory="100"
+        android:title="Guardar"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opCerrar"
+        android:orderInCategory="100"
+        android:title="Cerrar"
+        app:showAsAction="never" />
+</menu>
