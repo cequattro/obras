@@ -52,16 +52,41 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        Contacto[] listaDeContactos={new Contacto("Willy","Castro","29","Lince"),
-                                    new Contacto("Richard","Garrido","30","Breña"),
-                                    new Contacto("Karina","Aguilar","29","La Victoria"),
-                                    new Contacto("Angelo","Rodas","29","San Luis"),
-                                    new Contacto("Arturo","Moquillaza","29","La Victoria"),
-                                    new Contacto("Carlos","Pereyra","29","Ventanilla")};
+        Bundle extras=getIntent().getExtras();
 
-        mAdapter = new MyRecyclerAdapter(listaDeContactos);
-        mRecyclerView.setAdapter(mAdapter);
+        if(extras!=null)
+        {
+            if("NUEVO".equals(extras.getString("MODO")))
+            {
+                Contacto[] listaDeContactos={new Contacto("Willy","Castro","29","Lince"),
+                        new Contacto("Richard","Garrido","30","Breña"),
+                        new Contacto("Karina","Aguilar","29","La Victoria"),
+                        new Contacto("Angelo","Rodas","29","San Luis"),
+                        new Contacto("Arturo","Moquillaza","29","La Victoria"),
+                        new Contacto("Carlos","Pereyra","29","Ventanilla"),
+                        new Contacto(extras.getString("NOMBRES"),extras.getString("APELLIDOS"),extras.getString("EDAD"),extras.getString("DISTRITO"))};
+
+                mAdapter = new MyRecyclerAdapter(listaDeContactos);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        }
+        else
+        {
+            Contacto[] listaDeContactos={new Contacto("Willy","Castro","29","Lince"),
+                    new Contacto("Richard","Garrido","30","Breña"),
+                    new Contacto("Karina","Aguilar","29","La Victoria"),
+                    new Contacto("Angelo","Rodas","29","San Luis"),
+                    new Contacto("Arturo","Moquillaza","29","La Victoria"),
+                    new Contacto("Carlos","Pereyra","29","Ventanilla")};
+
+            mAdapter = new MyRecyclerAdapter(listaDeContactos);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+
+        // specify an adapter (see also next example)
+
+
+
 
         //crear adapter de recycler view y pasarle la lista de paises
 

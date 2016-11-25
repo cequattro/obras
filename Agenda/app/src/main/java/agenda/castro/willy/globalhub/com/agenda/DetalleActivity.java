@@ -1,5 +1,6 @@
 package agenda.castro.willy.globalhub.com.agenda;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -87,9 +88,25 @@ public class DetalleActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.opGuardar) {
-            Snackbar.make(getCurrentFocus(), "Guardar", Snackbar.LENGTH_LONG)
+            /*Snackbar.make(getCurrentFocus(), "Guardar", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            return true;
+            return true;*/
+            finish();
+            if("NUEVO CONTACTO".equals(lblTituloDetalle.getText().toString()))
+            {
+
+                Intent nuevaVentana = new Intent(getBaseContext(), MainActivity.class);
+                nuevaVentana.putExtra("MODO","NUEVO");
+                nuevaVentana.putExtra("NOMBRES",txtDetNombres.getText().toString());
+                nuevaVentana.putExtra("APELLIDOS",txtDetApellidos.getText().toString());
+                nuevaVentana.putExtra("EDAD",txtDetEdad.getText().toString());
+                nuevaVentana.putExtra("DISTRITO",txtDetDistrito.getText().toString());
+
+                Log.i("Info new",txtDetNombres.getText().toString());
+
+                startActivity(nuevaVentana);
+            }
+
         }
 
         if (id == R.id.opCerrar) {
