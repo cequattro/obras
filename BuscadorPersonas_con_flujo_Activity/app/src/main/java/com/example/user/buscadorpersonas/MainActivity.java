@@ -2,7 +2,7 @@ package com.example.user.buscadorpersonas;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -146,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
                         .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
                         .setContentTitle("My notification")
                         .setContentText("Hello World!");
-        /*
+
 
 // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, DetallePersonaActivity.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
 
 // The stack builder object will contain an artificial back stack for the
 // started Activity.
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 // your application to the Home screen.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(ResultActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
 // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
-        */
+
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
