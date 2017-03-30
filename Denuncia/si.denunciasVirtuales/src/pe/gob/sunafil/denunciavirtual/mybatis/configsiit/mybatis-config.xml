@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/denunciavirtual/mybatis/configsiit/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.siit.persistence.model.IltbcUnidad"  alias="IltbcUnidadBean"/>		
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.siit.persistence.model.IltbcSoldenvirtual"  alias="IltbcSoldenvirtualBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.siit.persistence.model.IltmvRegistroentrada"  alias="IltmvRegistroentradaBean"/>		
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.siit.persistence.model.VstIntendenRegionales"  alias="VstIntendenRegionalesBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.siit.persistence.model.SitbEmpleador"  alias="SitbEmpleadorBean"/>
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		 
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		 
+		<!-- PARA PRODUCCION:-->
+		<!-- 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSLIBRORECLAMACIONES" />
+			</dataSource>			
+		</environment> 
+		 -->
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XSIIT.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/siit/persistence/map/IltbcUnidadMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/siit/persistence/map/IltbcSoldenvirtualMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/siit/persistence/map/IltmvRegistroentradaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/siit/persistence/map/VstIntendenRegionalesMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/siit/persistence/map/SitbEmpleadorMapper.xml" />
+	</mappers>
+</configuration>
+

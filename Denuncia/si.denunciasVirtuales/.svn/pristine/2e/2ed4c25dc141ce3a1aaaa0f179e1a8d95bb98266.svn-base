@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+
+<ui:define name="cabecera" />
+
+<ui:define name="datosUsuario" />
+
+
+<ui:define name="contenido">
+<br />
+<strong style="margin-left:15px; font-size: 18px;">Su sesión ha caducado.</strong>
+<p:spacer height="20" />
+
+			    <p:dialog header="Su sesión ha caducado" widgetVar="sessionTimeOutDialog"
+	            			modal="true" fixedCenter="true" closable="false" width="400" visible="true" 
+            			style="text-align: center !important;" resizable="false" >
+                		
+                		<p:fieldset  style="background-image: url('resources/images/logos/lupa_sunafil_fondo.png'); background-repeat: no-repeat;">
+                			<br/>
+                			<h:outputText value="Su sesión ha caducado, por favor pulse sobre el siguiente botón para volver a acceder a la aplicación." />
+                			<br/>
+                		</p:fieldset>
+                		<br />
+                		<input id="confirmBackToLogin" type="button" class="input_boton" value="Volver a Acceder a la Aplicación"
+                   			   onclick="window.location='#{facesContext.externalContext.requestContextPath}';" />
+           		</p:dialog>
+</ui:define>
+
+
+<ui:define name="monitorSesion" />
+
+<ui:define name="pie" />
+
+</ui:composition>
+</html>

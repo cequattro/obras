@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/denunciavirtual/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.bean.Combo"  	alias="comboBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.bean.Solicitud" alias="solicitudBean"/>
+		<typeAlias type="org.reniec.rel.ReniecBean"						alias="ReniecBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.bean.Persona" 	alias="Persona"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.bean.Empresa" 	alias="Empresa"/>
+		
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbPersona"  alias="SitbPersonaBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbDistrito"  alias="SitbDistritoBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbProvincia"  alias="SitbProvinciaBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbDepartamento"  alias="SitbDepartamentoBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbTipomoneda"  alias="SitbTipomonedaBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.DlmvdDocxsol"  alias="DlmvdDocxsolBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.DlmvSolicitud"  alias="DlmvSolicitudBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.DltbcDocumento"  alias="DltbcDocumentoBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.DltbcMateria"  alias="DltbcMateriaBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.DltbEmpleador"  alias="DltbEmpleadorBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbcEntidad"  alias="TdtbcEntidadBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbdCentrolab"  alias="TdtbdCentrolabBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbcTramite"  alias="TdtbcTramiteBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbcCorrelativo"  alias="TdtbcCorrelativoBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdmvcHojarutaKey"  alias="TdmvcHojarutaKeyBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbcIntendencia"  alias="TdtbcIntendenciaBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdtbcDependencia"  alias="TdtbcDependenciaBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.TdmvcRegistro"  alias="TdmvcRegistroBean"/>
+		<typeAlias type="pe.gob.sunafil.denunciavirtual.persistence.model.SitbDepxdistrito"  alias="SitbDepxdistritoBean"/>
+		
+		
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		 
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		 
+		<!-- PARA PRODUCCION:-->
+		<!-- 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSLIBRORECLAMACIONES" />
+			</dataSource>			
+		</environment> 
+		 -->
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XLogueo.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XCombos.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XEmpleador.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XReporte.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XPersonaReniec.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XWebService.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/mybatis/xml/XLevantamiento.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbPersonaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbDistritoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbProvinciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbDepartamentoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbTipomonedaMapper.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/DlmvdDocxsolMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/DlmvSolicitudMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/DltbcDocumentoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/DltbcMateriaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/DltbEmpleadorMapper.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbcEntidadMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbdCentrolabMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbcTramiteMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbcCorrelativoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdmvcHojarutaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbcIntendenciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdtbcDependenciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/TdmvcRegistroMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/denunciavirtual/persistence/map/SitbDepxdistritoMapper.xml" />
+		 
+	</mappers>
+</configuration>
+

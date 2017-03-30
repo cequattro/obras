@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Empleador">
+
+	<select id="verificarEmpMTPE" statementType="CALLABLE" parameterType="hashMap"  resultType="String">
+		{ call PKG_EMPRESA.SPR_OBT_EXISTE_EMP_MTPE
+			(
+				#{P_V_CODEMP, mode=IN,jdbcType=VARCHAR,javaType=String},
+				#{P_V_RESULT, mode=OUT,jdbcType=VARCHAR,javaType=String}
+			)
+		}
+	</select>
+	
+	<select id="obtieneNuevaSolicitud" resultType="String">
+	    SELECT ''||dlmv_solicitud_seq.NEXTVAL NID 
+	    from dual     
+    </select>        
+  
+</mapper>

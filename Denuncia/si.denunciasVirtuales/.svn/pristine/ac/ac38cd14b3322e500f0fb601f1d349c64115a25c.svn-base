@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantillaR.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+			<f:metadata>
+			    <f:viewParam name="v_param" value="#{levantamientoBean.v_param}" />
+			</f:metadata>
+			<p:commandButton id="btnDefecto" style="display: none;"/>
+			<p:defaultCommand target="btnDefecto"/>
+			<p:fieldset>			
+				<p:toolbar rendered="true">
+		   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+		      		 <p:outputLabel value="Levantamiento de Reserva de Identidad"/>
+		   			</p:toolbarGroup>
+				</p:toolbar>
+				<center><p:graphicImage rendered="false" value="/resources/images/principal/header5.png"/></center>
+				
+				<br/>
+		
+				<p:fieldset style="text-align: center;">	
+				
+					<center>
+					<h:panelGrid columns="1" rendered="true">
+				    	<p:messages id="mensajes" closable="true" escape="false"/>
+				    </h:panelGrid>
+				    </center>	
+				    
+				    <center>
+				    <h:panelGrid columns="1" rendered="#{levantamientoBean.mostrar_datos}" >
+				    
+				    	<p:toolbar rendered="false">
+				   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+				      		 <p:outputLabel style="font-size: 16px !important;" value="Su solicitud ha sido enviada de manera satisfactoria, a continuación se muestra el número de hoja de ruta y solicitud de inspección generados, los cuales le servirán para poder realizar el seguimiento respectivo."/>
+				   			</p:toolbarGroup>
+						</p:toolbar>    	
+				    	
+				    	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" style="font-size: 14px !important;" />
+							<h:inputHidden value="#{levantamientoBean.n_codsol}" />
+							<p:outputLabel value="Yo, #{levantamientoBean.nombre} autorizo el levantamiento de reserva de identidad." style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" />
+							<!-- 
+							<p:outputLabel value="Con C&oacute;digo Nro. #{levantamientoBean.n_codsol}" style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" />
+							<p:outputLabel value="Con Param: #{levantamientoBean.v_param}" style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" />
+				    	 	-->
+				    	<p:separator/>
+				    	
+				    	<p:outputLabel value="Para autorizar, debe dar click en el siguiente botón." style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" />    	    	
+				
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+				                      
+				    </h:panelGrid>        
+					</center>
+									
+				       
+				</p:fieldset>				
+	 	
+	 	
+			</p:fieldset>
+			
+			<center>
+	     	<h:panelGrid columns="1" style="text-align: center;" rendered="#{levantamientoBean.mostrar_datos}">     		      		      		
+	     		 <p:commandButton value="Autorizar" icon="ui-icon-key" action="#{levantamientoBean.datosConfirmacion}"/>
+	    	</h:panelGrid>
+	    	</center>    		    	
+    	
+	</h:form>		
+			
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Siit">
+    
+    <select id="insertarRegistroEntradaSIIT" resultType="String" parameterType="hashMap" statementType="CALLABLE">  			
+	{ call INSPECCIONES_REG_ENTRADA.SPR_INS_REXDENVIRTUAL(
+   				#{P_N_NUMDEP},
+				#{P_V_NUMREGMP}, 
+				#{P_V_ANHOREGMP},
+				#{P_D_FECINGMP}, 
+				#{P_V_NUMDREMMP},
+				#{P_V_REMITEMP}, 
+				#{P_V_NUMDOC},
+				#{P_V_APEPATER}, 
+				#{P_V_APEMATER}, 
+				#{P_V_NOMBRES},  
+				#{P_V_CODEMP},  
+				#{P_V_ASUNTO},  
+				#{P_N_COSOL}, 
+				#{P_V_FLGLEVRI},
+				#{P_V_FLGRES}, 
+				#{P_V_CODUSUREG},
+				#{P_V_HOSTREG},  
+   				#{P_O_NUMENTRA, mode=OUT,jdbcType=VARCHAR,javaType=String}
+   				)
+   			}
+	</select>
+  
+</mapper>

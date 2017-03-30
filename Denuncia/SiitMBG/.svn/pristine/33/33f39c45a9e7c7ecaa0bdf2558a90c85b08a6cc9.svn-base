@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" >
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@10.1.200.30:1521:DESASUNA" userId="SIIT" password="siit" />
+    <javaModelGenerator targetPackage="pe.gob.sunafil.denunciavirtual.siit.persistence.model" targetProject="SiitMBG" />
+    <sqlMapGenerator targetPackage="pe.gob.sunafil.denunciavirtual.siit.persistence.map" targetProject="SiitMBG" />
+    <javaClientGenerator targetPackage="pe.gob.sunafil.denunciavirtual.siit.persistence.client" targetProject="SiitMBG" type="XMLMAPPER" />
+    
+    <table schema="SIIT" tableName="iltbc_unidad" >
+    </table>
+    
+    <table schema="SIIT" tableName="iltbc_soldenvirtual" >
+    </table>
+    
+    <table schema="SIIT" tableName="iltmv_registroentrada" >
+    </table>
+    
+    <table schema="SIIT" tableName="VST_INTENDEN_REGIONALES" >
+    </table>
+    
+    <table schema="SIIT" tableName="iltbc_depxdistrito" >
+    </table>
+    
+    <table schema="SIMINTRA1" tableName="SITB_EMPLEADOR" >
+    </table>
+    
+  </context>
+</generatorConfiguration>

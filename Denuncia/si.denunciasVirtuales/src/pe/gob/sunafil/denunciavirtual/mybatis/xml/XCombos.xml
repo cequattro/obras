@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Combos">
+
+    <resultMap type="comboBean" id="listacombo-out" >
+    	<result column="v_codigo" 	property="v_codigo"/>
+    	<result column="v_descripcion" 	property="v_descripcion"/>
+    </resultMap>
+     
+     <select id="tiposDocumentoIde" fetchSize="20" resultMap="listacombo-out">
+		SELECT TD.V_CODTDOCIDE AS V_CODIGO, 
+		       TD.V_DESTDOCIDE AS V_DESCRIPCION
+		  FROM SIMINTRA1.SITB_TDOCIDE TD
+		 WHERE TD.N_FLGESTDOC = 1
+		   AND TD.V_CODTDOCIDE IN ('09', '06', '03', '08')
+		 ORDER BY DECODE(TD.V_CODTDOCIDE, '03', 'AAAA', '09', 'BBB', TD.V_DESTDOCIDE)
+     </select> 
+     <select id="departamentos" fetchSize="20" resultMap="listacombo-out">
+		SELECT T.V_CODDEP AS V_CODIGO, 
+			   T.V_DESDEP AS V_DESCRIPCION
+		  FROM SITB_DEPARTAMENTO T
+		 WHERE T.V_FLGACT = 1
+		 ORDER BY DECODE(T.V_CODDEP, '15', '00', T.V_CODDEP)
+     </select> 
+     
+     <!-- DEPARTAMENTOS EN LOS CUALES SOLO HAY COMPETENCIA SUNAFIL -->
+     <select id="departamentosEmp" fetchSize="20" resultMap="listacombo-out">
+		SELECT T.V_CODDEP AS V_CODIGO, 
+			   T.V_DESDEP AS V_DESCRIPCION
+		  FROM SITB_DEPARTAMENTO T, (SELECT DISTINCT DD.V_CODDEP FROM SIMINTRA1.SITB_DEPXDISTRITO DD WHERE DD.N_NUMDEPSUN IS NOT NULL) D
+		 WHERE T.V_FLGACT = 1 AND T.V_CODDEP=D.V_CODDEP
+		 ORDER BY DECODE(T.V_CODDEP, '15', '00', T.V_CODDEP)
+     </select> 
+     
+     <select id="tiposDeZona" fetchSize="20" resultMap="listacombo-out">
+		SELECT T.V_CODZONA AS V_CODIGO, 
+		       T.V_DESZON AS V_DESCRIPCION
+		  FROM SITB_ZONA T
+		 WHERE T.N_FLGSUNMIN = 0
+		   AND T.V_CODZONA NOT IN ('12')
+		ORDER BY DECODE(T.V_DESZON,'OTROS','99999','SIN ZONA','ZZZZZ',T.V_DESZON)
+     </select> 
+     <select id="tiposDeVia" fetchSize="20" resultMap="listacombo-out">
+		SELECT T.V_CODTVIA AS V_CODIGO, 
+		       T.V_DESTVIA AS V_DESCRIPCION
+		  FROM SITB_TIPVIA T
+		 WHERE T.V_CODTVIA NOT IN ('00','- ','99')
+		ORDER BY DECODE(T.V_DESTVIA,'OTROS','ZZZZZ',T.V_DESTVIA)
+     </select> 
+     <select id="intendencias" fetchSize="20" resultMap="listacombo-out">
+		SELECT T.N_NUMDEP AS V_CODIGO, 
+		       T.V_DESDEP AS V_DESCRIPCION
+		  FROM LRTBC_INTENDENCIAS T
+		 WHERE T.V_FLGACT='S'
+		 ORDER BY DECODE(T.N_NUMDEP,'462','AAAA','495','Intendencia Regional de Ao',T.V_DESDEP)
+     </select> 
+     
+     <select id="provinciasxDep" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODPRO AS V_CODIGO, 
+		       T.V_DESPRO AS V_DESCRIPCION
+		  FROM SITB_PROVINCIA T
+		 WHERE T.V_FLGACT = 1
+		   AND T.V_CODDEP = #{coddep}
+		 ORDER BY T.V_CODPRO
+     </select> 
+     
+     <!-- Cuando se selecciona un departamento de competencia sunafil se lista sus provincias de competencia SUNAFIL -->
+     <select id="provinciasxDepEmp" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODPRO AS V_CODIGO, 
+		       T.V_DESPRO AS V_DESCRIPCION
+		  FROM SITB_PROVINCIA T,  (SELECT DISTINCT DD.V_CODDEP, DD.V_CODPRO FROM SIMINTRA1.SITB_DEPXDISTRITO DD WHERE DD.N_NUMDEPSUN IS NOT NULL) P
+		 WHERE T.V_FLGACT = 1  AND T.V_CODDEP=P.V_CODDEP  AND T.V_CODPRO=P.V_CODPRO
+		   AND T.V_CODDEP = #{coddep}
+		 ORDER BY T.V_CODPRO
+     </select>
+     
+     <select id="distritosxPro" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODDIS AS V_CODIGO, 
+		       T.V_DESDIS AS V_DESCRIPCION
+		  FROM SITB_DISTRITO T
+		 WHERE T.V_FLGACT = 1
+		   AND T.V_CODDEP = #{coddep}
+		   AND T.V_CODPRO = #{codpro}
+		 ORDER BY T.V_CODDIS
+     </select> 
+     
+     <!-- Cuando se selecciona una provincia de competencia sunafil se lista sus distritos de competencia SUNAFIL -->
+     <select id="distritosxProEmp" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODDIS AS V_CODIGO, 
+		       T.V_DESDIS AS V_DESCRIPCION
+		  FROM SITB_DISTRITO T , SIMINTRA1.SITB_DEPXDISTRITO D
+		 WHERE T.V_FLGACT = 1 AND T.V_CODDEP=D.V_CODDEP AND T.V_CODPRO=D.V_CODPRO AND T.V_CODDIS=D.V_CODDIS AND D.N_NUMDEPSUN IS NOT NULL
+		   AND T.V_CODDEP = #{coddep}
+		   AND T.V_CODPRO = #{codpro}
+		 ORDER BY T.V_CODDIS
+     </select> 
+      
+	 <select id="tiposIdentifDeReclamo" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.N_CODTIPIDE AS V_CODIGO, 
+		       T.V_DESTIPIDE AS V_DESCRIPCION
+		  FROM LRTBC_TIPIDENRECLA T
+		 WHERE T.V_FLGACT = 'S'
+		 ORDER BY T.N_CODTIPIDE
+     </select>
+     
+     <select id="departamentoByCod" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODDEP AS V_CODIGO, 
+			   T.V_DESDEP AS V_DESCRIPCION
+		  FROM SITB_DEPARTAMENTO T
+		 WHERE T.V_FLGACT = 1 AND T.V_CODDEP = #{coddep}
+		 ORDER BY DECODE(T.V_CODDEP, '15', '00', T.V_CODDEP)
+     </select> 
+     
+     <select id="provinciaByCod" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODPRO AS V_CODIGO, 
+		       T.V_DESPRO AS V_DESCRIPCION
+		  FROM SITB_PROVINCIA T
+		 WHERE T.V_FLGACT = 1
+		   AND T.V_CODDEP = #{coddep}
+		   AND T.V_CODPRO = #{codpro}
+		 ORDER BY T.V_CODPRO
+     </select>
+     
+     <select id="distritoByCod" fetchSize="20" parameterType="hashMap" resultMap="listacombo-out">
+		SELECT T.V_CODDIS AS V_CODIGO, 
+		       T.V_DESDIS AS V_DESCRIPCION
+		  FROM SITB_DISTRITO T
+		 WHERE T.V_FLGACT = 1
+		   AND T.V_CODDEP = #{coddep}
+		   AND T.V_CODPRO = #{codpro}
+		   AND T.V_CODDIS = #{coddis}
+		 ORDER BY T.V_CODDIS
+     </select>
+	
+
+</mapper>

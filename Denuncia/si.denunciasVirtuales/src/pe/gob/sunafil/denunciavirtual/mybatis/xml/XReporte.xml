@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Reporte">
+
+<resultMap id="reporteConstanciaSolicitud-out" type="hashMap">
+  
+    
+    <result column="N_CODRECLAM" 		jdbcType="VARCHAR" 		property="N_CODRECLAM"		/>
+	<result column="n_anho" 			jdbcType="VARCHAR" 		property="N_ANHO" 	/>
+	<result column="v_sila" 			jdbcType="VARCHAR" 		property="V_SIGLA" 	/>
+	<result column="n_numdep" 			jdbcType="VARCHAR" 		property="N_NUMDEP" 	/>
+	<result column="v_desdependencia" 	jdbcType="VARCHAR"		property="V_DESDEPENDENCIA" 	/>
+	<result column="d_fecreg" 			jdbcType="VARCHAR" 		property="D_FECREG" 	/>
+	<result column="v_nombre_ent"		jdbcType="VARCHAR" 		property="V_NOMBRE_ENT" 	/>
+	<result column="v_tipusu"			jdbcType="VARCHAR" 		property="V_TIPUSU" 	/>
+	<result column="v_telfijo" 			jdbcType="VARCHAR" 		property="V_TELFIJO" 	/>
+	<result column="v_telcel" 			jdbcType="VARCHAR" 		property="V_TELCEL" 	/>
+	<result column="v_email" 			jdbcType="VARCHAR" 		property="V_EMAIL" 	/>
+	<result column="v_desdep" 			jdbcType="VARCHAR" 		property="V_DESDEP" 	/>
+	<result column="v_despro" 			jdbcType="VARCHAR" 		property="V_DESPRO" 	/>
+	<result column="v_desdis" 			jdbcType="VARCHAR" 		property="V_DESDIS" 	/>
+	<result column="v_domicilio" 		jdbcType="VARCHAR" 		property="V_DOMICILIO" 	/>
+	<result column="v_flgdemora" 		jdbcType="VARCHAR" 		property="V_FLGDEMORA" 	/>
+	<result column="v_flgimped" 		jdbcType="VARCHAR" 		property="V_FLGIMPED" 	/>
+	<result column="v_flginfoins" 		jdbcType="VARCHAR" 		property="V_FLGINFOINS" 	/>
+	<result column="v_flgtrato" 		jdbcType="VARCHAR" 		property="V_FLGTRATO" 	/>
+	<result column="v_flgtrato" 		jdbcType="VARCHAR" 		property="V_FLGTRATO" 	/>
+	<result column="v_flgotros" 		jdbcType="VARCHAR" 		property="V_FLGOTROS" 	/>
+	<result column="v_flgdesotros" 		jdbcType="VARCHAR" 		property="V_FLGDESOTROS" 	/>
+	<result column="v_desreclam" 		jdbcType="VARCHAR" 		property="V_DESRECLAM" 	/>
+    
+       
+  </resultMap>
+  
+  <select id="reporteConstanciaSolicitud" resultMap="reporteConstanciaSolicitud-out" parameterType="solicitudBean" useCache="true">
+  	select 
+       LPAD(r.n_codreclam,10,'0') n_codreclam,
+       TO_CHAR(r.n_anho) n_anho,
+       TO_CHAR(r.n_numdep) n_numdep,
+       i.v_sigla v_sila,
+       i.v_desdep v_desdependencia,
+       to_char(r.d_fecreg,'DD/MM/YYYY HH24')||':'||to_char(r.d_fecreg,'mi')||':'||to_char(r.d_fecreg,'ss') d_fecreg,
+       DECODE(E.V_CODTDOCIDE,'09',r.v_razsocins,e.v_apepat||' '||e.v_apemat||' '||e.v_nombres) v_nombre_ent,
+       DECODE(r.v_tipusu,'T','Trabajador','E','Empleador','') v_tipusu,
+       r.v_telfijo,
+       r.v_telcel,
+       lower(r.v_email) v_email,
+       dep.v_desdep,
+       pro.v_despro,
+       dis.v_desdis,
+       tv.v_abrvia||'. '||de.v_desdir||
+       decode(trim(de.v_numdir),null,'','','',' NRO. '||de.v_numdir)||
+       decode(z.v_deszon,'SIN ZONA','',', '||z.v_deszon||' '||de.v_deszona)||
+       decode(de.v_manzana,null,'','-','',', MNZ. '||de.v_manzana)||
+       decode(de.v_lote,null,'','-','',', LOT. '||de.v_lote) as v_domicilio,
+       v_flgdemora,
+       v_flgimped,
+       v_flginfoins,
+       v_flgtrato,
+       v_flgnegativa,
+       v_flgotros,
+       v_flgdesotros,
+       r.v_desreclam
+  from lrtbc_entidad e,
+       sitb_tdocide td,
+       lrtbc_intendencias i,
+       lrtbc_reclamo r,
+       lrtbd_domicilioent de,
+       sitb_distrito dis,
+       sitb_provincia pro,
+       sitb_departamento dep,
+       sitb_zona z,
+       sitb_tipvia tv,
+       (
+        select rxt.n_codreclam,rxt.n_numdep,rxt.n_anho,
+        decode(sum(decode(rxt.n_codtipide,1,1,0)),1,'X',' ') v_flgdemora,
+        decode(sum(decode(rxt.n_codtipide,2,1,0)),1,'X',' ') v_flgimped,
+        decode(sum(decode(rxt.n_codtipide,3,1,0)),1,'X',' ') v_flginfoins,
+        decode(sum(decode(rxt.n_codtipide,4,1,0)),1,'X',' ') v_flgtrato,
+        decode(sum(decode(rxt.n_codtipide,5,1,0)),1,'X',' ') v_flgnegativa,
+        decode(sum(decode(rxt.n_codtipide,99,1,0)),1,'X',' ') v_flgotros,
+        max(decode(rxt.n_codtipide,99,rxt.v_desotrtir,null)) v_flgdesotros
+        from lrtbd_recxidentif rxt
+        group by rxt.n_codreclam,rxt.n_numdep,rxt.n_anho
+       ) rxtir
+ where i.n_numdep = r.n_numdep
+       and r.n_codreclam = rxtir.n_codreclam
+       and r.n_anho = rxtir.n_anho
+       and r.n_numdep = rxtir.n_numdep
+       and e.v_numdoc = de.v_numdoc
+       and e.v_codtdocide = de.v_codtdocide
+       and e.v_codtdocide=td.v_codtdocide
+       and de.n_coddir = r.n_coddir
+       and de.v_numdoc = r.v_numdoc
+       and de.v_codtdocide = r.v_codtdocide
+       and de.v_coddep=dis.v_coddep
+       and de.v_codpro=dis.v_codpro
+       and de.v_coddis=dis.v_coddis
+       and de.v_coddep=pro.v_coddep
+       and de.v_codpro=pro.v_codpro
+       and de.v_coddep=dep.v_coddep
+       and de.v_codzona=z.v_codzona
+       and de.v_codtvia=tv.v_codtvia
+       and r.n_codreclam = #{n_codreclam}
+       and r.n_anho = #{n_anho}
+       and r.n_numdep = #{n_numdep}
+       order by r.n_numdep,r.n_anho,r.n_codreclam
+	
+  </select>
+  
+	
+</mapper>

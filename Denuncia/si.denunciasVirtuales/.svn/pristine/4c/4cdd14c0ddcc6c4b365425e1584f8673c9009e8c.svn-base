@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	
+	<h:form id="formInicio">
+	
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	
+	
+    
+	<p:fieldset>			
+		<p:toolbar rendered="false">
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="PASO 2: Ingresar Datos del Empleador"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+		<center><p:graphicImage value="/resources/images/principal/header2.png"/></center>
+		
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Empleador">
+	
+	<center>
+	<h:panelGrid columns="1" rendered="true">
+    	<p:messages id="mensajes" closable="true" autoUpdate="true"/>
+    </h:panelGrid>
+    </center>
+	
+	<h:panelGrid columns="1" >		
+                           
+         <p:outputLabel value="Estimado(a) #{denunciaBean.solicitud.persona.v_nombres} #{denunciaBean.solicitud.persona.v_appaterno} #{denunciaBean.solicitud.persona.v_apmaterno} favor de ingresar la siguiente información:" style="font-weight:bold;" /><br/>           
+                                  
+    </h:panelGrid> 
+    
+    <h:panelGrid columns="7" >
+    
+    	 <p:outputLabel value="Número de RUC :" />
+         <p:inputText style="width: 120px; opacity: 1 !important;" id="ruc" value="#{denunciaBean.solicitud.empresa.v_codemp}" maxlength="11"  
+         			  onkeydown="javascript:fn_enterRUC();" onkeypress="return soloNumeros(event);" onblur="javascript:fn_ingresar()" tabindex="1" disabled="#{denunciaBean.datos2MostrarSgte}"/>
+         <p:graphicImage value="/resources/images/principal/question.png" height="16px" width="16px" id="fade" rendered="true"/>
+         <p:outputLabel value="Razón social :" />
+         <p:outputLabel id="razonSocial" value="#{denunciaBean.solicitud.empresa.v_razsoc}" style="font-weight: bold;" />
+         <p:outputLabel id="lineaRazonSocial" value="____________________________" rendered="#{denunciaBean.solicitud.empresa.v_razsoc == null or empty denunciaBean.solicitud.empresa.v_razsoc}"/>
+         <p:graphicImage value="/resources/images/iconos/icon-circulo-check.png" height="16px" width="16px" id="id_img_chek_emp" rendered="false" />
+         <p:tooltip id="toolTipFade" for="fade" value="Presione ENTER luego de digitar el número de RUC." />
+          
+                      
+    </h:panelGrid>
+    
+    <p:row>
+    	<br />
+		<p:column colspan="6" style="text-align: left !important;">
+		<h:outputLabel value="Localización de Centro de Trabajo:" styleClass="contenido_separador" style="text-align: left !important;"/>
+		<p:separator/>
+		</p:column>
+		<br/>
+	</p:row>
+	
+	<h:panelGrid columns="7" id="id_datos_ubigeo_empleador" >
+	
+		<h:outputLabel value="Departamento"/>
+		<p:selectOneMenu disabled="#{denunciaBean.esMTPE == 'SI' or denunciaBean.datos2MostrarSgte}"
+				value="#{denunciaBean.solicitud.v_coddepemp}" tabindex="2" 
+				id="v_coddepemp" widgetVar="v_coddepemp" style="text-align:left;width:120px; opacity: 1 !important;" 
+				>
+				<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+				<f:selectItems var="lst"
+					value="#{combosBean.listaDepartamentosEmp}"
+					itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+					
+				<p:ajax event="change"
+						update=":formInicio:v_codproemp, :formInicio:v_coddisemp"
+						listener="#{denunciaBean.selCmbDepartamentoEmp}">
+				</p:ajax>
+		</p:selectOneMenu>		
+		<h:outputLabel value="Provincia"/>
+		<p:selectOneMenu disabled="#{denunciaBean.esMTPE == 'SI' or denunciaBean.datos2MostrarSgte}" 
+			value="#{denunciaBean.solicitud.v_codproemp}" tabindex="3"
+			id="v_codproemp" widgetVar="v_codproemp" style="text-align:left;width:120px; opacity: 1 !important;">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{denunciaBean.listaProvinciasEmp}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+			<p:ajax event="change" update=":formInicio:v_coddisemp"
+				listener="#{denunciaBean.selCmbProvinciaEmp}">
+			</p:ajax>
+		</p:selectOneMenu>
+		<h:outputLabel value="Distrito"/>
+		<p:selectOneMenu disabled="#{denunciaBean.esMTPE == 'SI' or denunciaBean.datos2MostrarSgte}" 
+			value="#{denunciaBean.solicitud.v_coddisemp}" tabindex="4"
+			id="v_coddisemp" widgetVar="v_coddisemp" style="text-align:left;width:120px; opacity: 1 !important;">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{denunciaBean.listaDistritosEmp}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+			<p:ajax event="change" />	
+		</p:selectOneMenu>
+		<p:graphicImage value="/resources/images/iconos/icon-circulo-check.png" height="16px" width="16px" id="id_img_chek_emp2" rendered="false" />
+	</h:panelGrid>
+    <br/>        
+	</p:fieldset>		
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="3" style="text-align: center;" id="id_botones_paso2">
+     		 <p:commandButton id="btnChangeUbigeoEmp" title="Cambiar" value="Cambiar" 
+											rendered="#{denunciaBean.datos2MostrarSgte}"
+											action="#{denunciaBean.cambiaDatosDeEmpPaso2}"
+											icon="icon-update" update=":formInicio:id_datos_ubigeo_empleador, :formInicio:id_botones_paso2, :formInicio:ruc, :formInicio:id_img_chek_emp,:formInicio:id_img_chek_emp2"
+											process="@this"/>     		 
+     		 <p:commandButton value="Validar" action="#{denunciaBean.activaDatos2EmpleadorSgte}" icon="ui-icon-check" update="@form" rendered="#{!denunciaBean.datos2MostrarSgte}"/>     		 
+     		 <p:commandButton value="Registrar Solicitud" action="#{denunciaBean.datos3Solicitud}" icon="ui-icon-disk" update="@form" rendered="#{denunciaBean.datos2MostrarSgte}"/>
+     		 <p:commandButton value="Salir" action="#{denunciaBean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>
+    	</h:panelGrid>
+    	</center>    	
+    	
+    	<p:commandButton value="&nbsp;Aceptar" action="#{denunciaBean.activaRuc}"
+								 id="btnIngresar" widgetVar="btnIngresar" ajax="false" style="display:none" update="growl,mensajes,razonSocial,lineaRazonSocial" />	    	
+    	
+	</h:form>	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>		
+	
+	<script type="text/javascript">  
+       //<![CDATA[
+       	function fn_ingresar(){
+       		document.getElementById("formInicio:btnIngresar").click();
+   	    }       		
+       	function fn_enterRUC(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar();
+       		}
+       	}	       	
+ 		//]]>
+	</script>
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Denuncia Virtual?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+			
+	</ui:define>
+</ui:composition>	
+</html>	

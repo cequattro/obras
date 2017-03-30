@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="PersonaReniec">
+
+     <resultMap type="Persona" id="lstPersonaRen-out" >
+    	<result column="v_codtdocide" 	 		property="v_codtdocide"/>
+    	<result column="v_numdoc" 	 			property="v_numdoc"/>   
+    	<result column="v_apepater" 	 		property="v_appaterno"/>   
+    	<result column="v_apemater" 	 		property="v_apmaterno"/>  
+    	<result column="v_nombres" 	 			property="v_nombres"/> 
+    	<result column="v_flgreniec" 	 		property="v_flgreniec"/>
+    	<result column="v_codverific" 	 		property="v_codverific"/> 
+    	
+     </resultMap>
+     <select id="lstPersona" statementType="CALLABLE" parameterType="hashMap"  resultMap="lstPersonaRen-out">
+   			{ call SIMINTRA1.PKG_TRABAJADOR.SPR_LIS_TRABAJADOR(
+   				#{v_codtdocide, mode=IN,jdbcType=VARCHAR,javaType=String},
+   				#{v_numdoc, mode=IN,jdbcType=VARCHAR,javaType=String},
+   				#{cursorOut, mode=OUT,jdbcType=CURSOR,resultMap=lstPersona-out,javaType=ResultSet}
+   				)
+   			}
+     </select>
+     
+     
+     <resultMap type="ReniecBean" id="getTrabajadorRen-out" > 
+    	<result column="v_appaterno"	property="v_appaterno"/>
+    	<result column="v_apmaterno" 	property="v_apmaterno"/>
+    	<result column="v_nombres" 	 	property="v_nombres"/>   
+    	<result column="v_genero" 	 	property="v_genero"/>
+    	<result column="v_codverific" 	property="v_codverific"/>
+    	<result column="v_fecnac" 	 	property="v_fecnac"/>      	  
+     </resultMap>
+     <select id="getTrabajador" statementType="CALLABLE" parameterType="hashMap"  resultMap="getTrabajadorRen-out">
+		{ call SIMINTRA1.PKG_WSRENIEC.SPR_OBT_TRABAJADORRENIEC(
+			#{P_V_DNI, mode=IN,jdbcType=VARCHAR,javaType=String},
+			#{cursorOut, mode=OUT,jdbcType=CURSOR,resultMap=getTrabajadorRen-out,javaType=ResultSet}
+			)
+		}
+     </select>
+       
+   <!-- ==========================================================INSERT=================================================================== -->  
+   <insert id="insertPersona" parameterType="hashMap" statementType="CALLABLE">
+	    { call SIMINTRA1.PKG_WSRENIEC.SPR_INS_PERSONARENIEC(
+			    #{v_numdoc},
+			    '03',
+			    #{v_appaterno},
+			    #{v_apmaterno},
+			    #{v_nombres},
+			    #{v_fecnac},
+			    #{v_genero},
+			    #{v_estciv},
+			    'S',
+			    #{v_nompadre},
+			    #{v_nommadre},
+			    #{v_fecinscrip},
+			    #{v_fecemision},
+			    #{v_codverific},
+			    #{v_coddepnac},
+			    #{v_codprovnac},
+			    #{v_coddisnac},
+			    #{v_desdepnac},
+			    #{v_desprovnac},
+			    #{v_desdisnac},
+			    #{v_coddepdom},
+			    #{v_codprovdom},
+			    #{v_coddisdom},
+			    #{v_desdepdom},
+			    #{v_desprovdom},
+			    #{v_desdisdom},
+			    #{v_dirdom},
+			    '012',
+			    #{v_nomusureg},
+			    #{v_ip},
+			    #{V_SALIDA, mode=OUT,jdbcType=VARCHAR,javaType=String}
+	    ) }          
+  </insert>
+  
+  <!-- ======================================================= UPDATE=============================================-->
+  
+  <update id="updatePersona" parameterType="hashMap" statementType="CALLABLE">
+	  { call SIMINTRA1.PKG_WSRENIEC.SPR_UPD_PERSONARENIEC(
+			    #{v_numdoc},
+			    '03',
+			    #{v_appaterno},
+			    #{v_apmaterno},
+			    #{v_nombres},
+			    #{v_fecnac},
+			    #{v_genero},
+			    #{v_estciv},
+			    'S',
+			    #{v_nompadre},
+			    #{v_nommadre},
+			    #{v_fecinscrip},
+			    #{v_fecemision},
+			    #{v_codverific},
+			    #{v_coddepnac},
+			    #{v_codprovnac},
+			    #{v_coddisnac},
+			    #{v_desdepnac},
+			    #{v_desprovnac},
+			    #{v_desdisnac},
+			    #{v_coddepdom},
+			    #{v_codprovdom},
+			    #{v_coddisdom},
+			    #{v_desdepdom},
+			    #{v_desprovdom},
+			    #{v_desdisdom},
+			    #{v_dirdom},
+			    '012',
+			    #{v_nomusureg},
+			    #{v_ip},
+			    #{V_SALIDA, mode=OUT,jdbcType=VARCHAR,javaType=String}
+	    ) }         
+  </update>
+  
+  
+  <!-- =============================================CONSULTA VERIFICACION SI ESTA ACTUALIZADO LOS DATOS DEPERSONA===================================  -->
+  <select id="verificaActuPersonaReniec" resultType="String" parameterType="hashMap" statementType="CALLABLE">
+  	{ call SIMINTRA1.PKG_WSRENIEC.SPR_OBT_EXISTEPERSRENIEC(
+   				#{v_numdoc, mode=IN,jdbcType=VARCHAR,javaType=String},
+   				#{P_V_EXISTE, mode=OUT,jdbcType=VARCHAR,javaType=String}
+   				)
+   	}
+  </select>
+  
+</mapper>

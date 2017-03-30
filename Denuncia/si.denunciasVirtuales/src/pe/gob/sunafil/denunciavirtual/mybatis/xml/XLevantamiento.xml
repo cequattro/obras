@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper  namespace="Levantamiento">
+
+	<!-- *** OBTIENE FECHA *** --> 
+    <select id="obtieneNombresxCodSol" resultType="string" parameterType="string">
+	    select p.v_apepater || ' ' || p.v_apemater || ' ' || p.v_nombres as nombre
+		  from dlmv_solicitud s, simintra1.sitb_persona p
+		 where s.v_codtdocide = p.v_codtdocide
+		   and s.v_numdoc = p.v_numdoc
+		   and s.n_codsol = #{n_codsol}
+    </select> 
+ 	<!-- **************************** --> 
+
+</mapper> 

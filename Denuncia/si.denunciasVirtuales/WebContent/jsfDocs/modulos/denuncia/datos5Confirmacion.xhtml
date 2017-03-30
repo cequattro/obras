@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	<h:panelGroup id="messagePanel" layout="block" rendered="false">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar rendered="false">
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="Solicitud de Actuación Inspectiva"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+		<center><p:graphicImage value="/resources/images/principal/header5.png"/></center>
+		
+	<br/>
+	
+	<p:fieldset style="text-align: center;">	
+	
+	<center>
+	<h:panelGrid columns="1" rendered="true">
+    	<p:messages id="mensajes" showDetail="true"/>
+    </h:panelGrid>
+    </center>	
+    
+    <h:panelGrid columns="1">
+    
+    	<p:toolbar rendered="true">
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel style="font-size: 16px !important;" value="Su solicitud ha sido enviada de manera satisfactoria generándose la hoja de ruta N° #{denunciaBean.registroGuardado.vNumhoja}-#{denunciaBean.registroGuardado.vAniohoja}-SUNAFIL, la cual le servirá para realizar el seguimiento respectivo en la página Web de la Sunafil a través de la opción Consulta tu Tramite o en el siguiente link: "/>
+      		 <h:outputLink value="http://appweb.trabajo.gob.pe/si.consultaWebSIIT/" style="font-size: 14px !important;color:#2424e3 !important;" target="_blank">
+			    http://appweb.trabajo.gob.pe/si.consultaWebSIIT/
+		   	</h:outputLink>
+   			</p:toolbarGroup>
+		</p:toolbar>    
+		
+		<p:outputLabel value="&nbsp;&nbsp;&nbsp;" style="font-size: 14px !important;" />
+		
+		<h:outputLink value="http://appweb.trabajo.gob.pe/si.consultaWebSIIT/" style="font-size: 14px !important;" target="_blank" rendered="false">
+		    http://appweb.trabajo.gob.pe/si.consultaWebSIIT/
+		</h:outputLink>	
+		
+		<p:separator rendered="false"/>    	    	
+    	
+    	<p:outputLabel value="&nbsp;&nbsp;&nbsp;Se ha generado la hoja de ruta N° #{denunciaBean.registroGuardado.vNumhoja}-#{denunciaBean.registroGuardado.vAniohoja}-SUNAFIL" style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" rendered="false" />
+    	
+    	<p:separator rendered="false"/>
+    	
+    	<p:outputLabel value="&nbsp;&nbsp;&nbsp;Se ha generado la solicitud de actuación inspectiva N° #{denunciaBean.solicitud.v_numsol}-#{denunciaBean.solicitud.v_anhosol}-SUNAFIL" style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" rendered="false" />
+    	
+    	<p:separator rendered="false"/>
+    	
+    	<p:outputLabel value="&nbsp;&nbsp;&nbsp;Su constancia se ha enviado al correo electrónico consignado. Puede imprimir su constancia en el siguiente botón." style="font-size: 14px !important;text-align: center !important;" styleClass="contenido_separador" />
+
+		<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+                      
+    </h:panelGrid>        
+
+						
+	       
+	</p:fieldset>				
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">
+     		 <p:commandButton value="Salir" action="#{denunciaBean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>     		      		 
+     		 <p:commandButton value="Imprimir" icon="ui-icon-print" action="#{denunciaBean.imprimirConfirmacion}" onclick="this.form.target = '_blank'" ajax="false"/>
+    	</h:panelGrid>
+    	</center>    		    	
+    	
+	</h:form>		
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Denuncia Virtual?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+			
+	</ui:define>
+</ui:composition>	
+</html>	

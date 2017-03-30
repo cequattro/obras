@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio" enctype="multipart/form-data">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	<h:panelGroup id="messagePanel" layout="block" rendered="false">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar rendered="false">
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="PASO 3: Registrar Solicitud de Actuación Inspectiva"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+		<center><p:graphicImage value="/resources/images/principal/header3.png"/></center>
+		
+	<br/>
+	
+	<h:panelGrid columns="2" >		
+                           
+         <p:outputLabel value="(*)" style="color:#e30613;font-weight:bold;" /><p:outputLabel value="Datos Obligatorios." style="font-weight:bold;color:#e30613;" /><br/>           
+                                  
+    </h:panelGrid>
+	
+	<p:fieldset style="text-align: left;" legend="Datos de la Denuncia">
+	
+	<center>
+	<h:panelGrid columns="1" rendered="true">
+    	<p:messages id="mensajes" closable="true"/>
+    </h:panelGrid>
+    </center>		        
+    
+    <h:panelGrid columns="3" >
+    
+    	<p:outputLabel>Descripción de Denuncia <span style="color:#e30613;font-weight:bold;">(*)</span></p:outputLabel>
+		<p:inputTextarea rows="7" cols="77" value="#{denunciaBean.solicitud.v_motivo}" onkeyup="this.value = this.value.toUpperCase();" counter="display" maxlength="1000" counterTemplate="quedan {0} caracteres.">
+		<p:ajax event="blur" />
+		</p:inputTextarea>
+		<h:outputText id="display" />
+                      
+    </h:panelGrid>
+    <!-- POR AHORA SE COMENTA PORQUE NO QUIEREN QUE VAYA PERO POR AHORA NADA MAS 
+    <h:panelGrid columns="4" rendered="#{denunciaBean.solicitud.v_flgrellab}" id="id_campos_materia" >
+	
+		 <p:outputLabel>Materia <span style="color:#e30613;font-weight:bold;">(*)</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p:outputLabel>
+         <p:selectOneMenu id="materia" widgetVar="materia" value="#{denunciaBean.solicitud.n_codmat}">
+			<f:selectItem itemLabel="-Seleccione-" itemValue="#{-1}" />
+			<f:selectItems value="#{denunciaBean.listaMateria}" var="tipo" itemLabel="#{tipo.vDesmat}" itemValue="#{tipo.nCodmat}" />
+			<p:ajax event="change" process="@this" update=":formInicio:id_campos_materia" />
+		</p:selectOneMenu>
+         <p:outputLabel rendered="#{denunciaBean.solicitud.n_codmat==4}">Especifique <span style="color:#e30613;font-weight:bold;">(*)</span></p:outputLabel>
+         <p:inputText style="width: 305px" id="especifique" value="#{denunciaBean.solicitud.v_desotros}" rendered="#{denunciaBean.solicitud.n_codmat==4}"/>
+	
+	</h:panelGrid>
+    -->
+    <p:row>
+    	<br/>
+		<p:column colspan="6" style="text-align: left !important;">
+		<h:outputLabel value="Documentos que sustentan la Denuncia:" styleClass="contenido_separador" style="text-align: left !important;"/>
+		<p:separator/>
+		</p:column>
+		<br/>
+	</p:row>
+	
+	<h:panelGrid columns="4" id="id_campos_de4adjuntos">
+	
+	<h:outputLabel>Copia de DNI: </h:outputLabel>
+	<p:fileUpload id="id_fileDNI" value="#{denunciaBean.fileDNI}" mode="simple" skinSimple="true" rendered="#{denunciaBean.fileDNIName == null}"/>
+	<p:outputLabel id="id_fileDNIName" value="#{denunciaBean.fileDNIName}" rendered="#{denunciaBean.fileDNIName != null}"/>
+	<h:outputLabel><span style="color:#e30613;font-weight:bold;">(*)</span></h:outputLabel>
+	<p:commandButton id="btnChangeFileDNI" title="Cambio de Archivo." value="Cambiar" style="height: 21px;"
+											rendered="#{denunciaBean.fileDNIName != null}"
+											action="#{denunciaBean.cambiaFileDNI}"
+											icon="icon-update" update=":formInicio:id_campos_de4adjuntos"
+											process="@this"/>
+    <h:outputLabel value="&nbps;" rendered="#{denunciaBean.fileDNIName == null}"/>
+    
+    
+    <h:outputLabel>Copia de Contrato: </h:outputLabel>
+	<p:fileUpload id="id_fileContrato" value="#{denunciaBean.fileContrato}" mode="simple" skinSimple="true" rendered="#{denunciaBean.fileContratoName == null}"/>
+	<p:outputLabel id="id_fileContratoName" value="#{denunciaBean.fileContratoName}" rendered="#{denunciaBean.fileContratoName != null}"/>
+	<h:outputLabel><span style="color:#e30613;font-weight:bold;">&nbsp;&nbsp;</span></h:outputLabel>
+	<p:commandButton id="btnChangeFileContrato" title="Cambio de Archivo." value="Cambiar" style="height: 21px;"
+											rendered="#{denunciaBean.fileContratoName != null}"
+											action="#{denunciaBean.cambiaFileContrato}"
+											icon="icon-update" update=":formInicio:id_campos_de4adjuntos"
+											process="@this"/>
+    <h:outputLabel value="&nbps;" rendered="#{denunciaBean.fileContratoName == null}"/>
+    
+    <h:outputLabel>Copia de Boleta: </h:outputLabel>
+	<p:fileUpload id="id_fileBoleta" value="#{denunciaBean.fileBoleta}" mode="simple" skinSimple="true" rendered="#{denunciaBean.fileBoletaName == null}"/>
+	<p:outputLabel id="id_fileBoletaName" value="#{denunciaBean.fileBoletaName}" rendered="#{denunciaBean.fileBoletaName != null}"/>
+	<h:outputLabel><span style="color:#e30613;font-weight:bold;">&nbsp;&nbsp;</span></h:outputLabel>
+	<p:commandButton id="btnChangeFileBoleta" title="Cambio de Archivo." value="Cambiar" style="height: 21px;"
+											rendered="#{denunciaBean.fileBoletaName != null}"
+											action="#{denunciaBean.cambiaFileBoleta}"
+											icon="icon-update" update=":formInicio:id_campos_de4adjuntos"
+											process="@this"/>
+    <h:outputLabel value="&nbps;" rendered="#{denunciaBean.fileBoletaName == null}"/>
+    
+    <h:outputLabel value="Otros documentos:"/>
+	<p:fileUpload id="id_fileOtros" value="#{denunciaBean.fileOtros}" mode="simple" skinSimple="true" rendered="#{denunciaBean.fileOtrosName == null}"/>
+	<p:outputLabel id="id_fileOtrosName" value="#{denunciaBean.fileOtrosName}" rendered="#{denunciaBean.fileOtrosName != null}"/>   
+    <h:outputLabel value="&nbps;"/>
+    <p:commandButton id="btnChangeFileOtros" title="Cambio de Archivo." value="Cambiar" style="height: 21px;"
+											rendered="#{denunciaBean.fileOtrosName != null}"
+											action="#{denunciaBean.cambiaFileOtros}"
+											icon="icon-update" update=":formInicio:id_campos_de4adjuntos"
+											process="@this"/>
+    <h:outputLabel value="&nbps;" rendered="#{denunciaBean.fileOtrosName == null}"/>
+	
+	</h:panelGrid>
+	
+	       
+	</p:fieldset>				
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="3" style="text-align: center;">
+     		 <p:commandButton value="Regresar" ajax="false" action="#{denunciaBean.retornarADatos3Solicitud}" icon="ui-icon-arrowthick-1-w" update="@form" onclick="statusDialog.show();"/>     		      		 
+     		 <p:commandButton value="Enviar" ajax="false" icon="ui-icon-disk" update="@form" action="#{denunciaBean.datos5Confirmacion}" onclick="statusDialog.show();"/>
+     		 <p:commandButton value="Salir" action="#{denunciaBean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>
+    	</h:panelGrid>
+    	</center>    		    	
+    	
+	</h:form>		
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Denuncia Virtual?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+			
+	</ui:define>
+</ui:composition>	
+</html>	

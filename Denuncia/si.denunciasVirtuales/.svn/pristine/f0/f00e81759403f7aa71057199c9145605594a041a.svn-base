@@ -1,0 +1,22 @@
+#Tamano de pagina
+#   % = automaticamente al 99% del tamano de la pantalla
+#   px = tamno a 1050
+sunafil.framework.pagina.tamano=px
+
+#Proteccion del Framework
+#=>boton_derecho, alt+f4, f5, crtl+N, Crtl+U, copiado
+#   yes = activa proteccion
+#   no = proteccion deshabilitada
+sunafil.framework.seguridad=no
+
+
+#Ruta del Log
+ruta.log=/configLog/log4j.properties
+####################################################
+#    UBICACION DE LAS FOTOS DE LOS INSPECTORES     #
+####################################################
+#PRUEBAS
+#ruta.fileserver=D\:/Willy/pdfdenuncia/
+ruta.fileserver=//10.1.50.39/pdfdenuncia/
+#PRODUCCION
+#ruta.fileserver=/aplicas/Appxxxx/

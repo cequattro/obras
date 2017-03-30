@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="datosUsuario"/>
+	<ui:define name="contenido">
+	
+		<p:fieldset style="text-align: center;" >
+			<br/><br/>
+			<h:form id="formInicio">
+				<h:graphicImage value="/resources/images/principal/terminos_generales_929x685.png" ismap="true" usemap="#maplogin"/>
+				<map name="maplogin">
+					<area shape="rect" coords="391,600,538,638" href="javascript:fn_ingresar();" />
+					<!-- <area shape="rect" coords="0,0,200,20" href="javascript:fn_mostrarGuiaUsuario();" />  -->
+				</map> 
+				<p:commandButton icon="icon-login" value="&nbsp;Aceptar" action="#{denunciaBean.datos1DenunciaVirtual}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" />
+				<p:commandButton icon="icon-pdf" value="&nbsp;Guía de Usuario" action="#{denunciaBean.mostrarGuiaUsuario}"
+							     id="btnGuiaUsuario" widgetVar="btnGuiaUsuario" style="display:none" onclick="this.form.target='_blank'" ajax="false"/>				 
+												 
+				
+			</h:form>
+			<script type="text/javascript">  
+	        //<![CDATA[
+	        	// coordenadas: Specifies the coordinates of the left, top, right, bottom corner of the rectangle (for shape="rect")
+	        	function fn_ingresar(){
+	        		document.getElementById("formInicio:btnIngresar").click();
+	    	    }			
+	        	function fn_mostrarGuiaUsuario(){
+	        		document.getElementById("formInicio:btnGuiaUsuario").click();
+	    	    }			
+	  		//]]>
+			</script> 
+		</p:fieldset>
+	</ui:define>
+</ui:composition>
+</html>

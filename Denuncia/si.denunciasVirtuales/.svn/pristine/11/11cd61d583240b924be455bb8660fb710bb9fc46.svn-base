@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	<h:panelGroup id="messagePanel" layout="block" rendered="false">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar rendered="false">
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="PASO 1: Ingresar Datos del Solicitante"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+		<center><p:graphicImage value="/resources/images/principal/header1.png"/></center> 
+		
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Solicitante">
+	
+	<center>
+	<h:panelGrid columns="1" rendered="true">
+    	<p:messages id="mensajes" closable="true" />
+    </h:panelGrid>
+    </center>
+		
+	<h:panelGrid columns="8" >		
+         <p:outputLabel value="Número de DNI" />
+         <p:inputText style="width: 120px" id="dni" value="#{denunciaBean.solicitud.persona.v_numdoc}" maxlength="8" onkeypress="return soloNumeros(event);"/>
+         <p:outputLabel value="Dígito Verificador de DNI" />
+         <p:inputText style="width: 60px" id="digito" value="#{denunciaBean.solicitud.persona.v_codverific}" maxlength="1" onkeypress="return soloNumeros(event);"/>
+         <p:graphicImage value="/resources/images/principal/question.png" height="16px" width="16px" id="fade" rendered="false"/>         
+         <p:outputLabel value="&nbsp;" />           
+         <p:commandButton value="Validar" action="#{denunciaBean.datos2Empleador}" icon="ui-icon-check" update="@form" rendered="true"/>
+         <p:tooltip id="toolTipFade" for="fade" value="Es el dígito consecutivo al número de DNI en físico" >
+         	<p:graphicImage value="/resources/images/principal/dni.png" id="fade2"/>  
+         </p:tooltip>                                          
+    </h:panelGrid>       
+    
+    <br/>
+    
+    <center style="border:1px dashed #bed6f8;width:100%;">
+    <h:panelGrid columns="1">
+    <p:graphicImage value="/resources/images/principal/dni_preview.png"/>
+    </h:panelGrid>
+    </center>       
+            
+	</p:fieldset>		
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">
+     		 <p:commandButton value="Validar" action="#{denunciaBean.datos2Empleador}" icon="ui-icon-check" update="@form" rendered="false"/>     		 
+    	</h:panelGrid>
+    	</center>    		    	
+    	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>			
+			
+	</ui:define>
+</ui:composition>	
+</html>	
