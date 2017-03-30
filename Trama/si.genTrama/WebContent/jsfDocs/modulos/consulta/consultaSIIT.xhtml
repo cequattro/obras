@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<center>
+		
+		<p:fieldset style="text-align: center;" >			
+			<p:toolbar>
+	   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Búsqueda de Solicitud"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<h:form id="formConsulta">
+			
+			
+			<br/>
+				<p:outputLabel value="Estimado Usuario Ud. podrá hacer seguimiento de las Solicitudes de Inspección de Trabajo ingresadas por Mesa de Partes a partir del 01.03.2015" 
+							   style="color:#D51218;font-weight:bold;text-align: center !important;"/>
+			
+			<br/>
+			<br/>
+				<p:panel id="panellstConsulta" style="width: 955px !important;" >
+					<center>
+					<p:panelGrid id="pglstConsulta" style="width: 950px !important;">
+							<p:row >
+								<p:column colspan="4">
+									<p:toolbar>
+							   			<p:toolbarGroup align="left" styleClass="ui-widget-header" style="border: 0px !important; ">
+							      		 <p:outputLabel value="DATOS DE BUSQUEDA" style="font-size: 11px !important;"/>
+							   			</p:toolbarGroup>
+									</p:toolbar>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column  style="text-align: left; width:250px !important; white-space: normal !important;">
+									<h:outputLabel value="Intendencia (Región donde presentó su denuncia):" style="text-align: left !important;"/>								
+								</p:column>
+								<p:column colspan="3" style="text-align: left">								
+									<p:selectOneMenu value="#{consultaBean.parametros.v_codIntendencia}" id="id_codIntendencia" 
+													 widgetVar="id_codIntendencia" style="text-align: left">
+										<f:selectItem itemLabel="--Seleccione la Intendencia--" itemValue="-1"/>
+											<f:selectItems value="#{consultaBean.lstIntendencias}" var="intend"
+														   itemLabel="#{intend.v_descripcion}" itemValue="#{intend.v_codigo}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>	
+							<p:row >
+								<p:column style="text-align: left !important;">								
+									<h:outputLabel value="Nro. de Registro de Solicitud:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left; width:200px !important; ">								
+									<p:inputText value="#{consultaBean.parametros.nroRegMP}" id="id_nroRegMP"  onkeypress="return soloNumeros(event);" maxlength="10"/>
+								</p:column>
+								<p:column style="text-align: left; width:25px !important; ">
+									<h:outputLabel value="A&ntilde;o:&nbsp;" style="text-align: left !important;"/>								
+								</p:column>
+								<p:column style="text-align: left !important; width:470px !important;">
+									<p:selectOneMenu value="#{consultaBean.parametros.anioRegMP}" id="id_anioRegMP" 
+													 widgetVar="id_anioRegMP" style="text-align: left !important;">
+											<f:selectItems value="#{consultaBean.lstAnhos}" var="anio"
+														   itemLabel="#{anio.v_descripcion}" itemValue="#{anio.v_codigo}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="text-align: left !important;">
+									<p:outputLabel value="Ingrese c&oacute;digo que se muestra en la imagen:" />								
+								</p:column>
+								<p:column style="text-align: left !important;">
+									<p:inputText value="#{consultaBean.codigoCaptchaValidar}" id="id_codigoCaptchaValidar" widgetVar="id_codigoCaptchaValidar" maxlength="4"/>
+										
+																	
+								</p:column>
+								<p:column colspan="2" style="text-align: left !important;">
+									<p:fieldset style="text-align: left !important;width:105px !important;" > 
+						    		<p:outputLabel value="#{consultaBean.cadenaCaptcha}" id="id_lblCaptcha" 
+						    						style="font-weight: bold !important; font-size: 20px !important; vertical-align: middle !important;"/>
+						    		<p:spacer height="10"></p:spacer>
+						    		<p:commandButton icon="icon-update" action="#{consultaBean.refrescarCaptcha}" 
+										 			update=":formConsulta:id_lblCaptcha" style="vertical-align: middle !important;"/>
+										 			
+									</p:fieldset>
+								</p:column>
+							</p:row>					 
+						</p:panelGrid>
+						</center>
+						<p:separator/>
+						<center >
+							<p:commandButton value="Buscar"
+											 icon="icon-search"											 
+											 action="#{consultaBean.realizarConsulta}"
+											 update=":formListaConsulta:dtlstConsulta, :formMensajes:msgMensajesConsolidado, :formConsulta:id_lblCaptcha,"
+											 />
+							<p:commandButton  value="Limpiar"
+								  			  icon="icon-escoba"
+								  			  action="#{consultaBean.inicializar}"
+								  			  update=":formConsulta:id_codIntendencia, 
+								  			  		  :formConsulta:id_nroRegMP, 
+								  			  		  :formConsulta:id_anioRegMP,
+								  			  		  :formConsulta:id_lblCaptcha,
+								  			  		  :formConsulta:id_codigoCaptchaValidar,
+								  			  		  :formListaConsulta:dtlstConsulta, :formMensajes:msgMensajesConsolidado"
+								  			  process="@this"
+											 />
+					</center>
+					<p:separator/>
+					<center>
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td><b>Estado:</b></td>
+							<td>
+								<table border="0" cellspacing="0" cellpadding="0" align="center" class="color_borde_tabla" style="border: 1px solid grey;">
+						  			<tr>
+						  				<td valign="middle" align="center" height="23px"><p:graphicImage value="/resources/images/iconos/icon-distribuida.png" width="11" height="11"  style="margin:5px" border="0"/></td>
+						  				<td valign="middle" align="center"><span style="color:#444444;font-weight:bold;vertical-align:middle">Orden en Tr&aacute;mite<p:spacer width="10"/></span></td>
+						  				<td valign="middle" align="center"><p:graphicImage value="/resources/images/iconos/icon-cerrada.png" width="11" height="11"  style="margin:5px" border="0"/></td>
+						  				<td valign="middle" align="center"><span style="color:#444444;font-weight:bold;vertical-align:middle">Orden Concluida<p:spacer width="10"/></span></td>
+						  			</tr>
+								</table>
+							</td>
+							<td>&nbsp;&nbsp;</td>
+							<td><b>Resultado:</b></td>
+							<td>
+								<table border="0" cellspacing="0" cellpadding="0" align="center" class="color_borde_tabla" style="border: 1px solid grey;">
+						  			<tr>
+						  				<td valign="middle" align="center" height="23px"><p:graphicImage value="/resources/images/iconos/icon-informe.png" width="14" height="14"  style="margin:5px" border="0"/></td>
+						  				<td valign="middle" align="center"><span style="color:#444444;font-weight:bold;vertical-align:middle">Informe<p:spacer width="10"/></span></td>
+						  				<td valign="middle" align="center"><p:graphicImage value="/resources/images/iconos/icon-actaInf.png" width="14" height="14"  style="margin:5px" border="0"/></td>
+						  				<td valign="middle" align="center"><span style="color:#444444;font-weight:bold;vertical-align:middle">Acta de Infracción<p:spacer width="10"/></span></td>
+						  			</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					</center>
+					
+				</p:panel>	
+			</h:form>
+			
+			
+			<br/>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false"/>
+			</h:form>
+			<br/>
+			<h:form id="formListaConsulta" >
+			
+				<p:dataTable id="dtlstConsulta" var="consulta" emptyMessage="No hay registros para mostrar"
+							 value="#{consultaBean.lstResultadoConsultaSIIT}"
+							 paginator="true"
+							 paginatorPosition="bottom"
+							 rows="10"
+							 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rowsPerPageTemplate="5,10,15"
+							 >
+					
+					<p:column headerText="N° de Registro" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+						<h:outputText value="#{consulta.v_nroRegMP}" style="text-align: center !important;"/>
+					</p:column>
+					<p:column headerText="N° de Orden de Inspecci&oacute;n" rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:60px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_nroOIC}" rendered="#{consulta.v_tipoLista == 'conOI'}"/>
+					</p:column>
+					<p:column headerText="Fecha de Asignaci&oacute;n de Orden de Inspecci&oacute;n"
+							  rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:50px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_fecAsigOI}" />
+					</p:column>
+					<p:column headerText="Inspector(es) Asignado(s)" rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:150px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_inspAsig}" escape="false"/>
+					</p:column>
+					<p:column headerText="Empresa Inspeccionada" rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:150px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_empresa}"  />
+					</p:column>
+					<p:column headerText="Ver Motivos de Inspecci&oacute;n" rendered="#{consulta.v_tipoLista == 'conOI'}"  
+							  style="text-align: center; width:60px !important; white-space: normal !important;">
+						<p:commandButton title="Ver Motivos de Inspección"
+									 icon="icon-searchMat"        
+									 oncomplete="dlgListaMaterias.show()"           
+	                                 action="#{consultaBean.mostrarMaterias}"
+	                                 update=":formListaMaterias"
+	                                 >
+							<f:param name="numorden" value="#{consulta.v_numordeninsp}"/>
+							<f:param name="anioorden" value="#{consulta.v_anioorden}"/>
+							<f:param name="numdeporden" value="#{consulta.n_numdeporden}"/>
+					    </p:commandButton>
+					</p:column>
+					<p:column headerText="Estado" rendered="#{consulta.v_tipoLista == 'conOI'}" 
+							  style="width:10px !important; white-space: normal !important;">
+						<p:graphicImage value="/resources/images/iconos/icon-cerrada.png" width="11" height="11" title="ORDEN CERRADA" 
+										style="margin:5px" border="0" rendered="#{consulta.v_estado=='CERRADA'}"/>
+						<p:graphicImage value="/resources/images/iconos/icon-distribuida.png" width="11" height="11" title="ORDEN DISTRIBUIDA" 
+										style="margin:5px" border="0" rendered="#{consulta.v_estado=='DISTRIBUIDA' or consulta.v_estado=='APERTURADA'}"/>
+					</p:column>
+					<p:column headerText="Resultado" rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:10px !important; white-space: normal !important;">
+						<p:outputLabel value="-" rendered="#{consulta.v_estado=='DISTRIBUIDA' or consulta.v_estado=='APERTURADA'}"/>
+						<p:graphicImage value="/resources/images/iconos/icon-informe.png" width="16" height="16" title="Terminó en Informe"  
+										style="margin:5px" border="0" rendered="#{consulta.v_resultado=='INFORME' and consulta.v_estado=='CERRADA'}"/>
+						<p:graphicImage value="/resources/images/iconos/icon-actaInf.png" width="16" height="16" title="Generó Acta de Infracción" 
+										style="margin:5px" border="0" rendered="#{consulta.v_resultado=='ACTA DE INFRACCION' and consulta.v_estado=='CERRADA'}"/>					
+					</p:column>
+					<p:column headerText="Oficina" rendered="#{consulta.v_tipoLista == 'conOI'}"
+							  style="width:50px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_subIntendencia}" />			
+					</p:column>
+					<p:column headerText="Ver Etapa Sancionadora" rendered="#{consulta.v_tipoLista == 'conOI'}" 
+							  style="width:60px !important; white-space: normal !important;">
+						<p:commandButton title="Ver Etapa Sancionadora"
+									 icon="icon-searchMat"        
+									 oncomplete="dlgEtapaSancionadora.show()"           
+	                                 action="#{consultaBean.mostrarEtapaSancioandora}"
+	                                 update=":formEtapaSancionadora"
+	                                 rendered="#{consulta.v_resultado!='INFORME'}"
+	                                 >
+							<f:param name="numorden" value="#{consulta.v_numordeninsp}"/>
+							<f:param name="anioorden" value="#{consulta.v_anioorden}"/>
+							<f:param name="numdeporden" value="#{consulta.n_numdeporden}"/>
+					    </p:commandButton>
+					    <h:outputLabel value="-" rendered="#{consulta.v_resultado == 'INFORME'}"/>
+					</p:column>	
+					<!-- CUANDO NO TIENEN ORDEN DE INSPECCION: -->
+					<p:column headerText="Estado de la Solicitud" rendered="#{consulta.v_tipoLista == 'sinOI'}" 
+							  style="width:130px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_estado}"  />
+					</p:column>	
+					<p:column headerText="Motivo" rendered="#{consulta.v_tipoLista == 'sinOI'}" 
+							  style="width:650px !important; white-space: normal !important;">
+						<h:outputText value="#{consulta.v_motivo}"  />
+					</p:column>				
+				</p:dataTable>	
+			</h:form>
+			
+			
+			<!-- ==========================================DIALOG DE LISTA DE MATERIAS=============================================== -->
+			<h:form id="formListaMaterias"> 
+				<p:dialog 	id="dlgListaMaterias"
+							widgetVar="dlgListaMaterias"
+							modal="true"
+							resizable="false"
+							header="LISTA DE MOTIVOS DE INSPECCION (MATERIAS)"
+							width="750"
+							showEffect="clip" hideEffect="clip"
+							closable="true"
+							> 
+						<br/>
+						<p:dataTable    id="dtListaMaterias" var="lstMaterias" emptyMessage="No hay materias para mostrar"
+										value="#{consultaBean.lstMaterias}" 
+							 			paginator="true" 
+										paginatorPosition="bottom"
+							 			rows="10"
+							 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 			rowsPerPageTemplate="5,10,15" 
+							 			resizableColumns="true"
+							 			>
+							 	<p:column headerText="Area" width="35" style="white-space: normal !important;" >
+									<h:outputText value="#{lstMaterias.v_area}" title="#{lstMaterias.v_area}" />
+								</p:column>
+								<p:column headerText="Materia" width="200" style="white-space: normal !important;" >
+									<h:outputText value="#{lstMaterias.v_materia}" title="#{lstMaterias.v_materia}" />
+								</p:column>		
+								<p:column headerText="Sub Materia" width="200" style="white-space: normal !important;">
+										<h:outputText value="#{lstMaterias.v_submateria}" title="#{lstMaterias.v_submateria}" />
+								</p:column>		
+						</p:dataTable>										 	
+						<p:commandButton onclick="dlgListaMaterias.hide();" value="Aceptar" icon="icon-seleccionar"/>
+				</p:dialog>
+			</h:form>
+			<!-- ==========================================DIALOG DE PROCEDIMIENTO SANCIONADOR=============================================== -->
+			<h:form id="formEtapaSancionadora"> 
+				<p:dialog 	id="dlgEtapaSancionadora"
+							widgetVar="dlgEtapaSancionadora"
+							modal="true"
+							resizable="false"
+							header="DATOS DE LA ETAPA SANCIONADORA"
+							width="750"
+							showEffect="clip" hideEffect="clip"
+							closable="true"
+							> 
+						<br/>
+						<p:dataTable    id="dtEtapaSancionadora" var="lstEtaSanc" emptyMessage="No hay datos para mostrar"
+										value="#{consultaBean.lstEtapaSancionadora}" 
+							 			paginator="true" 
+										paginatorPosition="bottom"
+							 			rows="10"
+							 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 			rowsPerPageTemplate="5,10,15" 
+							 			resizableColumns="true" 
+							 			>
+							 	<p:column headerText="Acta de Infracción" width="90" style="white-space: normal !important;"  >							 	
+									<h:outputText value="#{lstEtaSanc.v_actaInf}" title="#{lstEtaSanc.v_actaInf}"/>
+												  
+								</p:column>
+								<p:column headerText="Expediente Sancionador" width="90" style="white-space: normal !important;" >
+									<h:outputText value="#{lstEtaSanc.v_expSanc}" title="#{lstEtaSanc.v_expSanc}" />
+								</p:column>		
+								<p:column headerText="Resolución de Primera Instancia" width="90" style="white-space: normal !important;">
+										<h:outputText value="#{lstEtaSanc.v_resol1raIns}" title="#{lstEtaSanc.v_resol1raIns}" />
+								</p:column>		
+								<p:column headerText="Resolución de Segunda Instancia" width="90" style="white-space: normal !important;">
+										<h:outputText value="#{lstEtaSanc.v_resol2daIns}" title="#{lstEtaSanc.v_resol2daIns}" />
+								</p:column>		
+						</p:dataTable>
+						<p:commandButton onclick="dlgEtapaSancionadora.hide();" value="Aceptar" icon="icon-seleccionar"/>					 	
+						  	
+				</p:dialog>
+			</h:form>
+			<!-- EXIT -->
+			<h:form id="frmSalir">
+				<center>
+					<p:commandButton value="Salir" action="#{consultaBean.salir}" icon="icon-exit"></p:commandButton>
+	
+				</center>
+			</h:form>
+		</p:fieldset>
+		</center>
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	</ui:define>
+</ui:composition>	
+</html>	

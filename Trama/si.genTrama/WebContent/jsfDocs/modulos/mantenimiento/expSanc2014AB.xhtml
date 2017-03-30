@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<center>
+		
+		<p:fieldset style="text-align: center;" >			
+			<p:toolbar>
+	   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Registro de Expedientes 2014 A - B para la SIRE1 y SIRE2"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<h:form id="formConsulta">
+			
+			
+			<br/>
+				<p:panel id="panellstConsulta" style="width: 955px !important;" >
+					<center>
+					<p:panelGrid id="pglstConsulta" style="width: auto !important;">
+							<p:row >
+								<p:column colspan="2">
+									<p:toolbar>
+							   			<p:toolbarGroup align="left" styleClass="ui-widget-header" style="border: 0px !important; ">
+							      		 <p:outputLabel value="Ingreso de Datos" style="font-size: 11px !important;"/>
+							   			</p:toolbarGroup>
+									</p:toolbar>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:180px !important;">								
+									<h:outputLabel value="Nro. de Expediente a Generar:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left;">								
+									<p:inputText value="#{exp2014abBean.exp2014.v_numexpsanc}" id="v_numexpsanc"  onkeypress="return soloNumeros(event);" maxlength="9" size="12"/>
+									&nbsp;<p:outputLabel value="#{exp2014abBean.letra}" id="lb_Letra"/>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:150px !important;">								
+									<h:outputLabel value="Fecha de Ingreso de Acta:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left;">								
+									
+									<p:calendar value="#{exp2014abBean.exp2014.d_fecaper}" id="d_fecaper" showOn="button" pattern="dd/MM/yyyy"
+												required="true" requiredMessage="Debe ingresar la fecha de ingreso del Acta" 
+												converterMessage="Ingrese una fecha de ingreso de acta válida" size="12" maxlength="10"
+												/>
+									
+									<p:tooltip id="toolTipContent" for="d_fecaper"  >
+										<p:outputLabel value="Recuerde que con esta fecha se genera el Expediente Sancionador"/>
+										<br/>
+										<p:outputLabel value="(debe ser del 2014 para sus expedientes)"/>
+									</p:tooltip>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="SIRE:" style="text-align: left !important;"/>								
+								</p:column>
+								<p:column style="text-align: left">								
+									<p:selectOneMenu value="#{exp2014abBean.exp2014.n_numdepdes}" id="n_numdepdes" 
+													 widgetVar="n_numdepdes" style="text-align: left">
+									    <p:ajax event="change" update=":formConsulta:lb_Letra" listener="#{exp2014abBean.numdepdesSelChanged}" />
+										<f:selectItem itemLabel="--Seleccione--" itemValue="-1"/>
+										<f:selectItem itemLabel="SIRE 1" itemValue="465"/>
+										<f:selectItem itemLabel="SIRE 2" itemValue="466"/>
+									</p:selectOneMenu>
+									<p:tooltip id="toolTipContent3" for="n_numdepdes"  >
+										<p:outputLabel value="SIRE 1: Al Exp, se le pondrá la letra 'A'"/>
+										<br/>
+										<p:outputLabel value="SIRE 2: Al Exp, se le pondrá la letra 'B'"/>
+									</p:tooltip>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:150px !important;">								
+									<h:outputLabel value="Nro. de Acta de Infración:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left;">								
+									<p:inputText value="#{exp2014abBean.exp2014.v_numactinsp}" id="v_numactinsp"  onkeypress="return soloNumeros(event);" maxlength="10">
+										<p:ajax event="blur" update=":formConsulta:lb_datosActa" listener="#{exp2014abBean.obtieneDatosActa}" />
+									</p:inputText>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:150px !important;">								
+									<h:outputLabel value="Año de Acta de Infración:&nbsp;" style="text-align: left !important;"/>
+								</p:column>
+								<p:column style="text-align: left;">								
+									<p:selectOneMenu value="#{exp2014abBean.exp2014.v_anhoacta}" id="v_anhoacta" 
+													 widgetVar="v_anhoacta" style="text-align: left">
+										<f:selectItem itemLabel="--Seleccione--" itemValue="-1"/>
+										<f:selectItem itemLabel="2014" itemValue="2014"/>
+										<f:selectItem itemLabel="2013" itemValue="2013"/>
+										<f:selectItem itemLabel="2012" itemValue="2012"/>
+										<p:ajax event="change" update=":formConsulta:lb_datosActa" listener="#{exp2014abBean.obtieneDatosActa}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column colspan="2" style="text-align: center !important;font:bold !important;">
+									<p:fieldset id="lb_datosActa">
+										<p:outputLabel id="id_datosActa" value="#{exp2014abBean.datosActa}" escape="false"/>
+									</p:fieldset>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:150px !important;">								
+									<h:outputLabel value="Dependencia de Acta:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left;">								
+									<h:outputLabel value="Intendencia de Lima Metropolitana" style="text-align: left !important;"/>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left !important; width:150px !important;">								
+									<h:outputLabel value="Fecha de Notificacion del Acta:&nbsp;" style="text-align: left !important;"/>									
+								</p:column>
+								<p:column style="text-align: left;">																	
+									<p:calendar value="#{exp2014abBean.exp2014.d_fecnoti}" id="d_fecnoti" showOn="button" pattern="dd/MM/yyyy"
+												required="true" requiredMessage="Debe ingresar la fecha de notificacion del Acta" 
+												converterMessage="Ingrese una fecha de notificación de acta válida" size="12" maxlength="10"
+												/>
+									<p:tooltip id="toolTipContent2" for="d_fecnoti"  >
+										<p:outputLabel value="Fecha de Notificación del Acta de Infracción"/>
+									</p:tooltip>
+								</p:column>
+							</p:row>			 
+						</p:panelGrid>
+						</center>
+						<p:separator/>
+						<center >
+							<p:commandButton value="Grabar"
+											 icon="icon-disk"											 
+											 action="#{exp2014abBean.mostrarDlgAlertGrabar}"
+											 update=":formMensajes:msgMensajesConsolidado, :formAlertGrabar:dlgAlertGrabar"
+											 />
+							<p:commandButton value="Regresar"
+											 icon="icon-return"											 
+											 action="#{exp2014abBean.toInicio}"
+											 immediate="true"
+											 />
+							
+					</center>
+					<p:separator/>
+					
+				</p:panel>	
+			</h:form>
+			
+			
+			<!-- MENSAJES -->
+			<br/>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false" />
+			</h:form>
+			<br/>
+			<!-- DIALOG -->
+			<h:form id="formDialogConfirm"> 
+				<p:dialog 	id="dlgConfirm"
+							widgetVar="dlgConfirm"
+							modal="true"
+							resizable="false"
+							header="EXPEDIENTE REGISTRADO CORRECTAMENTE"
+							width="550"
+							showEffect="clip" hideEffect="clip"
+							closable="false"
+							visible="#{exp2014abBean.muestraDialogConfirm}"
+							>
+						<p:fieldset>
+							<center>
+							<br/>
+								<p:outputLabel value="#{exp2014abBean.mensajeOK}" escape="false" />
+							<br/>
+							</center>
+						</p:fieldset>
+						<p:commandButton icon="icon-return" value="&nbsp;Ir a Inicio" action="#{exp2014abBean.toInicio}"
+												 style="vertical-align: middle !important;"/> 
+						<p:commandButton icon="icon-login" value="&nbsp;Registrar Otro Expediente" action="#{exp2014abBean.toExpedientesAB}"
+												 style="vertical-align: middle !important;"/>
+						
+						
+				</p:dialog>
+			</h:form>
+			<h:form id="formAlertGrabar">
+			<p:confirmDialog id="dlgAlertGrabar"
+								 widgetVar="dlgAlertGrabar"
+								 header="Registrar Expediente 2014"
+								 message="¿Está seguro de registrar el Expediente?"
+								 severity="alert"
+								 visible="#{exp2014abBean.muestraDlgAlertGrabar}"
+								 width="350px">
+					<center >			 
+					<p:commandButton id="btnConfRegistrar"
+									 value="Confirmar"
+								  	 icon="icon-pref"
+								  	 action="#{exp2014abBean.registrarExp2014ab}"	
+								  	 update=":formDialogConfirm:dlgConfirm, :formMensajes:msgMensajesConsolidado, :formAlertGrabar:dlgAlertGrabar"
+								  	 />
+									 
+					<p:commandButton value="Cancelar"                				 
+	                                 oncomplete="dlgAlertGrabar.hide();"                               
+	                                 icon="icon-cancel" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+			</h:form>
+		
+		</p:fieldset>
+		</center>
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+		<script type="text/javascript">  
+	        //<![CDATA[
+    		function xDlgAlertGrabar(xhr, status, args) {
+        		//alert("Entra aqui");
+    			if(args.flagDlgAlertGrabar==true){
+    				//alert("Entra aqui2");
+    				dlgAlertGrabar.show();
+				}//else{alert("Debe completar los campos para validacion");}
+    			
+			}
+	  		//]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

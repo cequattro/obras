@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				elementFormDefault="qualified"
+				targetNamespace="http://ocpsoft.com/prettyfaces/3.3.3"
+				xmlns="http://ocpsoft.com/prettyfaces/3.3.3">
+
+<!-- =========================GENERAL==============================================-->
+	
+	<url-mapping id="manual">
+		<pattern value="/Manual" />
+		<view-id value="/faces/jsfDocs/ayuda/manuales/MANUAL_O_GUIA_DEL_USUARIO.pdf" />
+	</url-mapping>
+	
+	<url-mapping id="consulta">
+		<pattern value="/consulta" />
+		<view-id value="/faces/jsfDocs/modulos/consulta/consultaSIIT.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="expsancab">
+		<pattern value="/expab" />
+		<view-id value="/faces/jsfDocs/modulos/mantenimiento/expSanc2014AB.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="expsanc2014ilm">
+		<pattern value="/exp2014ilm" />
+		<view-id value="/faces/jsfDocs/modulos/mantenimiento/expSanc2014_ilm.xhtml" />
+	</url-mapping>
+	
+	
+	
+	
+	<url-mapping id="inicio">
+		<pattern value="/inicio" />
+		<view-id value="/faces/jsfDocs/frmInicio.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="inicioTxt">
+		<pattern value="/inicioTxt" />
+		<view-id value="/faces/jsfDocs/frmInicioTxt.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="cargaApp">
+		<pattern value="/cargaApp" />
+		<view-id value="/faces/index.jsp" />
+		<action>#{cargaAppBean.CargaApp}</action>
+	</url-mapping>
+	
+	<url-mapping id="salir">
+		<pattern value="/salir" />
+		<view-id value="/faces/jsfDocs/salir/frmSalir.xhtml" />
+	</url-mapping>
+	
+	
+	<!-- PAGINAS DE LOGUEO Y CAMBIO CONTRASENA -->	
+	<url-mapping id="login">
+		<pattern value="/login" />
+		<view-id value="/faces/jsfDocs/seguridad/loginUI.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="mnt_contrasena">
+		<pattern value="/Mantenimiento/Contrasena" />
+		<view-id value="/faces/jsfDocs/seguridad/mtn_contrasena.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="NewContrasena">
+		<pattern value="/Mantenimiento/NewContrasena" />
+		<view-id value="/faces/jsfDocs/seguridad/contrasena.xhtml" />
+	</url-mapping>
+	
+	<!-- PAGINAS DE ERRORES -->
+	
+	<url-mapping id="404">
+		<pattern value="/404" />
+		<view-id value="/faces/jsfDocs/errores/error404.xhtml" />
+	</url-mapping>
+	<url-mapping id="401">
+		<pattern value="/401" />
+		<view-id value="/faces/jsfDocs/errores/error401.xhtml" />
+	</url-mapping>
+	<url-mapping id="500">
+		<pattern value="/500" />
+		<view-id value="/faces/jsfDocs/errores/error500.xhtml" />
+	</url-mapping>
+	<url-mapping id="timeout">
+		<pattern value="/timeout" />
+		<view-id value="/faces/jsfDocs/errores/timeoutsession.xhtml" />
+	</url-mapping>
+	<url-mapping id="exception">
+		<pattern value="/exception" />
+		<view-id value="/faces/jsfDocs/errores/exception.xhtml" />
+	</url-mapping>
+	
+</pretty-config>

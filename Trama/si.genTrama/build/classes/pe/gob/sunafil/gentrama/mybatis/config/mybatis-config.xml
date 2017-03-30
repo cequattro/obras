@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/gentrama/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.gentrama.bean.Combo"  			alias="comboBean"/>
+		<typeAlias type="pe.gob.sunafil.gentrama.bean.Usuario"  			alias="Usuario"/>
+		<typeAlias type="pe.gob.sunafil.gentrama.bean.Permisos" 			alias="permisosBean"/>
+		<typeAlias type="pe.gob.sunafil.gentrama.bean.Expedientes2014AB" alias="Expediente"/>
+		
+    </typeAliases>
+ 
+	<environments default="production"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		
+		<!-- <environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment> -->
+		 
+		<!-- PARA PRODUCCION: -->
+		 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSGENTRAMA" />
+			</dataSource>			
+		</environment>
+		
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/gentrama/mybatis/xml/XConsultaSIIT.xml" />
+		 <mapper resource="pe/gob/sunafil/gentrama/mybatis/xml/XLogueo.xml" />
+		 <mapper resource="pe/gob/sunafil/gentrama/mybatis/xml/XSeguridad.xml" />
+		 <mapper resource="pe/gob/sunafil/gentrama/mybatis/xml/XExp2014AB.xml" />
+		 
+	</mappers>
+</configuration>
+

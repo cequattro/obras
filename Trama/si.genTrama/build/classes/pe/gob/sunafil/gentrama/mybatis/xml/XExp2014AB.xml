@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Exp2014AB">
+
+	
+ 	<resultMap type="string" id="registrarExp2014ab-out" > 
+   		<result column="v_result" property="v_result" />
+   	</resultMap>
+    <select id="registrarExp2014ab"  statementType="CALLABLE" parameterType="hashMap" resultMap="registrarExp2014ab-out"> 
+        { call SP_CREAR_EXPSANC2014AB(
+        	#{v_numexpsanc, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{d_fecaper, mode=IN,jdbcType=DATE,javaType=Date},
+        	#{n_numdepdes, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_numactinsp, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_anhoacta, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{n_numdep, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{d_fecnoti, mode=IN,jdbcType=DATE,javaType=Date},
+        	#{v_codusureg, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_hostreg, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{v_result, mode=OUT,jdbcType=VARCHAR,resultMap=registrarExp2014ab-out,javaType=String}
+		) }
+    </select>    
+   
+   
+   	<select id="obtDatosActa" resultType="string" parameterType="Expediente">
+	   
+	   SELECT 'RUC: ' || E.V_CODEMP || '  - RAZ. SOCIAL: ' || E.V_RAZSOC
+		  FROM ILTBC_ACTAINSPECCI A, ILTBC_ORDENINSPECCION O, SITB_EMPLEADOR E
+		 WHERE A.V_NUMORDENINSP = O.V_NUMORDENINSP
+		   AND A.V_ANHO = O.V_ANHO
+		   AND A.N_NUMDEP = O.N_NUMDEP
+		   AND O.V_CODEMP = E.V_CODEMP
+		   AND A.V_NUMACTINSP = LPAD(#{v_numactinsp},10,'0')
+		   AND A.V_ANHOACTA = #{v_anhoacta}
+		   AND A.N_NUMDEP = #{n_numdep}
+			   
+  	</select>
+  	
+  	<select id="registrarExp2014UnicoIlm"  statementType="CALLABLE" parameterType="hashMap" resultMap="registrarExp2014ab-out"> 
+        { call SP_CREAR_ES2014UNICOILM(
+        	#{v_numexpsanc, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{d_fecaper, mode=IN,jdbcType=DATE,javaType=Date},
+        	#{n_numdepdes, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_numactinsp, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_anhoacta, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{n_numdep, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{d_fecnoti, mode=IN,jdbcType=DATE,javaType=Date},
+        	#{v_codusureg, mode=IN,jdbcType=VARCHAR,javaType=String},
+        	#{v_hostreg, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{v_result, mode=OUT,jdbcType=VARCHAR,resultMap=registrarExp2014ab-out,javaType=String}
+		) }
+    </select> 
+  	
+</mapper>

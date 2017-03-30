@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="monitorSesion"/>
+	<ui:define name="datosUsuario"/>
+	<ui:define name="contenido">
+	<ui:include src="/jsfDocs/includes/opcion-lateral-der.xhtml"/>
+		<p:fieldset>
+			<p:toolbar>
+				<p:toolbarGroup align="center" >
+					<center>
+						<p:outputLabel value="Gracias por Utilizar el Aplicativo de Generaci&oacute;n de Trama" style="text-align: center !important;"/>						
+					</center>
+				</p:toolbarGroup>
+			</p:toolbar>
+		<center>
+		<br/>		
+		
+		<a class="ui-icon-home" href="#{request.contextPath}" title="Ir al Inicio">
+		   <img src="#{request.contextPath}/resources/images/principal/home.png" border="0" /> 
+		</a>
+		
+		</center>
+			<br />
+		</p:fieldset>		
+		<h:form id="formSalir">
+		<p:poll interval="5"  listener="#{cargaAppBean.CargaApp}"  async="true"/>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

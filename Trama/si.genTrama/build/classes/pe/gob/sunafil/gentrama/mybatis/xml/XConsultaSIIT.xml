@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="ConsultaSIIT">
+
+	<resultMap id="combobox-out" type="comboBean">            
+            <result property="v_codigo" column="v_codigo" />
+            <result property="v_descripcion" column="v_descripcion" />            
+     </resultMap>
+
+    <select id="obtieneIntendencias"  statementType="CALLABLE" parameterType="hashMap" resultMap="combobox-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_LST_INTENDENCIAS(
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=combobox-out,javaType=ResultSet}
+		) }
+    </select>
+    
+    <select id="obtieneAnhos"  statementType="CALLABLE" parameterType="hashMap" resultMap="combobox-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_LST_ANHOS(
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=combobox-out,javaType=ResultSet}
+		) }
+    </select>
+    
+    
+    
+ 	<resultMap type="string" id="verificarRMP-out" > 
+   		<result column="v_result" property="v_result" />
+   	</resultMap>
+    <select id="verificarRMP"  statementType="CALLABLE" parameterType="hashMap" resultMap="verificarRMP-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_VERIFICA_RMP(
+        	#{v_nroregmp, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{v_anioregmp, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{n_numdep, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{v_result, mode=OUT,jdbcType=VARCHAR,resultMap=verificarRMP-out,javaType=String}
+		) }
+    </select>
+    
+    
+    <resultMap id="consultaSIIT-out" type="hashMap">            
+	    <result column="V_NROREGMP" 		jdbcType="VARCHAR"  property="v_nroRegMP"/>
+		<result column="V_NROOIC" 			jdbcType="VARCHAR"  property="v_nroOIC"/>
+		<result column="V_FECASIGOI" 		jdbcType="VARCHAR"  property="v_fecAsigOI"/>
+		<result column="V_INSPASIG" 		jdbcType="VARCHAR"  property="v_inspAsig"/>
+		<result column="V_ESTADO" 			jdbcType="VARCHAR"  property="v_estado"/>
+		<result column="V_EMPRESA" 			jdbcType="VARCHAR"  property="v_empresa"/>
+		<result column="V_NUMORDENINSP" 	jdbcType="VARCHAR"  property="v_numordeninsp"/>
+		<result column="V_ANIOORDEN" 		jdbcType="VARCHAR"  property="v_anioorden"/>
+		<result column="N_NUMDEPORDEN" 		jdbcType="VARCHAR"  property="n_numdeporden"/>
+		<result column="V_RESULTADO" 		jdbcType="VARCHAR"  property="v_resultado"/>
+		<result column="V_SUBINTENDENCIA" 	jdbcType="VARCHAR"  property="v_subIntendencia"/>
+		<result column="V_MOTIVO" 			jdbcType="VARCHAR"  property="v_motivo"/>
+		<result column="V_TIPOLISTA" 		jdbcType="VARCHAR"  property="v_tipoLista"/>         
+    </resultMap>
+	 
+    <select id="consultaSIIT"  statementType="CALLABLE" parameterType="hashMap" resultMap="consultaSIIT-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_LST_CONSULTASIIT(
+        	#{v_nroregmp, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{v_anioregmp, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{n_numdep, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=consultaSIIT-out,javaType=ResultSet}
+		) }
+    </select>
+    
+	
+	<resultMap id="obtMateriasAsigXOI-out" type="hashMap">            
+	    <result column="V_AREA" 			jdbcType="VARCHAR"  property="v_area"/>
+		<result column="V_MATERIA" 			jdbcType="VARCHAR"  property="v_materia"/>
+		<result column="V_SUBMATERIA" 		jdbcType="VARCHAR"  property="v_submateria"/>
+    </resultMap>
+    <select id="obtMateriasAsigXOI"  statementType="CALLABLE" parameterType="hashMap" resultMap="obtMateriasAsigXOI-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_LST_MATERIASXOI(
+        	#{numorden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{anioorden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{numdeporden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtMateriasAsigXOI-out,javaType=ResultSet}
+		) }
+    </select>
+    	 
+	<resultMap id="obtListaEtapaSancionadora-out" type="hashMap">            
+	    <result column="V_ACTAINF" 			jdbcType="VARCHAR"  property="v_actaInf"/>
+		<result column="V_EXPSANC" 			jdbcType="VARCHAR"  property="v_expSanc"/>
+		<result column="V_RESOL1RAINS" 		jdbcType="VARCHAR"  property="v_resol1raIns"/>
+		<result column="V_RESOL2DAINS" 		jdbcType="VARCHAR"  property="v_resol2daIns"/> 
+    </resultMap>
+    <select id="obtListaEtapaSancionadora"  statementType="CALLABLE" parameterType="hashMap" resultMap="obtListaEtapaSancionadora-out"> 
+        { call PKG_CONSULTAWEBSIIT.SPR_LST_ETAPASANCXOI(
+        	#{numorden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{anioorden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{numdeporden, mode=IN,jdbcType=VARCHAR,javaType=String},
+   			#{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtListaEtapaSancionadora-out,javaType=ResultSet}
+		) }
+    </select>
+   
+</mapper>

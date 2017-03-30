@@ -1,0 +1,698 @@
+.tabs {
+    position: relative;
+	margin: 0px auto;
+	width: 1000px;
+    margin-bottom: 15px;
+}
+
+input[type=text]:disabled {
+    background-color: #ccc !important;    
+	border: 1px solid gray;
+}
+
+.tabs select {
+	font-size: 9px;
+}
+
+.tabs .options{
+	width: 1320px !important;
+}
+
+
+
+.tabs .options input[type=radio]{
+	position: absolute;
+	z-index: 1000;
+	width: 160px;/*120 distancias de tab*/
+	height: 15px;
+	left: 0px;
+	top: 0px;
+	opacity: 0;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+	cursor: pointer;
+}
+
+.tabs .group-radio {
+    display: inline-block;
+    height: 7px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-top: 30px;
+    text-align: left;
+    width: 1000px;
+}
+
+.tabs .group-radio span{
+	vertical-align: top;
+	font-family: tahoma,arial,helvetica,sans-serif;
+	font-size: 11px;
+	padding-right: 15px;
+}
+
+
+/*
+.tabs input[type=radio]#tab-2{
+	left: 160px; 120 distancias de tab  
+}
+.tabs input[type=radio]#tab-3{
+	left: 320px;240 distancias de tab
+}
+.tabs input[type=radio]#tab-4{
+	left: 640px; 360 distancias de tab
+}
+
+.tabs input[type=radio]#tab-5{
+	left: 1280px; 480 distancias de tab
+}
+*/
+
+
+
+.cursor {
+	background: #b6b6b6;
+	/*background: -moz-linear-gradient(top, #d50000 0%, #b71717 100%);*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d50000), color-stop(100%,#b71717));
+	background: -webkit-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -o-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%);
+	background: linear-gradient(top, #d50000 0%,#b71717 100%);
+	
+	border: 1px;
+	font-family: arial,tahoma,verdana,helvética;
+	font-weight: bold;
+	font-size: 11px;
+	color: #767676;
+	
+	line-height: 20px;
+	height: 44px;
+	position: relative;
+	padding: 0px;
+    float: left;
+	display: block;
+	width: 20px;/*80px distancias de tab*/
+	letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    border-radius: 3px 3px 0 0;
+    
+}
+
+.cursor2 {
+	background: #b6b6b6;
+	/*background: -moz-linear-gradient(top, #d50000 0%, #b71717 100%);*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d50000), color-stop(100%,#b71717));
+	background: -webkit-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -o-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%);
+	background: linear-gradient(top, #d50000 0%,#b71717 100%);
+	
+	border: 1px;
+	font-family: arial,tahoma,verdana,helvética;
+	font-weight: bold;
+	font-size: 11px;
+	color: #767676;
+	
+	line-height: 20px;
+	height: 22px;
+	position: relative;
+	padding: 0px;
+    float: left;
+	display: block;
+	width: 20px;/*80px distancias de tab*/
+	letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    border-radius: 3px 3px 0 0;
+    
+}
+
+.pestana {
+	background: #b6b6b6 !important;
+	/*background: -moz-linear-gradient(top, #d50000 0%, #b71717 100%);*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d50000), color-stop(100%,#b71717));
+	background: -webkit-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -o-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%);
+	background: linear-gradient(top, #d50000 0%,#b71717 100%);
+	
+	border: 1px;
+	font-family: arial,tahoma,verdana,helvética;
+	font-weight: bold;
+	font-size: 11px;
+	color: black;
+	
+	line-height: 20px;
+	height: 22px;
+	position: relative;
+	padding: 0px;
+    float: left;
+	width: 160px;/*80px distancias de tab*/
+	letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 2px 0 2px rgba(0,0,0,0.1), -2px 0 2px rgba(0,0,0,0.1);
+    cursor: pointer;
+    
+}
+
+.pestana_click {
+	background: #e20000 !important;
+	/*background: -moz-linear-gradient(top, #d50000 0%, #b71717 100%);*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d50000), color-stop(100%,#b71717));
+	background: -webkit-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -o-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%);
+	background: linear-gradient(top, #d50000 0%,#b71717 100%);
+	
+	border: 1px;
+	font-family: arial,tahoma,verdana,helvética;
+	font-weight: bold;
+	font-size: 12px;
+	color: white;
+	
+	line-height: 20px;
+	height: 22px;
+	position: relative;
+	padding: 0px;
+    float: left;
+	width: 160px;/*80px distancias de tab*/
+	letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 2px 0 2px rgba(0,0,0,0.1), -2px 0 2px rgba(0,0,0,0.1);
+    cursor: pointer;
+    
+}
+
+.pestana_dis {
+	background: #b6b6b6 !important;
+	/*background: -moz-linear-gradient(top, #d50000 0%, #b71717 100%);*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d50000), color-stop(100%,#b71717));
+	background: -webkit-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -o-linear-gradient(top, #d50000 0%,#b71717 100%);
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%);
+	background: linear-gradient(top, #d50000 0%,#b71717 100%);
+	
+	border: 1px;
+	font-family: arial,tahoma,verdana,helvética;
+	font-weight: bold;
+	font-size: 11px;
+	color: #919191;
+	
+	line-height: 20px;
+	height: 22px;
+	position: relative;
+	padding: 0px;
+    float: left;
+	width: 160px;/*80px distancias de tab*/
+	letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 2px 0 2px rgba(0,0,0,0.1), -2px 0 2px rgba(0,0,0,0.1);
+    cursor: pointer;
+    
+}
+
+
+/* cambio para lanzamiento de UAT */
+
+.options td:hover{
+		background: #d50000 !important;
+		color: #ccc !important;
+		font-weight: bold !important;
+
+}
+
+
+/* #tab-4:hover{ */
+/* 	background: #d50000 !important; */
+/* 		color: #ccc !important; */
+/* 		font-weight: bold !important; */
+/* } */
+/* #tab-5:hover{ */
+/* 	background: #d50000 !important; */
+/* 		color: #ccc !important; */
+/* 		font-weight: bold !important; */
+/* } */
+/* #tab-6:hover{ */
+/* 	background: #d50000 !important; */
+/* 		color: #ccc !important; */
+/* 		font-weight: bold !important; */
+/* } */
+/* #tab-8:hover{ */
+/* 	background: #d50000 !important; */
+/* 		color: #ccc !important; */
+/* 		font-weight: bold !important; */
+/* } */
+
+/* #tab-9:hover{ */
+/* 	background: #d50000 !important; */
+/* 		color: #ccc !important; */
+/* 		font-weight: bold !important; */
+/* } */
+/*fin cambio para lanzamiento de UAT */
+
+
+.tabs label:after {
+    content: '';
+	background: #fff;
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	display: block;
+}
+
+#tablaPlanSAS_filter label{
+	font-family: arial;
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    font-weight: normal !important;
+    line-height: normal !important;
+    
+}
+
+#tablaPlanSAS_filter input[type=text] {
+	width: 90%;
+}
+
+#tablaPlanSAS_filter{
+	border-bottom: 1px solid black;
+	padding: 4px 5px 5px 5px !important;
+	
+}
+
+#tablaClinicaSAS_filter label{
+	font-family: arial;
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    font-weight: normal !important;
+    line-height: normal !important;
+    
+}
+
+#tablaClinicaSAS_filter input[type=text] {
+	width: 77%;
+}
+
+#tablaClinicaSAS_filter{
+	border-bottom: 1px solid black;
+	padding: 4px 5px 5px 5px !important;
+	
+}
+
+.tabs input:hover + label {
+	background: #d50000;
+	color: #ccc;
+}
+/*
+.tabs label:first-of-type {
+    z-index: 5;
+    box-shadow: 2px 0 2px rgba(0,0,0,0.1);
+}
+
+.tab-label-2 {
+    z-index: 4;
+}
+
+.tab-label-3 {
+    z-index: 3;
+}
+
+.tab-label-4 {
+    z-index: 2;
+}
+
+.tab-label-5 {
+    z-index: 1;
+}
+*/
+
+.tabs input:checked + label {
+    background: #e20000;
+    border: 1px;
+    font-family: arial,tahoma,verdana,helvética;
+    font-weight: bold;
+    font-size: 12px;
+    color: #fff;
+}
+
+.clear-shadow {
+	clear: both;
+}
+
+.content {
+    background: #ccc;/*fff*/
+	position: relative;
+    width: 100%;
+	max-height: 900px;/*este es el alto del tab content*/
+	z-index: 7;
+    box-shadow: 0 -2px 3px -2px rgba(0,0,0,0.2), 0 2px 2px rgba(0,0,0,0.1);
+    border-radius: 0 3px 3px 3px;
+}
+/*
+.content div {
+    position: absolute;
+	top: 0;
+	left: 0;
+	padding-top: 0px;
+	padding-right: 40px;
+	padding-left: 40px;
+	padding-bottom: 10px;
+	z-index: 1;
+    opacity: 0;
+
+    -webkit-transition: opacity linear 0.1s;
+    -moz-transition: opacity linear 0.1s;
+    -o-transition: opacity linear 0.1s;
+    -ms-transition: opacity linear 0.1s;
+    transition: opacity linear 0.1s;
+}*/
+/*
+.tabs input.tab-selector-1:checked ~ .content .content-1,
+.tabs input.tab-selector-2:checked ~ .content .content-2,
+.tabs input.tab-selector-3:checked ~ .content .content-3,
+.tabs input.tab-selector-4:checked ~ .content .content-4
+.tabs input.tab-selector-5:checked ~ .content .content-5 
+.tabs input.tab-selector-5:checked ~ .content .content-6
+.tabs input.tab-selector-7:checked ~ .content .content-7{
+	z-index: 100;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity=100);
+    opacity: 1;
+
+    -webkit-transition: opacity ease-out 0.2s 0.1s;
+    -moz-transition: opacity ease-out 0.2s 0.1s;
+    -o-transition: opacity ease-out 0.2s 0.1s;
+    -ms-transition: opacity ease-out 0.2s 0.1s;
+    transition: opacity ease-out 0.2s 0.1s;
+}*/
+.content div h2,
+.content div h3{
+	color: #d50000;
+}
+
+.content div p {
+	font-size: 11px;/* wca 16072014 14px; */
+	line-height: 22px;
+	/*font-style: italic;*/ /* wca 16072014 commented */
+	text-align: left;
+	margin: 0;
+	/*color: #000;*/ /* wca 16072014 #777; */
+	padding-left: 15px;
+	font-family: Arial; /* wca 16072014 Cambria, Georgia, serif; */
+	border-left: 8px solid rgba(63,148,148, 0.1);	
+}
+
+.etiqueta {
+    color: #767676;
+    font-weight: bold;
+    text-align: left;  
+    margin-right: 5px;
+    font-family: Verdana, Arial, Helvetica;
+    font-size: 11px;
+}
+
+.etiquetalabel {
+    color: #000;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: tahoma, arial, helvetica, sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    line-height: normal;
+    width: 150px !important
+}
+
+.etiquetalabelCombo {
+    color: #000;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: tahoma, arial, helvetica, sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    line-height: normal;
+    width: 500px !important
+}
+
+.tituloBox {
+    font-weight: bold;
+    font-family: arial;
+    font-size: 12px !important;
+}
+
+.tituloBoxCarpeta {
+	background-color: #e20000 !important;
+    font-weight: bold;
+    font-family: arial;
+    font-size: 12px !important;
+    width: 100%
+}
+
+.subtituloBox {
+	font-weight:normal !important;
+	font-family: arial;
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    line-height: normal !important;
+}
+
+.subtituloBox2 {
+	color: black !important;
+	font-weight:normal !important;
+	font-family: arial;
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    line-height: normal !important;
+    padding: 10px !important;
+    background: white !important;
+    
+}
+
+.etiquetaSeccion {
+    color: #d50000;
+    font-family: tahoma, arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.txt-resaltado {
+    font-size:10px;
+    font-weight:bold;
+    text-transform: uppercase;
+    font-family: tahoma, arial, helvetica, sans-serif;
+    
+}
+
+.txt-no-resaltado {
+    font-size:10px;
+    font-weight:bold;
+}
+
+.txt-no-resaltado-area {
+    font-size:12px;
+    font-weight:bold;
+}
+
+.boton {
+	font-family: arial, tahoma, verdana, helvetica;
+	font-size: 11px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: normal;
+	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%); 
+	background-position: o;
+	background-position-x: 0px;
+	background-position-y: 50%;
+	background-repeat: no-repeat;
+	background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	font-color: #A9A9A9;
+	/*padding-left: 18px;*/
+}
+
+.boton-descargar{	
+	background-image:url(../images/descargar_documento.png) !important;
+	background-repeat:no-repeat;
+  	height:110px;
+  	width:88px;
+  	background-position:center;
+  	background: -ms-linear-gradient(top, #cdcdcd 0%, #aaaaaa 100%); 
+	font-family: arial, tahoma, verdana, helvetica;
+	font-size: 11px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: normal;
+
+	background-position: o;
+	background-position-x: 0px;
+	background-position-y: 50%;
+	background-repeat: no-repeat;
+	background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	font-color: #A9A9A9;
+    }
+    
+.OFHighlightTerm1{
+	background-color: yellow !important;
+	color:black !important;
+}
+
+.OFHighlightTerm2{
+	background-color: yellow !important;
+	color:black !important;
+}
+
+.OFHighlightTerm3{
+	background-color: yellow !important;
+	color:black !important;
+}
+
+.OFHighlightTerm4{
+	background-color: yellow !important;
+	color:black !important;
+}
+
+.nomRiesgo{
+	color: black;
+	font-weight: bold;
+	font-size: 12px
+}
+
+.tituloDoc{
+	color: black;
+	font-weight: bold;
+	font-size: 10px
+}
+.comment{
+	font-family: tahoma,arial,helvetica,sans-serif;
+	color: gray;
+	font-size: 11px;
+}
+
+.pree{
+ vertical-align: top;	
+ text-align:center;
+}
+
+.txt-resaltado-disabled{
+	
+	color: #000000;
+    font-family: tahoma, arial, helvetica, sans-serif;
+    /*font-weight: bold;*/
+    font-size: 11px;
+	
+}
+
+table.preexistencias{
+	width: 100%; 
+	display:none;
+	border-collapse:none;
+}
+.td-cabecera{
+	background-color: #D8D8D8;
+	padding: 4px;
+}
+.td-cabecera-doble{
+	background-color: #D8D8D8;
+	padding: 4px;
+	height: 40px;
+}
+.td-normal{
+	padding: 4px;
+}
+
+.td-sheet{
+	background-color: #B6B6B6;
+	padding: 4px;
+}
+
+.combobox {
+    margin-right: 0.1em;
+}
+.combobox_arrow{
+  
+
+    background: transparent url("down-arrow.png") no-repeat center center;
+    display: block;
+    height: 22px;
+    width: 22px;
+
+}
+.combobox_button {
+
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius   : 0 4px 4px 0;
+  border-radius        : 0 4px 4px 0;
+  -moz-background-clip   : padding;
+  -webkit-background-clip: padding-box;
+  background-clip        : padding-box;
+  background: #ccc;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #ccc), color-stop(0.6, #eee));
+  background-image: -webkit-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  background-image: -moz-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  background-image: -o-linear-gradient(bottom, #ccc 0%, #eee 60%);
+  background-image: -ms-linear-gradient(top, #cccccc 0%,#eeeeee 60%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee',GradientType=0 );
+  background-image: linear-gradient(top, #cccccc 0%,#eeeeee 60%);
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  height: 100%;
+  width: 18px;
+
+}
+
+.combobox_button:hover {
+    text-decoration: none;
+}
+
+.combobox_button {
+    * top: 1px !important;
+}
+
+.combobox_selector {
+    background-color: #EEE;
+    font-family: Helvetia, Arial, sans-serif;
+    font-size: 12px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow: auto;
+    width:325px !important
+}
+
+.combobox_selector ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border:1px solid #CCC;
+}
+
+.combobox_selector li {
+    padding: 2px 5px;
+}
+
+.combobox_selector li:hover,
+.combobox_selector li.selected {
+    background-color: #0066CC;
+    color: #FFF;
+}
+

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	
+	<ui:define name="contenido">
+		
+		
+	
+		<p:fieldset style="text-align: center;" >
+			<p:toolbar>
+				<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Bienvenido al Aplicativo"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+			<br/>
+			<br/>
+			<h:form id="formInicio" rendered="false">
+				<p:panel id="panelInicio" style="width: 955px !important;" >
+					<center>
+					<br />
+					<p:panelGrid id="pgInicio" style="width: auto !important;">
+						<p:row >
+							<p:column style="text-align: center !important;">
+								<p:outputLabel value="Estimado Usuario Seleccione una opcion para administrar el SIIT."
+											   style="font-weight:bold;font-weight:bold;text-align: center !important;"/>
+											   <br/>
+											   <br/>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="text-align: center !important;">
+								<p:commandButton icon="icon-login" value="&nbsp;Expedientes 2014 A-B" action="#{exp2014abBean.toExpedientesAB}"
+												 style="vertical-align: middle !important;"/>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="text-align: center !important;">
+								<p:commandButton icon="icon-login" value="&nbsp;Expedientes Unicos 2014 SIRE1" action="#{exp2014abBean.toExpedientes2014ilm}"
+												 style="vertical-align: middle !important;"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					</center>
+				</p:panel>
+				
+			</h:form>
+			
+			<h:panelGrid columns="7" >
+			<p:commandButton icon="ui-icon-extlink" value="Generar trama a Texto (.txt)"
+	                                 title="Generar trama a Texto (.txt)" styleClass="ui-state-default" />
+			<p:commandButton icon="ui-icon-extlink" value="Convertir trama a Excel (.xlsx)"
+	                                 title="Convertir trama a Excell (.xlsx)" action="#{exp2014abBean.genTxt()}" styleClass="ui-state-disabled" />
+	                                 
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>					
+    		<p:graphicImage value="/resources/images/principal/guia.png" width="139px" height="25px" onclick="javascript:window.open('/si.genTrama/jsfDocs/modulos/manual.pdf');" style="cursor:pointer;" alt="Gu&iacute;a de Usuario" title="Ver Gu&iacute;a de Usuario"/>
+							
+				                                 									 
+			</h:panelGrid> 
+			<p:fieldset>                                
+	                                 
+			<h:panelGrid columns="3" >
+        	<p:graphicImage value="/resources/images/principal/xls.png"/>
+        	<p:graphicImage value="/resources/images/principal/arrow.png"/>
+        	<p:graphicImage value="/resources/images/principal/txt.png"/>
+        	</h:panelGrid>	                                 
+			
+			<p:fieldset style="text-align: left;" legend="Primer paso">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="false" />
+			 
+			    <p:fileUpload value="#{exp2014abBean.file}" mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{exp2014abBean.upload}" update=":formUpload:messages,:formValidator" icon="ui-icon-arrowthick-1-n" />
+			</h:form>
+			</p:fieldset>
+			<p:fieldset style="text-align: left;" legend="Segundo paso" rendered="#{exp2014abBean.uploaded}">
+			<h:form id="formValidator" style="text-align: center;">
+				<p:growl id="messages2" showDetail="true" rendered="false" />
+				<br /><br />
+				<p:commandButton value="Generar Trama Para BN" ajax="false" actionListener="#{exp2014abBean.convert}" update=":formValidator" rendered="#{exp2014abBean.uploaded}" icon="ui-icon-gear" />
+				<br /><br />
+				
+				<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+				    <p:graphicImage name="/resources/images/ajaxloadingbar.gif" />
+				</p:dialog>
+			
+			    <p:commandButton value="Descargar Trama" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" rendered="#{exp2014abBean.converted}">
+			        <p:fileDownload value="#{exp2014abBean.fileDownload}" />
+			    </p:commandButton>
+			    
+			    <p:commandButton value="Descargar con servlet" icon="ui-icon-print" 
+                                             action="#{exp2014abBean.showFile()}" 
+                                             onclick="this.form.target = '_blank'" ajax="false" rendered="false" />
+			    			    		  
+				<p:button onclick="window.open('/si.expedientesAB/resources/txt/temporal_TramaBN_libros.txt')" value="Descargar con link" icon="ui-icon-arrowthick-1-s" rendered="false" />
+			    
+			    <p:commandButton value="Descargar Trama Fraccionamientos" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" rendered="false">
+			        <p:fileDownload value="#{exp2014abBean.fileDownloadFr}" />
+			    </p:commandButton>
+			    <br /><br />
+			    <p:commandButton value="Nueva trama" ajax="false" actionListener="#{exp2014abBean.reset}" update=":formUpload,:formValidator" rendered="#{exp2014abBean.uploaded or exp2014abBean.converted}" icon="ui-icon-newwin" />
+			 
+				<script type="text/javascript">
+				function start() {
+				    PF('statusDialog').show();
+				}
+				 
+				function stop() {
+				    PF('statusDialog').hide();
+				}
+				</script>
+				<br /><br />
+				<p:commandButton value="Descargar Fraccionamientos" ajax="false" actionListener="#{exp2014abBean.convert}" update=":formValidator:messages2" rendered="false" />
+			</h:form>
+			</p:fieldset>
+			</p:fieldset>
+			<!-- MENSAJES -->
+			<br/>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false" showDetail="true" />
+			</h:form>
+			<br/>
+		</p:fieldset>
+
+	</ui:define>
+</ui:composition>
+</html>

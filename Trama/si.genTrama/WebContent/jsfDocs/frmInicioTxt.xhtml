@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	
+	<ui:define name="contenido">
+		
+		
+	
+		<p:fieldset style="text-align: center;" >
+			<p:toolbar>
+				<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Bienvenido al Aplicativo"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+			<br/>
+			<br/>			
+			
+			<h:panelGrid columns="7" >
+			<p:commandButton icon="ui-icon-extlink" value="Generar trama a Texto (.txt)"
+	                                 title="Generar trama a Texto (.txt)" action="#{exp2014abBean.genXlsx()}" styleClass="ui-state-disabled" />
+			<p:commandButton icon="ui-icon-extlink" value="Convertir trama a Excel (.xlsx)"
+	                                 title="Convertir trama a Excell (.xlsx)" styleClass="ui-state-default" />	   
+	                                 
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>					
+    		<p:graphicImage value="/resources/images/principal/guia.png" width="139px" height="25px" onclick="javascript:window.open('/si.genTrama/jsfDocs/modulos/manual.pdf');" style="cursor:pointer;" alt="Gu&iacute;a de Usuario" title="Ver Gu&iacute;a de Usuario"/>	                                 
+	                                                               
+			</h:panelGrid>	                    
+			<p:fieldset>             
+	                                 
+			<h:panelGrid columns="3" >
+        	<p:graphicImage value="/resources/images/principal/txt.png"/>
+        	<p:graphicImage value="/resources/images/principal/arrow.png"/>
+        	<p:graphicImage value="/resources/images/principal/xls.png"/>
+        	</h:panelGrid>	                                 
+			
+			<p:fieldset style="text-align: left;" legend="Primer paso">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">			    
+			 
+			    <p:fileUpload value="#{exp2014abBean.fileTxt}" mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{exp2014abBean.uploadTxt}" update=":formUpload:messages,:formValidator" icon="ui-icon-arrowthick-1-n" />
+			</h:form>
+			</p:fieldset>
+			<p:fieldset style="text-align: left;" legend="Segundo paso" rendered="#{exp2014abBean.uploadedTxt}">
+			<h:form id="formValidator" style="text-align: center;">
+				<br /><br />
+				<p:commandButton value="Generar Excel" ajax="false" actionListener="#{exp2014abBean.convertTxt}" update=":formValidator" rendered="#{exp2014abBean.uploadedTxt}" icon="ui-icon-gear" />
+				<br /><br />
+				
+				<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+				    <p:graphicImage name="/resources/images/ajaxloadingbar.gif" />
+				</p:dialog>
+			
+			    <p:commandButton value="Descargar Excel" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" rendered="#{exp2014abBean.convertedTxt}">
+			        <p:fileDownload value="#{exp2014abBean.fileDownloadTxt}" />
+			    </p:commandButton>			    
+			    			    		  							    			    
+			    <br /><br />
+			    <p:commandButton value="Nueva conversión" ajax="false" actionListener="#{exp2014abBean.resetTxt}" update=":formUpload,:formValidator" rendered="#{exp2014abBean.uploadedTxt or exp2014abBean.convertedTxt}" icon="ui-icon-newwin" />
+			 
+				<script type="text/javascript">
+				function start() {
+				    PF('statusDialog').show();
+				}
+				 
+				function stop() {
+				    PF('statusDialog').hide();
+				}
+				</script>
+				<br /><br />				
+			</h:form>
+			</p:fieldset>
+			</p:fieldset>
+			<!-- MENSAJES -->
+			<br/>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false" showDetail="true" />
+			</h:form>
+			<br/>
+		</p:fieldset>
+
+	</ui:define>
+</ui:composition>
+</html>
