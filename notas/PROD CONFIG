@@ -1,0 +1,17 @@
+recurso_bd=java\:comp/env/jdbc/sip
+
+driver=oracle.jdbc.driver.OracleDriver
+nro_pag_bloq=3
+autocommit=false
+nro_registro=9
+#JDBC.DefaultAutoCommit=false
+
+##########################
+#Para ORAPOLO:
+##########################
+username=SIIT
+password=forsat2412
+#password=lima$123
+url=jdbc:oracle:thin:@//odbscan.trabajo.gob.pe:1521/orazeus
+#url=jdbc:oracle:thin:@//odbscan.trabajo.gob.pe:1521/oraapolo
+#url=jdbc:oracle:thin:@10.1.151.233:1521:ORCL
