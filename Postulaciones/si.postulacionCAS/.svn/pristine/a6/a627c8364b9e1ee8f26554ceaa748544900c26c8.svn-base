@@ -1,0 +1,105 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+import org.primefaces.context.RequestContext;
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.Combo;
+import pe.gob.sunafil.postulacioncas.bean.HojaDeVida;
+import pe.gob.sunafil.postulacioncas.bean.Persona;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.CombosDespatch;
+
+
+
+@ManagedBean(name="postulacion1Bean")
+@SessionScoped
+public class Postulacion1Bean {
+	private static Logger logger = Logger.getLogger(Postulacion1Bean.class.getName());
+	
+	private HojaDeVida hojadevida;
+	private Persona persona;
+	private List<Combo> listaProvinciasNac;
+	private List<Combo> listaDistritosNac;
+	private CombosDespatch dspcombos = new CombosDespatch();
+	
+	
+	public Postulacion1Bean() {
+		inicializar();
+	}
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacion1Bean");
+		try {
+			hojadevida = new HojaDeVida();
+			persona = new Persona();
+			listaProvinciasNac = new ArrayList<Combo>();
+			listaDistritosNac = new ArrayList<Combo>();
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	
+	
+	/**
+	 * obtiene los distritos por el departamento seleccionado
+	 */
+	public void selCmbDepartamentoNac(){
+		logger.info("Obteniendo Cmb Provincia de Nacimiento");
+		try{
+			listaProvinciasNac = new ArrayList<Combo>();
+			String coddep = persona.getV_coddepnac(); 
+			listaProvinciasNac = dspcombos.listaProvinciasxDep(coddep);
+			
+			//DESSELECCIONANDO LA PROVINCIA
+			persona.setV_codpronac("");
+			//DESSELECCIONANDO EL DISTRITO
+			persona.setV_coddisnac("");
+			
+			//LIMPIAMOS LOS DISTRITOS
+			listaDistritosNac = new ArrayList<Combo>();
+			
+		}catch(Exception e){
+			logger.error("Error en Listar las provincias y distritos: "+e.getMessage(),e);
+		}
+	}
+	public void dialogReferencia(){		
+		RequestContext.getCurrentInstance().execute("dialogWidget.show()");
+	}
+	
+	
+	/***************************************************************************************************************
+	 * ************************          ZONA DE GETS Y SETS                   *************************************
+	 ***************************************************************************************************************/
+
+	public HojaDeVida getHojadevida() {
+		return hojadevida;
+	}
+	public void setHojadevida(HojaDeVida hojadevida) {
+		this.hojadevida = hojadevida;
+	}
+	public Persona getPersona() {
+		return persona;
+	}
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+	public List<Combo> getListaProvinciasNac() {
+		return listaProvinciasNac;
+	}
+	public void setListaProvinciasNac(List<Combo> listaProvinciasNac) {
+		this.listaProvinciasNac = listaProvinciasNac;
+	}
+	public List<Combo> getListaDistritosNac() {
+		return listaDistritosNac;
+	}
+	public void setListaDistritosNac(List<Combo> listaDistritosNac) {
+		this.listaDistritosNac = listaDistritosNac;
+	}
+}

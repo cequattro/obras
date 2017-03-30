@@ -1,0 +1,174 @@
+package pe.gob.sunafil.postulacioncas.mybatis.implementacion;
+
+import java.io.Serializable;
+
+import javax.swing.text.rtf.RTFEditorKit;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.DomicilioEntidad;
+import pe.gob.sunafil.postulacioncas.bean.Entidad;
+import pe.gob.sunafil.postulacioncas.bean.Reclamo;
+import pe.gob.sunafil.postulacioncas.bean.ReclamoxTipoIdentif;
+import pe.gob.sunafil.postulacioncas.mybatis.comun.MyBatisConnectionFactory;
+import pe.gob.sunafil.postulacioncas.mybatis.interfase.INTReclamo;
+import pe.gob.sunafil.postulacioncas.utils.EnviarMail;
+import pe.gob.sunafil.postulacioncas.utils.FacesUtils;
+
+public class IMPReclamo implements INTReclamo, Serializable{
+	
+	private static final long serialVersionUID = -1780689648367635626L;
+	private static Logger logger = Logger.getLogger(IMPReclamo.class.getName());
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	public IMPReclamo(){
+		sqlSessionFactory = MyBatisConnectionFactory.getSqlSessionFactory();
+	}
+
+	@Override
+	public String insertarReclamo(Reclamo reclamo, Entidad entidad, DomicilioEntidad domEntidad, String[] selectedTiposIdentifDeReclamo, String v_desotrtir) throws Exception {
+		
+		SqlSession session = sqlSessionFactory.openSession();
+		String mensaje="";
+		try {
+			//ANULANDO EL AUTOCOMMIT:
+			session.commit(false);
+			
+			//REPLICANDO PKS DISPONIBLES
+			reclamo.setV_codtdocide(entidad.getV_codtdocide());
+			reclamo.setV_numdoc(entidad.getV_numdoc());
+			domEntidad.setV_codtdocide(entidad.getV_codtdocide());
+			domEntidad.setV_numdoc(entidad.getV_numdoc());
+			
+			//INGRESANDO EL HOST QUE REGISTRO
+			String v_hostreg="" +FacesUtils.getIpAddress();
+			entidad.setV_hostreg(v_hostreg);
+			entidad.setV_hostmod(v_hostreg);
+			reclamo.setV_hostreg(v_hostreg);
+			domEntidad.setV_hostreg(v_hostreg);
+			
+			//======================================================================
+			//1RO SE INSERTA LA ENTIDAD
+			//======================================================================
+			//VERIFICAMOS SI LA ENTIDAD YA SE ENCUENTRA REGISTRADA Y SI ES ASI SI VIENE DE RENIEC SI ES DNI:
+			String v_existe_msg = (String)session.selectOne("Entidad.verificaExisteEntidad",entidad);
+			if("NE".equalsIgnoreCase(v_existe_msg)){
+				logger.info("Insertando Entidad...");
+				session.insert("Entidad.insertEntidad", entidad);//PARA PRUEBAS NO INTERESA SI COMENTAMOS O NO ESTO
+			}else if("S".equalsIgnoreCase(v_existe_msg) && "03".equals(entidad.getV_codtdocide())){//QUIERE DECIR QUE ES UN DNI DE RENIEC
+				//NO SE TOCA
+				logger.info("La Entidad Ya existe no se toca por ser validado con RENIEC...");
+			}else{
+				logger.info("Actualizando Nombres o Datos de Entidad...");
+				session.insert("Entidad.actualizaEntidad", entidad);//PARA PRUEBAS NO INTERESA SI COMENTAMOS O NO ESTO
+			}
+			
+			
+			//======================================================================
+			//2DO SE INSERTA EL DOMICILIO DE LA ENTIDAD
+			//======================================================================
+			logger.info("Insertando DomicilioEntidad...");
+			session.insert("DomicilioEntidad.insertDomicilioEntidad", domEntidad);//COMENTAR PARA PRUEBAS
+			
+			logger.debug("El código de la dirección salio domEntidad.getN_coddir()==>"+domEntidad.getN_coddir());
+			
+			//======================================================================
+			//3RO SE INSERTA EL RECLAMO
+			//======================================================================
+			logger.info("Insertando Reclamo...");
+			//OBTENEMOS EL AÑO:
+			int n_anho = (Integer)session.selectOne("Reclamo.obtieneAnio");
+			
+			reclamo.setN_coddir(domEntidad.getN_coddir());
+			reclamo.setN_anho(n_anho);
+			if("".equals(entidad.getV_razsoc())){
+				reclamo.setV_razsocins("");
+			}else{
+				reclamo.setV_razsocins(entidad.getV_razsoc());
+			}
+			
+			session.insert("Reclamo.insertReclamo", reclamo);//COMENTAR PARA PRUEBAS
+			//reclamo.setN_codreclam(777);//DESCOMENTAR PARA PRUEBAS
+			
+			logger.debug("El código de reclamo salio domEntidad.getN_codreclam()==>"+reclamo.getN_codreclam());
+			logger.debug("El año de reclamo salio domEntidad.getN_anho()==>"+reclamo.getN_anho());
+			
+			//======================================================================
+			//4tO SE INSERTA LOS TIPOS DE IDENTIFICACION DE LA ATENCION BRINDADA
+			//======================================================================
+			//ITERAMOS:
+			logger.info("insertando la(s) identificacion(es) de la atención brindada");
+			for (String tipo : selectedTiposIdentifDeReclamo){
+				ReclamoxTipoIdentif rTipo = new ReclamoxTipoIdentif();
+				rTipo.setN_anho(reclamo.getN_anho());
+				rTipo.setN_numdep(reclamo.getN_numdep());
+				rTipo.setN_codreclam(reclamo.getN_codreclam());
+				rTipo.setN_codtipide(tipo);
+				if("99".equals(tipo)){//SI ES OTROS.
+					rTipo.setV_desotrtir(v_desotrtir);
+				}else{
+					rTipo.setV_desotrtir("");
+				}
+				rTipo.setV_codusureg(entidad.getV_numdoc());
+				rTipo.setV_hostreg(v_hostreg);
+				logger.debug("Insertando:Seleccionado=>"+rTipo.toString());
+				session.insert("Reclamo.insertRecxIdentif",rTipo);//COMENTAR PARA PRUEBAS				
+			}
+			
+			//======================================================================
+			//5TO OBTENEMOS EL MENSAJE DE CODIGO AÑO Y DEPENDENCIA GENERADO, 
+			//    Y OTROS PARA EL CORREO
+			//======================================================================
+			String nroAnioSigla = (String)session.selectOne("Reclamo.obtNroCompletoReclamo",reclamo);
+			//FALTANTES A PASAR A ESTE METODO:
+	    	String v_desintendencia=(String)session.selectOne("Reclamo.obtDesIntendenciaReclamo",reclamo);
+	    	String v_desdepprodis=(String)session.selectOne("Reclamo.obtDesDepProDisReclamo",domEntidad);//COMENTAR PARA PRUEBAS
+//	    	String v_desdepprodis="LIMA / LIMA / JESUS MARIA";//DESCOMENTAR PARA PRUEBAS
+	    	String v_desdireccion=(String)session.selectOne("Reclamo.obtDesDireccionReclamo",reclamo);//COMENTAR PARA PRUEBAS
+//	    	String v_desdireccion="Av. Los Salaverry 2456 - Urbanizacion Los Reclamones";//DESCOMENTAR PARA PRUEBAS
+	    	
+	    	//Completando el mensaje para la panalla final:
+	    	mensaje = nroAnioSigla+" de la "+v_desintendencia;
+			//======================================================================
+			//6tO SE ENVIA CORREO ELECTRÓNICO AL USUARIO:
+			//======================================================================
+			/*EnviarMail enviarCorreo=new EnviarMail();
+			String[] direcciones=new String[1];
+			direcciones[0]=reclamo.getV_email().toLowerCase();
+			String mensajeHtml=enviarCorreo.obtieneHTMLDeReclamacion(reclamo, 
+																	 entidad, 
+																	 domEntidad, 
+																	 selectedTiposIdentifDeReclamo, 
+																	 v_desotrtir, 
+																	 nroAnioSigla,
+																	 v_desintendencia,
+																	 v_desdepprodis,
+																	 v_desdireccion);
+			String asunto="SUNAFIL - Registro de Reclamación Nro. "+mensaje;
+			if(direcciones.length>0 && direcciones!=null){
+				try {
+					enviarCorreo.generarEnvioDeCorreos(mensajeHtml, direcciones,asunto,reclamo.getN_numdep());
+				} catch (Exception e1) {
+					logger.error("Error al enviar el correo, e.getMessage()=>"+e1.getMessage());
+					logger.error(e1.getMessage(),e1);
+				}
+			}*/
+			
+			//======================================================================
+			//7MO FINALMENTE SE HACE COMMIT
+			//======================================================================
+			session.commit();			
+		} catch (Exception e) {
+			logger.error("Error en IMPReclamo>insertarReclamo: "+e.getMessage(),e);
+			mensaje=e.getMessage();				
+			session.rollback();
+			throw new Exception(e);
+		} finally {
+			session.close();
+		}
+		return mensaje;
+	}
+}

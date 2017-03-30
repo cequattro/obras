@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="CONFIRMACIÓN DE ENVÍO">	  
+       
+       <h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center>
+       	<p:outputLabel value="Mostrar Datos de Confirmación Aquí." style="font-weight:bold;" />
+       	<p:outputLabel value="Estimado Postulante, identificado con el Nro. de DNI : #{postulacion1Bean.persona.v_numdoc}" style="font-weight:bold;" />
+       	<p:outputLabel value="De nombres: #{postulacion1Bean.persona.v_apepat} #{postulacion1Bean.persona.v_apemat}  #{postulacion1Bean.persona.v_nombres}"/>
+       	<p:outputLabel value=" &nbsp;&nbsp; " />
+       	<p:outputLabel value=" Su Hoja de Vida fue enviada satisfactoriamente, por favor acerquese con el formato en PDF emitido por este sistema al Tramite Documentario de SUNAFIL para regularizar el trámite." style="font-weight:bold;" />
+       	
+       	</center>
+       
+       </h:panelGrid>
+         
+       
+     
+     </p:fieldset>
+     
+     <br/>
+     
+     
+    
+	 	
+	<center>
+     	<h:panelGrid columns="2" style="text-align: center;">     	
+     		 <p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>
+     		 <p:commandButton value="Imprimir" icon="ui-icon-print" action="#{postulacion3Bean.imprimirConfirmacion}" onclick="this.form.target = '_blank'" ajax="false"/>	      		     		 	      	
+    	</h:panelGrid>
+    	</center>
+
+    	    	    	
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Postulaciones?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

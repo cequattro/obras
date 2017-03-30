@@ -1,0 +1,611 @@
+html, body {
+    font-family:Arial,Verdana,sans-serif;font-size:11px;    
+    height: 100%;
+    background-color: #58595b !important;
+    
+}
+
+.ui-datatable-data{
+	font-weight: bold;
+	font-size: 0.92em !important;
+	
+		
+	
+}
+.ui-widget-content a {
+    font-size: 0.92em !important;
+}
+
+.ui-panelgrid tr,td {   
+    border: 0 !important;    
+}
+
+.ui-inputfield {    
+    padding: 2px !important;
+}
+
+.ui-selectonemenu-item {
+    white-space: pre-wrap !important;
+    max-width: 400px;
+}
+/*
+.ui-radiobutton {
+    display: inline-block;
+    line-height: 12px;
+    margin: 2px 0;
+    width: 12px;
+}
+.ui-radiobutton .ui-radiobutton-box {
+    border-radius: 7px 7px 7px 7px;
+    height: 12px;
+    line-height: 12px;
+    width: 12px;
+}*/
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  font-size: 0.92em !important;
+ 
+}
+
+.ui-datatable td,tr {   
+   border: 1px solid #BED6F8 !important;  
+  
+}
+
+
+/*
+.ui-widget-header {
+	text-align: center !important;	
+}
+*/
+
+.ui-widget-header label{
+	text-align: center !important;
+	font-size: 18px !important;
+}
+
+.ui-panelgrid{
+    margin: auto !important;
+    width: 100%;
+}
+  
+
+
+.tablaPrincipal{
+	background-color: white;
+	
+}
+
+input{
+	 text-transform: uppercase;
+}
+
+/*
+label{
+	font-weight: bold;
+	
+}*/
+
+
+/*      ICONOS        */
+.icon-key {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-key.png") !important;
+}
+.icon-home {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-home.png") !important;
+}
+.icon-search {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-search.png") !important;
+}
+.icon-searchMat {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-searchMat.png") !important;
+}
+.icon-mant {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-mant.png") !important;
+}
+.icon-music {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-music.png") !important;
+}
+.icon-artist {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-artist.png") !important;
+}
+.icon-album {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-album.png") !important;
+}
+.icon-title {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-title.png") !important;
+}
+.icon-report {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-report.png") !important;
+}
+.icon-security {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-security.png") !important;
+}
+.icon-rol {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-rol.png") !important;
+}
+.icon-user {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-user.png") !important;
+}
+.icon-pref {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-pref.png") !important;
+}
+.icon-exit {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-exit.png") !important;
+}
+.icon-add {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-add.png") !important;
+}
+.icon-edit {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-pencil.png") !important;
+}
+.icon-delete {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_eliminarT.png") !important;
+}
+.icon-true {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-status-true.png") !important;
+}
+.icon-false {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-status-false.png") !important;
+}
+.icon-disk {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-disk.png") !important;
+}
+.icon-cancel {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-cancel.png") !important;
+}
+.icon-update {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-update.png") !important;
+}
+
+.icon-recepcion {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/flecha-abajo.gif") !important;
+}
+
+.icon-recepcion_fecha {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icono_flecha_abajo.png") !important;
+}
+
+.icon-seleccionar {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-selecionado.png") !important;
+}
+
+.icon-print {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_print.png") !important;
+}
+
+
+
+
+.icon-addRetcc {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico-addRetcc.png") !important;
+}
+
+.icon-print_x {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_print_x.png") !important;
+}
+
+.icon-caduco {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico-caduco.png") !important;
+}
+
+.icon-cancelCircular {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico-cancelCircular.png") !important;
+}
+
+.icon-escoba {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico-escoba.png") !important;
+}
+
+.icon-editar {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-editar.png") !important;
+}
+
+.icon-tacho {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-tacho.png") !important;
+}
+
+.icon-sustituir {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-sustituir.png") !important;
+}
+
+.icon-cancelarR {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-cancelarR.png") !important;
+}
+
+.icon-camara {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-camara.png") !important;
+}
+
+.icon-eliminar-usuarios {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-eliminar-usuarios.png") !important;
+}
+
+.icon-eliminar-usuario {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-eliminar-usuario.png") !important;
+}
+
+.icon-editar-usuarios {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-editar-usuarios.png") !important;
+}
+
+.icon-editar-usuario {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-editar-usuario.png") !important;
+}
+
+
+.icon-agregar-usuarios {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-agregar-usuarios.png") !important;
+}
+
+.icon-agregar-usuario {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-agregar-usuario.png") !important;
+}
+
+.icon-bus-usuarios {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-bus-usuarios.png") !important;
+}
+
+.icon-usuario {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-usuario.png") !important;
+}
+.icon-next {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-next.png") !important;
+}
+
+.icon-modi-encu {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-modi-encu.png") !important;
+}
+
+.icon-tacho-n {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-tacho-n.png") !important;
+}
+.icon-modi-encu2 {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-modi-encu2.png") !important;
+}
+
+.icon-enviar-32 {
+    width:32px;
+    height:32px;
+    margin-right: 8px;
+    background-image:url("./../../resources/images/iconos/icon-enviar-32.png") !important;
+}
+.icon-enviar-16 {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-enviar-16.png") !important;
+}
+
+.icon-salir {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-salir.jpg") !important;
+}
+
+.icon-informe {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-informe.png") !important;
+}
+.icon-acta-infraccion {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-actaInf.png") !important;
+}
+.icon-distribuida {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-distribuida.png") !important;
+}
+.icon-cerrada {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-cerrada.png") !important;
+}
+
+.icon-video {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_youtube16x16.png") !important;
+}
+
+
+.icon-pdf {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_pdf.png") !important;
+}
+
+.icon-login {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/ico_login.png") !important;
+}
+
+
+
+
+/*ESTILOS DE CLASES*/
+.menuClase{
+	padding: 0px;
+	margin: 0px;
+	margin-top: 2px;
+	margin-bottom: 2px;	
+	width: 180px;
+}
+
+.contenidoClase{
+	padding: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	width: 995px;
+	float: left;
+	height: 100%;
+	vertical-align: top;
+}
+.controlClase{
+	padding: 0px;
+	margin: 0px; 
+	background-color: white;
+}
+.cajaAmplia{
+	width: 350px;
+}
+
+.cajaMediana{
+	width: 250px;
+}
+.caja{
+	width: 150px;
+}
+.cajaPeque{
+	width: 40px;
+}
+
+.fondoCabeceraTabla td{
+	background: url("/si.encuestadis/faces/javax.faces.resource/images/ui-bg_highlight-hard_100_eeeeee_1x100.png?ln=primefaces-blitzer") repeat-x scroll 50% 50% #EEEEEE;
+    border: 1px solid #D8DCDF;
+    color: #004276;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+/*Estilo para el contenido general en NEGRITA*/
+.contenido_negrita {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+color: #525252;
+}
+
+.contenido_especial {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+color: #B1B1B2;
+}
+
+/* ESTILO DE COLOR ROJO PARA LOS CAMPOS OBLIGATORIOS*/
+.contenido_rojoBold {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #FF0000;
+	font-weight: bold;
+}
+.contenido_separador {
+	font-size: 11px;
+	font-weight: bold;
+	color: #336699;
+	text-align: left !important;
+}
+
+.input_boton {
+	-moz-box-shadow:inset 0px 1px 7px -21px #dcecfb;
+	-webkit-box-shadow:inset 0px 1px 7px -21px #dcecfb;
+	box-shadow:inset 0px 1px 7px -21px #dcecfb;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #b4d1ed), color-stop(1, #82b1e0));
+	background:-moz-linear-gradient(top, #b4d1ed 5%, #82b1e0 100%);
+	background:-webkit-linear-gradient(top, #b4d1ed 5%, #82b1e0 100%);
+	background:-o-linear-gradient(top, #b4d1ed 5%, #82b1e0 100%);
+	background:-ms-linear-gradient(top, #b4d1ed 5%, #82b1e0 100%);
+	background:linear-gradient(to bottom, #b4d1ed 5%, #82b1e0 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#b4d1ed', endColorstr='#82b1e0',GradientType=0);
+	background-color:#b4d1ed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #7cadde;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:11px;
+	font-weight:bold;
+	padding:3px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #4c80b5;
+	text-transform: none !important;
+}
+.input_boton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #82b1e0), color-stop(1, #b4d1ed));
+	background:-moz-linear-gradient(top, #82b1e0 5%, #b4d1ed 100%);
+	background:-webkit-linear-gradient(top, #82b1e0 5%, #b4d1ed 100%);
+	background:-o-linear-gradient(top, #82b1e0 5%, #b4d1ed 100%);
+	background:-ms-linear-gradient(top, #82b1e0 5%, #b4d1ed 100%);
+	background:linear-gradient(to bottom, #82b1e0 5%, #b4d1ed 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#82b1e0', endColorstr='#b4d1ed',GradientType=0);
+	background-color:#82b1e0;
+}
+.input_boton:active {
+	position:relative;
+	top:1px;
+}
+
+.checkboxes tr {
+   float: left;
+    width: 50%;
+}
+.icon-redx {
+    width:16px;
+    height:16px;
+    margin-right: 4px;
+    background-image:url("./../../resources/images/iconos/icon-redx.png") !important;
+}

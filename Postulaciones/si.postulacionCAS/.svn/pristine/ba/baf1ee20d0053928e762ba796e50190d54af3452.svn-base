@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formPostulacion1">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="DATOS PERSONALES">
+	<h:panelGrid columns="6" id="tr_convocatoria">
+	
+		 <p:outputLabel value="Convocatoria CAS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu id="conv" value="#{postulacion1Bean.hojadevida.n_corconv}">             
+	         <f:selectItem itemLabel="- Seleccione -" itemValue="" />
+	         <f:selectItems var="lst" value="#{combosBean.listaConvocatorias}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+	         	<p:ajax event="change" update=":formPostulacion1:tr_convocatoria" listener="#{postulacion1Bean.selCmbConvocatoria}"/>
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Nombre del Puesto :"/>         
+         <p:outputLabel style="font-weight:bold;" value="#{postulacion1Bean.hojadevida.v_desconv}" id="v_desconv" />
+         <p:outputLabel style="font-weight:bold;" id="v_desconv_vacio2" value="____________________" rendered="#{postulacion1Bean.muestraLineaPuesto}"/>
+         
+         
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="9" >
+         
+         <p:outputLabel value="Tipo Documento&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.persona.v_codtdocide}" id="v_codtdocide" widgetVar="v_codtdocide">
+			<f:selectItem itemValue="#{null}" itemLabel="- Seleccione -"/>
+			<f:selectItems var="lst" value="#{combosBean.listaTipoDocumentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>				
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Nro Documento" />
+         <p:inputText value="#{postulacion1Bean.persona.v_numdoc}" id="v_numdoc" onkeypress="return isNumberKeyNL(this);" maxlength="15" style="width: 120px"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>                
+
+         <p:outputLabel value="Apellido Paterno"/>
+         <p:inputText value="#{postulacion1Bean.persona.v_apepat}" id="v_apepat" onkeypress="return sololetra(event);" style="width: 120px" maxlength="40"  />
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Apellido Materno"/>
+         <p:inputText value="#{postulacion1Bean.persona.v_apemat}" id="v_apemat" onkeypress="return sololetra(event);" style="width: 120px" maxlength="40"  />
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Nombres"/>
+         <p:inputText value="#{postulacion1Bean.persona.v_nombres}" id="v_nombres" onkeypress="return sololetra(event);" style="width: 120px" maxlength="60"  />
+         <p:outputLabel value=" " />   
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="LUGAR DE NACIMIENTO:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="9" >     
+         <p:outputLabel value="Departamento &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+     	 <h:selectOneMenu value="#{postulacion1Bean.persona.v_coddepnac}"  id="v_coddepnac"  style="width:120px">
+			<f:selectItem itemLabel="- Seleccione -" itemValue="" />
+			<f:selectItems var="lst" value="#{combosBean.listaDepartamentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_codpronac, :formPostulacion1:v_coddisnac" listener="#{postulacion1Bean.selCmbDepartamentoNac}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Provincia"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.persona.v_codpronac}" id="v_codpronac"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaProvinciasNac}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_coddisnac" listener="#{postulacion1Bean.selCmbProvinciaNac}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         <p:outputLabel value="Distrito"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.persona.v_coddisnac}" id="v_coddisnac"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaDistritosNac}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>   
+         
+         <p:outputLabel for="d_fecnac" value="Fecha nacimiento" />
+    	 <p:calendar id="d_fecnac" yearRange="c-70:c+0" value="#{postulacion1Bean.persona.d_fecnac}"  showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10"  >
+    	 	
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 <p:outputLabel value="Nacionalidad"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_nacionalidad}" id="v_nacionalidad" onkeypress="return sololetra(event);" style="width: 120px" maxlength="60"  />
+         <p:outputLabel value=" " />
+    	 <p:outputLabel value="Estado Civil"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_codestciv}" id="v_codestciv" >
+			<f:selectItem itemValue="#{null}" itemLabel="- Seleccione -"/>
+			<f:selectItems var="lst" value="#{combosBean.listaEstadoCivil}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>		
+         <p:outputLabel value=""/>
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >  
+         <p:outputLabel value="DIRECCIÓN ACTUAL:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="9" >     
+         <p:outputLabel value="Departamento &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_coddepdom}"  id="v_coddepdom"  style="width:120px">
+			<f:selectItem itemLabel="- Seleccione -" itemValue="" />
+			<f:selectItems var="lst" value="#{combosBean.listaDepartamentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_codprodom :formPostulacion1:v_coddisdom" listener="#{postulacion1Bean.selCmbDepartamentoDom}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Provincia"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_codprodom}" id="v_codprodom"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaProvinciasDom}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_coddisdom" listener="#{postulacion1Bean.selCmbProvinciaDom}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         
+         <p:outputLabel value="Distrito"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_coddisdom}" id="v_coddisdom"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaDistritosDom}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="6">
+       	<p:outputLabel value="Urbanización &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+       	<p:outputLabel value=" " />
+       	<p:inputText value="#{postulacion1Bean.hojadevida.v_urbanizac}" id="v_urbanizac" onkeypress="return sololetra(event);" style="width: 200px" maxlength="60"  />
+       	<p:outputLabel value=" " />
+       	<p:outputLabel value="Dirección"/>
+       	<p:inputText style="width: 300px" id="dire" maxlength="60"/>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="9">
+    
+         <p:outputLabel value="Teléfono Fijo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+        <p:inputText value="#{postulacion1Bean.hojadevida.v_telfij}" id="v_telfij" onkeypress="return sololetra(event);" style="width: 120px" maxlength="10"  />
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Teléfono Celular"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_telcel}" id="v_telcel" onkeypress="return sololetra(event);" style="width: 120px" maxlength="9"  />
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Correo Eletrónico"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_correo}" id="v_correo" onkeypress="return sololetra(event);" style="width: 120px" maxlength="150"  />
+         <p:outputLabel value=" " />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="COLEGIATURA:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="6" >
+         
+         <p:outputLabel value="Colegio Profesional &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_descolegio}" id="v_descolegio" onkeypress="return sololetra(event);" style="width: 120px" maxlength="150"  />
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Registro Nro"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_numregcol}" id="v_numregcol" onkeypress="return sololetra(event);" style="width: 120px" maxlength="150"  />
+         <p:outputLabel value=" " />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="COLEGIATURA:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="3" >
+         
+         <p:outputLabel value="Persona con Discapacidad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+		 <p:selectOneRadio value="#{postulacion1Bean.hojadevida.v_flgdis}" id="v_flgdis">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="FUERZAS ARMADAS" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="3" >
+         <p:outputLabel value="Licencia de las FF. AA. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+		 <p:selectOneRadio value="#{postulacion1Bean.hojadevida.v_flglicfa}" id="v_flglicfa">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+	
+	<center>
+	    <h:panelGrid columns="2" style="text-align: center;">     		 
+	   	<p:commandButton value="Siguiente" ajax="false" action="#{postulacion1Bean.goToDatos2Postulaciones}" icon="ui-icon-arrowthick-1-e" update="@form" onclick="statusDialog.show();"/>
+	   	<p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>		      		
+	   	</h:panelGrid>
+   	</center>
+    	    	    	
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="true" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formSalir" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Postulaciones?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

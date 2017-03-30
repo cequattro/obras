@@ -1,0 +1,427 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.SecScreenDespatch;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcFormacion;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcGradoacademi;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcTipcapacitac;
+import pe.gob.sunafil.postulacioncas.persistence.model.SitbPais;
+
+import org.apache.log4j.Logger;
+
+@ManagedBean(name="postulacion2Bean")
+@SessionScoped
+public class Postulacion2Bean {
+private static Logger logger = Logger.getLogger(Postulacion2Bean.class.getName());
+	
+	@ManagedProperty("#{postulacion1Bean}")
+	private Postulacion1Bean postulacion1Bean;
+	
+	private List <RhtbcFormacion> listaFormacion;
+	private List <RhtbcGradoacademi> listaGrados;
+	private List <SitbPais> listaPaises;
+	private List <RhtbcTipcapacitac> listaTiposCapacitacion;		
+	private List<Map> lstFormacion = new ArrayList();
+	private String nivel;
+	private String grado;
+	private String centro;
+	private String especialidad;
+	private Date fi;
+	private Date fe;
+	private Date fex;
+	private String ciudad;
+	private String pais;		
+	
+	private List<Map> lstCapacitacion = new ArrayList();
+	private String tipoCapacitacion;
+	private String centroE;
+	private String tema;
+	private Date fIn;
+	private Date fTer;
+	private String duracion;		
+	
+	private List<Map> lstOtrosDoc = new ArrayList();
+	private String otroDoc;		
+	
+	public List<Map> getLstOtrosDoc() {
+		return lstOtrosDoc;
+	}
+
+	public void setLstOtrosDoc(List<Map> lstOtrosDoc) {
+		this.lstOtrosDoc = lstOtrosDoc;
+	}
+
+	public String getOtroDoc() {
+		return otroDoc;
+	}
+
+	public void setOtroDoc(String otroDoc) {
+		this.otroDoc = otroDoc;
+	}
+
+	public List<Map> getLstCapacitacion() {
+		return lstCapacitacion;
+	}
+
+	public void setLstCapacitacion(List<Map> lstCapacitacion) {
+		this.lstCapacitacion = lstCapacitacion;
+	}
+
+	public String getTipoCapacitacion() {
+		return tipoCapacitacion;
+	}
+
+	public void setTipoCapacitacion(String tipoCapacitacion) {
+		this.tipoCapacitacion = tipoCapacitacion;
+	}
+
+	public String getCentroE() {
+		return centroE;
+	}
+
+	public void setCentroE(String centroE) {
+		this.centroE = centroE;
+	}
+
+	public String getTema() {
+		return tema;
+	}
+
+	public void setTema(String tema) {
+		this.tema = tema;
+	}
+
+	public Date getfIn() {
+		return fIn;
+	}
+
+	public void setfIn(Date fIn) {
+		this.fIn = fIn;
+	}
+
+	public Date getfTer() {
+		return fTer;
+	}
+
+	public void setfTer(Date fTer) {
+		this.fTer = fTer;
+	}
+
+	public String getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(String duracion) {
+		this.duracion = duracion;
+	}
+
+	public String getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(String nivel) {
+		this.nivel = nivel;
+	}
+
+	public String getGrado() {
+		return grado;
+	}
+
+	public void setGrado(String grado) {
+		this.grado = grado;
+	}
+
+	public String getCentro() {
+		return centro;
+	}
+
+	public void setCentro(String centro) {
+		this.centro = centro;
+	}
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
+	}
+
+	public Date getFi() {
+		return fi;
+	}
+
+	public void setFi(Date fi) {
+		this.fi = fi;
+	}
+
+	public Date getFe() {
+		return fe;
+	}
+
+	public void setFe(Date fe) {
+		this.fe = fe;
+	}
+
+	public Date getFex() {
+		return fex;
+	}
+
+	public void setFex(Date fex) {
+		this.fex = fex;
+	}
+
+	public String getCiudad() {
+		return ciudad;
+	}
+
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
+	}
+
+	public String getPais() {
+		return pais;
+	}
+
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
+
+	public List<RhtbcFormacion> getListaFormacion() {
+		SecScreenDespatch secScreenDespatch = new SecScreenDespatch();
+		try {
+			listaFormacion=secScreenDespatch.getFormaciones();
+		} catch (Exception e) {
+			listaFormacion=null;
+			e.printStackTrace();
+		}
+		return listaFormacion;
+	}
+	
+	public void setListaFormacion(List<RhtbcFormacion> listaFormacion) {
+		this.listaFormacion = listaFormacion;
+	}
+	
+	public List<RhtbcGradoacademi> getListaGrados() {
+		SecScreenDespatch secScreenDespatch = new SecScreenDespatch();
+		try {
+			listaGrados=secScreenDespatch.getGradoAcademico();
+		} catch (Exception e) {
+			listaGrados=null;
+			e.printStackTrace();
+		}
+		return listaGrados;
+	}
+	
+	public void setListaGrados(List<RhtbcGradoacademi> listaGrados) {
+		this.listaGrados = listaGrados;
+	}
+	
+	public List<SitbPais> getListaPaises() {
+		SecScreenDespatch secScreenDespatch = new SecScreenDespatch();
+		try {
+			listaPaises=secScreenDespatch.getPaises();
+		} catch (Exception e) {
+			listaPaises=null;
+			e.printStackTrace();
+		}
+		return listaPaises;
+	}
+	
+	public void setListaPaises(List<SitbPais> listaPaises) {
+		this.listaPaises = listaPaises;
+	}
+	
+	public List<RhtbcTipcapacitac> getListaTiposCapacitacion() {
+		SecScreenDespatch secScreenDespatch = new SecScreenDespatch();
+		try {
+			listaTiposCapacitacion=secScreenDespatch.getTiposCapacitacion();
+		} catch (Exception e) {
+			listaTiposCapacitacion=null;
+			e.printStackTrace();
+		}
+		return listaTiposCapacitacion;
+	}
+	
+	public void setListaTiposCapacitacion(
+			List<RhtbcTipcapacitac> listaTiposCapacitacion) {
+		this.listaTiposCapacitacion = listaTiposCapacitacion;
+	}
+	
+	public Postulacion1Bean getPostulacion1Bean() {
+		return postulacion1Bean;
+	}
+	
+	public void setPostulacion1Bean(Postulacion1Bean postulacion1Bean) {
+		this.postulacion1Bean = postulacion1Bean;
+	}		
+	
+	public List<Map> getLstFormacion() {
+		return lstFormacion;
+	}
+
+	public void setLstFormacion(List<Map> lstFormacion) {
+		this.lstFormacion = lstFormacion;
+	}
+
+	public Postulacion2Bean() {
+		inicializar();
+	}	
+	
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacionBean2");
+		try {
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	public String datos2Postulaciones(){
+		return "pretty:registroPostulacion2";
+	}
+	
+	public static String getFormatDate(Date date) {
+		if(date!=null){
+			return new SimpleDateFormat("dd/MM/yyyy").format(date);}
+		else{
+			return "";}
+	}
+	
+	public void removeItemFormacion(HashMap delItem)
+	{
+		if(lstFormacion!=null)
+		{
+			lstFormacion.remove(delItem);
+			if(lstFormacion.isEmpty())
+			{
+				lstFormacion = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemFormacion()
+	{
+		if(lstFormacion!=null)
+		{
+			HashMap mMap = new HashMap();
+			mMap.put("nivel",nivel.split("-")[0]);
+			mMap.put("nivelDes",nivel.split("-")[1]);
+			mMap.put("grado",grado.split("-")[0]);
+	        mMap.put("gradoDes",grado.split("-")[1]);	        
+	        mMap.put("centro",centro.toUpperCase());        
+	        mMap.put("especialidad",especialidad.toUpperCase());
+	        mMap.put("fi",getFormatDate(fi));        
+	        mMap.put("fe",getFormatDate(fe));
+	        mMap.put("fex",getFormatDate(fex));
+	        mMap.put("ciudad",ciudad.toUpperCase());	        
+	        mMap.put("pais",pais.split("-")[0]);
+	        mMap.put("paisDes",pais.split("-")[1]); 
+	        lstFormacion.add(mMap);	       
+		}
+		else
+		{
+			lstFormacion = new ArrayList();
+			
+			HashMap mMap = new HashMap();
+			mMap.put("nivel",nivel.split("-")[0]);
+			mMap.put("nivelDes",nivel.split("-")[1]);
+			mMap.put("grado",grado.split("-")[0]);
+	        mMap.put("gradoDes",grado.split("-")[1]);
+	        mMap.put("centro",centro.toUpperCase());        
+	        mMap.put("especialidad",especialidad.toUpperCase());
+	        mMap.put("fi",getFormatDate(fi));        
+	        mMap.put("fe",getFormatDate(fe));
+	        mMap.put("fex",getFormatDate(fex));
+	        mMap.put("ciudad",ciudad.toUpperCase());	    
+	        mMap.put("pais",pais.split("-")[0]);
+	        mMap.put("paisDes",pais.split("-")[1]);        
+	        lstFormacion.add(mMap);
+		}
+	}
+	
+	public void removeItemCapacitacion(HashMap delItem)
+	{
+		if(lstCapacitacion!=null)
+		{
+			lstCapacitacion.remove(delItem);
+			if(lstCapacitacion.isEmpty())
+			{
+				lstCapacitacion = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemCapacitacion()
+	{
+		if(lstCapacitacion!=null)
+		{
+			HashMap mMap = new HashMap();
+			mMap.put("tipo",tipoCapacitacion.split("-")[0]);
+			mMap.put("tipoDes",tipoCapacitacion.split("-")[1]);
+			mMap.put("centro",centroE.toUpperCase());
+	        mMap.put("tema",tema.toUpperCase());	        
+	        mMap.put("fi",getFormatDate(fIn));        
+	        mMap.put("ft",getFormatDate(fTer));
+	        mMap.put("duracion",duracion);        	       
+	        lstCapacitacion.add(mMap);	       
+		}
+		else
+		{
+			lstCapacitacion = new ArrayList();
+			
+			HashMap mMap = new HashMap();
+			mMap.put("tipo",tipoCapacitacion.split("-")[0]);
+			mMap.put("tipoDes",tipoCapacitacion.split("-")[1]);
+			mMap.put("centro",centroE.toUpperCase());
+	        mMap.put("tema",tema.toUpperCase());	        
+	        mMap.put("fi",getFormatDate(fIn));        
+	        mMap.put("ft",getFormatDate(fTer));
+	        mMap.put("duracion",duracion);        
+	        lstCapacitacion.add(mMap);
+		}
+	}
+	
+	public void removeItemOtrosDoc(HashMap delItem)
+	{
+		if(lstOtrosDoc!=null)
+		{
+			lstOtrosDoc.remove(delItem);
+			if(lstOtrosDoc.isEmpty())
+			{
+				lstOtrosDoc = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemOtrosDoc()
+	{		
+		if(lstOtrosDoc!=null)
+		{
+			HashMap mMap = new HashMap();
+	        mMap.put("otrodoc",otroDoc.toUpperCase());        	       
+	        lstOtrosDoc.add(mMap);	       
+		}
+		else
+		{
+			lstOtrosDoc = new ArrayList();
+			
+			HashMap mMap = new HashMap();
+	        mMap.put("otrodoc",otroDoc.toUpperCase());        
+	        lstOtrosDoc.add(mMap);
+		}
+	}
+	
+}

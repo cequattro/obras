@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WebServicePideReniec">
+
+	<!-- VERIFICA SI EXISTE SESION ACTIVA // ANTES FROM SIIT.ILTMV_WSSESRENIEC -->
+	<select id="verifySessionWS" resultType="String">
+	    SELECT V_SESION
+	      FROM SIMINTRA1.SITBD_WSRENIEC
+	     WHERE N_CORSES IN (SELECT MAX(N_CORSES) FROM SIMINTRA1.SITBD_WSRENIEC)
+	       AND N_CORWS=1
+	</select>
+	
+	
+	<!-- INSERTA UNA NUEVA SESION SI ES QUE NO EXISTE //ANTIGUO: INSERT INTO SIIT.ILTMV_WSSESRENIEC-->
+	<insert id="savenewSessionWS" parameterType="hashMap">
+     INSERT INTO SIMINTRA1.SITBD_WSRENIEC
+	  (N_CORSES, V_SESION, D_FECHA, V_CODSIS, V_ESQUEMA, V_FLGERROR,N_CORWS)
+	 VALUES
+	  ((SELECT NVL(MAX(C.N_CORSES), 0) + 1 FROM SIMINTRA1.SITBD_WSRENIEC C),
+	   #{v_sesion},
+	   SYSDATE,
+	   #{v_codsis}, 
+	   (select sys_context( 'userenv', 'current_schema' ) from dual),
+	   'E',
+	   1	   
+	   )
+	</insert>
+
+
+</mapper>

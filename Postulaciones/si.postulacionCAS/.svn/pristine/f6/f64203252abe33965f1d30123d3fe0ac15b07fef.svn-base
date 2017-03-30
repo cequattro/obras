@@ -1,0 +1,327 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.ExperienciaLaboral;
+import pe.gob.sunafil.postulacioncas.bean.ReferenciasLaborales;
+
+@ManagedBean(name="postulacion3Bean")
+@SessionScoped
+public class Postulacion3Bean {
+private static Logger logger = Logger.getLogger(Postulacion3Bean.class.getName());
+	
+	@ManagedProperty("#{postulacion1Bean}")
+	private Postulacion1Bean postulacion1Bean;
+	@ManagedProperty("#{postulacion2Bean}")
+	private Postulacion2Bean postulacion2Bean;
+	
+	private List<ExperienciaLaboral> lstExperienciaGen = new ArrayList();
+	private String entidadg;
+	private String puestog;
+	private String funcionesg;
+	private Date fechaIg;
+	private Date fechaFg;
+	private String tiempog;
+	
+	private List<ExperienciaLaboral> lstExperienciaPro = new ArrayList();
+	private String entidadp;
+	private String puestop;
+	private String funcionesp;
+	private Date fechaIp;
+	private Date fechaFp;
+	private String tiempop;
+	
+	private List<ReferenciasLaborales> lstReferencia = new ArrayList();
+	private String entidadr;
+	private String nombrerefr;
+	private String puestor;
+	private String telefonor;
+	
+	
+	public List<ExperienciaLaboral> getLstExperienciaGen() {
+		return lstExperienciaGen;
+	}
+	public void setLstExperienciaGen(List<ExperienciaLaboral> lstExperienciaGen) {
+		this.lstExperienciaGen = lstExperienciaGen;
+	}
+	public String getEntidadg() {
+		return entidadg;
+	}
+	public void setEntidadg(String entidadg) {
+		this.entidadg = entidadg;
+	}
+	public String getPuestog() {
+		return puestog;
+	}
+	public void setPuestog(String puestog) {
+		this.puestog = puestog;
+	}
+	public String getFuncionesg() {
+		return funcionesg;
+	}
+	public void setFuncionesg(String funcionesg) {
+		this.funcionesg = funcionesg;
+	}
+	public Date getFechaIg() {
+		return fechaIg;
+	}
+	public void setFechaIg(Date fechaIg) {
+		this.fechaIg = fechaIg;
+	}
+	public Date getFechaFg() {
+		return fechaFg;
+	}
+	public void setFechaFg(Date fechaFg) {
+		this.fechaFg = fechaFg;
+	}
+	public String getTiempog() {
+		return tiempog;
+	}
+	public void setTiempog(String tiempog) {
+		this.tiempog = tiempog;
+	}
+	public List<ExperienciaLaboral> getLstExperienciaPro() {
+		return lstExperienciaPro;
+	}
+	public void setLstExperienciaPro(List<ExperienciaLaboral> lstExperienciaPro) {
+		this.lstExperienciaPro = lstExperienciaPro;
+	}
+	public String getEntidadp() {
+		return entidadp;
+	}
+	public void setEntidadp(String entidadp) {
+		this.entidadp = entidadp;
+	}
+	public String getPuestop() {
+		return puestop;
+	}
+	public void setPuestop(String puestop) {
+		this.puestop = puestop;
+	}
+	public String getFuncionesp() {
+		return funcionesp;
+	}
+	public void setFuncionesp(String funcionesp) {
+		this.funcionesp = funcionesp;
+	}
+	public Date getFechaIp() {
+		return fechaIp;
+	}
+	public void setFechaIp(Date fechaIp) {
+		this.fechaIp = fechaIp;
+	}
+	public Date getFechaFp() {
+		return fechaFp;
+	}
+	public void setFechaFp(Date fechaFp) {
+		this.fechaFp = fechaFp;
+	}
+	public String getTiempop() {
+		return tiempop;
+	}
+	public void setTiempop(String tiempop) {
+		this.tiempop = tiempop;
+	}
+	public List<ReferenciasLaborales> getLstReferencia() {
+		return lstReferencia;
+	}
+	public void setLstReferencia(List<ReferenciasLaborales> lstReferencia) {
+		this.lstReferencia = lstReferencia;
+	}
+	public String getEntidadr() {
+		return entidadr;
+	}
+	public void setEntidadr(String entidadr) {
+		this.entidadr = entidadr;
+	}
+	public String getNombrerefr() {
+		return nombrerefr;
+	}
+	public void setNombrerefr(String nombrerefr) {
+		this.nombrerefr = nombrerefr;
+	}
+	public String getPuestor() {
+		return puestor;
+	}
+	public void setPuestor(String puestor) {
+		this.puestor = puestor;
+	}
+	public String getTelefonor() {
+		return telefonor;
+	}
+	public void setTelefonor(String telefonor) {
+		this.telefonor = telefonor;
+	}
+	public Postulacion1Bean getPostulacion1Bean() {
+		return postulacion1Bean;
+	}
+	public void setPostulacion1Bean(Postulacion1Bean postulacion1Bean) {
+		this.postulacion1Bean = postulacion1Bean;
+	}
+	public Postulacion2Bean getPostulacion2Bean() {
+		return postulacion2Bean;
+	}
+	public void setPostulacion2Bean(Postulacion2Bean postulacion2Bean) {
+		this.postulacion2Bean = postulacion2Bean;
+	}
+	
+	public Postulacion3Bean() {
+		inicializar();
+	}
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacionBean3");
+		try {
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	public String datos3Postulaciones(){
+		return "pretty:registroPostulacion3";
+	}
+	
+	public String datosConfirmacion(){
+		return "pretty:registroPostulacionFin";
+	}
+	
+	public static String getFormatDate(Date date) {
+		if(date!=null){
+			return new SimpleDateFormat("dd/MM/yyyy").format(date);}
+		else{
+			return "";}
+	}
+	
+	public void removeItemExperienciaGeneral(ExperienciaLaboral delItem)
+	{
+		if(lstExperienciaGen!=null)
+		{
+			lstExperienciaGen.remove(delItem);
+			if(lstExperienciaGen.isEmpty())
+			{
+				lstExperienciaGen = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemExperienciaGeneral()
+	{
+		if(lstExperienciaGen!=null)
+		{
+			ExperienciaLaboral mMap = new ExperienciaLaboral();
+			mMap.setV_entidad(entidadg.toUpperCase());
+			mMap.setV_puesto(puestog.toUpperCase());
+			mMap.setV_funciones(funcionesg.toUpperCase());
+			mMap.setD_fecini(getFormatDate(fechaIg));
+			mMap.setD_fecfin(getFormatDate(fechaFg));
+			mMap.setN_tiempmes(tiempog.toUpperCase());
+			mMap.setV_flgtipexp("G");
+	        lstExperienciaGen.add(mMap);	       
+		}
+		else
+		{
+			lstExperienciaGen = new ArrayList();
+			
+			ExperienciaLaboral mMap = new ExperienciaLaboral();
+			mMap.setV_entidad(entidadg.toUpperCase());
+			mMap.setV_puesto(puestog.toUpperCase());
+			mMap.setV_funciones(funcionesg.toUpperCase());
+			mMap.setD_fecini(getFormatDate(fechaIg));
+			mMap.setD_fecfin(getFormatDate(fechaFg));
+			mMap.setN_tiempmes(tiempog.toUpperCase());
+			mMap.setV_flgtipexp("G");
+	        lstExperienciaGen.add(mMap);
+		}
+	}
+	
+	public void removeItemExperienciaProfesional(ExperienciaLaboral delItem)
+	{
+		if(lstExperienciaPro!=null)
+		{
+			lstExperienciaPro.remove(delItem);
+			if(lstExperienciaPro.isEmpty())
+			{
+				lstExperienciaPro = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemExperienciaProfesional()
+	{
+		if(lstExperienciaPro!=null)
+		{
+			ExperienciaLaboral mMap = new ExperienciaLaboral();
+			mMap.setV_entidad(entidadp.toUpperCase());
+			mMap.setV_puesto(puestop.toUpperCase());
+			mMap.setV_funciones(funcionesp.toUpperCase());
+			mMap.setD_fecini(getFormatDate(fechaIp));
+			mMap.setD_fecfin(getFormatDate(fechaFp));
+			mMap.setN_tiempmes(tiempop.toUpperCase());
+			mMap.setV_flgtipexp("P");
+	        lstExperienciaPro.add(mMap);	       
+		}
+		else
+		{
+			lstExperienciaPro = new ArrayList();
+			
+			ExperienciaLaboral mMap = new ExperienciaLaboral();
+			mMap.setV_entidad(entidadp.toUpperCase());
+			mMap.setV_puesto(puestop.toUpperCase());
+			mMap.setV_funciones(funcionesp.toUpperCase());
+			mMap.setD_fecini(getFormatDate(fechaIp));
+			mMap.setD_fecfin(getFormatDate(fechaFp));
+			mMap.setN_tiempmes(tiempop.toUpperCase());
+			mMap.setV_flgtipexp("P");
+	        lstExperienciaPro.add(mMap);
+		}
+	}
+	
+	public void removeItemReferencia(ReferenciasLaborales delItem)
+	{
+		if(lstReferencia!=null)
+		{
+			lstReferencia.remove(delItem);
+			if(lstReferencia.isEmpty())
+			{
+				lstReferencia = new ArrayList();
+			}
+		}
+	}
+	
+	public void addItemReferencia()
+	{
+		if(lstReferencia!=null)
+		{
+			ReferenciasLaborales mMap = new ReferenciasLaborales();
+			mMap.setV_entidad(entidadr.toUpperCase());
+			mMap.setV_nomref(nombrerefr.toUpperCase());
+			mMap.setV_cargo(puestor.toUpperCase());
+			mMap.setV_telefono(telefonor);
+			lstReferencia.add(mMap);	       
+		}
+		else
+		{
+			lstReferencia = new ArrayList();
+			
+			ReferenciasLaborales mMap = new ReferenciasLaborales();
+			mMap.setV_entidad(entidadr.toUpperCase());
+			mMap.setV_nomref(nombrerefr.toUpperCase());
+			mMap.setV_cargo(puestor.toUpperCase());
+			mMap.setV_telefono(telefonor);
+			lstReferencia.add(mMap);
+		}
+	}
+	
+}

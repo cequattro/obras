@@ -1,0 +1,369 @@
+package pe.gob.sunafil.postulacioncas.utils;
+
+
+
+import javax.mail.*;
+import javax.mail.internet.*;
+
+import pe.gob.sunafil.postulacioncas.bean.DomicilioEntidad;
+import pe.gob.sunafil.postulacioncas.bean.Entidad;
+import pe.gob.sunafil.postulacioncas.bean.Reclamo;
+import pe.gob.sunafil.postulacioncas.bean.ReclamoxTipoIdentif;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Properties;
+
+
+public class EnviarMail {   
+    
+    public void  generarEnvioDeCorreos(String mensajeHtml,String[] direcciones,String asunto,String n_numdep_evalToOculto) throws Exception{
+    	
+    	String host= "smtp.gmail.com";
+		String user= "sistemas.sunafil@gmail.com";
+		String password= "ogtic2015";
+		
+		Properties properties = new Properties();
+		properties.put("mail.smtp.host", host);
+		properties.put("mail.smtp.mail.sender", user);
+		properties.put("mail.smtp.user",user); 
+		properties.put("mail.smtp.password", password);
+		properties.put("mail.smtp.starttls.enable", "true");// TLS si está disponible
+		
+		//INI::::CODIGO DE PRUEBAS Y VERIFICACION, SOLO COMENTAR EN PRODUCCION: 
+//		properties.put("mail.transport.protocol", "smtps");
+//		properties.put("mail.smtp.ssl.enable", "true");
+//		properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		//FIN::::
+		
+		properties.put("mail.smtp.auth", "true");//Si requiere o no usuario y password para conectarse.
+		properties.put("mail.smtp.port","587"); //NO ME PIDIO ESTO:Puerto de gmail para envio de correos
+		
+		System.out.println("obtenemos la sesion:");
+		Session session = Session.getDefaultInstance(properties);
+		
+		System.out.println("Ingresamos los mensajes :");
+		MimeMessage message = new MimeMessage(session);
+		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+
+		message.setSubject(asunto);
+		
+		Address direccionesClase[] = new Address[direcciones.length];
+		for (int i = 0; i < direcciones.length; i++) {
+			System.out.println("dircciones--> " + direcciones[i] + " " + i);
+			direccionesClase[i] = new InternetAddress(direcciones[i]);
+		}
+		System.out.println("addRecipients and content:");
+		message.addRecipients(Message.RecipientType.TO, direccionesClase);
+		//MENSAJE COPIA OCULTO:
+		if ("462".equalsIgnoreCase(n_numdep_evalToOculto)){
+			System.out.println("Enviando Mensaje Oculto para copia a librodereclamaciones@sunafil.gob.pe");//COMENTAR PARA PRUEBAS
+			message.addRecipients(Message.RecipientType.BCC, new Address[] { new InternetAddress("librodereclamaciones@sunafil.gob.pe") });//COMENTAR PARA PRUEBAS
+//			System.out.println("Enviando Mensaje Oculto para copia a rgarrido@sunafil.gob.pe");//DESCOMENTAR PARA PRUEBAS
+//			message.addRecipients(Message.RecipientType.BCC, new Address[] { new InternetAddress("rgarrido@sunafil.gob.pe") });//DESCOMENTAR PARA PRUEBAS
+		}
+		
+		message.setContent(mensajeHtml, "text/html");
+		//Acuse de Recibo
+		//message.addHeader("Disposition-Notification-to", (String) properties.get("mail.smtp.mail.sender"));
+		//Prioridad Alta
+		System.out.println("metemos addheaer X-Priority:");
+		message.addHeader("X-Priority", "1");
+		
+		System.out.println("obtenemos el Transport:");
+		Transport t = session.getTransport("smtp");
+	    try {
+	    	System.out.println("obtenemos el connect():");
+	        t.connect(host, user, password);
+	        System.out.println("enviando el mensaje:");
+	        //SOLO A LOS RECIPIENTS TO
+	        //t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+	        //A TODOS LOS RECIPIENTS ALL
+	        t.sendMessage(message,message.getAllRecipients());
+
+	    } finally {
+	    	System.out.println("cerramos la conexion:");
+	        t.close();
+	    }	
+		System.out.println("Termino el envío de correo.");
+    	
+    }
+    /**
+     * Para obtener el String en HTML del StackTrace del Error Sucedido y enviarlo al correo.
+     * @param throwable
+     * @return String
+     */
+    public static String getStackTraceToHTML(final Throwable throwable) {
+    	StringWriter sw = new StringWriter();
+    	PrintWriter pw = new PrintWriter(sw);
+		throwable.printStackTrace(pw);
+		String stackTrace = sw.toString();
+		return stackTrace.replace(System.getProperty("line.separator"), "<br/>\n");
+    }
+    
+    /**
+     * Obtiene el codigo html para el envio de correo al ciudadano que reclamó.
+     * @param reclamo
+     * @param entidad
+     * @param domEntidad
+     * @param selectedTiposIdentifDeReclamo
+     * @param v_desotrtir
+     * @param nroReclam
+     * @param v_desintendencia
+     * @param v_desdepprodis
+     * @param v_desdireccion
+     * @return
+     */
+    public String obtieneHTMLDeReclamacion(Reclamo reclamo, 
+    									   Entidad entidad, 
+    									   DomicilioEntidad domEntidad, 
+    									   String[] selectedTiposIdentifDeReclamo, 
+    									   String v_desotrtir,
+    									   String nroReclam,
+    									   String v_desintendencia,
+    									   String v_desdepprodis,
+    									   String v_desdireccion){
+    	
+    	//LOS QUE SI SE PUEDEN OBTENER:
+    	String msghtml="";
+    	String nom_o_Razsoc= "";
+    	String tipo_usuario="";
+    	
+    	if ("09".equals(entidad.getV_codtdocide())){
+    		nom_o_Razsoc=entidad.getV_razsoc();
+    	}else{
+    		nom_o_Razsoc=entidad.getV_apepat()+" "+entidad.getV_apemat()+" "+entidad.getV_nombres();
+    	}
+    	
+    	if("T".equalsIgnoreCase(reclamo.getV_tipusu())){
+    		tipo_usuario="Trabajador";
+    	}else if("E".equalsIgnoreCase(reclamo.getV_tipusu())){
+    		tipo_usuario="Empleador";
+    	}
+    	
+    	String v_flgotros="";
+    	String v_flgdematen="&nbsp;&nbsp;";
+    	String v_flgimpedinj="&nbsp;&nbsp;";
+    	String v_flginfoins="&nbsp;&nbsp;";
+    	String v_flgdescortes="&nbsp;&nbsp;";
+    	String v_flgnegatide="&nbsp;&nbsp;";
+    	
+    	for (String tipo : selectedTiposIdentifDeReclamo){
+			
+			if("99".equals(tipo)){//SI ES OTROS.
+				v_flgotros="X";
+			}else if("1".equals(tipo)){//SI ES OTROS.
+				v_flgdematen="X";
+			}else if("2".equals(tipo)){//SI ES OTROS.
+				v_flgimpedinj="X";
+			}else if("3".equals(tipo)){//SI ES OTROS.
+				v_flginfoins="X";
+			}else if("4".equals(tipo)){//SI ES OTROS.
+				v_flgdescortes="X";
+			}else if("5".equals(tipo)){//SI ES OTROS.
+				v_flgnegatide="X";
+			}
+		}
+    	msghtml= "<strong>Estimado usuario:</strong>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"En atenci&oacute;n al reclamo presentado a nuestra instituci&oacute;n, le hacemos llegar la constancia respectiva; asimismo le indicamos que su reclamo ser&aacute; respondido en el más breve plazo, el mismo que no exceder&aacute; de 30 d&iacute;as hábiles contados desde la fecha de su presentaci&oacute;n.";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml = msghtml+
+    			 "<table width=\"98%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 12px;\">"
+				+  "<tr style=\"background-image:url(https://lh3.googleusercontent.com/-uhzwavIAv8E/ViZ_QZPB-vI/AAAAAAAAADw/z2LMNE7GcAo/s36-Ic42/bg_azul_superior.png); background-repeat:repeat-x;\">"
+				+		"<td colspan=\"2\" width=\"215\" bgcolor=\"#002B66\" style=\"border-bottom-width:thin; border-bottom-style:solid; border-bottom-color:#002B66;\">"
+				+			"<img src=\"https://lh3.googleusercontent.com/-t4sZdyWtv78/VYHhAUIMI7I/AAAAAAAAAB4/OQwXCIw60qk/s207/cabecera_izq.png\" alt=\"SUNAFIL\" width=\"207\" height=\"36\" longdesc=\"SUNAFIL\" /></td>"
+				+		"<td width=\"840\" align=\"right\" bgcolor=\"#002B66\">"
+				+			"<span style=\"font-size: 12px;color: #FFFFFF;font-family: Geneva, Arial, Helvetica, sans-serif;\"><strong>Hoja de Reclamaci&oacute;n Nro. "+nroReclam+"</strong></span></td>"
+				+		"<td width=\"18\" bgcolor=\"#002B66\"></td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td width=\"16\" height=\"30\">&nbsp;</td>"
+				+    "<td colspan=\"2\"><div align=\"center\" style=\"font-size: 13px; color: #000000; font-family: Geneva, Arial, Helvetica, sans-serif; font-weight: bold;\"><strong>LIBRO DE RECLAMACIONES </strong></div></td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Entidad:</strong> Superintendencia Nacional de Fiscalizaci&oacute;n Laboral</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Intendencia Regional:</strong> "+v_desintendencia+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td width=\"451\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong><U>1. IDENTIFICACION DEL USUARIO: </U></strong></td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Nro. de Documento:</strong> "+entidad.getV_numdoc()+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Nombre o Raz&oacute;n Social:</strong> "+nom_o_Razsoc+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Tipo Usuario:</strong> "+tipo_usuario+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Tel&eacute;fono fijo:</strong> "+reclamo.getV_telfijo()+" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Tel&eacute;fono Celular</strong>: "+reclamo.getV_telcel()+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Correo Electr&oacute;nico:</strong> "+reclamo.getV_email().toLowerCase()+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong><u>Domicilio:</u></strong></td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong>Departamento / Provincia / Distrito:</strong> "+v_desdepprodis+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"> <strong>Direcci&oacute;n:</strong> "+v_desdireccion+" </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong><U>2. IDENTIFICACION DEL RECLAMO:</U></strong> </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">"
+				+		"<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+				+		  "<tr>"
+				+			"<td>Demora en la atenci&oacute;n. </td>"
+				+			"<td bordercolor=\"#000000\" bgcolor=\"#CCCCCC\">("+v_flgdematen+")</td>"
+				+			"<td>&nbsp;</td>"
+				+			"<td>Impedimento injustificado de ingreso a la instituci&oacute;n. </td>"
+				+		  "<td bordercolor=\"#000000\" bgcolor=\"#CCCCCC\">("+v_flgimpedinj+")</td>"
+				+		  "</tr>"
+				+		  "<tr>"
+				+			"<td>Trato descort&eacute;s.</td>"
+				+			"<td bordercolor=\"#000000\" bgcolor=\"#CCCCCC\">("+v_flgdescortes+")</td>"
+				+			"<td>&nbsp;</td>"
+				+			"<td>Negativa a Identificarse. </td>"
+				+		  "<td bordercolor=\"#000000\" bgcolor=\"#CCCCCC\">("+v_flgnegatide+")</td>"
+				+		  "</tr>"
+				+		  "<tr>"
+				+			"<td>Informaci&oacute;n insuficiente y/o err&oacute;nea.</td>"
+				+			"<td bordercolor=\"#000000\" bgcolor=\"#CCCCCC\">("+v_flginfoins+")</td>"
+				+			"<td>&nbsp;</td>"
+				+			"<td>&nbsp;</td>"
+				+		  "<td>&nbsp;</td>"
+				+		  "</tr>"
+				+	  "</table>"
+				+	"</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>";
+    	
+    	//SI ES DE TIPO OTROS:
+    	if("X".equalsIgnoreCase(v_flgotros)){
+    	msghtml= msghtml 
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><BR/>Otros vinculados al servicio de atenci&oacute;n: </td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">"+v_desotrtir+"</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>";
+    	}
+    	
+    	msghtml= msghtml
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><strong><U>Descripci&oacute;n del Reclamo: </U></strong></td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\"><BR/>"+reclamo.getV_desreclam()+"</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr>"
+				+    "<td>&nbsp;</td>"
+				+    "<td colspan=\"2\">&nbsp;</td>"
+				+    "<td>&nbsp;</td>"
+				+  "</tr>"
+				+  "<tr style=\"background-image:url(https://lh3.googleusercontent.com/-1yliOEtUzLk/ViZ_QrD3NUI/AAAAAAAAAD0/3MHm0r5Y_RY/s50-Ic42/bg_azul_inferior.png); background-repeat:repeat-x;\">"
+				+    "<td colspan=\"4\">"
+				+	   "<table width=\"100%\" height=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"font-size: 12px; color: #FFFFFF; font-family: Geneva, Arial, Helvetica, sans-serif; background-color:#002B66 \">"
+				+     "<tr>"
+				+       "<td width=\"4%\" align=\"left\" valign=\"middle\"><img src=\"https://lh3.googleusercontent.com/-6ExqWr0dzBo/VYHoLRmgqvI/AAAAAAAAACQ/i-jdmvf7iIo/s50/lupa_gris_t.png\" alt=\"lupa\" height=\"35\" border=\"0\" longdesc=\"SUNAFIL\" /></td>"
+				+  	   "<td width=\"96%\" align=\"left\" valign=\"middle\"><span style=\"font-weight: bold;\">Aplicativo Virtual de Libro de Reclamaciones</span><br /><span style=\"font-size:9px; color:#999999\">Superintendencia Nacional de Fiscalizaci&oacute;n Laboral - SUNAFIL</span></td>"
+				+	   "</tr>"
+				+     "</table>"
+				+	  "</td>"
+				+  "</tr>"
+				+"</table>";
+    	
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"Lamentamos las molestias ocasionadas.";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"Atentamente,";
+    	msghtml= msghtml+"<br/>";
+    	msghtml= msghtml+"<strong>SUNAFIL</strong>";
+
+    	System.out.println(msghtml);
+    	
+    	return msghtml;
+    }
+
+}

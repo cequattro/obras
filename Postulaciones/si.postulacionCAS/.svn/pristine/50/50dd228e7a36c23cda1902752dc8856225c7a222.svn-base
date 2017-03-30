@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/postulacioncas/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Combo"  alias="comboBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Entidad"  alias="entidadBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.DomicilioEntidad"  alias="domEntidadBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Reclamo"  alias="reclamoBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.ReclamoxTipoIdentif"  alias="recxIdentifBean"/>
+		
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		 <!-- -->
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		<!--  -->
+		<!-- PARA PRODUCCION:-->
+		<!-- 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSpostulacioncasACIONES" />
+			</dataSource>			
+		</environment> 
+		 -->
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XConsultaSIIT.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XLogueo.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XCombos.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XEntidad.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XDomicilioEntidad.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XReclamo.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XPersonaReniec.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XWebService.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XReporte.xml" />
+		 
+	</mappers>
+</configuration>
+

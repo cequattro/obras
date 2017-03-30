@@ -1,0 +1,152 @@
+package pe.gob.sunafil.postulacioncas.bean;
+
+import java.io.Serializable;
+
+public class HojaDeVida implements Serializable{
+
+	private static final long serialVersionUID = 5995467075132806976L;
+	
+	private String n_corconv;
+	private String v_nacionalidad;
+	private String v_codestciv;
+	private String v_direccion;
+	private String v_urbanizac;
+	private String v_coddepdom;
+	private String v_codprodom;
+	private String v_coddisdom;
+	private String v_telfij;
+	private String v_telcel;
+	private String v_correo;
+	private String v_descolegio;
+	private String v_numregcol;
+	private String v_flgdis;
+	private String v_flglicfa;
+	private String v_codusureg;
+	private String d_fecreg;
+	private String v_hostreg;
+	
+	public String getN_corconv() {
+		return n_corconv;
+	}
+	public void setN_corconv(String n_corconv) {
+		this.n_corconv = n_corconv;
+	}
+	public String getV_nacionalidad() {
+		return v_nacionalidad;
+	}
+	public void setV_nacionalidad(String v_nacionalidad) {
+		this.v_nacionalidad = v_nacionalidad;
+	}
+	public String getV_codestciv() {
+		return v_codestciv;
+	}
+	public void setV_codestciv(String v_codestciv) {
+		this.v_codestciv = v_codestciv;
+	}
+	public String getV_direccion() {
+		return v_direccion;
+	}
+	public void setV_direccion(String v_direccion) {
+		this.v_direccion = v_direccion;
+	}
+	public String getV_urbanizac() {
+		return v_urbanizac;
+	}
+	public void setV_urbanizac(String v_urbanizac) {
+		this.v_urbanizac = v_urbanizac;
+	}
+	public String getV_coddepdom() {
+		return v_coddepdom;
+	}
+	public void setV_coddepdom(String v_coddepdom) {
+		this.v_coddepdom = v_coddepdom;
+	}
+	public String getV_codprodom() {
+		return v_codprodom;
+	}
+	public void setV_codprodom(String v_codprodom) {
+		this.v_codprodom = v_codprodom;
+	}
+	public String getV_coddisdom() {
+		return v_coddisdom;
+	}
+	public void setV_coddisdom(String v_coddisdom) {
+		this.v_coddisdom = v_coddisdom;
+	}
+	public String getV_telfij() {
+		return v_telfij;
+	}
+	public void setV_telfij(String v_telfij) {
+		this.v_telfij = v_telfij;
+	}
+	public String getV_telcel() {
+		return v_telcel;
+	}
+	public void setV_telcel(String v_telcel) {
+		this.v_telcel = v_telcel;
+	}
+	public String getV_correo() {
+		return v_correo;
+	}
+	public void setV_correo(String v_correo) {
+		this.v_correo = v_correo;
+	}
+	public String getV_descolegio() {
+		return v_descolegio;
+	}
+	public void setV_descolegio(String v_descolegio) {
+		this.v_descolegio = v_descolegio;
+	}
+	public String getV_numregcol() {
+		return v_numregcol;
+	}
+	public void setV_numregcol(String v_numregcol) {
+		this.v_numregcol = v_numregcol;
+	}
+	public String getV_flgdis() {
+		return v_flgdis;
+	}
+	public void setV_flgdis(String v_flgdis) {
+		this.v_flgdis = v_flgdis;
+	}
+	public String getV_flglicfa() {
+		return v_flglicfa;
+	}
+	public void setV_flglicfa(String v_flglicfa) {
+		this.v_flglicfa = v_flglicfa;
+	}
+	public String getV_codusureg() {
+		return v_codusureg;
+	}
+	public void setV_codusureg(String v_codusureg) {
+		this.v_codusureg = v_codusureg;
+	}
+	public String getD_fecreg() {
+		return d_fecreg;
+	}
+	public void setD_fecreg(String d_fecreg) {
+		this.d_fecreg = d_fecreg;
+	}
+	public String getV_hostreg() {
+		return v_hostreg;
+	}
+	public void setV_hostreg(String v_hostreg) {
+		this.v_hostreg = v_hostreg;
+	}
+	@Override
+	public String toString() {
+		return "HojaDeVida [n_corconv=" + n_corconv + ", v_nacionalidad="
+				+ v_nacionalidad + ", v_codestciv=" + v_codestciv
+				+ ", v_direccion=" + v_direccion + ", v_urbanizac="
+				+ v_urbanizac + ", v_coddepdom=" + v_coddepdom
+				+ ", v_codprodom=" + v_codprodom + ", v_coddisdom="
+				+ v_coddisdom + ", v_telfij=" + v_telfij + ", v_telcel="
+				+ v_telcel + ", v_correo=" + v_correo + ", v_descolegio="
+				+ v_descolegio + ", v_numregcol=" + v_numregcol + ", v_flgdis="
+				+ v_flgdis + ", v_flglicfa=" + v_flglicfa + ", v_codusureg="
+				+ v_codusureg + ", d_fecreg=" + d_fecreg + ", v_hostreg="
+				+ v_hostreg + "]";
+	}
+	
+
+}

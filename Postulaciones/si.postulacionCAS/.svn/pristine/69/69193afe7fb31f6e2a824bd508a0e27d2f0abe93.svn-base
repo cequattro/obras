@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">.::Postulacion CAS::.</ui:insert></title>
+	<h:outputStylesheet name="postulacioncas.css" library="css" />	
+	<h:outputScript name="validacion.js" library="js"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/principal/favicon.png"/>
+</h:head>
+
+<h:body onload="javascript:window.history.forward(1);" >
+<!-- Google Tag Manager Para cuando configuremos el script-->
+<!-- 
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MVJPFV"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MVJPFV');</script>
+-->
+<!-- End Google Tag Manager -->
+ 
+	<!-- Se va a usar Tablas para ordenarlo Se puede usar Div  -->
+
+	
+	
+	<table cellpadding="0" cellspacing="0" align="center" border="0" class="tablaPrincipal">
+		<tr>
+			<td colspan="2" style="padding: 0px; border: 1px solid black;">
+				<ui:insert name="cabecera">
+					<p:graphicImage value="/resources/images/principal/cabecera.png"/>
+				</ui:insert>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="controlClase" align="left">				
+				<ui:insert name="datosUsuario">
+					<ui:include src="/jsfDocs/includes/opcion-lateral-der.xhtml"/>
+					<p:panelGrid>
+						<p:row>
+							<p:column style="text-align: left">
+								<h:outputLabel value="Estimado Usuario Bienvenido al Aplicativo"/>
+							</p:column>
+							<p:column style="text-align: right">
+								<h:outputText value="#{cargaAppBean.s_fecha}"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					
+				</ui:insert>
+			</td>
+		</tr>
+		
+		<tr >
+		<!-- CUERPO -->
+			<td style="vertical-align: super;padding: 0px;" colspan="2">
+				<div id="contenido" class="contenidoClase">
+					<ui:insert name="contenido">
+					</ui:insert>
+				</div> 
+				<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+					header="Status" draggable="false" closable="false"
+					position="center" resizable="false">
+					<h:outputText value="Espere porfavor..." />
+					<br />
+					<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+				</p:dialog>
+				<ui:insert name="monitorSesion">
+					<p:idleMonitor onactive="sessionTimeOutDialog.show();" timeout="#{session.maxInactiveInterval * 1000}" />
+	           		<p:dialog header="Su sesión ha caducado" widgetVar="sessionTimeOutDialog"
+	            			modal="true" fixedCenter="true" closable="false" width="400" visible="false" 
+	            			style="text-align: center !important;" resizable="false">
+	                		
+	                		<p:fieldset  style="background-image: url('resources/images/logos/lupa_sunafil_fondo.png'); background-repeat: no-repeat;">
+	                			<br/>
+	                			<h:outputText value="Su sesión ha caducado, por favor pulse sobre el siguiente botón para volver a acceder a la aplicación." />
+	                			<br/>
+	                		</p:fieldset>
+	                		<br />
+	                		<input id="confirmBackToLogin" type="button" class="input_boton" value="Volver a Acceder a la Aplicación"
+	                   			   onclick="window.location='#{facesContext.externalContext.requestContextPath}';" />
+	           		</p:dialog>
+           		</ui:insert>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding-top: 5px;">
+				<ui:insert name="pie">
+					<fieldset style="margin: 0px;border: 1px solid #D8DCDF; "> 
+
+						<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0px;">
+							<tr>
+								<td width="100%" align="center" valign="middle" class="contenido_negrita">
+										Elaborado por la Oficina General de Tecnologías de la Información y Comunicaciones - SUNAFIL
+								</td>
+							</tr>
+							<tr>
+								<td align="center" valign="middle" class="contenido_especial">
+										Copyright © 2015 Aplicativo del Libro de Reclamaciones. Todos los Derechos Reservados. Perú. Telef. (511) 390 2777
+								</td>
+							</tr>								
+							
+						</table>
+
+					</fieldset>
+				</ui:insert>
+			</td>
+		</tr>
+	</table>
+   
+
+</h:body>
+</html>

@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<p:graphicImage value="/resources/images/principal/paso3de3.png"/>	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+	
+	<p:fieldset style="text-align: left;" legend="V.  a) EXPERIENCIA LABORAL GENERAL">
+	<h:panelGrid columns="9" >			 
+         
+         <p:outputLabel value="Nombre de Entidad o Empresa &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.entidadg}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Puesto / Cargo &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.puestog}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Principales Funciones Realizadas &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.funcionesg}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel for="buttoni" value="Fecha inicio" />
+    	 <p:calendar id="buttoni" showOn="button" size="10" pattern="dd/MM/yyyy" value="#{postulacion3Bean.fechaIg}" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" pattern="dd/MM/yyyy" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+         
+         <p:outputLabel for="buttone" value="Fecha término" />
+    	 <p:calendar id="buttone" showOn="button" size="10" pattern="dd/MM/yyyy" value="#{postulacion3Bean.fechaFg}" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" pattern="dd/MM/yyyy" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />               
+
+         <p:outputLabel value="Tiempo en el cargo" rendered="false"/>
+         <p:inputText style="width: 120px" id="ti" maxlength="60" value="#{postulacion3Bean.tiempog}" rendered="false">
+         </p:inputText>
+         <p:outputLabel value="" rendered="false"/>
+         
+       </h:panelGrid>   
+       
+       <h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Experiencia" action="#{postulacion3Bean.addItemExperienciaGeneral()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+       </h:panelGrid>
+         
+       <h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable" value="#{postulacion3Bean.lstExperienciaGen}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Nombre de Entidad o Empresa" >
+	                <h:outputText value="#{item.v_entidad}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Puesto / Cargo" >
+	                <h:outputText value="#{item.v_puesto}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Principales Funciones Realizadas" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.v_funciones}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Inicio" >
+	                <h:outputText value="#{item.d_fecini}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Término">
+	                <h:outputText value="#{item.d_fecfin}"/>
+	            </p:column> 
+	            <p:column headerText="Tiempo en el cargo" rendered="false">
+	                <h:outputText value="#{item.n_tiempmes}"/>
+	            </p:column>          
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{postulacion3Bean.avisoRemoveItemExperienciaGeneral(item)}" process="@this" update="@form" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+     
+     
+    <p:fieldset style="text-align: left;" legend="V.  b) EXPERIENCIA PROFESIONAL O ESPECÍFICA">
+	<h:panelGrid columns="9" >	
+	
+		 <p:outputLabel value="Nombre de Entidad o Empresa &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.entidadp}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Puesto / Cargo &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.puestop}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Principales Funciones Realizadas &nbsp;&nbsp;" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.funcionesp}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel for="buttonii" value="Fecha inicio" />
+    	 <p:calendar id="buttonii" showOn="button" size="10" pattern="dd/MM/yyyy" value="#{postulacion3Bean.fechaIp}" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" pattern="dd/MM/yyyy" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+         
+         <p:outputLabel for="buttonee" value="Fecha término" />
+    	 <p:calendar id="buttonee" showOn="button" size="10" pattern="dd/MM/yyyy" value="#{postulacion3Bean.fechaFp}" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" pattern="dd/MM/yyyy" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />               
+
+         <p:outputLabel value="Tiempo en el cargo" rendered="false"/>
+         <p:inputText style="width: 120px" id="tii" maxlength="60" value="#{postulacion3Bean.tiempop}" rendered="false">
+         </p:inputText>
+         <p:outputLabel value="" rendered="false"/>	
+	
+	</h:panelGrid>
+	
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Experiencia" action="#{postulacion3Bean.addItemExperienciaProfesional()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+    </h:panelGrid>    
+    
+    <h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable2" value="#{postulacion3Bean.lstExperienciaPro}" 
+	                         var="item" widgetVar="usrTable2"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Nombre de Entidad o Empresa" >
+	                <h:outputText value="#{item.v_entidad}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Puesto / Cargo" >
+	                <h:outputText value="#{item.v_puesto}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Principales Funciones Realizadas" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.v_funciones}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Inicio" >
+	                <h:outputText value="#{item.d_fecini}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Término">
+	                <h:outputText value="#{item.d_fecfin}"/>
+	            </p:column> 
+	            <p:column headerText="Tiempo en el cargo" rendered="false">
+	                <h:outputText value="#{item.n_tiempmes}"/>
+	            </p:column>         
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{postulacion3Bean.avisoRemoveItemExperienciaProfesional(item)}" process="@this" update="@form" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+	
+	</p:fieldset>
+     
+      <br/>
+	 	
+	<p:fieldset style="text-align: left;" legend="VI. REFERENCIAS LABORALES">
+	
+	<h:panelGrid columns="12" >
+	
+		 <p:outputLabel value="Entidad o Empresa" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.entidadr}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Nombre del Referente" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.nombrerefr}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Puesto / Cargo" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.puestor}"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Teléfono de la Entidad" />
+         <p:inputText style="width: 120px" value="#{postulacion3Bean.telefonor}" onkeypress="return soloNumeros(event);"/>
+         <p:outputLabel value=""/>	                  
+	
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Referencia Laboral" action="#{postulacion3Bean.addItemReferencia()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+    </h:panelGrid>
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable3" value="#{postulacion3Bean.lstReferencia}" 
+	                         var="item" widgetVar="usrTable3"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Entidad o Empresa" >
+	                <h:outputText value="#{item.v_entidad}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>          
+	            <p:column headerText="Nombre del Referente" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.v_nomref}"/>
+	            </p:column>
+	            <p:column headerText="Puesto / Cargo" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.v_cargo}"/>
+	            </p:column>
+	            <p:column headerText="Teléfono de la Entidad" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.v_telefono}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{postulacion3Bean.avisoRemoveItemReferencia(item)}" process="@this" update="@form" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+	
+	</p:fieldset>		 	
+	
+	  <br/>
+	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">     		 
+     		 <p:commandButton value="Regresar" ajax="false" action="#{postulacion3Bean.datos2Postulaciones}" icon="ui-icon-arrowthick-1-w" update="@form" onclick="statusDialog.show();"/>
+     		 
+     		 <p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>		      		
+    	</h:panelGrid>
+    	<h:panelGrid columns="1" style="text-align: center;">
+    		<p:commandButton value="&nbsp;Enviar" action="#{postulacion3Bean.avisoAntesDeGrabar}" icon="icon-redx" update="@form" style="background:#d71217 !important; color:#ffffff !important;"/>
+    	</h:panelGrid>
+    	</center>
+    	    	    	
+	        
+	</p:fieldset>
+
+    	    	   
+   	 <p:dialog widgetVar="dialogConfirmacionGarbar" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+		   <center>
+				<br/>
+			    <h:outputLabel value="¿Está seguro que desea enviar los datos de Postulación?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" icon="ui-icon-check" action="#{postulacion3Bean.datosConfirmacion()}" oncomplete="dialogConfirmacionGarbar.hide();" update="@form" onclick="statusDialog.show();"/>
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogConfirmacionGarbar.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</center>
+			</p:fieldset>
+	</p:dialog> 	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	
+	<p:dialog widgetVar="dialogEliminarExpLabGen" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+		   <center>
+			<h:form id="formElimExpLabGen" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="¿Está seguro que desea eliminar la Experiencia Laboral General seleccionada?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" icon="ui-icon-check" action="#{postulacion3Bean.removeItemExperienciaGeneral()}" oncomplete="dialogEliminarExpLabGen.hide();" update=":formInicio:datatable"/>
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogEliminarExpLabGen.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</center>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	<p:dialog widgetVar="dialogEliminarExpLabPro" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+		   <center>
+			<h:form id="formElimExpLabPro" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="¿Está seguro que desea eliminar la Experiencia Laboral Profesional o Específica seleccionada?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" icon="ui-icon-check" action="#{postulacion3Bean.removeItemExperienciaProfesional()}" oncomplete="dialogEliminarExpLabPro.hide();" update=":formInicio:datatable2"/>
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogEliminarExpLabPro.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</center>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	<p:dialog widgetVar="dialogEliminarRefLab" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+		   <center>
+			<h:form id="formElimRefLab" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="¿Está seguro que desea eliminar la Referencia Laboral seleccionada?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" icon="ui-icon-check" action="#{postulacion3Bean.removeItemReferencia()}" oncomplete="dialogEliminarRefLab.hide();" update=":formInicio:datatable3"/>
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogEliminarRefLab.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</center>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+		   <center>
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Postulante, ¿Está seguro de Salir del Aplicativo?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</center>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

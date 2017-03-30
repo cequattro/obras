@@ -1,0 +1,348 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.context.RequestContext;
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.Combo;
+import pe.gob.sunafil.postulacioncas.bean.HojaDeVida;
+import pe.gob.sunafil.postulacioncas.bean.Persona;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.CombosDespatch;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.Postulacion1Despatch;
+
+
+
+@ManagedBean(name="postulacion1Bean")
+@SessionScoped
+public class Postulacion1Bean {
+	private static Logger logger = Logger.getLogger(Postulacion1Bean.class.getName());
+	
+	private HojaDeVida hojadevida;
+	private Persona persona;
+	private List<Combo> listaProvinciasNac;
+	private List<Combo> listaDistritosNac;
+	private List<Combo> listaProvinciasDom;
+	private List<Combo> listaDistritosDom;
+	private CombosDespatch dspcombos = new CombosDespatch();
+	private Postulacion1Despatch dsppost1 = new Postulacion1Despatch();
+	private boolean muestraLineaPuesto; 
+	private String mensajeValidacion;
+	
+	public Postulacion1Bean() {
+		inicializar();
+	}
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacion1Bean");
+		try {
+			hojadevida = new HojaDeVida();
+			persona = new Persona();
+			listaProvinciasNac = new ArrayList<Combo>();
+			listaDistritosNac = new ArrayList<Combo>();
+			muestraLineaPuesto = true;
+			mensajeValidacion = "";
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	
+	
+	/**
+	 * obtiene los distritos por el departamento seleccionado
+	 */
+	public void selCmbDepartamentoNac(){
+		logger.info("Obteniendo Cmb Provincia de Nacimiento");
+		try{
+			listaProvinciasNac = new ArrayList<Combo>();
+			String coddep = persona.getV_coddepnac(); 
+			listaProvinciasNac = dspcombos.listaProvinciasxDep(coddep);
+			
+			//DESSELECCIONANDO LA PROVINCIA
+			persona.setV_codpronac("");
+			//DESSELECCIONANDO EL DISTRITO
+			persona.setV_coddisnac("");
+			
+			//LIMPIAMOS LOS DISTRITOS
+			listaDistritosNac = new ArrayList<Combo>();
+			
+		}catch(Exception e){
+			logger.error("Error en Listar las provincias y distritos: "+e.getMessage(),e);
+		}
+	}
+	
+	public void selCmbProvinciaNac(){
+		logger.info("Obteniendo Cmb Distrito");
+		try{
+			listaDistritosNac = new ArrayList<Combo>();
+			String coddep = persona.getV_coddepnac();
+			String codpro = persona.getV_codpronac();
+			listaDistritosNac = dspcombos.listaDistritosxPro(coddep,codpro);
+			//DESSELECCIONANDO EL DISTRITO
+			persona.setV_coddisnac("");
+			
+		}catch(Exception e){
+			logger.error("Error en Listar los distritos: "+e.getMessage(),e);
+		}
+	}
+	
+	/**
+	 * obtiene los distritos del domicilio del postulante por el departamento seleccionado
+	 */
+	public void selCmbDepartamentoDom(){
+		logger.info("Obteniendo Cmb Provincia de Domicilio");
+		System.out.println("obteniendo provincias lalala");
+		try{
+			listaProvinciasDom = new ArrayList<Combo>();
+			String coddep = hojadevida.getV_coddepdom(); 
+			listaProvinciasDom = dspcombos.listaProvinciasxDep(coddep);
+			
+			//DESSELECCIONANDO LA PROVINCIA
+			hojadevida.setV_codprodom("");
+			//DESSELECCIONANDO EL DISTRITO
+			hojadevida.setV_coddisdom("");
+			
+			//LIMPIAMOS LOS DISTRITOS
+			listaDistritosDom = new ArrayList<Combo>();
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("Error en Listar las provincias y distritos de domicilio: "+e.getMessage(),e);
+		}
+	}
+	
+	public void selCmbProvinciaDom(){
+		logger.info("Obteniendo Cmb Distrito");
+		try{
+			listaDistritosDom = new ArrayList<Combo>();
+			String coddep = hojadevida.getV_coddepdom();
+			String codpro = hojadevida.getV_codprodom();
+			listaDistritosDom = dspcombos.listaDistritosxPro(coddep,codpro);
+			//DESSELECCIONANDO EL DISTRITO
+			hojadevida.setV_coddisdom("");
+			
+		}catch(Exception e){
+			logger.error("Error en Listar los distritos de domicilio: "+e.getMessage(),e);
+		}
+	}
+	
+	public void selCmbConvocatoria(){
+		logger.info("Obteniendo el Nombre de la Convocatoria");
+		try{
+			
+			String p_corconv = hojadevida.getN_corconv();
+			if(p_corconv.equals("")){
+				hojadevida.setV_desconv(null);
+				muestraLineaPuesto=true;
+			}else{
+				String v_desconv = dsppost1.obtieneNombreConvocatoria(p_corconv);
+				
+				hojadevida.setV_desconv(v_desconv);
+				if(v_desconv==null){
+					muestraLineaPuesto=true;
+				}else{
+					muestraLineaPuesto=false;
+				}
+				
+			}
+			
+		}catch(Exception e){
+			logger.error("Error en selCmbConvocatoria: "+e.getMessage(),e);
+		}
+	}
+	
+	public String goToDatos2Postulaciones(){
+		String salida="pretty:registroPostulacion2";
+		//VALIDAMOS LOS DATOS INGRESADOS:
+		
+		if(!validaPostulacion1()){
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Información", mensajeValidacion));
+			return null;
+		}
+		
+		return salida;
+	}
+	
+	public boolean validaPostulacion1(){
+		
+		logger.info("Validando información");/*
+		if("".equals(hojadevida.getN_corconv())){
+			mensajeValidacion="Por favor seleccione la postulación.";
+			return false;
+		}
+		if("".equals(persona.getV_codtdocide())){
+			mensajeValidacion="Por favor seleccione el tipo de documento.";
+			return false;
+		}
+		
+		if("".equals(persona.getV_apepat().trim())){
+			mensajeValidacion="Por favor ingrese su appelido paterno.";
+			return false;
+		}
+		if("".equals(persona.getV_apemat().trim())){
+			mensajeValidacion="Por favor ingrese su apellido materno.";
+			return false;
+		}
+		if("".equals(persona.getV_nombres().trim())){
+			mensajeValidacion="Por favor ingrese su nombre.";
+			return false;
+		}
+		if("".equals(persona.getV_coddepnac())){
+			mensajeValidacion="Por favor seleccione su departamento de nacimiento.";
+			return false;
+		}
+		if("".equals(persona.getV_codpronac())){
+			mensajeValidacion="Por favor seleccione su provincia de nacimiento.";
+			return false;
+		}
+		if("".equals(persona.getV_coddisnac())){
+			mensajeValidacion="Por favor seleccione su distrito de nacimiento.";
+			return false;
+		}
+		System.out.println("d_fecnac=>>>>>>>>>>>>>>>>>"+persona.getD_fecnac());
+		
+		
+		if(persona.getD_fecnac()!=null){
+			if(persona.getD_fecnac().getYear() < 1900){
+				System.out.println(persona.getD_fecnac().getYear());
+				mensajeValidacion="Por favor ingrese su fecha de nacimiento válida.";
+				return false;
+			}
+		}
+		else{
+			mensajeValidacion="Por favor ingrese su fecha de nacimiento.";
+			return false;
+		}
+		
+		
+		if("".equals(persona.getD_fecnac()) || persona.getD_fecnac()==null){
+			mensajeValidacion="Por favor ingrese su fecha de nacimiento.";
+			return false;
+		}		
+		if("".equals(hojadevida.getV_nacionalidad().trim())){
+			mensajeValidacion="Por favor ingrese su nacionalidad.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_codestciv())){
+			mensajeValidacion="Por favor seleccione su estado civil.";
+			return false;
+		}		
+		
+		if("".equals(hojadevida.getV_coddepdom())){
+			mensajeValidacion="Por favor seleccione el departamento de su domicilio actual.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_codprodom())){
+			mensajeValidacion="Por favor seleccione la provincia de su domicilio actual.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_coddisdom())){
+			mensajeValidacion="Por favor seleccione el distrito de su domicilio actual.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_urbanizac().trim())){
+			mensajeValidacion="Por favor ingrese la urbanización de su domicilio actual.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_direccion().trim())){
+			mensajeValidacion="Por favor ingrese la direccion de su domicilio actual.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_telfij().trim())){
+			mensajeValidacion="Por favor ingrese su telefono fijo.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_telcel().trim())){
+			mensajeValidacion="Por favor ingrese su celular.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_correo().trim())){
+			mensajeValidacion="Por favor ingrese su celular.";
+			return false;
+		}
+		
+		if("".equals(hojadevida.getV_descolegio().trim())){
+			mensajeValidacion="Por favor ingrese los datos de su colegio profesional.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_numregcol().trim())){
+			mensajeValidacion="Por favor ingrese su número de registro su colegiatura.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_flgdis())){
+			mensajeValidacion="Por favor seleccione si es una persona con discapacidad.";
+			return false;
+		}
+		if("".equals(hojadevida.getV_flglicfa())){
+			mensajeValidacion="Por favor seleccione si tiene licencia de las fuerzas armadas.";
+			return false;
+		}*/
+		
+		return true;		
+	}
+	public void dialogReferencia(){		
+		RequestContext.getCurrentInstance().execute("dialogWidget.show()");
+	}
+	
+	
+	/***************************************************************************************************************
+	 * ************************          ZONA DE GETS Y SETS                   *************************************
+	 ***************************************************************************************************************/
+
+	public HojaDeVida getHojadevida() {
+		return hojadevida;
+	}
+	public void setHojadevida(HojaDeVida hojadevida) {
+		this.hojadevida = hojadevida;
+	}
+	public Persona getPersona() {
+		return persona;
+	}
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+	public List<Combo> getListaProvinciasNac() {
+		return listaProvinciasNac;
+	}
+	public void setListaProvinciasNac(List<Combo> listaProvinciasNac) {
+		this.listaProvinciasNac = listaProvinciasNac;
+	}
+	public List<Combo> getListaDistritosNac() {
+		return listaDistritosNac;
+	}
+	public void setListaDistritosNac(List<Combo> listaDistritosNac) {
+		this.listaDistritosNac = listaDistritosNac;
+	}
+	public List<Combo> getListaProvinciasDom() {
+		return listaProvinciasDom;
+	}
+	public void setListaProvinciasDom(List<Combo> listaProvinciasDom) {
+		this.listaProvinciasDom = listaProvinciasDom;
+	}
+	public List<Combo> getListaDistritosDom() {
+		return listaDistritosDom;
+	}
+	public void setListaDistritosDom(List<Combo> listaDistritosDom) {
+		this.listaDistritosDom = listaDistritosDom;
+	}
+	public boolean isMuestraLineaPuesto() {
+		return muestraLineaPuesto;
+	}
+	public void setMuestraLineaPuesto(boolean muestraLineaPuesto) {
+		this.muestraLineaPuesto = muestraLineaPuesto;
+	}
+	public String getMensajeValidacion() {
+		return mensajeValidacion;
+	}
+	public void setMensajeValidacion(String mensajeValidacion) {
+		this.mensajeValidacion = mensajeValidacion;
+	}
+}

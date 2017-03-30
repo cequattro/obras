@@ -1,0 +1,309 @@
+package pe.gob.sunafil.postulacioncas.reniecws;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.axis.AxisFault;
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.pidereniec.bean.PersonaReniecBean;
+import pe.gob.sunafil.pidereniec.ws.ClientePideReniec;
+import pe.gob.sunafil.postulacioncas.bean.Entidad;
+import pe.gob.sunafil.postulacioncas.managedBeans.LibroReclamBean;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.PersonaReniecDespatch;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.WebServiceDespatch;
+import pe.gob.sunafil.postulacioncas.utils.EnviarMail;
+
+
+public class ReniecWebService {
+	
+	WebServiceDespatch wsd;
+	private static Logger logger = Logger.getLogger(ReniecWebService.class.getName());
+	
+	public String getnewSessionWS(String codigoError) throws Exception {
+		System.out.println("OBTIENE SESION DE WEBSERVICE");
+		String session="";
+		try {
+			
+			wsd = new WebServiceDespatch();
+			ClientePideReniec clientePideReniec = new ClientePideReniec();
+			//CONSULTAR EN BASE DE DATOS SI HAY SESION ACTIVA DIARIA
+			session = wsd.verifySessionWS();
+			logger.debug("Entrando a ReniecWebServiceDao.getnewSessionWS('"+codigoError+"') =>OBTIENE SESION DE WEBSERVICE");
+
+			//SI NO HAY SESSION ACTIVA EN BASE 
+			if (session == null || session.length()==0 || "NDS".equals(codigoError) || "-2".equals(codigoError)) {
+				//1.OBTENER SESSION
+				logger.info("Hay algun error en la session o ya es invalida. Obtenemos una nueva session de RENIEC.");
+				session=clientePideReniec.obtenerSesion("3405897345", "5784905794");
+				if(session.length()>3 && session.length()<=200){
+					//2.REGISTRAR SESSION EN BASE DE DATOS	
+					wsd.savenewSessionWS(session, "L.R");
+				}
+			}
+			logger.debug("session Obtenida=> "+session);
+			return session;
+			
+		}catch (Exception e) {
+			logger.error("Error al obtener la sesion en ReniecWebService, metodo getnewSessionWS "+e.getMessage(),e);
+			throw new Exception(e);
+		}
+		
+	}
+	
+
+	
+	
+	public PersonaReniecBean obtenerPersonaSWReniec(Entidad persona) throws Exception{
+		System.out.println("BUSCANDO PERSONA EN WEBSERVICE");
+		
+		//INSTANCIAMOS LA PERSONA DE RETORNO:
+		PersonaReniecBean resultPersona=new PersonaReniecBean();
+		
+		//INSTANCIAMOS EL BEAN DEL CLIENTE RENIEC:
+		PersonaReniecBean reniecBean = new PersonaReniecBean();
+		//INSTANCIAMOS EL SERVICIO DEL CLIENTE DE RENIEC PARA CONSULTAR AL WS:
+		ClientePideReniec cpReniec = new ClientePideReniec();
+		
+		//INSTANCIANDO AL DESPATCH PARA INSERTAR O NO
+		PersonaReniecDespatch dspPersonaReniec = new PersonaReniecDespatch();
+		
+		String verificacion="";
+		try {
+			
+			if (persona.getV_codtdocide().equals("03")) {
+				
+				//VERIFICAMOS SI LA PERSONA EXISTE Y ESTA ACTUALIZADA SEGUN RENIEC
+				logger.info("VERIFICAMOS SI LA PERSONA EXISTE Y ESTA ACTUALIZADA SEGUN RENIEC");
+				verificacion=dspPersonaReniec.verificaActuPersonaReniec(persona);
+				
+				
+				//SI NO EXISTE DEBE SER NULL ENTONCES SE CONSULTA Y SE INSERTA
+				if(verificacion==null){
+					System.out.println("SI NO EXISTE DEBE SER NULL ENTONCES SE CONSULTA Y SE INSERTA");
+					persona.setV_flgreniec("S");
+					
+					//ReniecBean reniecBean = new ReniecBean();
+					//ObtenerPersonaReniec opr = new ObtenerPersonaReniec();
+					
+					
+					String dni="";
+					dni=persona.getV_numdoc();
+					
+					for(int i=0;i<3;i++){
+						String sesion = "" + getnewSessionWS(reniecBean.getV_mensaje());
+						
+						reniecBean = cpReniec.obtenerPersonaReniec(dni, sesion);
+						
+						resultPersona.setV_apepat(reniecBean.getV_apepat());
+						resultPersona.setV_apemat(reniecBean.getV_apemat());
+						resultPersona.setV_nombres(reniecBean.getV_nombres());
+						resultPersona.setV_mensaje(reniecBean.getV_mensaje());
+						
+						if("".equals(reniecBean.getV_mensaje()) || "-8".equals(reniecBean.getV_mensaje()) || "-3".equals(resultPersona.getV_mensaje())){
+							//SI NO SALE NINGUN MENSAJE EN RENIEC ES QUE TODO SALIO CORRECTAMENTE
+							//SI NOS SALE EL -8 ES PORQUE EL DNI NO EXISTE EN LA BASE DE DATOS DE RENIEC
+							//EL MENSAJE "-3" SIGNIFICA QUE EXCEDIÓ  EL  MÁXIMO  NRO  DE  CONSULTAS  POR MINUTO
+							//Y SI NO NOS SALEN ESOS ERRORES SALIMOS DEL BUCLE YA QUE TENEMOS LA INFORMACION SIN INCONVENIENTES
+							resultPersona.setV_dni(dni);
+							if("".equals(reniecBean.getV_mensaje())){//SI TODO OK SE INSERTA:
+								Entidad personBD = new Entidad();
+								personBD.setV_apemat(reniecBean.getV_apemat());
+								personBD.setV_apepat(reniecBean.getV_apepat());								
+								personBD.setV_nombres(reniecBean.getV_nombres());
+								personBD.setV_numdoc(dni);
+								personBD.setV_codtdocide("03");
+								personBD.setV_codusureg(persona.getV_codusureg());
+								dspPersonaReniec.insertarPersona(personBD);
+							}
+							break;
+						}
+					}
+					
+					/**INICIO ENVIO DE CORREO EN CASO DE INCONVENIENTE CON EL WEBSERVICE**/
+					boolean validaEnvioCorreo=false;
+					if(!"".equals(resultPersona.getV_mensaje()) && !"-8".equals(resultPersona.getV_mensaje()) && !"-3".equals(resultPersona.getV_mensaje()) ){
+						//EXISTE ALGUN ERROR POR ESO SE REMITE CORREO:
+						//EL MENSAJE "-8" SIGNIFICA QUE EL DNI NO EXISTE POR LO TANTO NO SE REMITE CORREO
+						//EL MENSAJE "-3" SIGNIFICA QUE EXCEDIÓ  EL  MÁXIMO  NRO  DE  CONSULTAS  POR MINUTO
+						logger.error("Se encontro un inconveniente con RENIEC!!:::resultPersona.getV_mensaje()=>"+resultPersona.getV_mensaje());
+						validaEnvioCorreo=true;
+					}
+					if(validaEnvioCorreo==true){	
+						
+						EnviarMail enviarCorreo=new EnviarMail();
+						String[] direcciones=new String[3];
+						direcciones[0]="kaguilar@sunafil.gob.pe";
+						direcciones[1]="amatienzo@sunafil.gob.pe";
+						direcciones[2]="rgarrido@sunafil.gob.pe";
+						String mensaje="";								
+						String asunto="Error Web Service de PIDE-RENIEC ("+resultPersona.getV_mensaje()+")";
+						mensaje="<b>DNI</b> consultado =<b>'"+dni+"'</b> <br/>"
+								 + "::El c&oacute;digo de Error obtenido es: <br/>" 
+								 + "::reniecBean.getV_mensaje()=><b>"+resultPersona.getV_mensaje()+"</b>";
+						if(direcciones.length>0 && direcciones!=null){
+							try {
+								enviarCorreo.generarEnvioDeCorreos(mensaje, direcciones,asunto,"");
+							} catch (Exception e1) {
+								logger.error("Error al enviar el correo, e.getMessage()=>"+e1.getMessage());
+								logger.error(e1.getMessage(),e1);
+							}
+						}
+						
+						/**FIN ENVIO DE CORREO EN CASO DE ERROR DEL WEB SERVICE**/
+						resultPersona=null;
+					}
+					
+					
+				}else{
+					//SI EXISTE  
+					//SI ESTA ACTUALIZADO SOLO SE CONSULTA 
+					if(verificacion.equals("S")){
+						System.out.println("VERIFICACION != NULL; PERSONA ACTUALIZADA");
+						Entidad personBD = new Entidad();
+						personBD=dspPersonaReniec.getPersona(persona);
+						resultPersona.setV_apemat(personBD.getV_apemat());
+						resultPersona.setV_apepat(personBD.getV_apepat());
+						resultPersona.setV_dni(personBD.getV_numdoc());
+						resultPersona.setV_nombres(personBD.getV_nombres());
+						resultPersona.setV_mensaje("");
+					}else{
+						//SINO SE ACTUALIZA LA PERSONA
+						System.out.println("VERIFICACION != NULL; PERSONA DEBE ACTUALIZARSE");
+						
+						
+						String dni="";
+						dni=persona.getV_numdoc();
+						
+						for(int i=0;i<3;i++){
+							String sesion = "" + getnewSessionWS(reniecBean.getV_mensaje());
+							
+							reniecBean = cpReniec.obtenerPersonaReniec(dni, sesion);
+							
+							resultPersona.setV_apepat(reniecBean.getV_apepat());
+							resultPersona.setV_apemat(reniecBean.getV_apemat());
+							resultPersona.setV_nombres(reniecBean.getV_nombres());
+							resultPersona.setV_mensaje(reniecBean.getV_mensaje());
+							
+							if("".equals(reniecBean.getV_mensaje()) || "-8".equals(reniecBean.getV_mensaje()) || "-3".equals(resultPersona.getV_mensaje()) ){
+								//SI NO SALE NINGUN MENSAJE EN RENIEC ES QUE TODO SALIO CORRECTAMENTE
+								//SI NOS SALE EL -8 ES PORQUE EL DNI NO EXISTE EN LA BASE DE DATOS DE RENIEC
+								//EL MENSAJE "-3" SIGNIFICA QUE EXCEDIÓ  EL  MÁXIMO  NRO  DE  CONSULTAS  POR MINUTO
+								//Y SI NO NOS SALEN ESOS ERRORES SALIMOS DEL BUCLE YA QUE TENEMOS LA INFORMACION SIN INCONVENIENTES
+								resultPersona.setV_dni(dni);
+								if("".equals(reniecBean.getV_mensaje())){//SI TODO OK SE INSERTA:
+									Entidad personBD = new Entidad();
+									personBD.setV_apepat(reniecBean.getV_apepat());
+									personBD.setV_apemat(reniecBean.getV_apemat());
+									personBD.setV_nombres(reniecBean.getV_nombres());
+									personBD.setV_numdoc(dni);
+									personBD.setV_codtdocide("03");
+									personBD.setV_codusumod(persona.getV_codusureg());
+									
+									dspPersonaReniec.actualizarPersona(personBD);
+								}
+								break;
+							}
+						}
+						
+						/**INICIO ENVIO DE CORREO EN CASO DE INCONVENIENTE CON EL WEBSERVICE**/
+						boolean validaEnvioCorreo=false;
+						if(!"".equals(resultPersona.getV_mensaje()) && !"-8".equals(resultPersona.getV_mensaje()) && !"-3".equals(resultPersona.getV_mensaje()) ){
+							//EXISTE ALGUN ERROR POR ESO SE REMITE CORREO:
+							//EL MENSAJE "-8" SIGNIFICA QUE EL DNI NO EXISTE POR LO TANTO NO SE REMITE CORREO
+							//EL MENSAJE "-3" SIGNIFICA QUE EXCEDIÓ  EL  MÁXIMO  NRO  DE  CONSULTAS  POR MINUTO
+							logger.error("Se encontro un inconveniente con RENIEC!!:::resultPersona.getV_mensaje()=>"+resultPersona.getV_mensaje());
+							validaEnvioCorreo=true;
+						}
+						if(validaEnvioCorreo==true){	
+							
+							EnviarMail enviarCorreo=new EnviarMail();
+							String[] direcciones=new String[3];
+							direcciones[0]="kaguilar@sunafil.gob.pe";
+							direcciones[1]="amatienzo@sunafil.gob.pe";
+							direcciones[2]="rgarrido@sunafil.gob.pe";
+							String mensaje="";								
+							String asunto="Error Web Service de PIDE-RENIEC ("+resultPersona.getV_mensaje()+")";
+							mensaje="<b>DNI</b> consultado =<b>'"+dni+"'</b> <br/>"
+									 + "::El c&oacute;digo de Error obtenido es: <br/>" 
+									 + "::reniecBean.getV_mensaje()=><b>"+resultPersona.getV_mensaje()+"</b>";
+							if(direcciones.length>0 && direcciones!=null){
+								try {
+									enviarCorreo.generarEnvioDeCorreos(mensaje, direcciones,asunto,"");
+								} catch (Exception e1) {
+									logger.error("Error al enviar el correo, e.getMessage()=>"+e1.getMessage());
+									logger.error(e1.getMessage(),e1);
+								}
+							}
+							
+							/**FIN ENVIO DE CORREO EN CASO DE ERROR DEL WEB SERVICE**/
+							resultPersona=null;
+						}
+						
+						
+					}
+				}
+			} else {
+				resultPersona = null;
+			}
+			
+		} catch (AxisFault e) {
+			resultPersona.setV_mensaje("AXISFAULT");//LO MANDAMOS COMO SERVICIO RENIEC CAIDO.
+			System.out.println("SERVICIO RENIEC CAIDOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!");
+			logger.error(e.getMessage(),e);
+			/**INICIO ENVIO DE CORREO EN CASO DE ERROR DEL METODO**/
+			
+			EnviarMail enviarCorreo=new EnviarMail();
+			String[] direcciones=new String[3];		
+			direcciones[0]="kaguilar@sunafil.gob.pe";//kaguilar
+			direcciones[1]="amatienzo@sunafil.gob.pe";//lgallegos
+			direcciones[2]="rgarrido@sunafil.gob.pe";
+			String mensaje="";								
+			String asunto="Servicio RENIEC CAIDO(AXISFAULT) - Web Service de PIDE-RENIEC ";
+			mensaje="DNI consultado =<b>'"+persona.getV_numdoc()+"'</b> <br/><br/><b>:::EXCEPTION (e):</b> "
+					 + "<br/><br/> <b>:::e.printStackTrace()=></b><br/><br/> "
+					 + EnviarMail.getStackTraceToHTML(e);
+			if(direcciones.length>0 && direcciones!=null){
+				try {
+					enviarCorreo.generarEnvioDeCorreos(mensaje, direcciones,asunto,"");
+				} catch (Exception e1) {
+					logger.info("Error al enviar el correo, e.getMessage()=>"+e1.getMessage());
+					logger.error(e1.getMessage(),e1);
+				}
+			}
+			return resultPersona;
+		} catch (Exception e) {	
+			
+			resultPersona=null;
+			logger.error(e.getMessage(),e);
+			/**INICIO ENVIO DE CORREO EN CASO DE ERROR DEL METODO**/
+			
+			EnviarMail enviarCorreo=new EnviarMail();
+			String[] direcciones=new String[3];		
+			direcciones[0]="kaguilar@sunafil.gob.pe";
+			direcciones[1]="amatienzo@sunafil.gob.pe";
+			direcciones[2]="rgarrido@sunafil.gob.pe";
+			String mensaje="";								
+			String asunto="Error GRAVE Web Service de PIDE-RENIEC ";
+			mensaje="DNI consultado =<b>'"+persona.getV_numdoc()+"'</b> <br/><br/><b>:::EXCEPTION (e):</b> "
+					 + "<br/><br/> <b>:::e.printStackTrace()=></b><br/><br/> "
+					 + EnviarMail.getStackTraceToHTML(e);
+			if(direcciones.length>0 && direcciones!=null){
+				try {
+					enviarCorreo.generarEnvioDeCorreos(mensaje, direcciones,asunto,"");
+				} catch (Exception e1) {
+					logger.info("Error al enviar el correo, e.getMessage()=>"+e1.getMessage());
+					logger.error(e1.getMessage(),e1);
+				}
+			}
+			
+			/**INICIO ENVIO DE CORREO EN CASO DE ERROR DEL WEB SERVICE**/
+			throw new Exception(e);
+		}
+		resultPersona.toString();
+		return resultPersona;
+		
+	}
+
+
+}

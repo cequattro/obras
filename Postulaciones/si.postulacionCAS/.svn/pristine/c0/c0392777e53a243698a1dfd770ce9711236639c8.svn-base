@@ -1,0 +1,29 @@
+package pe.gob.sunafil.postulacioncas.mybatis.despachadores;
+
+import pe.gob.sunafil.postulacioncas.bean.Entidad;
+import pe.gob.sunafil.postulacioncas.mybatis.implementacion.IMPPersonaReniec;
+import pe.gob.sunafil.postulacioncas.mybatis.interfase.INTPersonaReniec;
+
+
+
+public class PersonaReniecDespatch {
+	
+	private INTPersonaReniec persDao;
+	
+	public PersonaReniecDespatch(){
+		persDao=new IMPPersonaReniec();
+	}
+	
+	public String verificaActuPersonaReniec(Entidad persona) throws Exception {
+		return persDao.verificaActuPersonaReniec(persona);
+	} 
+	public String insertarPersona(Entidad persona) throws Exception {
+		return persDao.insertarPersona(persona);
+	}	 
+	public String actualizarPersona(Entidad persona) throws Exception {
+		return persDao.actualizarPersona(persona);
+	}
+	public Entidad getPersona(Entidad persona) throws Exception {
+		return persDao.getPersona(persona);
+	}
+}

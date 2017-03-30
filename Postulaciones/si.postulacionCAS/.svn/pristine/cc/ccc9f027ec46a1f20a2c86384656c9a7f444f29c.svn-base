@@ -1,0 +1,115 @@
+package pe.gob.sunafil.postulacioncas.mybatis.implementacion;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import net.sf.jasperreports.data.cache.BigDecimalValues;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.HojaDeVida;
+import pe.gob.sunafil.postulacioncas.bean.Persona;
+import pe.gob.sunafil.postulacioncas.mybatis.comun.MyBatisConnectionFactory;
+import pe.gob.sunafil.postulacioncas.mybatis.interfase.INTPostulacion1;
+import pe.gob.sunafil.postulacioncas.persistence.client.RhtbcConvocatoriaMapper;
+import pe.gob.sunafil.postulacioncas.persistence.client.RhtbcHojadevidaMapper;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcConvocatoria;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcConvocatoriaExample;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcHojadevida;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcHojadevidaExample;
+
+public class IMPPostulacion1 implements INTPostulacion1{
+	
+	private static Logger logger = Logger.getLogger(IMPPostulacion1.class.getName());
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	public IMPPostulacion1(){
+		sqlSessionFactory=MyBatisConnectionFactory.getSqlSessionFactory();
+	}
+	
+	@Override
+	public String obtieneNombreConvocatoria(String n_corconv) throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbcConvocatoriaExample example = new RhtbcConvocatoriaExample();
+		example.createCriteria().andNCorconvEqualTo(new BigDecimal(n_corconv));
+		RhtbcConvocatoriaMapper mapper = sqlSession.getMapper(RhtbcConvocatoriaMapper.class);
+		try {
+			List <RhtbcConvocatoria> allRecords = mapper.selectByExample(example);
+			if(allRecords == null ){
+				return null;
+			}else if (allRecords.size() == 0){
+				return null;
+			}else{
+				return allRecords.get(0).getvPuesto();
+			}
+			
+		} catch (Exception e) {
+			logger.error("Error actualizarRegistroEntradaSIIT "+e.getMessage(),e);   
+        	return null;
+		} finally{
+			sqlSession.close();			
+		}
+		
+	}
+	
+	
+	public String insertarPostulacionCabecera(HojaDeVida hojadevida, Persona persona) throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		
+		
+		//********************************************************
+		//INSERTANDO LA TABLA CABECERA:
+		//********************************************************
+		RhtbcHojadevidaExample exampleHV1 = new RhtbcHojadevidaExample();
+		exampleHV1.createCriteria().andCorrelativoActual();
+		BigDecimal n_corhojvid = new BigDecimal(0);
+		try {
+			
+			//OBTENEMOS EL CORRELATIVO DE HOJA DE VIDA:
+			RhtbcHojadevidaMapper mapperHV1 = sqlSession.getMapper(RhtbcHojadevidaMapper.class);
+			List <RhtbcHojadevida> allRecords = mapperHV1.selectByExample(exampleHV1);
+			if(allRecords.size()>=1){
+				n_corhojvid = allRecords.get(0).getnCorhojvid();
+			}
+			n_corhojvid = n_corhojvid.add(new BigDecimal(1));//sumando 1
+			
+			RhtbcHojadevidaMapper mapperHV2 = sqlSession.getMapper(RhtbcHojadevidaMapper.class);
+			
+			//INSERTANDO LA HOJA DE VIDA:
+			RhtbcHojadevida record = new RhtbcHojadevida();
+			record.setnCorhojvid(n_corhojvid);
+			record.setvNumdoc(persona.getV_numdoc());
+			record.setvCodtdocide(persona.getV_codtdocide());
+			record.setnCorconv(new BigDecimal(hojadevida.getN_corconv()));
+			record.setvNacionali(hojadevida.getV_nacionalidad());
+			record.setvCoddepdom(hojadevida.getV_coddepdom());
+			record.setvCodprodom(hojadevida.getV_codprodom());
+			record.setvCoddisdom(hojadevida.getV_coddisdom());
+			record.setvUrbanizac(hojadevida.getV_urbanizac());
+			record.setvDireccion(hojadevida.getV_direccion());
+			record.setvTelfij(hojadevida.getV_telfij());
+			record.setvTelcel(hojadevida.getV_telcel());
+			record.setvDescolegio(hojadevida.getV_descolegio());
+			record.setvNumregcol(hojadevida.getV_numregcol());
+			record.setvFlgdis(hojadevida.getV_flgdis());
+			record.setvFlglicfa(hojadevida.getV_flglicfa());
+			record.setvHostreg("YOOOOOOOOO");
+			
+			mapperHV2.insertSelective(record);
+			sqlSession.commit();
+			
+		} catch (Exception e) {
+        	System.out.println("Error getCorrelativoGlobalTurno "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+		return n_corhojvid+"";//DEVOLVEMOS EL CORRELATIVO DE LA HOJA DE VIDA
+	}
+	
+	
+	
+}

@@ -1,0 +1,38 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import org.apache.log4j.Logger;
+
+@ManagedBean(name="postulacion2Bean")
+@SessionScoped
+public class Postulacion2Bean {
+private static Logger logger = Logger.getLogger(Postulacion2Bean.class.getName());
+	
+	@ManagedProperty("#{postulacion1Bean}")
+	private Postulacion1Bean postulacion1Bean;
+	
+	public Postulacion1Bean getPostulacion1Bean() {
+		return postulacion1Bean;
+	}
+	public void setPostulacion1Bean(Postulacion1Bean postulacion1Bean) {
+		this.postulacion1Bean = postulacion1Bean;
+	}
+	
+	public Postulacion2Bean() {
+		inicializar();
+	}
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacionBean2");
+		try {
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	
+}

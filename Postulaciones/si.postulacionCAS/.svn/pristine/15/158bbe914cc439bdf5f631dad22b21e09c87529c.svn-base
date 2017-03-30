@@ -1,0 +1,81 @@
+package pe.gob.sunafil.postulacioncas.mybatis.despachadores;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.mybatis.implementacion.IMP2ndScreen;
+import pe.gob.sunafil.postulacioncas.mybatis.interfase.INT2ndScreen;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxcapacitac;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxformacion;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxotrdoc;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcFormacion;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcGradoacademi;
+import pe.gob.sunafil.postulacioncas.persistence.model.RhtbcTipcapacitac;
+import pe.gob.sunafil.postulacioncas.persistence.model.SitbPais;
+
+
+public class SecScreenDespatch {
+	
+	private static final SecScreenDespatch instance = new SecScreenDespatch();
+	
+	private INT2ndScreen segundaDAO;
+	private static Logger logger = Logger.getLogger(LoginDespatch.class.getName());
+	
+	public SecScreenDespatch() {
+		segundaDAO = new IMP2ndScreen();
+	    }		
+
+	public List <RhtbcFormacion> getFormaciones() throws Exception
+	{
+		return segundaDAO.getFormaciones();
+	}
+	
+	public List <RhtbcGradoacademi> getGradoAcademico() throws Exception
+	{
+		return segundaDAO.getGradoAcademico();
+	}
+	
+	public List <SitbPais> getPaises() throws Exception
+	{
+		return segundaDAO.getPaises();
+	}
+	
+	public List <RhtbcTipcapacitac> getTiposCapacitacion() throws Exception
+	{
+		return segundaDAO.getTiposCapacitacion();
+	}
+	
+	public RhmvcHvxformacion getCorrelativoMovimientoFormacion() throws Exception
+	{
+		return segundaDAO.getCorrelativoMovimientoFormacion();
+	}
+	
+	public int insertarMovimientoFormacion(RhmvcHvxformacion entidad) throws Exception
+	{
+		return segundaDAO.insertarMovimientoFormacion(entidad);
+	}
+	
+	public RhmvcHvxcapacitac getCorrelativoMovimientoCapacitacion() throws Exception
+	{
+		return segundaDAO.getCorrelativoMovimientoCapacitacion();
+	}
+	
+	public int insertarMovimientoCapacitacion(RhmvcHvxcapacitac entidad) throws Exception
+	{
+		return segundaDAO.insertarMovimientoCapacitacion(entidad);
+	}
+	
+	public RhmvcHvxotrdoc getCorrelativoOtrosDocumentos() throws Exception
+	{
+		return segundaDAO.getCorrelativoOtrosDocumentos();
+	}
+	
+	public int insertarOtrosDocumentos(RhmvcHvxotrdoc entidad) throws Exception
+	{
+		return segundaDAO.insertarOtrosDocumentos(entidad);
+	}
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" >
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@//10.1.200.30:1521/DESASUNA" userId="RRHHSYS" password="RRHHSYS" />
+    <javaModelGenerator targetPackage="pe.gob.sunafil.postulacioncas.persistence.model" targetProject="PostulacionMBG" />
+    <sqlMapGenerator targetPackage="pe.gob.sunafil.postulacioncas.persistence.map" targetProject="PostulacionMBG" />
+    <javaClientGenerator targetPackage="pe.gob.sunafil.postulacioncas.persistence.client" targetProject="PostulacionMBG" type="XMLMAPPER" />
+
+    <table schema="SIMINTRA1" tableName="SITB_PERSONA" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_DISTRITO" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_PAIS" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="RHTBC_HOJADEVIDA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TIPCAPACITAC" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_HVXCAPACITAC" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_REFERENCIA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_HVXOTRDOC" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_HVXFORMACION" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_EXPERIENCIA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_FORMACION" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_GRADOACADEMI" >
+    </table>      
+    
+  </context>
+</generatorConfiguration>

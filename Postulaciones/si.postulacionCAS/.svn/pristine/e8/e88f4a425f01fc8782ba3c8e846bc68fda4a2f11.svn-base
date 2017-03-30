@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="DATOS PERSONALES">
+	<h:panelGrid columns="9" >
+	
+		 <p:outputLabel value="Convocatoria CAS &nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="conv">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Tipo Documento &nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipodoc">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Nro Documento" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>  
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>                
+
+         <p:outputLabel value="Apellido Paterno"/>
+         <p:inputText style="width: 120px" id="apepat" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Apellido Materno"/>
+         <p:inputText style="width: 120px" id="apemat" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Nombres"/>
+         <p:inputText style="width: 120px" id="nombres" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />   
+         
+         <p:outputLabel value="LUGAR DE NACIMIENTO:" style="font-weight:bold;"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Departamento"/>
+		 <h:selectOneMenu style="width:120px" id="dep">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Provincia"/>
+		 <h:selectOneMenu style="width:120px" id="prov">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         
+         <p:outputLabel value="Distrito"/>
+		 <h:selectOneMenu style="width:120px" id="dis">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>   
+         
+         <p:outputLabel for="button" value="Fecha nacimiento" />
+    	 <p:calendar id="button" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 
+    	 <p:outputLabel value="Nacionalidad"/>
+         <p:inputText style="width: 120px" id="nac" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+    	 
+    	 <p:outputLabel value="Estado Civil"/>
+		 <h:selectOneMenu style="width:120px" id="tipoactivo">             
+             <f:selectItem itemLabel="---" itemValue="#{null}" />
+        	 <f:selectItem itemLabel="SOLTERO" itemValue="#{1}" />
+        	 <f:selectItem itemLabel="CASADO" itemValue="#{2}" />  
+        	 <f:selectItem itemLabel="DIVORCIADO" itemValue="#{3}" />
+        	 <f:selectItem itemLabel="VIUDO" itemValue="#{4}" />
+        	 <p:ajax event="change" update="@form" />         
+         </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="DIRECCIÓN ACTUAL:" style="font-weight:bold;"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Departamento"/>
+		 <h:selectOneMenu style="width:120px" id="depdom">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Provincia"/>
+		 <h:selectOneMenu style="width:120px" id="provdom">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         
+         <p:outputLabel value="Distrito"/>
+		 <h:selectOneMenu style="width:120px" id="disdom">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Urbanización"/>
+         <p:inputText style="width: 120px" id="urb" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Dirección"/>
+         <p:inputText style="width: 120px" id="dire" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Teléfono Fijo"/>
+         <p:inputText style="width: 120px" id="fij" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Teléfono Celular"/>
+         <p:inputText style="width: 120px" id="cel" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Correo Eletrónico"/>
+         <p:inputText style="width: 120px" id="mail" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="COLEGIATURA:" style="font-weight:bold;"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Colegio Profesional"/>
+         <p:inputText style="width: 120px" id="col" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Registro Nro"/>
+         <p:inputText style="width: 120px" id="colnro" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="DISCAPACIDAD:" style="font-weight:bold;"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Persona con Discapacidad" />
+		 <p:selectOneRadio id="v_discap">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+		 
+		 <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="FUERZAS ARMADAS:" style="font-weight:bold;"/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Licencia de las FF. AA." />
+		 <p:selectOneRadio id="v_armas">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+         
+         <p:outputLabel for="buttonb" value="Fecha de baja" rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" />
+    	 <p:calendar id="buttonb" showOn="button" size="10"  value="#{personalBean.fechaBaja}" pattern="dd/MM/yyyy" locale="es" navigator="true" rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" maxlength="10" converterMessage="Debe ingresar una fecha de baja válida">
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" />
+    	 
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+     
+     
+	 	
+		 	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">     		 
+     		 <p:commandButton value="Siguiente" ajax="false" action="#{postulacion2Bean.datos2Postulaciones}" icon="ui-icon-arrowthick-1-e" update="@form" onclick="statusDialog.show();"/>
+     		 <p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>		      		
+    	</h:panelGrid>
+    	</center>
+    	    	    	
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Postulaciones?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

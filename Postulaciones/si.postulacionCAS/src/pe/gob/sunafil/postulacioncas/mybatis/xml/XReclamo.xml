@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Reclamo">
+    
+    <select id="obtieneAnio" resultType="int">
+	    select TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) from dual     
+    </select> 
+    
+    <insert id="insertReclamo" parameterType="reclamoBean" >
+    	<selectKey resultType="int" keyProperty="n_codreclam" order="BEFORE">
+			SELECT NVL(MAX(T.N_CODRECLAM)+1, 
+           			   DECODE(#{n_anho}||#{n_numdep},'2015462',1
+			                           				,'2015484',1
+			                           				,'2015487',1
+			                           				,'2015489',1
+			                           				,'2015490',1
+			                           				,'2015491',1
+			                           				,'2015492',1
+			                           				,'2015493',1
+			                           				,'2015494',1
+			                           				,'2015495',1
+			                           				,1))
+		        FROM LRTBC_RECLAMO T
+			   WHERE T.N_ANHO = #{n_anho}
+			     AND T.N_NUMDEP = #{n_numdep}
+  		</selectKey>
+    	INSERT INTO LRTBC_RECLAMO
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			N_CODRECLAM,
+			N_ANHO,
+			N_NUMDEP,
+			N_CODDIR,
+			V_NUMDOC,
+			V_CODTDOCIDE,
+			V_TIPUSU,
+	      <if test="v_telfijo != null" >
+	        V_TELFIJO,
+	      </if>
+	      <if test="v_telcel != null" >
+	        V_TELCEL,
+	      </if>
+	      	V_EMAIL,
+	      	V_DESRECLAM,
+	      <if test="v_razsocins != null" >
+	        V_RAZSOCINS,
+	      </if>
+			V_CODUSUREG,
+			D_FECREG,
+			V_HOSTREG
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	    	#{n_codreclam},
+	    	#{n_anho},
+	    	#{n_numdep},
+	    	#{n_coddir},
+	        #{v_numdoc,jdbcType=VARCHAR},
+			#{v_codtdocide,jdbcType=VARCHAR},
+			#{v_tipusu,jdbcType=VARCHAR},
+		  <if test="v_telfijo != null" >
+		    UPPER(#{v_telfijo,jdbcType=VARCHAR}),
+		  </if>
+	      <if test="v_telcel != null" >
+	      	UPPER(#{v_telcel,jdbcType=VARCHAR}),
+	      </if>
+	      	UPPER(#{v_email,jdbcType=VARCHAR}),
+	      	UPPER(#{v_desreclam,jdbcType=VARCHAR}),
+	      <if test="v_razsocins != null" >
+	      	UPPER(#{v_razsocins,jdbcType=VARCHAR}),
+	      </if>
+		    #{v_numdoc,jdbcType=VARCHAR},
+		    sysdate,
+		    #{v_hostreg,jdbcType=VARCHAR}
+	    </trim>
+	</insert>
+	
+	<insert id="insertRecxIdentif" parameterType="recxIdentifBean" >
+    	INSERT INTO LRTBD_RECXIDENTIF
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			N_ANHO,
+			N_NUMDEP,
+			N_CODTIPIDE,
+			N_CODRECLAM,
+	      <if test="v_desotrtir != null" >
+	        V_DESOTRTIR,
+	      </if>
+			V_CODUSUREG,
+			D_FECREG,
+			V_HOSTREG
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	    	#{n_anho},
+	    	#{n_numdep},
+	    	#{n_codtipide},
+	        #{n_codreclam},
+		  <if test="v_desotrtir != null" >
+		    UPPER(#{v_desotrtir,jdbcType=VARCHAR}),
+		  </if>
+		    #{v_codusureg,jdbcType=VARCHAR},
+		    SYSDATE,
+		    #{v_hostreg,jdbcType=VARCHAR}
+	    </trim>
+	</insert>
+     
+     
+    <select id="obtNroCompletoReclamo" resultType="string" parameterType="reclamoBean">
+	  	select LPAD(#{n_codreclam},10,'0')||'-'||#{n_anho}||'-'||t.v_sigla from lrtbc_intendencias t
+		 where t.n_numdep=#{n_numdep}
+	</select>
+	<select id="obtDesIntendenciaReclamo" resultType="string" parameterType="reclamoBean">
+	  	select t.v_desdep from lrtbc_intendencias t
+		 where t.n_numdep=#{n_numdep}
+	</select>
+	<select id="obtDesDepProDisReclamo" resultType="string" parameterType="domEntidadBean">
+		select dep.v_desdep||' / '||
+		       pro.v_despro||' / '||
+		       dis.v_desdis
+		  from lrtbd_domicilioent de,
+		       sitb_distrito dis,
+		       sitb_provincia pro,
+		       sitb_departamento dep
+		 where de.v_coddep=dis.v_coddep
+		       and de.v_codpro=dis.v_codpro
+		       and de.v_coddis=dis.v_coddis
+		       and de.v_coddep=pro.v_coddep
+		       and de.v_codpro=pro.v_codpro
+		       and de.v_coddep=dep.v_coddep
+		       and de.n_coddir=#{n_coddir}
+		       and de.v_numdoc= #{v_numdoc,jdbcType=VARCHAR}
+			   and de.v_codtdocide=#{v_codtdocide,jdbcType=VARCHAR}
+	</select>
+	<select id="obtDesDireccionReclamo" resultType="string" parameterType="domEntidadBean">
+	  	select 
+		       tv.v_abrvia||'. '||de.v_desdir||
+		       decode(trim(de.v_numdir),null,'','','',' NRO. '||de.v_numdir)||
+		       decode(z.v_deszon,'SIN ZONA','',', '||z.v_deszon||' '||de.v_deszona)||
+		       decode(de.v_manzana,null,'','-','',', MNZ. '||de.v_manzana)||
+		       decode(de.v_lote,null,'','-','',', LOT. '||de.v_lote) as v_domicilio
+		  from lrtbd_domicilioent de,
+		       sitb_distrito dis,
+		       sitb_provincia pro,
+		       sitb_departamento dep,
+		       sitb_zona z,
+		       sitb_tipvia tv
+		 where de.v_coddep=dis.v_coddep
+		       and de.v_codpro=dis.v_codpro
+		       and de.v_coddis=dis.v_coddis
+		       and de.v_coddep=pro.v_coddep
+		       and de.v_codpro=pro.v_codpro
+		       and de.v_coddep=dep.v_coddep
+		       and de.v_codzona=z.v_codzona
+		       and de.v_codtvia=tv.v_codtvia
+		       and de.n_coddir=#{n_coddir}
+		       and de.v_numdoc= #{v_numdoc,jdbcType=VARCHAR}
+			   and de.v_codtdocide=#{v_codtdocide,jdbcType=VARCHAR}
+	</select>
+</mapper>

@@ -1,0 +1,23 @@
+recurso_bd=java\:comp/env/jdbc/sip
+
+driver=oracle.jdbc.driver.OracleDriver
+nro_pag_bloq=3
+autocommit=false
+nro_registro=9
+#JDBC.DefaultAutoCommit=false
+
+
+##########################
+#Para PRODSUNA-SUANFIL:
+##########################
+#username=RRHHSYS
+#password=RRHHSYSPROD
+#url=jdbc:oracle:thin:@10.1.200.18:1521:PRODSUNA
+
+##########################
+#Para DESASUNA-SUANFIL:
+##########################
+username=RRHHSYS
+password=RRHHSYS
+url=jdbc:oracle:thin:@10.1.200.30:1521:DESASUNA
+

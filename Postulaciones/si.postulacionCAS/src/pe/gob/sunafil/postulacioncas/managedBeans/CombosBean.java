@@ -1,0 +1,139 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.postulacioncas.bean.Combo;
+import pe.gob.sunafil.postulacioncas.mybatis.despachadores.CombosDespatch;
+
+@ManagedBean(name="combosBean")
+@SessionScoped
+public class CombosBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3120298444112164123L;
+	private static Logger logger = Logger.getLogger(CombosBean.class.getName());
+	
+	private List<Combo> listaTipoDocumentos;
+	private List<Combo> listaDepartamentos;
+	private List<Combo> listaTipoZonas;
+	private List<Combo> listaTipoVias;
+	private List<Combo> listaIntendencias;
+	private List<Combo> listaConvocatorias;
+	private List<Combo> listaEstadoCivil;
+	
+	private CombosDespatch dspcombos;
+	
+	/**
+	 * Constructor
+	 */
+	public CombosBean(){
+		logger.info("Inicializando Con el Constructor de CombosBean");;
+	}
+	
+	/**
+     * Método que retorna una lista de tipo de documentos.
+     * @return Lista de Combo de tipos de documentos.
+     */	
+	public List<Combo> getListaTipoDocumentos() {
+		try{
+			if(listaTipoDocumentos==null){				
+				listaTipoDocumentos=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaTipoDocumentos=dspcombos.listaComboXTipo("TipoDocIde");
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar Tipos de Documento: "+e.getMessage(),e);
+		}
+		return listaTipoDocumentos;
+	}
+	
+	public List<Combo> getListaDepartamentos() {
+		try{
+			if(listaDepartamentos==null){				
+				listaDepartamentos=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaDepartamentos=dspcombos.listaComboXTipo("Departamento");
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar los Departemanetos: "+e.getMessage(),e);
+		}
+		return listaDepartamentos;
+	}
+	
+	public List<Combo> getListaTipoZonas() {
+		try{
+			if(listaTipoZonas==null){				
+				listaTipoZonas=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaTipoZonas=dspcombos.listaComboXTipo("TipoZona");					
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar Tipos de Zonas: "+e.getMessage(),e);
+		}
+		return listaTipoZonas;
+	}
+	
+	public List<Combo> getListaTipoVias() {
+		try{
+			if(listaTipoVias==null){				
+				listaTipoVias=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaTipoVias=dspcombos.listaComboXTipo("TipoVia");
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar Tipos de Vías: "+e.getMessage(),e);
+		}
+		return listaTipoVias;
+	}
+	
+	public List<Combo> getListaIntendencias() {
+		try{
+			if(listaIntendencias==null){				
+				listaIntendencias=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaIntendencias=dspcombos.listaComboXTipo("Intendencia");
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar las Intendencias: "+e.getMessage(),e);
+		}
+		return listaIntendencias;
+	}
+	
+	public List<Combo> getListaConvocatorias() {
+		try{
+			System.out.println("Obteniendo lista de convocatorias");
+			if(listaConvocatorias==null){				
+				listaConvocatorias=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaConvocatorias=dspcombos.listaComboXTipo("Convocatorias");
+				System.out.println("listaconvocatorias.size=>"+listaConvocatorias.size());
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar las Convocatorias: "+e.getMessage(),e);
+		}
+		return listaConvocatorias;
+	}
+	
+	public List<Combo> getListaEstadoCivil() {
+		try{
+			if(listaEstadoCivil==null){				
+				listaEstadoCivil=new ArrayList<Combo>();
+				dspcombos=new CombosDespatch();
+				listaEstadoCivil=dspcombos.listaComboXTipo("EstadoCivil");
+				System.out.println("listaEstadoCivil.size=>"+listaEstadoCivil.size());
+			}
+		} catch (Exception e) {
+			logger.error("Error en Listar los EstadoCivil: "+e.getMessage(),e);
+		}
+		return listaEstadoCivil;
+	}
+	
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="DomicilioEntidad">
+    
+    <insert id="insertDomicilioEntidad" parameterType="domEntidadBean" >
+    	<selectKey resultType="int" keyProperty="n_coddir" order="BEFORE">
+		   SELECT NVL(MAX(T.N_CODDIR), 0) + 1
+			 FROM LRTBD_DOMICILIOENT T
+			WHERE T.V_NUMDOC = #{v_numdoc,jdbcType=VARCHAR}
+			  AND T.V_CODTDOCIDE = #{v_codtdocide,jdbcType=VARCHAR}
+  		</selectKey>  
+  		
+    	INSERT INTO LRTBD_DOMICILIOENT
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+			N_CODDIR,
+			V_NUMDOC,
+			V_CODTDOCIDE,
+			V_CODDEP,
+			V_CODPRO,
+			V_CODDIS,
+			V_CODZONA,
+	      <if test="v_deszona != null" >
+	        V_DESZONA,
+	      </if>
+			V_CODTVIA,
+			V_DESDIR,
+			V_NUMDIR,
+	      <if test="v_manzana != null" >
+	        V_MANZANA,
+	      </if>
+	      <if test="v_lote != null" >
+	        V_LOTE,
+	      </if>
+	      	V_CODUSUREG,
+			D_FECREG,
+			V_HOSTREG
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	        #{n_coddir},
+	        #{v_numdoc,jdbcType=VARCHAR},
+			#{v_codtdocide,jdbcType=VARCHAR},
+			#{v_coddep,jdbcType=VARCHAR},
+			#{v_codpro,jdbcType=VARCHAR},
+			#{v_coddis,jdbcType=VARCHAR},
+			#{v_codzona,jdbcType=VARCHAR},
+		  <if test="v_deszona != null" >
+		    UPPER(#{v_deszona,jdbcType=VARCHAR}),
+		  </if>
+		  	#{v_codtvia,jdbcType=VARCHAR},
+		  	UPPER(#{v_desdir,jdbcType=VARCHAR}),
+		  	UPPER(#{v_numdir,jdbcType=VARCHAR}),
+	      <if test="v_manzana != null" >
+	      	UPPER(#{v_manzana,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_lote != null" >
+	       	UPPER(#{v_lote,jdbcType=VARCHAR}),
+	      </if>
+		    #{v_numdoc,jdbcType=VARCHAR},
+		    sysdate,
+		    #{v_hostreg,jdbcType=VARCHAR}
+	    </trim>
+	</insert>
+     
+</mapper>

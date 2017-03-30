@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Entidad">
+    
+    <insert id="insertEntidad" parameterType="entidadBean" >
+    	INSERT INTO LRTBC_ENTIDAD
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	        V_NUMDOC,
+	        V_CODTDOCIDE,
+	      <if test="v_razsoc != null" >
+	        V_RAZSOC,
+	      </if>
+	      <if test="v_apepat != null" >
+	        V_APEPAT,
+	      </if>
+	      <if test="v_apemat != null" >
+	        V_APEMAT,
+	      </if>
+	      <if test="v_nombres != null" >
+	        V_NOMBRES,
+	      </if>
+			V_CODUSUREG,
+			D_FECREG,
+			V_HOSTREG
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	        #{v_numdoc,jdbcType=VARCHAR},
+			#{v_codtdocide,jdbcType=VARCHAR},
+		  <if test="v_razsoc != null" >
+		    UPPER(#{v_razsoc,jdbcType=VARCHAR}),
+		  </if>
+	      <if test="v_apepat != null" >
+	      	UPPER(#{v_apepat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_apemat != null" >
+	       	UPPER(#{v_apemat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_nombres != null" >
+	        UPPER(#{v_nombres,jdbcType=VARCHAR}),
+	      </if>
+		    #{v_numdoc,jdbcType=VARCHAR},
+		    sysdate,
+		    #{v_hostreg,jdbcType=VARCHAR}
+	    </trim>
+	</insert>
+	
+	<select id="verificaExisteEntidad" resultType="string" parameterType="entidadBean">
+	  	select NVL(MAX(p.V_FLGRENIEC),'NE') from lrtbc_entidad p
+			where p.v_numdoc=#{v_numdoc,jdbcType=VARCHAR}
+			and p.v_codtdocide=#{v_codtdocide,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="actualizaEntidad" parameterType="entidadBean" >
+	    update LRTBC_ENTIDAD
+	    set 
+	      <if test="v_razsoc != null" >
+	        V_RAZSOC = UPPER(#{v_razsoc,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_apepat != null" >
+	        V_APEPAT = UPPER(#{v_apepat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_apemat != null" >
+	        V_APEMAT = UPPER(#{v_apemat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_nombres != null" >
+	        V_NOMBRES = UPPER(#{v_nombres,jdbcType=VARCHAR}),
+	      </if>
+			V_CODUSUMOD = #{v_numdoc,jdbcType=VARCHAR},
+			D_FECMOD = SYSDATE,
+			V_HOSTMOD = #{v_hostmod,jdbcType=VARCHAR}
+	    where V_CODTDOCIDE = #{v_codtdocide,jdbcType=VARCHAR}
+	      and V_NUMDOC = #{v_numdoc,jdbcType=VARCHAR}
+	</update>
+     
+</mapper>

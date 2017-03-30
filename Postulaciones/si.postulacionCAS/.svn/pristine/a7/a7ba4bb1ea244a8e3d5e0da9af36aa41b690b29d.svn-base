@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="FORMACIÓN ACADÉMICA">
+	<h:panelGrid columns="9" >
+	
+		 <p:outputLabel value="Nivel"/>
+		 <h:selectOneMenu style="width:120px" id="niv">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Grado Académico &nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="gra">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Centro de Estudios &nbsp;&nbsp;&nbsp;" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Especialidad" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel for="buttoni" value="Fecha inicio" />
+    	 <p:calendar id="buttoni" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+         
+         <p:outputLabel for="buttone" value="Fecha egreso" />
+    	 <p:calendar id="buttone" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />  
+         
+         <p:outputLabel for="buttond" value="Fecha extensión de diploma &nbsp;&nbsp;&nbsp;" />
+    	 <p:calendar id="buttond" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />                
+
+         <p:outputLabel value="Ciudad"/>
+         <p:inputText style="width: 120px" id="ciu" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="País"/>
+		 <h:selectOneMenu style="width:120px" id="pai">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+       </h:panelGrid>   
+       
+       <h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Formación" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+       </h:panelGrid>
+         
+       <h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable" value="#{personalBean.listaDetPersonal}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Nivel" >
+	                <h:outputText value="#{item.vDesint}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Grado Académico Obtenido" >
+	                <h:outputText value="#{item.vDesdep}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Centro de Estudios" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.vDestipo}"/>
+	            </p:column>
+	            <p:column headerText="Especialidad" >
+	                <h:outputText value="#{item.vNomcargo}"/>
+	            </p:column>	
+	            <p:column headerText="Fecha de Inicio" >
+	                <h:outputText value="#{item.vNomescala}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Egreso">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column> 
+	            <p:column headerText="Fecha de Extensión">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column> 
+	            <p:column headerText="Ciudad / País">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column>            
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminar(item)}" process="@this" update=":formUpload3" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+     
+     
+    <p:fieldset style="text-align: left;" legend="CAPACITACIÓN">
+	<h:panelGrid columns="9" >	
+	
+		 <p:outputLabel value="Tipo de Capacitación &nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipc">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />         
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Centro de Estudios &nbsp;&nbsp;&nbsp;" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Tema" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>	
+         
+         <p:outputLabel for="buttonii" value="Fecha inicio" />
+    	 <p:calendar id="buttonii" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 
+    	 <p:outputLabel for="buttont" value="Fecha término" />
+    	 <p:calendar id="buttont" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 
+    	 <p:outputLabel value="Duración (Horas) &nbsp;&nbsp;&nbsp;" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>	
+	
+	</h:panelGrid>
+	
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Capacitación" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+    </h:panelGrid>    
+    
+    <h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable2" value="#{personalBean.listaDetPersonal}" 
+	                         var="item" widgetVar="usrTable2"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Tipo de Capacitación" >
+	                <h:outputText value="#{item.vDesint}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>          
+	            <p:column headerText="Centro de Estudios" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.vDestipo}"/>
+	            </p:column>
+	            <p:column headerText="Tema" >
+	                <h:outputText value="#{item.vNomcargo}"/>
+	            </p:column>	
+	            <p:column headerText="Fecha de Inicio" >
+	                <h:outputText value="#{item.vNomescala}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Término">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column> 
+	            <p:column headerText="Duración (Horas)">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column>        
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminar(item)}" process="@this" update=":formUpload3" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+	
+	</p:fieldset>
+     
+      <br/>
+	 	
+	<p:fieldset style="text-align: left;" legend="OTROS DOCUMENTOS EXIGIDOS PARA EL CARGO Y/O COMPLEMENTARIOS">
+	
+	<h:panelGrid columns="9" >
+	
+		 <p:outputLabel value="Documento &nbsp;&nbsp;&nbsp;" />
+         <p:inputText style="width: 120px"/>
+         <p:outputLabel value=""/>	                  
+	
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;">
+       
+       	<center><p:commandButton value="Añadir Documento" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-plusthick" update="@form"/></center>
+       
+    </h:panelGrid>
+	
+	<h:panelGrid columns="1" style="width:940px;text-align:center;" >                      
+         
+         
+         <p:dataTable id="datatable3" value="#{personalBean.listaDetPersonal}" 
+	                         var="item" widgetVar="usrTable3"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="N°" >
+	                <h:outputText value="#{item.vDesint}" style="width:200px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>          
+	            <p:column headerText="Documento" style="width:150px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.vDestipo}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminar(item)}" process="@this" update=":formUpload3" />		            		            
+	            	
+	            </p:column>
+	        </p:dataTable>
+         
+         
+    
+    	 
+     </h:panelGrid>
+	
+	</p:fieldset>		 	
+	
+	  <br/>
+	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">     		 
+     		 <p:commandButton value="Siguiente" ajax="false" action="#{postulacion3Bean.datos3Postulaciones}" icon="ui-icon-arrowthick-1-e" update="@form" onclick="statusDialog.show();"/>
+     		 <p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>		      		
+    	</h:panelGrid>
+    	</center>
+    	    	    	
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Confirmación">
+			<h:form id="formUpload" style="text-align: center;">
+				<br/>
+			    <h:outputLabel value="Estimado Trabajador, está seguro de Salir del Aplicativo de Postulaciones?"/>
+			 	<br/><br/>			    
+			    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+			    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,653 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<center>
+		
+		<p:fieldset style="text-align: center;" >			
+			<p:toolbar>	
+	   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Formulario de Libro de Reclamaciones"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<h:form id="formLibro">
+			
+				<p:panel id="panelFrmLibro" style="width: 955px !important;" >
+					<center>
+					<p:panelGrid id="pgFrmLibro" style="width: 950px !important;">
+							<p:row >
+								<p:column colspan="6">
+									<p:toolbar>
+							   			<p:toolbarGroup align="left" styleClass="ui-widget-header" style="border: 0px !important; ">
+							      		 <p:outputLabel value="I. IDENTIFICACION DEL USUARIO" style="font-size: 12px !important;"/>
+							   			</p:toolbarGroup>
+									</p:toolbar>
+								</p:column>
+							</p:row>
+							
+							<!-- ====================================== DATOS DEL USUARIO ================================================ -->
+							<p:row >
+								<p:column style="text-align: left; white-space: normal !important; ">
+									<table border="0" cellpadding="0" cellspacing="0" style="text-align: left !important; border-width: 0 !important; padding: 0px !important;width: 115px;"><tr>
+									<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+										<h:outputLabel value="Tipo de Documento:" style="text-align: left !important; border-width: 0 !important; padding: 0px !important;"/>
+									</td>
+									<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+									</td>
+									</tr></table>
+									
+								</p:column>
+								<p:column style="text-align: left; ">		
+										<h:panelGroup id="pg_codtdocide" style="border-width: 0 !important; padding: 0px !important; ">
+											<p:selectOneMenu
+												value="#{libroBean.entidad.v_codtdocide}"
+												required="true" disabled="#{libroBean.is_NumDocReadonly}"
+												requiredMessage="Debe elegir el tipo de documento."
+												id="v_codtdocide" widgetVar="v_codtdocide"
+												>
+												<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+												<f:selectItems var="lst"
+													value="#{combosBean.listaTipoDocumentos}"
+													itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+												<p:ajax event="change"
+													update=":formLibro:pg_inputs_person, :formLibro:pg_inputs_ruc, :formLibro:pg_btnBusPersona"
+													listener="#{libroBean.selCmbTipoDocumento}">
+												</p:ajax>
+											</p:selectOneMenu>
+										</h:panelGroup>
+									</p:column>
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Nro del Documento:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left; " colspan="3">
+									<h:panelGroup id="pg_btnBusPersona" style="border-width: 0 !important; padding: 0px !important; ">
+									<table border="0" cellpadding="0" cellspacing="0" style="border-width: 0; padding: 0px; ">
+										<tr>
+											<td style="padding-right: 1px;">
+												<p:inputText value="#{libroBean.entidad.v_numdoc}"
+													id="v_numdoc" onkeypress="return isNumberKeyNL(this);"
+													readonly="#{libroBean.is_NumDocReadonly}"
+													maxlength="15" required="true" requiredMessage="Debe ingresar el N&uacute;mero del documento."
+													validatorMessage="Debe ingresar un n&uacute;mero de documento v&aacute;lido."
+													>
+													<f:validateLength minimum="8" maximum="15" />
+												</p:inputText>
+											</td>
+											<td style="padding-left: 0px;">
+												<p:commandButton id="btnBusPersona" title="Busqueda" style="height: 21px;"
+															value="Buscar en RENIEC"
+															rendered="#{libroBean.show_btn_reniec}"
+															action="#{libroBean.obtenerPersonReniec}"
+															icon="icon-search"
+															update=":formLibro:pg_inputs_person, :formLibro:pg_btnBusPersona, :formLibro:pg_codtdocide, :formMensajes:msgMensajesConsolidado"
+															oncomplete="xDlgObtPersona(xhr, status, args);"
+															process="@this, :formLibro:v_numdoc" />
+															 
+												<p:commandButton id="btnChangeNumDoc" title="Cambio Num. Doc." value="Cambiar" style="height: 21px;"
+														rendered="#{libroBean.show_btn_cambioNumDoc}"
+														action="#{libroBean.cambiaNumDoc}"
+														icon="icon-update" update=":formLibro:pg_inputs_person, :formLibro:pg_btnBusPersona, :formLibro:pg_codtdocide"
+														process="@this"/>
+																											
+											</td>
+										</tr>
+									</table>
+									</h:panelGroup>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important; border-width: 0 !important; padding: 0px !important; "  >
+									<h:panelGroup id="pg_inputs_person" style="border-width: 0 !important; padding: 0px !important; " >
+										<h:panelGroup id="pg_inputs_person_in" rendered="#{libroBean.show_inputs_person}">
+										<table border="0" cellpadding="0" cellspacing="0" style="border-width: 0; padding: 0px; ">
+											<tr>
+												<td width="115px">
+													<h:outputLabel value="Apellido Paterno:" style="text-align: left !important;"/>
+													<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+												</td>
+												<td>
+													<h:inputText value="#{libroBean.entidad.v_apepat}"
+																id="v_apepat" onkeypress="return sololetra(event);"
+																maxlength="40" required="true" requiredMessage="Debe ingresar su apellido paterno."
+																readonly="#{libroBean.is_NombresReadonly}"
+																styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover" />
+												</td>
+												<td>
+													<h:outputLabel value="Apellido Materno" style="text-align: left !important;"/>
+													<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+												</td>
+												<td>
+													<h:inputText value="#{libroBean.entidad.v_apemat}"
+																id="v_apemat" onkeypress="return sololetra(event);"
+																maxlength="40" required="true" requiredMessage="Debe ingresar su apellido materno."
+																readonly="#{libroBean.is_NombresReadonly}"
+																styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover" />
+												</td>
+												<td>
+													<h:outputLabel value="Nombres:" style="text-align: left !important;"/>
+													<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+												</td>
+												<td>
+													<h:inputText value="#{libroBean.entidad.v_nombres}"
+																id="v_nombres" onkeypress="return sololetra(event);"
+																maxlength="40" required="true" requiredMessage="Debe ingresar su(s) Nombre(s)."
+																readonly="#{libroBean.is_NombresReadonly}"
+																styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover" />
+												</td>
+											</tr>
+										</table>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup id="pg_inputs_ruc" >
+										<h:panelGroup id="pg_inputs_ruc_in" rendered="#{libroBean.show_inputs_ruc}">
+										<table border="0" cellpadding="0" cellspacing="0" style="border-width: 0; padding: 0px; ">
+											<tr>
+												<td width="115px">
+													<h:outputLabel value="Raz&oactue;n Social:" style="text-align: left !important;"/>
+													<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+												</td>
+												<td>
+													<h:inputText value="#{libroBean.entidad.v_razsoc}"
+																id="v_razsoc" onkeypress="return sololetra(event);"
+																size="100" maxlength="500" required="true" requiredMessage="Debe ingresar la Raz&oacute;n Social."
+																styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover" />
+												</td>
+											</tr>
+										</table>
+										</h:panelGroup>
+									</h:panelGroup>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column style="text-align: left; white-space: normal !important; ">
+									<h:outputLabel value="Tipo Usuario:" style="text-align: left !important; border-width: 0 !important; padding: 0px !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+								</p:column>
+								<p:column style="text-align: left; padding-left: 0px;" colspan="5" >
+									<p:selectOneRadio id="v_tipusu" value="#{libroBean.reclamo.v_tipusu}" 
+													  required="true" requiredMessage="Debe seleccionar el tipo de usuario (Trabajador o Empleador).">
+							            <f:selectItem itemLabel="Trabajador" itemValue="T" />
+							            <f:selectItem itemLabel="Empleador" itemValue="E" />
+							        </p:selectOneRadio>
+								</p:column>
+							</p:row>
+							<!-- ====================================== FIN DATOS DEL USUARIO ================================================ -->
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;">
+								<h:outputLabel value="Domicilio:" styleClass="contenido_separador" style="text-align: left !important;"/>
+								<p:separator/>
+								</p:column>
+							</p:row>
+							
+							<!-- ====================================== DOMICILIO DEL USUARIO ================================================ -->
+							
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Departamento:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left;" colspan="5">
+									<table border="0" cellpadding="0" cellspacing="0" style="text-align: left !important; border-width: 0 !important; padding: 0px !important;width: 115px;">
+									<tr>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<p:selectOneMenu
+												value="#{libroBean.domEntidad.v_coddep}"
+												required="true"
+												requiredMessage="Debe elegir el Departamento"
+												id="v_coddep" widgetVar="v_coddep"
+												>
+												<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+												<f:selectItems var="lst"
+													value="#{combosBean.listaDepartamentos}"
+													itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+													
+												<p:ajax event="change"
+														update=":formLibro:v_codpro, :formLibro:v_coddis"
+														listener="#{libroBean.selCmbDepartamento}">
+												</p:ajax>
+											</p:selectOneMenu>
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding-left: 10px !important;padding-right: 10px !important;">
+											&nbsp;&nbsp;
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<h:outputLabel value="Provincia:" style="text-align: left !important;"/>
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>		
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding-left: 10px !important;padding-right: 10px !important;">
+											&nbsp;&nbsp;
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<p:selectOneMenu value="#{libroBean.domEntidad.v_codpro}"
+												required="true" requiredMessage="Debe elegir la Provincia."
+												id="v_codpro" widgetVar="v_codpro" style="text-align: left">
+												<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+												<f:selectItems var="lst" value="#{libroBean.listaProvincias}"
+													itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+												<p:ajax event="change" update=":formLibro:v_coddis"
+													listener="#{libroBean.selCmbProvincia}">
+												</p:ajax>
+											</p:selectOneMenu>
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding-left: 10px !important;padding-right: 10px !important;">
+											&nbsp;&nbsp;
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<h:outputLabel value="Distrito:" style="text-align: left !important;"/>
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding-left: 10px !important;padding-right: 10px !important;">
+											&nbsp;&nbsp;
+										</td>
+										<td style="text-align: left !important; border-width: 0 !important; padding: 0px !important;">
+											<p:selectOneMenu value="#{libroBean.domEntidad.v_coddis}"
+												required="true" requiredMessage="Debe elegir el Distrito."
+												id="v_coddis" widgetVar="v_coddis" style="text-align: left">
+												<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+												<f:selectItems var="lst" value="#{libroBean.listaDistritos}"
+													itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+											</p:selectOneMenu>
+										</td>
+									</tr>
+									</table>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Tipo de Zona:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left;">
+									<p:selectOneMenu
+										value="#{libroBean.domEntidad.v_codzona}"
+										required="true"
+										requiredMessage="Debe elegir el tipo de Zona"
+										id="v_codzona" widgetVar="v_codzona"
+										>
+										<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+										<f:selectItems var="lst"
+											value="#{combosBean.listaTipoZonas}"
+											itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Nombre de Zona:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left; ">
+										<p:inputText value="#{libroBean.domEntidad.v_deszona}"
+											id="v_deszona" onkeypress="return sololetra(event);"
+											maxlength="100" />
+									</p:column>
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Tipo de V&iacute;a:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left; width:110px !important;">								
+									<p:selectOneMenu
+										value="#{libroBean.domEntidad.v_codtvia}"
+										required="true"
+										requiredMessage="Debe elegir el tipo de V&iacute;a"
+										id="v_codtvia" widgetVar="v_codtvia"
+										>
+										<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+										<f:selectItems var="lst"
+											value="#{combosBean.listaTipoVias}"
+											itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Direcci&oacute;n:" style="text-align: left !important;"/>
+									<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>								
+								</p:column>
+								<p:column style="text-align: left;" colspan="3">
+										<p:inputText value="#{libroBean.domEntidad.v_desdir}"
+											required="true"
+											requiredMessage="Debe ingresar la direci&oacute;n."
+											id="v_desdir" size="85" onkeypress="return soloLetraNumDir(event);"
+											maxlength="250" />
+									</p:column>
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="N&uacute;mero:" style="text-align: left !important;"/>
+								</p:column>
+								<p:column style="text-align: left; ">
+										<p:inputText value="#{libroBean.domEntidad.v_numdir}"
+											id="v_numdir" onkeypress="return soloLetraNumDir(event);"
+											maxlength="15" />
+									</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Manzana:" style="text-align: left !important;"/>
+								</p:column>
+								<p:column style="text-align: left;">
+										<p:inputText value="#{libroBean.domEntidad.v_manzana}"
+											id="v_manzana" size="5" onkeypress="return soloLetraNumDir(event);"
+											maxlength="10" />
+								</p:column>
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Lote:" style="text-align: left !important;"  />
+								</p:column>
+								<p:column style="text-align: left; ">
+										<p:inputText value="#{libroBean.domEntidad.v_lote}"
+											id="v_lote" size="5" onkeypress="return soloLetraNumDir(event);"
+											maxlength="10" />
+								</p:column>
+								<p:column colspan="2">
+								</p:column>
+							</p:row>
+							
+							<!-- ====================================== FIN DOMICILIO DEL USUARIO ================================================ -->
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;">
+								<h:outputLabel value="Datos de Contacto:" styleClass="contenido_separador" style="text-align: left !important;"/>
+								<p:separator/>
+								</p:column>
+							</p:row>
+							
+							<!-- ====================================== TELEFONOS Y CORREO ================================================ -->
+							
+							<p:row >
+								<p:column  style="text-align: left; white-space: normal !important;">
+									<h:outputLabel value="Tel&eacute;fono Fijo:" style="text-align: left !important;"/>
+								</p:column>
+								<p:column style="text-align: left;" colspan="5">
+									<table border="0" cellpadding="0" cellspacing="0" style="border-width: 0; padding: 0px; ">
+										<tr>
+											<td style="padding-left: 0px;"><p:inputText id="v_telfijo" value="#{libroBean.reclamo.v_telfijo}" maxlength="15" onkeypress="return soloNumLetTelelf(event);"/></td>
+											<td>
+												<h:outputLabel value="Tel&eacute;fono Celular:" style="text-align: left !important;"/>
+											</td>
+											<td style="padding-left: 0px; padding-right: 0px;">
+												<p:inputText id="v_telcel" value="#{libroBean.reclamo.v_telcel}" maxlength="9" onkeypress="return soloNumeros(event);"/>
+											</td>
+											<td>
+												<h:outputLabel value="Email:" style="text-align: left !important;"/>
+												<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+											</td>
+											<td>
+												<p:inputText value="#{libroBean.reclamo.v_email}" 
+														id="v_email" size="50" style="text-transform:lowercase !important;" required="true" requiredMessage="Debe ingresar su correo electr&oacute;nico"
+														maxlength="60" validatorMessage="Debe ingresar un correo electr&oacute;nico correcto" >
+														<f:validateRegex
+															pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+												</p:inputText>
+											</td>
+										</tr>
+									</table>
+								</p:column>
+								 
+							</p:row>
+							<!-- ==================================== FIN TELEFONOS Y CORREO ================================================ -->
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;">
+									<p:outputLabel value="Se enviar&aacute; carta de respuesta al correo electr&oacute;nico ingresado." style="font: bold; "/>	
+								</p:column>
+							</p:row>
+							
+							
+							<!-- ====================================== RECLAMO ==================================================== -->
+							<p:row >
+								<p:column colspan="6">
+									<p:toolbar>
+							   			<p:toolbarGroup align="left" styleClass="ui-widget-header" style="border: 0px !important; ">
+							      		 <p:outputLabel value="II. RECLAMO" style="font-size: 12px !important;"/>
+							   			</p:toolbarGroup>
+									</p:toolbar>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important; vertical-align:middle !important; padding: 0px !important;" >
+									<table border="0" cellpadding="0" cellspacing="0" style="border-width: 0; padding: 0px; ">
+										<tr>
+											<td>
+												<h:outputLabel value="Dependencia donde ocurrieron los Hechos: &nbsp;&nbsp;&nbsp; " style="text-align: left !important;"/>
+												<h:outputLabel value="(*)" style="text-align: left !important;" styleClass="contenido_rojoBold"/>
+											</td>
+											<td>
+												<p:selectOneMenu
+													value="#{libroBean.reclamo.n_numdep}"
+													required="true"
+													requiredMessage="Debe elegir la Dependencia donde ocurrieron los hechos."
+													id="n_numdep" widgetVar="n_numdep"
+													>
+													<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+													<f:selectItems var="lst"
+														value="#{combosBean.listaIntendencias}"
+														itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+												</p:selectOneMenu>
+											</td>
+										</tr>
+									</table>
+								</p:column>
+							</p:row>
+							
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;">
+									<p:outputLabel value="Identificaci&oacute;n de la atenci&oacute;n brindada:" styleClass="contenido_separador" style="text-align: left !important;"/>
+									<p:separator/>
+								</p:column>
+							</p:row>
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important; padding: 0px !important;">
+									<h:panelGroup layout="block" styleClass="checkboxes">
+										<p:selectManyCheckbox id="lista_chekboxs" widgetVar="lista_chekboxs" value="#{libroBean.selectedTiposIdentifDeReclamo}"  layout="pageDirection"  >
+									        <f:selectItems value="#{libroBean.listaTiposIdentifDeReclamo}" var="lst" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}"  >
+									        </f:selectItems>
+								        	<p:ajax  update=":formLibro:pg_desotrtir"
+								        			listener="#{libroBean.verifMarcaOtros}" 
+								        			/>
+								        	
+									    </p:selectManyCheckbox>
+								    </h:panelGroup>
+								</p:column>
+							</p:row>
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;" >
+									<h:panelGroup id="pg_desotrtir" >
+										<h:outputLabel value="Detalle el otro tipo de atenci&oacute;n:" rendered="#{libroBean.show_desotrtir}" style="text-align: left !important;"/><br/>
+										<h:inputTextarea rendered="#{libroBean.show_desotrtir}" value="#{libroBean.v_desotrtir}" style="text-transform:uppercase !important;"
+														 cols="100" rows="2" id="v_desotrtir"   styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover"/>
+										<br />
+										<h:outputLabel value="(300 caracteres como m&aacute;ximo)" rendered="#{libroBean.show_desotrtir}" style="text-align: left !important; font-size: 9px; "/>
+									</h:panelGroup>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;">
+									<p:outputLabel value="Descripci&oacute;n del Reclamo:" styleClass="contenido_separador" style="text-align: left !important;"/>
+									<p:separator/>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: left !important;"> 								
+										<h:inputTextarea value="#{libroBean.reclamo.v_desreclam}"  style="text-transform:uppercase !important;"
+											cols="100" rows="5" id="v_desreclam" required="true" requiredMessage="Debe ingresar la descripci&oacute;n de su reclamo."
+											styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-hover" />
+											<br/>
+										<h:outputLabel value="(600 caracteres como m&aacute;ximo)" style="text-align: left !important; font-size: 9px; "/>
+								</p:column>
+							</p:row>
+							
+							<!-- ====================================== FIN RECLAMO ==================================================== -->
+						</p:panelGrid>
+						</center>
+						<p:separator/>
+						<center >
+							<p:commandButton value="Grabar" icon="icon-disk"
+								update=":formMensajes:msgMensajesConsolidado, :formLibro"
+								action="#{libroBean.mostrarDlgInsReclamo}"
+								oncomplete="xDlgInsReclamo(xhr, status, args);" />
+							
+							 
+						</center>
+					<p:separator/>
+				</p:panel>	
+			</h:form>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false"/>
+			</h:form>
+			<h:form id="frmSalir">
+				<center>
+					<p:commandButton value="Salir" action="#{libroBean.salir}" icon="icon-exit"></p:commandButton>
+				</center>
+			</h:form>
+		</p:fieldset>
+		</center>
+		
+		
+		<!-- ==================================== INI DIALOG CONFIRMACION ================================ -->
+		<h:form id="formConfirmacion">
+			<p:confirmDialog id="dlgConfirmacion"
+								 widgetVar="dlgConfirmacion"
+								 header="Registrar Reclamo"
+								 message="¿Está seguro de registrar el Reclamo?"
+								 severity="alert"
+								 width="350px">
+					<center >			 
+					<p:commandButton id="btnConfRegresarDocCE"
+									 value="Confirmar"
+								  	 icon="icon-pref"
+								  	 action="#{libroBean.registrarReclamo}"	
+								  	 />
+									 
+					<p:commandButton value="Cancelar"                				 
+	                                 oncomplete="dlgConfirmacion.hide();"                               
+	                                 icon="icon-cancel" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+			
+			<p:confirmDialog id="dlgObtReniec"
+								 widgetVar="dlgObtReniec"
+								 header="Consulta RENIEC"
+								 message="No se pudo encontrar los nombres en RENIEC, por favor verificar el DNI o registrar los nombres manualmente."
+								 severity="alert"
+								 width="350px">
+					<center >		 
+					<p:commandButton value="Aceptar"                				 
+	                                 oncomplete="dlgObtReniec.hide();"                               
+	                                 icon="icon-pref" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+			
+			
+			<p:confirmDialog id="dlglimiteConsulRENIEC"
+								 widgetVar="dlglimiteConsulRENIEC"
+								 header="Límite Consulta RENIEC"
+								 message="Estimado usuario, se excedio el numero de consultas a RENIEC por minuto para obtener sus nombres, puede volver a intentarlo en unos minutos o registrar los nombres manualmente."
+								 severity="alert"
+								 width="450px">
+					<center >		 
+					<p:commandButton value="Aceptar"                				 
+	                                 oncomplete="dlglimiteConsulRENIEC.hide();"                               
+	                                 icon="icon-pref" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+			
+			<p:confirmDialog id="dlgAlertDigitosDNI"
+								 widgetVar="dlgAlertDigitosDNI"
+								 header="Validaci&oacute;n"
+								 message="El DNI debe tener 8 digitos, por favor verifique"
+								 severity="alert"
+								 width="350px">
+					<center >		 
+					<p:commandButton value="Aceptar"                				 
+	                                 oncomplete="dlgAlertDigitosDNI.hide();"                               
+	                                 icon="icon-pref" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+
+			<p:confirmDialog id="dlgErrorWS"
+								 widgetVar="dlgErrorWS"
+								 header="Conexi&oacute;n a RENIEC"
+								 message="El servicio de RENIEC se encuentra inactivo, por favor registre manualmente."
+								 severity="alert"
+								 width="350px">
+					<center >		 
+					<p:commandButton value="Aceptar"                				 
+	                                 oncomplete="dlgErrorWS.hide();"                               
+	                                 icon="icon-pref" />				 
+								 
+				   </center>
+			</p:confirmDialog>
+		</h:form>
+		
+		<!-- ==================================== FIN DIALOG CONFIRMACION ================================ -->
+		
+		
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+		<script type="text/javascript">  
+        //<![CDATA[
+    		function xDlgInsReclamo(xhr, status, args) {
+        		//alert("Entra aqui");
+    			if(args.flagDlgInsReclamo==true){
+    				//alert("Entra aqui2");
+    				dlgConfirmacion.show();
+				}//else{alert("Debe completar los campos para validacion");}
+			}
+
+    		function xDlgObtPersona(xhr, status, args) {
+        		//alert("Entrandooo");        		
+    			if(args.flagDlgObtReniec==true){
+    				dlgObtReniec.show();
+				}
+				if(args.flagDlgAlertDigitos==true){
+					dlgAlertDigitosDNI.show();
+				}
+				if(args.flagDlgErrorWS==true ){
+					dlgErrorWS.show();
+				}
+				if(args.flagDlglimiteConsulRENIEC==true ){
+					dlglimiteConsulRENIEC.show();
+				}
+				
+			}
+
+    		
+  			 //]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

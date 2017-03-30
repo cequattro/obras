@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper  namespace="Logueo">
+
+	<!-- *** OBTIENE FECHA *** --> 
+    <select id="obtieneFecha" resultType="string">
+	    select trim(to_char(sysdate, 'Day'))||', '||to_char(sysdate, 'DD')||' de '||trim(to_char(sysdate, 'Month'))||' del '||to_char(sysdate, 'YYYY') || ' Hora: ' || TO_CHAR(sysdate,'HH24:mi') fecha 
+	    from dual     
+    </select> 
+ 	<!-- **************************** --> 
+
+</mapper> 

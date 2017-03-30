@@ -1,0 +1,8 @@
+package pe.gob.sunafil.postulacioncas.mybatis.interfase;
+
+
+public interface INTPostulacion1 {
+
+	public String obtieneNombreConvocatoria(String n_corconv) throws Exception;
+	
+}

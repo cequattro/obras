@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<center>
+		
+		<p:fieldset style="text-align: center;" >			
+			<p:toolbar>	
+	   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+	      		 <p:outputLabel value="Libro de Reclamaciones"/>
+	   			</p:toolbarGroup>
+			</p:toolbar>
+			<h:form id="formLibro">
+			
+				<p:panel id="panelFrmLibro" style="width: 955px !important;" >
+					<center>
+					<p:panelGrid id="pgFrmLibro" style="width: 900px !important;">
+							<p:row >
+								<p:column colspan="6">
+									<p:toolbar>
+							   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="text-align: center !important; border: 0px !important; ">
+							      		 <!-- <p:outputLabel value="ESTIMADO USUARIO SU RECLAMO HA SIDO REGISTRADO SATISFACTORIAMENTE Y ENVIADO A SU CORREO ELECTR&Oacute;NICO" style=" text-align: center !important; font-size: 14px !important;"/> -->
+							      		 <p:outputLabel value="Su reclamo ser&aacute; respondido en el m&aacute;s breve plazo, el mismo que no exceder&aacute; de 30 días h&aacute;biles contados desde la fecha de su presentaci&oacute;n" style=" text-align: center !important; font-size: 14px !important;"/>
+							   			</p:toolbarGroup>
+									</p:toolbar>
+								</p:column>
+							</p:row>
+							
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: center !important;">
+									<h:outputLabel value="Se ha generado la Hoja de Reclamaci&oacute;n Nro. " styleClass="contenido_separador" style="text-align: center !important;"/>
+									<h:outputLabel value="#{libroBean.numeroReclamo}" styleClass="contenido_separador" style="text-align: center !important;"/>
+									<p:separator/>
+								</p:column>
+							</p:row>
+							
+							
+							<p:row >
+								<p:column colspan="6" style="text-align: center !important;">
+								<h:outputLabel value="Su constancia ser&aacute; enviada al correo electr&oacute;nico consignado. Puede imprimir su constancia en el siguiente bot&oacute;n:" styleClass="contenido_separador" style="text-align: center !important;"/>
+								<p:separator/>
+								</p:column>
+							</p:row>
+							
+						</p:panelGrid>
+						</center>
+						<center >
+											 
+							<p:commandButton id="btnGeneraConstacia"
+								 value="Imprimir Constancia"
+							  	 icon="icon-pref"
+							  	 action="#{libroBean.generarConstancia}"
+							  	 onclick="this.form.target='_blank'"
+								 ajax="false" 	 
+							  	 />
+						</center>
+					
+				</p:panel>	
+			</h:form>
+			<h:form id="formMensajes">
+				<p:messages id="msgMensajesConsolidado"  closable="true" escape="false"/>
+			</h:form>
+			<h:form id="frmSalir">
+				<center>
+					<p:commandButton value="Salir" action="#{libroBean.salir}" icon="icon-exit"></p:commandButton>
+				</center>
+			</h:form>
+		</p:fieldset>
+		</center>
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	</ui:define>
+</ui:composition>	
+</html>	

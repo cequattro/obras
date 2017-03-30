@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/postulacioncas/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Combo"  alias="comboBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Entidad"  alias="entidadBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.DomicilioEntidad"  alias="domEntidadBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.Reclamo"  alias="reclamoBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.bean.ReclamoxTipoIdentif"  alias="recxIdentifBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhmvcExperiencia"  alias="RhmvcExperienciaBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxcapacitac"  alias="RhmvcHvxcapacitacBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxformacion"  alias="RhmvcHvxformacionBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhmvcHvxotrdoc"  alias="RhmvcHvxotrdocBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhmvcReferencia"  alias="RhmvcReferenciaBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhtbcConvocatoria"  alias="RhtbcConvocatoriaBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhtbcFormacion"  alias="RhtbcFormacionBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhtbcGradoacademi"  alias="RhtbcGradoacademiBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhtbcHojadevida"  alias="RhtbcHojadevidaBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.RhtbcTipcapacitac"  alias="RhtbcTipcapacitacBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.SitbDistrito"  alias="SitbDistritoBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.SitbPais"  alias="SitbPaisBean"/>
+		<typeAlias type="pe.gob.sunafil.postulacioncas.persistence.model.SitbPersona"  alias="SitbPersonaBean"/>
+		
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		 <!-- -->
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		<!--  -->
+		<!-- PARA PRODUCCION:-->
+		<!-- 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSpostulacioncasACIONES" />
+			</dataSource>			
+		</environment> 
+		 -->
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XConsultaSIIT.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XLogueo.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XCombos.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XEntidad.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XDomicilioEntidad.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XReclamo.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XPersonaReniec.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XWebService.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/mybatis/xml/XReporte.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhmvcExperienciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhmvcHvxcapacitacMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhmvcHvxformacionMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhmvcHvxotrdocMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhmvcReferenciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhtbcConvocatoriaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhtbcFormacionMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhtbcGradoacademiMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhtbcHojadevidaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/RhtbcTipcapacitacMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/SitbDistritoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/SitbPaisMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/postulacioncas/persistence/map/SitbPersonaMapper.xml" />
+		 
+	</mappers>
+</configuration>
+

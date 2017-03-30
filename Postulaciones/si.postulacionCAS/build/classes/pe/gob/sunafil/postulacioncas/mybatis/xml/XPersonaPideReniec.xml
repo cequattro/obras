@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="PersonaPideReniec">
+
+   <resultMap type="entidadBean" id="lstPersonaRen-out" >
+    	<result column="v_codtdocide" 	 		property="v_codtdocide"/>
+    	<result column="v_numdoc" 	 			property="v_numdoc"/>   
+    	<result column="v_apepat" 	 			property="v_apepat"/>   
+    	<result column="v_apemat" 	 			property="v_apemat"/>  
+    	<result column="v_nombres" 	 			property="v_nombres"/> 
+    	<result column="v_flgreniec" 	 		property="v_flgreniec"/>  
+    </resultMap>
+     
+     <select id="lstPersona" statementType="CALLABLE" parameterType="hashMap"  resultMap="lstPersonaRen-out">
+   			SELECT V_CODTDOCIDE, V_NUMDOC, V_APEPAT, V_APEMAT, V_NOMBRES, V_FLGRENIEC
+			  FROM LRTBC_ENTIDAD E
+			 WHERE V_CODTDOCIDE = #{v_codtdocide,jdbcType=VARCHAR}
+      		   AND V_NUMDOC = #{v_numdoc,jdbcType=VARCHAR}
+     </select>  
+   <!-- ==========================================================INSERT=================================================================== -->
+   <insert id="insertPersonaReniec" parameterType="entidadBean" >
+    	INSERT INTO LRTBC_ENTIDAD
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	        V_NUMDOC,
+	        V_CODTDOCIDE,
+	      <if test="v_apepat != null" >
+	        V_APEPAT,
+	      </if>
+	      <if test="v_apemat != null" >
+	        V_APEMAT,
+	      </if>
+	      <if test="v_nombres != null" >
+	        V_NOMBRES,
+	      </if>
+			V_CODUSUREG,
+			D_FECREG,
+			V_HOSTREG,
+			V_FLGRENIEC
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	        #{v_numdoc,jdbcType=VARCHAR},
+			#{v_codtdocide,jdbcType=VARCHAR},
+	      <if test="v_apepat != null" >
+	      	UPPER(#{v_apepat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_apemat != null" >
+	       	UPPER(#{v_apemat,jdbcType=VARCHAR}),
+	      </if>
+	      <if test="v_nombres != null" >
+	        UPPER(#{v_nombres,jdbcType=VARCHAR}),
+	      </if>
+		    'POR-RENIEC',
+		    sysdate,
+		    #{v_hostreg,jdbcType=VARCHAR},
+		    'S'
+	    </trim>
+	</insert>
+  
+  <!-- ======================================================= UPDATE=============================================-->
+  
+  <update id="updatePersona" parameterType="entidadBean" >
+    update LRTBC_ENTIDAD
+    set 
+      <if test="v_apepat != null" >
+        V_APEPAT = #{v_apepat,jdbcType=VARCHAR},
+      </if>
+      <if test="v_apemat != null" >
+        V_APEMAT = #{v_apemat,jdbcType=VARCHAR},
+      </if>
+      <if test="v_nombres != null" >
+        V_NOMBRES = #{v_nombres,jdbcType=VARCHAR},
+      </if>
+      V_CODUSUMOD = 'POR-RENIEC',
+      D_FECMOD = SYSDATE,
+      V_HOSTMOD = #{v_hostmod,jdbcType=VARCHAR},
+      V_FLGRENIEC = 'S'
+    where V_CODTDOCIDE = #{v_codtdocide,jdbcType=VARCHAR}
+      and V_NUMDOC = #{v_numdoc,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <!-- =============================================CONSULTA VERIFICACION SI ESTA ACTUALIZADO LOS DATOS DEPERSONA=================================== -->
+  <select id="verificaActuPersonaReniec" resultType="string" parameterType="entidadBean">
+  	select p.V_FLGRENIEC from lrtbc_entidad p
+		where p.v_numdoc=#{v_numdoc,jdbcType=VARCHAR}
+		and p.v_codtdocide=#{v_codtdocide,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formPostulacion1">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="FORMATO DE HOJA DE VIDA"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<p:graphicImage value="/resources/images/principal/paso1de3.png"/>
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+		
+		
+	<h:panelGrid columns="6" id="tr_convocatoria">
+	
+		 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;Convocatoria CAS(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu id="conv" value="#{postulacion1Bean.hojadevida.n_corconv}">             
+	         <f:selectItem itemLabel="- Seleccione -" itemValue="" />
+	         <f:selectItems var="lst" value="#{combosBean.listaConvocatorias}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+	         	<p:ajax event="change" update=":formPostulacion1:tr_convocatoria" listener="#{postulacion1Bean.selCmbConvocatoria}"/>
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Nombre del Puesto :"/>         
+         <p:outputLabel style="font-weight:bold;" value="#{postulacion1Bean.hojadevida.v_desconv}" id="v_desconv" />
+         <p:outputLabel style="font-weight:bold;" id="v_desconv_vacio2" value="____________________" rendered="#{postulacion1Bean.muestraLineaPuesto}"/>
+         
+         
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <br/>
+	<p:fieldset style="text-align: left;" legend="I. DATOS PERSONALES">
+	
+    
+    <p:panelGrid id="tr_tipodocAndNombres">
+         <p:row>
+	         <p:column>
+	         	<p:outputLabel value="Tipo Documento(*)&nbsp;&nbsp;&nbsp;"/>
+	         </p:column>
+	         <p:column>
+				 <p:selectOneMenu value="#{postulacion1Bean.persona.v_codtdocide}" id="v_codtdocide" widgetVar="v_codtdocide"  disabled="#{postulacion1Bean.is_NumDocReadonly}">
+					<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+					<f:selectItems var="lst" value="#{combosBean.listaTipoDocumentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+						<p:ajax event="change" update=":formPostulacion1:tr_tipodocAndNombres, :formPostulacion1:tr_domicilioNacimiento" listener="#{postulacion1Bean.selCmbTipoDocumento}" />
+				 </p:selectOneMenu>
+			 </p:column>
+			 <p:column>				
+	         	<p:outputLabel value=""/>
+	         </p:column>
+	         <p:column>
+	         	<p:outputLabel value="Nro Documento(*)" />
+	         </p:column>
+	         <p:column>
+	         	<p:inputText value="#{postulacion1Bean.persona.v_numdoc}" id="v_numdoc" 
+		         			  onkeypress="return isNumberKeyNL(this);" maxlength="15" style="width: 120px"
+		         			  readonly="#{postulacion1Bean.is_NumDocReadonly}"/>
+	         </p:column>
+	         <p:column colspan="4">
+		         <p:commandButton id="btnBusPersona" title="Busqueda" style="height: 21px;"
+									value="Buscar en RENIEC"
+									rendered="#{postulacion1Bean.show_btn_reniec}"
+									action="#{postulacion1Bean.obtenerPersonReniec}"
+									icon="icon-search"
+									update=":formPostulacion1:tr_tipodocAndNombres, :formPostulacion1:tr_domicilioNacimiento"
+									oncomplete="xDlgObtPersona(xhr, status, args);"
+									process="@this, :formPostulacion1:v_numdoc" />
+				 <p:commandButton id="btnChangeNumDoc" title="Cambio Num. Doc." value="Cambiar" style="height: 21px;"
+									rendered="#{postulacion1Bean.show_btn_cambioNumDoc}"
+									action="#{postulacion1Bean.cambiaNumDoc}"
+									icon="icon-update" update=":formPostulacion1:tr_tipodocAndNombres, :formPostulacion1:tr_domicilioNacimiento"
+									process="@this"/>
+			</p:column>
+		 </p:row>       
+		       
+		 <p:row>
+		 	<p:column>
+	        	<p:outputLabel value="Apellido Paterno(*)"/>
+	        </p:column>
+	        <p:column>
+	        	<p:inputText value="#{postulacion1Bean.persona.v_apepat}" id="v_apepat" onkeypress="return sololetra(event);" 
+	        				 style="width: 120px" maxlength="40"  readonly="#{postulacion1Bean.is_NombresReadonly}"/>
+	        </p:column>
+	        <p:column>
+	        	<p:outputLabel value=""/>
+	        </p:column>
+	        <p:column>
+	        	<p:outputLabel value="Apellido Materno(*)"/>
+	        </p:column>
+	        <p:column>
+	        	<p:inputText value="#{postulacion1Bean.persona.v_apemat}" id="v_apemat" onkeypress="return sololetra(event);" 
+	        				 style="width: 120px" maxlength="40"  readonly="#{postulacion1Bean.is_NombresReadonly}"/>
+	        </p:column>
+	        <p:column>
+	        	<p:outputLabel value=""/>
+	        </p:column>
+	        <p:column>
+	        	<p:outputLabel value="Nombres(*)"/>
+	        </p:column>
+	        <p:column>
+	        	<p:inputText value="#{postulacion1Bean.persona.v_nombres}" id="v_nombres" onkeypress="return sololetra(event);" 
+	        			     style="width: 120px" maxlength="60"  readonly="#{postulacion1Bean.is_NombresReadonly}"/>
+	        </p:column>
+	        <p:column>
+	        	<p:outputLabel value=" " />
+	        </p:column>
+         </p:row>   
+    </p:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="LUGAR DE NACIMIENTO:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="9" id="tr_domicilioNacimiento">     
+         <p:outputLabel value="Departamento(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+     	 <h:selectOneMenu value="#{postulacion1Bean.persona.v_coddepnac}"  id="v_coddepnac"  style="width:120px">
+			<f:selectItem itemLabel="- Seleccione -" itemValue="" />
+			<f:selectItems var="lst" value="#{combosBean.listaDepartamentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_codpronac, :formPostulacion1:v_coddisnac" listener="#{postulacion1Bean.selCmbDepartamentoNac}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         <p:outputLabel value="Provincia(*)"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.persona.v_codpronac}" id="v_codpronac"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaProvinciasNac}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_coddisnac" listener="#{postulacion1Bean.selCmbProvinciaNac}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         <p:outputLabel value="Distrito(*)"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.persona.v_coddisnac}" id="v_coddisnac"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaDistritosNac}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>   
+         
+         <p:outputLabel for="d_fecnac" value="Fecha nacimiento(*)" />
+    	 <p:calendar id="d_fecnac" yearRange="c-70:c+50" value="#{postulacion1Bean.persona.d_fecnac}"  showOn="button" size="10" pattern="dd/MM/yyyy" 
+    	 			 locale="es" navigator="true" maxlength="10" disabled="#{postulacion1Bean.is_NombresReadonly}" >
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 <p:outputLabel value="Nacionalidad(*)"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_nacionalidad}" id="v_nacionalidad" onkeypress="return sololetra(event);" style="width: 120px" maxlength="60"  />
+         <p:outputLabel value=" " />
+    	 <p:outputLabel value="Estado Civil(*)"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_codestciv}" id="v_codestciv" >
+			<f:selectItem itemValue="#{null}" itemLabel="- Seleccione -"/>
+			<f:selectItems var="lst" value="#{combosBean.listaEstadoCivil}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>		
+         <p:outputLabel value=""/>
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >  
+         <p:outputLabel value="DIRECCIÓN ACTUAL:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="9" >     
+         <p:outputLabel value="Departamento(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_coddepdom}"  id="v_coddepdom"  style="width:120px">
+			<f:selectItem itemLabel="- Seleccione -" itemValue="" />
+			<f:selectItems var="lst" value="#{combosBean.listaDepartamentos}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_codprodom :formPostulacion1:v_coddisdom" listener="#{postulacion1Bean.selCmbDepartamentoDom}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Provincia(*)"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_codprodom}" id="v_codprodom"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaProvinciasDom}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" update=":formPostulacion1:v_coddisdom" listener="#{postulacion1Bean.selCmbProvinciaDom}"/>
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/> 
+         
+         <p:outputLabel value="Distrito(*)"/>
+		 <h:selectOneMenu value="#{postulacion1Bean.hojadevida.v_coddisdom}" id="v_coddisdom"  style="width:120px">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{postulacion1Bean.listaDistritosDom}" itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+		 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="6">
+       	<p:outputLabel value="Urbanización(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+       	<p:outputLabel value=" " />
+       	<p:inputText value="#{postulacion1Bean.hojadevida.v_urbanizac}" id="v_urbanizac" onkeypress="return sololetra(event);" style="width: 200px" maxlength="150"  />
+       	<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+       	<p:outputLabel value="Dirección(*)"/>
+       	<p:inputText value="#{postulacion1Bean.hojadevida.v_direccion}" id="v_direccion" onkeypress="return soloLetraNumDir(event);" style="width: 370px" maxlength="150"  />
+    </h:panelGrid>
+    
+    <h:panelGrid columns="9">
+    
+         <p:outputLabel value="Teléfono Fijo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+        <p:inputText value="#{postulacion1Bean.hojadevida.v_telfij}" id="v_telfij" onkeypress="return soloNumLetTelelf(event);" style="width: 120px" maxlength="15"  />
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Teléfono Celular"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_telcel}" id="v_telcel" onkeypress="return soloNumeros(event);" style="width: 120px" maxlength="9"  />
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Correo Eletrónico(*)"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_correo}" id="v_correo" style="text-transform:lowercase !important; width: 220px" maxlength="50"/>
+         <p:outputLabel value=" " />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="COLEGIATURA:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="6" >
+         
+         <p:outputLabel value="Colegio Profesional &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_descolegio}" id="v_descolegio" onkeypress="return soloLetraNumDir(event);" style="width: 300px" maxlength="150"  />
+         <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+         
+         <p:outputLabel value="Registro Nro"/>
+         <p:inputText value="#{postulacion1Bean.hojadevida.v_numregcol}" id="v_numregcol" onkeypress="return soloLetraNumDir(event);" style="width: 100px" maxlength="10"  />
+         <p:outputLabel value=" " />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="COLEGIATURA:" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="3" >
+         
+         <p:outputLabel value="Persona con Discapacidad(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+		 <p:selectOneRadio value="#{postulacion1Bean.hojadevida.v_flgdis}" id="v_flgdis">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+    </h:panelGrid>
+    <br></br>
+    <h:panelGrid columns="1" >
+         <p:outputLabel value="FUERZAS ARMADAS" style="font-weight:bold;"/>
+    </h:panelGrid>
+    <p:separator></p:separator>
+    <h:panelGrid columns="3" >
+         <p:outputLabel value="Licencia de las FF. AA.(*) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+		 <p:selectOneRadio value="#{postulacion1Bean.hojadevida.v_flglicfa}" id="v_flglicfa">			
+		 <f:selectItem itemLabel="SI" itemValue="S" />
+		 <f:selectItem itemLabel="NO" itemValue="N" />
+		 </p:selectOneRadio>
+		 <p:outputLabel value="" />
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+     
+	<p:outputLabel value="(*) Campos Obligatorios" style="font-weight:bold; font-style: italic;" />
+	<center>
+		
+	    <h:panelGrid columns="2" style="text-align: center;">     		 
+	   	<p:commandButton value="Siguiente" ajax="false" action="#{postulacion1Bean.goToDatos2Postulaciones}" icon="ui-icon-arrowthick-1-e" update="@form" onclick="statusDialog.show();"/>
+	   	<p:commandButton value="Salir" action="#{postulacion1Bean.dialogReferencia()}" icon="ui-icon-close" update="@form"/>		      		
+	   	</h:panelGrid>
+   	</center>
+    	    	    	
+	        
+	</p:fieldset>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+		
+	
+	<!-- ==================================== INI DIALOG CONFIRMACION ================================ -->
+	<h:form id="formConfirmacion">
+		<p:dialog widgetVar="dialogWidget" modal="true">
+			   <p:fieldset style="text-align: left;" legend="Confirmación">
+			   <center>
+				<h:form id="formSalir" style="text-align: center;">
+					<br/>
+				    <h:outputLabel value="Estimado Postulante, ¿Está seguro de Salir del Aplicativo?"/>
+				 	<br/><br/>			    
+				    <p:commandButton value="SI" onclick="window.location='#{facesContext.externalContext.requestContextPath}';" icon="ui-icon-check" />
+				    <h:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+				    <p:commandButton value="NO" onclick="dialogWidget.hide();" icon="ui-icon-close" />
+				    <br/><br/>
+				</h:form>
+				</center>
+				</p:fieldset>
+		</p:dialog>
+		
+		<p:confirmDialog id="dlgObtReniec"
+							 widgetVar="dlgObtReniec"
+							 header="Consulta RENIEC"
+							 message="No se pudo encontrar los nombres en RENIEC, por favor verificar el DNI o registrar los nombres manualmente."
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgObtReniec.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+		
+		<p:confirmDialog id="dlglimiteConsulRENIEC"
+							 widgetVar="dlglimiteConsulRENIEC"
+							 header="Límite Consulta RENIEC"
+							 message="Estimado usuario, se excedio el numero de consultas a RENIEC por minuto para obtener sus nombres, puede volver a intentarlo en unos minutos o registrar los nombres manualmente."
+							 severity="alert"
+							 width="450px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlglimiteConsulRENIEC.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="dlgAlertDigitosDNI"
+							 widgetVar="dlgAlertDigitosDNI"
+							 header="Validaci&oacute;n"
+							 message="El DNI debe tener 8 digitos, por favor verifique"
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgAlertDigitosDNI.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+	
+		<p:confirmDialog id="dlgErrorWS"
+							 widgetVar="dlgErrorWS"
+							 header="Conexi&oacute;n a RENIEC"
+							 message="El servicio de RENIEC se encuentra inactivo, por favor registre manualmente."
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgErrorWS.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="dlgDNIConRUIPN"
+							 widgetVar="dlgDNIConRUIPN"
+							 header="Verificar DNI"
+							 message="El DNI solicitado se encuentra cancelado(21), restringido(22) u observado(23) en el Registro &Uacute;nico de Identificaci&oacute;n de las Personas Naturales (RUIPN)."
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgDNIConRUIPN.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="dlgHorarioFueraRENIEC"
+							 widgetVar="dlgHorarioFueraRENIEC"
+							 header="Conexi&oacute;n a RENIEC"
+							 message="El servicio de RENIEC se encuentra inactivo, por favor registre manualmente."
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgHorarioFueraRENIEC.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="dlgSinAccesoToRENIEC"
+							 widgetVar="dlgSinAccesoToRENIEC"
+							 header="Conexi&oacute;n a RENIEC"
+							 message="El servicio de RENIEC se encuentra inactivo, por favor registre manualmente."
+							 severity="alert"
+							 width="350px">
+				<center >		 
+				<p:commandButton value="Aceptar"                				 
+	                                oncomplete="dlgSinAccesoToRENIEC.hide();"                               
+	                                icon="icon-pref" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		
+	</h:form>
+	<!-- ==================================== FIN DIALOG CONFIRMACION ================================ -->
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	<script type="text/javascript">  
+       //<![CDATA[
+   		function xDlgInsReclamo(xhr, status, args) {
+       		//alert("Entra aqui");
+   			if(args.flagDlgInsReclamo==true){
+   				//alert("Entra aqui2");
+   				dlgConfirmacion.show();
+			}//else{alert("Debe completar los campos para validacion");}
+		}
+
+   		function xDlgObtPersona(xhr, status, args) {
+       		//alert("Entrandooo");        		
+   			if(args.flagDlgObtReniec==true){
+   				dlgObtReniec.show();
+			}
+			if(args.flagDlgAlertDigitos==true){
+				dlgAlertDigitosDNI.show();
+			}
+			if(args.flagDlgErrorWS==true ){
+				dlgErrorWS.show();
+			}
+			if(args.flagDlglimiteConsulRENIEC==true ){
+				dlglimiteConsulRENIEC.show();
+			}
+
+			if(args.flagDlgDNIConRUIPN==true ){
+				dlgDNIConRUIPN.show();
+			}
+			if(args.flagDlgHorarioFueraRENIEC==true ){
+				dlgHorarioFueraRENIEC.show();
+			}
+			if(args.flagDlgSinAccesoToRENIEC==true ){
+				dlgSinAccesoToRENIEC.show();
+			}
+			
+		}    		
+ 			 //]]>
+	</script> 
+		
+	</ui:define>
+</ui:composition>	
+</html>	

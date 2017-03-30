@@ -1,0 +1,113 @@
+package pe.gob.sunafil.postulacioncas.bean;
+
+import java.io.Serializable;
+
+public class Persona implements Serializable{
+
+	private static final long serialVersionUID = -3131363062691782499L;
+
+	private String v_numdoc;
+	private String v_codtdocide;
+	private String v_apepat;
+	private String v_apemat;
+	private String v_nombres;
+	private String v_coddepnac;
+	private String v_codpronac;
+	private String v_coddisnac;
+	private String d_fecnac;
+	private String v_flgreniec;
+	private String v_codusureg;
+	private String d_fecreg;
+	private String v_hostreg;
+	public String getV_numdoc() {
+		return v_numdoc;
+	}
+	public void setV_numdoc(String v_numdoc) {
+		this.v_numdoc = v_numdoc;
+	}
+	public String getV_codtdocide() {
+		return v_codtdocide;
+	}
+	public void setV_codtdocide(String v_codtdocide) {
+		this.v_codtdocide = v_codtdocide;
+	}
+	public String getV_apepat() {
+		return v_apepat;
+	}
+	public void setV_apepat(String v_apepat) {
+		this.v_apepat = v_apepat;
+	}
+	public String getV_apemat() {
+		return v_apemat;
+	}
+	public void setV_apemat(String v_apemat) {
+		this.v_apemat = v_apemat;
+	}
+	public String getV_nombres() {
+		return v_nombres;
+	}
+	public void setV_nombres(String v_nombres) {
+		this.v_nombres = v_nombres;
+	}
+	public String getV_coddepnac() {
+		return v_coddepnac;
+	}
+	public void setV_coddepnac(String v_coddepnac) {
+		this.v_coddepnac = v_coddepnac;
+	}
+	public String getV_codpronac() {
+		return v_codpronac;
+	}
+	public void setV_codpronac(String v_codpronac) {
+		this.v_codpronac = v_codpronac;
+	}
+	public String getV_coddisnac() {
+		return v_coddisnac;
+	}
+	public void setV_coddisnac(String v_coddisnac) {
+		this.v_coddisnac = v_coddisnac;
+	}
+	public String getD_fecnac() {
+		return d_fecnac;
+	}
+	public void setD_fecnac(String d_fecnac) {
+		this.d_fecnac = d_fecnac;
+	}
+	public String getV_flgreniec() {
+		return v_flgreniec;
+	}
+	public void setV_flgreniec(String v_flgreniec) {
+		this.v_flgreniec = v_flgreniec;
+	}
+	public String getV_codusureg() {
+		return v_codusureg;
+	}
+	public void setV_codusureg(String v_codusureg) {
+		this.v_codusureg = v_codusureg;
+	}
+	public String getD_fecreg() {
+		return d_fecreg;
+	}
+	public void setD_fecreg(String d_fecreg) {
+		this.d_fecreg = d_fecreg;
+	}
+	public String getV_hostreg() {
+		return v_hostreg;
+	}
+	public void setV_hostreg(String v_hostreg) {
+		this.v_hostreg = v_hostreg;
+	}
+	@Override
+	public String toString() {
+		return "Persona [v_numdoc=" + v_numdoc + ", v_codtdocide="
+				+ v_codtdocide + ", v_apepat=" + v_apepat + ", v_apemat="
+				+ v_apemat + ", v_nombres=" + v_nombres + ", v_coddepnac="
+				+ v_coddepnac + ", v_codpronac=" + v_codpronac
+				+ ", v_coddisnac=" + v_coddisnac + ", d_fecnac=" + d_fecnac
+				+ ", v_flgreniec=" + v_flgreniec + ", v_codusureg="
+				+ v_codusureg + ", d_fecreg=" + d_fecreg + ", v_hostreg="
+				+ v_hostreg + "]";
+	}
+	
+	
+}

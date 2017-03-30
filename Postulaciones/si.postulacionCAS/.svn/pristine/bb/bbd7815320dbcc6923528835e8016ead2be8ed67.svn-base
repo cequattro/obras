@@ -1,0 +1,49 @@
+package pe.gob.sunafil.postulacioncas.managedBeans;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import org.apache.log4j.Logger;
+
+@ManagedBean(name="postulacion3Bean")
+@SessionScoped
+public class Postulacion3Bean {
+private static Logger logger = Logger.getLogger(Postulacion3Bean.class.getName());
+	
+	@ManagedProperty("#{postulacion1Bean}")
+	private Postulacion1Bean postulacion1Bean;
+	@ManagedProperty("#{postulacion2Bean}")
+	private Postulacion2Bean postulacion2Bean;
+	
+	public Postulacion1Bean getPostulacion1Bean() {
+		return postulacion1Bean;
+	}
+	public void setPostulacion1Bean(Postulacion1Bean postulacion1Bean) {
+		this.postulacion1Bean = postulacion1Bean;
+	}
+	public Postulacion2Bean getPostulacion2Bean() {
+		return postulacion2Bean;
+	}
+	public void setPostulacion2Bean(Postulacion2Bean postulacion2Bean) {
+		this.postulacion2Bean = postulacion2Bean;
+	}
+	
+	public Postulacion3Bean() {
+		inicializar();
+	}
+	@SuppressWarnings("rawtypes")
+	public void inicializar(){
+		logger.info("Entra a inicializar postulacionBean3");
+		try {
+			//aqui inicializamos al entrar al formulario
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	
+	public String datos3Postulaciones(){
+		return "pretty:registroPostulacion3";
+	}
+	
+}
