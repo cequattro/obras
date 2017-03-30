@@ -1,0 +1,97 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.interfase;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+
+public interface INTPersonal {
+
+	public List <TdtbcDependencia> getAutocompletarDependenciaEIntendencia(String query, String nNumint) throws Exception;	
+	
+	public List <SitbTdocide> getTipoDocRemitente() throws Exception;
+	
+	public List <PrtbcPersonal> getPersonal(PrtbcPersonal filtro) throws Exception;
+	
+	public List <VstPersonalrrhh> getPersonalRRHH(VstPersonalrrhh filtro) throws Exception;
+	
+	public List <PrtbcTipopers> getTipoPersonal() throws Exception;
+	
+	public List <SitbPercargo> getCargos() throws Exception;
+	
+	public List <SitbEscalaremun> getEscalas() throws Exception;
+	
+	public int insertarPersonal(PrtbcPersonal entidad) throws Exception;
+	
+	public int actualizarPersonal(PrtbcPersonal entidad) throws Exception;
+	
+	public TdtbcDependencia getDependenciaPorCodigo(Short nNumdep) throws Exception;
+	
+	public List <TdtbcIntendencia> getIntendencia(String nNumint) throws Exception;
+	
+	public List <RhtbcTurno> getTurnos() throws Exception;
+	
+	public List <RhtbcTurnodia> getTurnoDia(Short nCodturno) throws Exception;
+	
+	public List <VstTurnopersonalrrhh> getTurnoPersonal(String vCodpersonal) throws Exception;
+	
+	public List <RhtbdPersonal> getDetallePersonal(String vCodpersonal) throws Exception;
+	
+	public RhmvcPerturno getCorrelativoGlobalPerTurno() throws Exception;
+	
+	public int insertarPerTurno(RhmvcPerturno entidad) throws Exception;
+	
+	public int insertarDetallePersonal(RhtbdPersonal entidad) throws Exception;
+	
+	public int actualizarDetallePersonal(RhtbdPersonal entidad) throws Exception;
+	
+	public int eliminarDetallePersonal(RhtbdPersonal entidad) throws Exception;
+	
+	public RhtbdPersonal getCorrelativoGlobalDetalle(String vCodpersonal) throws Exception;
+	
+	public List <VstDetpersonalrrhh> getVistaDetallePersonal(String vCodpersonal) throws Exception;
+	
+	public int disableDetallePersonal(String vCodpersonal) throws Exception;
+	
+	public int disableFlgActDetallePersonal(String vCodpersonal) throws Exception;
+	
+	public int eliminarPerTurno(RhmvcPerturno entidad) throws Exception;
+	
+	public int actualizarPerTurno(RhmvcPerturno entidad) throws Exception;
+	
+	public int disableDateDetallePersonal(String vCodpersonal, Date dFecfin) throws Exception;
+	
+	public String currentDate() throws Exception;
+	
+	public boolean getTieneTurnoActivo(String vCodpersonal) throws Exception;
+	
+	public int disableDatePerTurno(String vCodpersonal, Date dFecfin) throws Exception;
+	
+	public RhtbdPersonal getMinDateDetalle(String vCodpersonal) throws Exception;
+	
+	public RhmvcPerturno getMinDatePerTurno(String vCodpersonal) throws Exception;
+	
+	public RhmvcPerturno getMaxDatePerTurno(String vCodpersonal) throws Exception;
+	
+	public boolean getTieneOtroTurnoActivo(String vCodpersonal, Short nCodperturno) throws Exception;
+	
+	public boolean getTieneDetalleActivo(String vCodpersonal) throws Exception;
+	public List<PrtbcPersonal> getAutoCompletarPersonal(String query) throws Exception;
+	public List <VstTurnopersonalrrhh> getTurnoPersonal(String vCodpersonal,Date fecha) throws Exception;
+	
+}

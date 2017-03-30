@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Inasistencia">
+
+<resultMap id="reporteInasistencia-out" type="hashMap">  
+    
+    <result column="MES" 				jdbcType="VARCHAR" 		property="MES"		/>
+	<result column="ANIO" 				jdbcType="VARCHAR" 		property="ANIO" 	/>
+	<result column="FECHA" 				jdbcType="VARCHAR" 		property="FECHA" 	/>
+	<result column="V_FECHA" 			jdbcType="VARCHAR" 		property="V_FECHA" 	/>
+	<result column="V_CODPERSONAL" 		jdbcType="VARCHAR"		property="V_CODPERSONAL" 	/>		
+	<result column="NOMBRES" 			jdbcType="VARCHAR"		property="NOMBRES" 	/>
+	<result column="N_NUMDEP" 			jdbcType="VARCHAR"		property="N_NUMDEP" 	/>
+	<result column="V_DESDEP" 			jdbcType="VARCHAR"		property="V_DESDEP" 	/>
+	<result column="N_NUMINT" 			jdbcType="VARCHAR"		property="N_NUMINT" 	/>
+	<result column="V_DESINT" 			jdbcType="VARCHAR"		property="V_DESINT" 	/>
+	<result column="V_CODTIPODOCID" 	jdbcType="VARCHAR"		property="V_CODTIPODOCID" 	/>
+	<result column="V_DESABR" 			jdbcType="VARCHAR"		property="V_DESABR" 	/>
+	<result column="V_DESTDOCIDE" 		jdbcType="VARCHAR"		property="V_DESTDOCIDE" 	/>
+	<result column="REGIMEN" 			jdbcType="VARCHAR"		property="REGIMEN" 	/>
+	<result column="V_DESDIA" 			jdbcType="VARCHAR"		property="V_DESDIA" 	/>	
+	<result column="MOTIVO" 			jdbcType="VARCHAR"		property="MOTIVO" 	/>
+	<result column="TURNO" 				jdbcType="VARCHAR"		property="TURNO" 	/>
+       
+  </resultMap>
+  
+  <select id="reporteInasistencia" resultMap="reporteInasistencia-out" parameterType="hashMap">
+select 
+v_mes MES,
+v_anho ANIO,
+d_fecha FECHA,
+TO_CHAR(d_fecha,'DD/MM/YYYY') V_FECHA,
+v_codpersonal,
+v_nombres NOMBRES,       
+n_numdep,
+v_desdep,
+n_numint,
+v_desint,
+v_codtdocide V_CODTIPODOCID,      
+v_desabr,
+v_destdocide,
+v_regimen REGIMEN,
+v_dia V_DESDIA,       
+v_motivo MOTIVO,
+V_DESTURNO TURNO                                  
+from vst_rpt_inasistencias T
+
+
+WHERE
+  
+<if test="PARAM_MES != null" >  
+T.v_mes=#{PARAM_MES}
+</if>
+
+<if test="PARAM_ANIO != null" >
+AND T.v_anho=#{PARAM_ANIO}
+</if>
+
+<if test="PARAM_INTENDENCIA != null" >  
+AND T.n_numint=#{PARAM_INTENDENCIA}
+</if>
+
+<if test="PARAM_DEPENDENCIA != null" >
+AND T.n_numdep=#{PARAM_DEPENDENCIA}
+</if>
+
+<if test="PARAM_TIPODOC != null" >
+AND T.v_codtdocide=#{PARAM_TIPODOC}
+</if>
+
+<if test="PARAM_NRODOC != null" >
+AND T.v_codpersonal=#{PARAM_NRODOC}
+</if>
+
+order by T.v_codpersonal asc,T.d_fecha asc
+
+  </select>
+        
+</mapper>

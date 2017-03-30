@@ -1,0 +1,62 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.despachadores;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPPersonal;
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPTurnoDia;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTPersonal;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTTurnoDia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+public class TurnoDiaDespatch {
+	private static final TurnoDiaDespatch instance = new TurnoDiaDespatch();
+	 
+	 private INTTurnoDia turnoDiaDAO;
+	 private static Logger logger = Logger.getLogger(LoginDespatch.class.getName());
+	 
+	 public TurnoDiaDespatch() {
+		 turnoDiaDAO = new IMPTurnoDia();
+	    }	 
+	 
+	 public List <RhtbcTurnodia> getTurnosDia(Short nCodturno) throws Exception
+	 {
+		 return turnoDiaDAO.getTurnosDia(nCodturno);
+	 }
+	 
+	 
+	 public int insertarTurnoDia(RhtbcTurnodia entidad) throws Exception
+	 {
+		 return turnoDiaDAO.insertarTurnoDia(entidad);
+	 }
+	 
+	 public int insertarDetalleTurnoDia(RhtbcTurnodia entidad) throws Exception
+	 {
+		 return turnoDiaDAO.insertarDetalleTurnoDia(entidad);
+	 }
+	 
+	 public RhtbcTurnodia getCorrelativoTurnoDia(Short nCodturno) throws Exception
+	 {
+		 return turnoDiaDAO.getCorrelativoTurnoDia(nCodturno);
+	 }
+	 public int eliminarTurnoDia(RhtbcTurnodia entidad) throws Exception{
+		 return turnoDiaDAO.eliminarTurnoDia(entidad);
+	 }
+	 
+	 
+}

@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="edopcd" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="97061a61-3ae2-436f-8993-579b3803e88a">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="146"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<queryString>
+		<![CDATA[SELECT t.v_periodo,
+       t.v_numdocide,
+       t.v_desrazons,
+       t.v_coddep,
+       (SELECT d.v_desdep FROM simintra1.sitb_departamento d WHERE t.v_coddep=d.v_coddep ) v_desdep,
+       t.v_codpro,
+       (SELECT d.v_despro FROM simintra1.sitb_provincia d WHERE t.v_coddep=d.v_coddep AND t.v_codpro=d.v_codpro ) v_despro,
+        t.v_coddis,
+       (SELECT d.v_desdis FROM simintra1.sitb_distrito d WHERE t.v_coddep=d.v_coddep AND t.v_codpro=d.v_codpro AND t.v_coddis=d.v_coddis  ) v_desdis,
+       t.v_diremp,
+       t.v_telemp,
+       t.v_codsec,
+       (SELECT s.v_dessec FROM simintra1.sitb_seccion s WHERE s.v_codsec=t.v_codsec ) v_dessec,
+       t.v_codciiu,
+       (SELECT c.v_desciiu FROM simintra1.sitb_ciiu c  WHERE c.v_codsec=t.v_codsec AND c.v_codciiu=t.v_codciiu ) v_desciiu,
+       t.n_tietradis,
+       t.n_numtrabpe,
+
+       dm.v_apenom,
+       UPPER(dm.v_cargo) as v_cargo,
+       dm.v_email,
+       dm.v_codtelfij||'-'||dm.v_telfijo as v_telfijo,
+       dm.v_telmovil,
+       dm.v_flgcontdis,
+       FNC_CREPORTE(1,t.v_periodo,t.v_numdocide) v_des3233,
+	oxd.n_corocdem as n_corocdem,
+       (SELECT d.v_desdep FROM simintra1.sitb_departamento d WHERE oxd.v_coddep=d.v_coddep ) v_desdepo,
+       (SELECT d.v_despro FROM simintra1.sitb_provincia d WHERE oxd.v_coddep=d.v_coddep AND oxd.v_codpro=d.v_codpro ) v_desproo,
+       oxd.v_codocupac,
+       (SELECT d.v_desocupac FROM simintra1.sitb_ocupacion d WHERE oxd.v_codocupac=d.v_codocupac ) v_desocupac,
+       oxd.n_numtraba,
+       FNC_DREPORTE(2,oxd.n_corocdem) v_dese,
+       (SELECT ne.v_desnivesu FROM entbc_nivedu ne WHERE oxd.n_cornivedu=ne.n_cornivedu) as v_desnivesu,
+       FNC_DREPORTE(3,oxd.n_corocdem) v_desg,
+       oxd.v_flgcap,
+       FNC_DREPORTE(4,oxd.n_corocdem) v_desi,
+       oxd.v_flgexplab,
+       oxd.n_monrembru,
+       oxd.n_corhorari,
+       (SELECT ed.v_deseda FROM enmvd_ocupxedad oxe, entbc_edad ed WHERE oxe.n_corocdem=oxd.n_corocdem AND oxe.n_coreda=ed.n_coreda) as v_deseda,
+       (SELECT oxe.n_itrime FROM enmvd_ocupxedad oxe WHERE oxe.n_corocdem=oxd.n_corocdem) as n_itrime,
+       (SELECT oxe.n_iitrime FROM enmvd_ocupxedad oxe WHERE oxe.n_corocdem=oxd.n_corocdem) as n_iitrime,
+       (SELECT oxe.n_iiitrime FROM enmvd_ocupxedad oxe WHERE oxe.n_corocdem=oxd.n_corocdem) as n_iiitrime,
+       (SELECT oxe.n_ivtrime FROM enmvd_ocupxedad oxe WHERE oxe.n_corocdem=oxd.n_corocdem) as n_ivtrime,
+       oxd.n_numtracon,
+       oxd.n_numtraloc,
+       oxd.n_numtraotr,
+
+
+       dm.v_flgpol,
+       dm.v_flgorient,
+       FNC_CREPORTE(5,t.v_periodo,t.v_numdocide) v_des4244,
+       FNC_CREPORTE(6,t.v_periodo,t.v_numdocide) v_des51,
+       dm.v_flgdific,
+       FNC_CREPORTE(7,t.v_periodo,t.v_numdocide) v_des62,
+       decode(dm.v_valoraci,1,'Muy útil',2,'Útil',3,'Poco útil',4,'Nada útil') as v_valoraci,
+       t.n_numtrabse
+
+FROM  enmvx_muestraemp t
+INNER JOIN enmvc_demandapd dm ON t.v_periodo=dm.v_periodo AND t.v_numdocide=dm.v_numdocide
+LEFT JOIN  enmvd_ocupaxdeman oxd ON t.v_periodo=oxd.v_periodo AND t.v_numdocide=oxd.v_numdocide
+WHERE t.v_periodo='112013' AND t.v_numdocide='20514038270']]>
+	</queryString>
+	<field name="V_PERIODO" class="java.lang.String"/>
+	<field name="V_NUMDOCIDE" class="java.lang.String"/>
+	<field name="V_DESRAZONS" class="java.lang.String"/>
+	<field name="V_CODDEP" class="java.lang.String"/>
+	<field name="V_DESDEP" class="java.lang.String"/>
+	<field name="V_CODPRO" class="java.lang.String"/>
+	<field name="V_DESPRO" class="java.lang.String"/>
+	<field name="V_CODDIS" class="java.lang.String"/>
+	<field name="V_DESDIS" class="java.lang.String"/>
+	<field name="V_DIREMP" class="java.lang.String"/>
+	<field name="V_TELEMP" class="java.lang.String"/>
+	<field name="V_CODSEC" class="java.lang.String"/>
+	<field name="V_DESSEC" class="java.lang.String"/>
+	<field name="V_CODCIIU" class="java.lang.String"/>
+	<field name="V_DESCIIU" class="java.lang.String"/>
+	<field name="N_TIETRADIS" class="java.math.BigDecimal"/>
+	<field name="N_NUMTRABPE" class="java.math.BigDecimal"/>
+	<field name="V_APENOM" class="java.lang.String"/>
+	<field name="V_CARGO" class="java.lang.String"/>
+	<field name="V_EMAIL" class="java.lang.String"/>
+	<field name="V_TELFIJO" class="java.lang.String"/>
+	<field name="V_TELMOVIL" class="java.lang.String"/>
+	<field name="V_FLGCONTDIS" class="java.lang.String"/>
+	<field name="V_DES3233" class="java.lang.String"/>
+	<field name="N_COROCDEM" class="java.math.BigDecimal"/>
+	<field name="V_DESDEPO" class="java.lang.String"/>
+	<field name="V_DESPROO" class="java.lang.String"/>
+	<field name="V_CODOCUPAC" class="java.lang.String"/>
+	<field name="V_DESOCUPAC" class="java.lang.String"/>
+	<field name="N_NUMTRABA" class="java.math.BigDecimal"/>
+	<field name="V_DESE" class="java.lang.String"/>
+	<field name="V_DESNIVESU" class="java.lang.String"/>
+	<field name="V_DESG" class="java.lang.String"/>
+	<field name="V_FLGCAP" class="java.lang.String"/>
+	<field name="V_DESI" class="java.lang.String"/>
+	<field name="V_FLGEXPLAB" class="java.lang.String"/>
+	<field name="N_MONREMBRU" class="java.math.BigDecimal"/>
+	<field name="N_CORHORARI" class="java.math.BigDecimal"/>
+	<field name="V_DESEDA" class="java.lang.String"/>
+	<field name="N_ITRIME" class="java.math.BigDecimal"/>
+	<field name="N_IITRIME" class="java.math.BigDecimal"/>
+	<field name="N_IIITRIME" class="java.math.BigDecimal"/>
+	<field name="N_IVTRIME" class="java.math.BigDecimal"/>
+	<field name="N_NUMTRACON" class="java.math.BigDecimal"/>
+	<field name="N_NUMTRALOC" class="java.math.BigDecimal"/>
+	<field name="N_NUMTRAOTR" class="java.math.BigDecimal"/>
+	<field name="V_FLGPOL" class="java.lang.String"/>
+	<field name="V_FLGORIENT" class="java.lang.String"/>
+	<field name="V_DES4244" class="java.lang.String"/>
+	<field name="V_DES51" class="java.lang.String"/>
+	<field name="V_FLGDIFIC" class="java.lang.String"/>
+	<field name="V_DES62" class="java.lang.String"/>
+	<field name="V_VALORACI" class="java.lang.String"/>
+	<field name="N_NUMTRABSE" class="java.math.BigDecimal"/>
+	<variable name="Variable1.10" class="java.lang.String"/>
+	<variable name="Variable3.1" class="java.lang.String"/>
+	<group name="matiz" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{N_COROCDEM}]]></groupExpression>
+		<groupHeader>
+			<band height="28" splitType="Stretch">
+				<staticText>
+					<reportElement uuid="ea92ccb8-206b-49fc-9291-022ebaedc671" key="staticText-42" mode="Opaque" x="0" y="1" width="534" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[3.4 Detalle las ocupaciones de los trabajadores con discapacidad adicionales que su empresa contrataría en el año 2014, por provincia.]]></text>
+				</staticText>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="a9fc4dd7-2408-4af0-9cbb-861e2e13ce6a" key="textField-17" mode="Opaque" x="0" y="14" width="86" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{V_DESDEPO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="b16d90cc-03f1-4b15-8ae0-ce08121c4477" key="textField-18" mode="Opaque" x="86" y="14" width="84" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{V_DESPROO}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="ea5f86fa-2fb1-4500-8251-fe6be1e7ac6b" key="textField-19" mode="Opaque" x="169" y="14" width="30" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{V_CODOCUPAC}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement uuid="31cf38e1-792e-46df-99f2-d01ffd01fe8c" key="textField-20" mode="Opaque" x="198" y="14" width="234" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{V_DESOCUPAC}]]></textFieldExpression>
+				</textField>
+				<textField pattern="##0" isBlankWhenNull="false">
+					<reportElement uuid="70074e62-436a-4473-838c-9f93dfdc0930" key="textField" mode="Opaque" x="495" y="14" width="39" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{N_NUMTRABA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="f89bb99d-8f2d-47da-8570-4e54ea6ed037" key="staticText-43" mode="Opaque" x="432" y="14" width="63" height="13" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[N° Trabajadores]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="12" splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="5" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="207" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bd3d6db4-4074-4c0d-9dfc-8c92fa8d2b98" key="staticText-1" mode="Opaque" x="0" y="-23" width="534" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[CUESTIONARIO DE DEMANDA LABORAL PARA PERSONAS CON DISCAPACIDAD]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="2ca7c0ec-4052-41e9-bc6e-92805dc3f005" key="textField" x="37" y="16" width="70" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NUMDOCIDE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5605b5c3-b110-46cb-bab2-497d4e1626ad" key="staticText-2" mode="Opaque" x="0" y="0" width="534" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 1: DATOS GENERALES DE SU EMPRESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7d1de2e5-d916-41d8-bedb-b4d3dd3c21a1" key="staticText-3" x="1" y="16" width="36" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.1 RUC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6c7471db-243c-44e1-ab37-bcc4dd03b32b" key="staticText-4" x="107" y="16" width="46" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.2 Razón social:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="18abc88b-2faf-424d-9c05-c446590367ac" key="textField" x="153" y="16" width="244" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESRAZONS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7da32ef9-bb3c-4a5e-83d2-b40cd2e6139f" key="staticText-6" x="1" y="30" width="68" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.3 Departamento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b0b76918-a467-4064-9123-0b3ef33a9a60" key="staticText-7" x="173" y="30" width="53" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.4 Provincia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e05818f7-5a05-4221-9317-3013a0514f8c" key="staticText-8" x="335" y="30" width="41" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.5 Distrito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c4dd1d2-b2a5-4ff8-833a-ce55e60e1b9e" key="staticText-9" x="1" y="43" width="53" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.6 Dirección:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="8533242c-a913-40b9-8484-f5184b51d0da" key="textField" x="70" y="30" width="104" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDEP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="dc0310c7-9aa8-4d88-82c2-8b6746bbeb1e" key="textField" x="227" y="30" width="109" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESPRO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="46283e70-6f3b-476d-9689-d5a75aa6afdc" key="textField" x="378" y="30" width="149" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDIS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="48557632-5de6-45d3-a8e3-098ebd48a394" key="textField" x="54" y="43" width="191" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DIREMP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="edd7b0a2-2cde-404f-8c8d-d1026626282f" key="staticText-16" x="245" y="43" width="106" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.7 Teléfono de la empresa:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="78fe8e63-a4ef-42a7-bbf1-d7319031053c" key="textField-3" x="351" y="43" width="149" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_TELEMP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="0" y="61" width="46" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.8 Sección:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="c2b92d2f-1bb5-46e4-8678-ad3fc5269850" key="textField-1" x="61" y="61" width="161" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESSEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="567316c4-5df1-4e62-8e0c-fc809a632532" key="staticText-12" x="230" y="61" width="35" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.9 CIIU:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="2ee35cd7-11b3-48e2-aed9-5dd7d9415244" key="textField-2" x="289" y="61" width="245" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESCIIU}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="24e4b456-d8cd-490b-ae26-1ea2b099fac3" key="staticText-13" x="0" y="76" width="319" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ 1.10  ¿Su empresa cuenta con trabajadores con discapacidad al 31 de agosto de 2013? ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="67b21e98-ed52-4d25-b9fb-66669bfcd781" key="textField-4" x="98" y="106" width="188" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_APENOM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="2" y="90" width="534" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 2: PERSONA QUE PROPORCIONA LOS DATOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c878b4d2-9ce5-4801-8640-96f6de8b5707" key="staticText-18" x="0" y="106" width="97" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.1. Apellidos y nombres:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="714e7e51-a4b8-4c0d-b9a2-8f9c59846ce2" key="staticText-19" x="288" y="106" width="53" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.2 Cargo:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="4a485e08-63ad-4d43-b70b-4fb5f1e0734a" key="textField-5" x="342" y="106" width="169" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_CARGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="04d7d13b-302c-4026-aaaa-8cdecfa143e9" key="staticText-21" x="0" y="119" width="97" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.3 Correo electrónico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6765adee-bc75-477d-9470-15fc00721512" key="staticText-22" x="203" y="119" width="53" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.4 Teléfono: fijo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="35163326-da99-4bd9-bc06-972eae9f8864" key="staticText-23" x="325" y="119" width="118" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.5   Nro. de celular (opcional):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="9ae29941-a2b7-4c79-9cfb-1c9ee061fc31" key="textField-6" x="98" y="119" width="105" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_EMAIL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="70423593-9640-4697-b7fe-a8eadaebb1c4" key="textField-7" x="256" y="119" width="69" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_TELFIJO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="488990fd-0718-4c9b-b9e1-2f8714145994" key="textField-12" x="443" y="119" width="87" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_TELMOVIL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="d7217b5c-eb3a-4211-81e0-5cc2a56171e3" key="textField" x="46" y="61" width="16" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_CODSEC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="1964643e-4748-4485-bc58-f471c71bff67" key="textField" x="264" y="61" width="29" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_CODCIIU}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="0f4676b6-2731-40a3-a0cc-0a12dd339fab" key="textField" x="325" y="76" width="67" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_TIETRADIS}.intValue()==1? "Si" : "No"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ccfa00bb-01e1-4736-98ed-21c816e2484c" key="staticText-24" mode="Opaque" x="0" y="132" width="534" height="15" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 3: DEMANDA FUTURA DE TRABAJADORES CON DISCAPACIDAD DE SU EMPRESA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c9ce7ba0-e8e4-4da1-a436-209dd38cf0a6" key="staticText-25" x="0" y="147" width="319" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[3.1 ¿Durante el año 2014, su empresa contrataría trabajadores con discapacidad?                            ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="89e2d3b7-15bd-4ee1-b59e-1e85592dded0" key="textField" x="321" y="147" width="100" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGCONTDIS}.equals("1")? "Si (continúe 3.2)" : "No (continúe 3.3)"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="80d3a8a1-9408-4990-b372-3dd381ac3d03" key="textField" x="0" y="159" width="514" height="22"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGCONTDIS}.equals("1") && $F{N_NUMTRABPE}.intValue()<51 ? "3.2 ¿Por qué razones contrataría su empresa trabajadores con discapacidad?  (marque máximo dos alternativas) "
+:($F{V_FLGCONTDIS}.equals("1") && $F{N_NUMTRABPE}.intValue()>=51 ? "3.2 ¿Por qué razones contrataría su empresa trabajadores con discapacidad?  (marque máximo tres alternativas) "
+:($F{V_FLGCONTDIS}.equals("0") && $F{N_NUMTRABPE}.intValue()<51 ? "3.3 ¿Por qué razones no contrataría su empresa trabajadores con discapacidad? (marque máximo dos alternativas)":"3.3 ¿Por qué razones no contrataría su empresa trabajadores con discapacidad? (marque máximo tres alternativas)"))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="bca4355d-7e31-4060-a10e-57f4cd3d85b7" key="textField" x="2" y="-33" width="532" height="31"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DES3233}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="243" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b4deb05f-d935-4121-8725-de9ba779a58f" key="staticText-44" x="0" y="1" width="455" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[e. ¿Para esta ocupación su empresa contraría trabajadores con discapacidad que tengan ...]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="76f6ea08-232a-468f-83a6-07eb3d37225f" key="textField" x="0" y="14" width="534" height="53"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a5c44ba-5eb0-4b00-a775-a9df1d5647c3" key="staticText-45" x="0" y="67" width="349" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[f. ¿Cuál es el nivel educativo del trabajador con discapacidad que requeriría para esta ocupación?
+
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="6f1e593c-c669-4f93-a979-94598ebbd5a2" key="textField" x="356" y="67" width="178" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESNIVESU}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="5bea20a5-b0b9-4999-ad8c-35b921cec530" key="textField" x="0" y="93" width="534" height="36"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESG}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="71c5a4a2-bc2a-4e5d-971f-eb25ddfd9b69" key="staticText-46" x="0" y="80" width="349" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[g. ¿Qué carrera técnica o profesión debe tener el  trabajador con discapacidad?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1461946d-a9ca-44c7-9275-85326469ddd8" key="staticText-47" x="0" y="129" width="423" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[h. ¿Esta ocupación requeriría que el  trabajador  con discapacidad tenga capacitación específica para su desempeño?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="b44961b1-dc31-4dfd-8ab5-996d044e92d8" key="textField" x="425" y="129" width="108" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGCAP}.equals("1") ? "Si (Continúe)" : "No (Pase a la pregunta j)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2bb4ffea-89fd-4d7c-b124-e4a49aedd8a2" key="staticText-48" x="143" y="179" width="357" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[k. ¿Qué remuneración bruta promedio mensual estaría dispuesto a pagar para esta ocupación (S/.)?]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="ad589caa-f47a-42cc-8f9b-35da8a39204c" key="textField" x="501" y="179" width="34" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_MONREMBRU}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4ce3e188-a0b0-43f1-90aa-d5a7cc040883" key="staticText-49" x="0" y="192" width="304" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[l. ¿Qué jornada laboral requeriría esta ocupación para el trabajador con discapacidad]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="99831496-32f6-4b71-bc86-ab633fe3743d" key="textField" x="305" y="192" width="87" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_CORHORARI}.intValue()==1? "Horario fijo (8 horas)" : "Media jornada (4 horas)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="231f086f-7525-40a9-bb90-c10544bb8193" key="staticText-50" x="390" y="192" width="74" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[m.  Edad requerida ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="7e3b68b8-8ab7-476e-b9c5-38ad8d4b6921" key="textField" x="464" y="192" width="70" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESEDA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="cc467fa1-0596-4d94-9a40-80e2b1070efb" key="textField" x="380" y="205" width="22" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_ITRIME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="04a47f16-bab0-4387-9390-da340588fc57" key="staticText-51" mode="Opaque" x="370" y="205" width="10" height="13" forecolor="#330033" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[I]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="829b32f3-5b49-4e1a-a8c1-d40818fad327" key="staticText-52" mode="Opaque" x="408" y="205" width="10" height="13" forecolor="#330033" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[II]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="0df01b78-fd04-4f43-bad4-739289adf65b" key="textField-21" x="418" y="205" width="22" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_IITRIME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2052369e-7336-4c2b-9953-bbf436d4bbb0" key="staticText-53" mode="Opaque" x="445" y="205" width="10" height="13" forecolor="#330033" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[III]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="0c037c58-4cb7-4d7d-8e58-ff653f0bdc32" key="textField-22" x="455" y="205" width="22" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_IIITRIME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="05851933-01f2-46d8-a352-9f893ff6f2d0" key="staticText-54" mode="Opaque" x="482" y="205" width="10" height="13" forecolor="#330033" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[IV]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="0e920e65-25ae-4552-a3be-a2e2b1c582b1" key="textField-23" x="492" y="205" width="22" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_IVTRIME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="16ab7722-972c-4e93-988d-07c34040a525" key="staticText-55" x="0" y="217" width="438" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ñ. Detalle cuantos trabajadores con discapacidad adicionales contrataría en esta ocupación por modalidad de contratación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="237ea7bd-6535-4a94-af05-6181565997d8" key="staticText-56" x="0" y="230" width="56" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1. Por contrato]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="41a1565c-d0cb-4062-8368-2717144bd039" key="textField" x="58" y="230" width="24" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_NUMTRACON}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="15b8db05-b882-4a71-9bbf-ce7dc089b312" key="staticText-57" x="85" y="230" width="105" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2. Por locación de servicios                                ]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="3f694606-6436-441c-aa1b-a960bc8f8ccf" key="textField-24" x="192" y="230" width="31" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_NUMTRALOC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="092a9fda-dfe9-4819-a4d8-1a6220534c65" key="staticText-58" x="227" y="230" width="35" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[3. Otra]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="dc3e30f3-b7b7-446c-9672-e32617f3e7c8" key="textField-25" x="264" y="230" width="29" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_NUMTRAOTR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e49ce669-5f0a-493d-b378-8ad46a69d29b" key="staticText-62" x="0" y="142" width="236" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[i. ¿En qué debería  estar capacitado? (Máximo 3)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="8ff9cbe0-0768-4a3e-9e5c-5a47adb6118a" key="textField-28" x="0" y="155" width="532" height="24"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="6a350ff8-83d9-4bfc-a28d-cebb0474c5f7" key="textField-29" x="124" y="179" width="15" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGEXPLAB}.equals("1") ? "Si" : "No"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ee6a262b-a985-417f-acdc-28a88b72af8c" key="staticText-63" x="0" y="179" width="124" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[j. ¿Requeriría experiencia laboral?                     ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5984faea-abe6-4f26-b278-3a0f94d585b7" key="staticText-64" x="0" y="205" width="368" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[n. Detalle cuantos trabajadores con discapacidad adicionales contrataría en esta ocupación por trimestre:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="5" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="5" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band height="269" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="3c0fddb6-4ebb-4f2b-aa5f-04a9f3779593" key="textField-30" x="438" y="32" width="96" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGPOL}.equals("1") ? "" : $F{V_FLGORIENT}.equals("1") ? "Si (continúe con 4.4)" : "No (Pase a la sección 5)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b0d1fca6-0bf2-4ee7-9847-760ad1233a7f" key="staticText-65" x="0" y="117" width="534" height="14"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[5.1 ¿Conoce los incentivos tributarios y económicos establecidos en la legislación para las empresas que contratarán trabajadores con discapacidad?]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9ce14da0-8b8f-4dcf-aaa7-e804a4d9b430" key="textField-31" x="0" y="131" width="534" height="32"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DES51}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d42e4341-17d6-45aa-bab9-7dd35c00c822" key="staticText-66" mode="Opaque" x="0" y="102" width="534" height="15" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 5: INCENTIVOS PARA LA CONTRATACIÓN DE TRABAJADORES CON DISCAPACIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a24b9d04-5635-4dc9-b16e-52b60e367035" key="staticText-67" mode="Opaque" x="0" y="168" width="534" height="15" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 6: DIFICULTADES OPERATIVAS PARA LA CONTRATACIÓN DE TRABAJADORES CON DISCAPACIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea7557ff-97bb-4ca0-881c-4f9dafc65881" key="staticText-68" x="0" y="183" width="385" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[6.1 ¿Considera Ud. que las empresas enfrentarán dificultades para contratar trabajadores con discapacidad? ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3be1f191-cdcc-4f73-9718-79562df71e4e" key="textField-32" x="0" y="197" width="534" height="25"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGDIFIC}.equals("1") ? $F{V_DES62}  : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="21d9d5fc-c7ed-403d-9d51-98f875a61943" key="textField-33" x="394" y="183" width="105" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGDIFIC}.equals("1") ? "Si (continúe con 6.2)" : "No (Pase a sección 7)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="07bdd00c-c970-4ed5-87ae-87c7140ec643" key="staticText-69" mode="Opaque" x="0" y="222" width="534" height="15" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 7: SERVICIO PÚBLICO ESPECIALIZADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ca409307-6386-4ffa-ac7e-355e784b6ae4" key="staticText-70" x="0" y="237" width="457" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[7.1 ¿Cómo valoraría su empresa un servicio público especializado que facilite la contratación de trabajadores con discapacidad?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="ae011a8d-664e-4ca3-a17c-a5cf0af1e1c6" key="textField-34" x="455" y="237" width="76" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_VALORACI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b0d560e-4464-4526-a68e-1ded81e593c8" key="staticText-71" x="0" y="250" width="380" height="13"/>
+				<textElement>
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Total de trabajadores a Nivel Nacional al 31 de agosto de 2013 (Considerar todos los regímenes laborales)]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="bf69eb8f-e602-4836-a349-dc6fb7bdd205" key="textField-35" x="379" y="250" width="50" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_NUMTRABSE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3371b47b-9de1-4341-9b37-f5d234aeec88" key="staticText-72" mode="Opaque" x="0" y="4" width="534" height="15" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SECCIÓN 4: POLÍTICA DE RECURSOS HUMANOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9cd03d41-711f-490d-8d6f-2983135bdb62" key="staticText-73" x="0" y="19" width="439" height="13"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[4.1 ¿Su empresa cuenta con una política de recursos humanos que incorpora la gestión del trabajador con discapacidad? ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="9b3148dd-0274-4bd1-bda6-db1d60cbef7e" key="textField-36" x="439" y="19" width="80" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGPOL}.equals("1") ? "Si (continúe 4.2)" : "No (continúe 4.3)"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fe6436fb-7c6d-4ea8-ba65-6e094e6b57c0" key="textField-37" x="0" y="58" width="534" height="36"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGPOL}.equals("1") ? $F{V_DES4244} : $F{V_FLGORIENT}.equals("1") ? $F{V_DES4244} : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="5b147a5e-03fe-474e-b580-6d0cfbad9886" key="textField-38" x="1" y="32" width="436" height="13"/>
+				<textElement>
+					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGPOL}.equals("1") ? "4.2  ¿Qué acciones viene implementando acorde a esta política? " : "4.3 ¿Su empresa reorientará su política de recursos humanos hacia la gestión del trabajador con discapacidad?"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2f001473-60fe-486d-8c2a-918af9e2d610" key="textField-39" x="1" y="45" width="497" height="13"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGORIENT}.equals("1") ? "4.4 ¿Qué acciones implementará para el desarrollo de la gestión de recursos humanos del trabajador con discapacidad?" : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

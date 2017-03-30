@@ -1,0 +1,180 @@
+package pe.gob.sunafil.gestionpersonal.txt;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.MarcacionDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacion;
+
+public class tramaConverterTxt {//para xlsx con apache poi
+
+	public static String curDate;
+	public static Date initDate;
+	public static Date endDate;		
+	
+	public static Date getInitDate() {
+		return initDate;
+	}
+
+	public static void setInitDate(Date initDate) {
+		tramaConverterTxt.initDate = initDate;
+	}
+
+	public static Date getEndDate() {
+		return endDate;
+	}
+
+	public static void setEndDate(Date endDate) {
+		tramaConverterTxt.endDate = endDate;
+	}
+
+	public static String getCurDate() {
+		return curDate;
+	}
+
+	public static void setCurDate(String curDate) {
+		tramaConverterTxt.curDate = curDate;
+	}
+
+	static String breakpLineWriter;
+	public void Process(){
+		try{
+			Properties configProp = new Properties();
+			String resource = "pe/gob/sunafil/gestionpersonal/util/properties/mtpe_resources.properties";
+			//String resource = "gob/sunafil/xlsx/config.properties";
+			Reader reader = Resources.getResourceAsReader(resource);
+			configProp.load(reader);		    
+			String folderPathImport = configProp.getProperty("ruta.xls")+"/";
+			//String folderPathImport = configProp.getProperty("folderTxt");			
+			Workbook wb = new XSSFWorkbook();//
+		    Sheet sheet = wb.createSheet("libro nuevo");//
+			BufferedReader br;
+			br = new BufferedReader(new FileReader(folderPathImport+"temporal.txt"));
+	    	String line;
+	    	int lineNum=0;
+	    	//head
+	    	Row rowHead = sheet.createRow((short)lineNum);//
+	    	rowHead.createCell(0).setCellValue("Código del Personal");//
+	    	rowHead.createCell(1).setCellValue("Fecha y Hora");//
+	    	rowHead.createCell(2).setCellValue("Mensaje");//
+	    	//end head
+	    	while ((line = br.readLine()) != null) {
+	    		if(line.length()==37)//end SUB
+	    		{	    		
+	    			MarcacionDespatch marcacionDespatch = new MarcacionDespatch();
+	    			String[] rowArray=line.split("	");
+	    			boolean existePersonal=false;
+	    			try {
+	    				existePersonal=marcacionDespatch.getExistePersonal(rowArray[0].trim());
+					} catch (Exception e) {
+						existePersonal=false;
+						e.printStackTrace();
+					}
+	    			if(!existePersonal)
+	    			{//si no existe insertar en log en excel
+	    				lineNum++;
+			    		System.out.println("row : "+lineNum+" ::: "+line.length());
+			    		Row row = sheet.createRow((short)lineNum);//		    		
+			    	    row.createCell(0).setCellValue(rowArray[0].trim());//
+			    	    row.createCell(1).setCellValue(rowArray[1].substring(8, 10)+"/"
+			    	    								+rowArray[1].substring(5, 7)+"/"
+			    	    								+rowArray[1].substring(0, 4)+" "
+			    	    								+rowArray[1].substring(11).split(":")[0]+":"
+			    	    								+rowArray[1].substring(11).split(":")[1]+":"
+			    	    								+rowArray[1].substring(11).split(":")[2]);//
+			    	    row.createCell(2).setCellValue("No existe un registro activo de personal con este número de documento.");
+	    			}
+	    			else
+	    			{//si existe entonces insertar en BD
+	    				try {
+			    			SimpleDateFormat simpleDate=new SimpleDateFormat("dd/MM/yyyy");
+			    			Date dateRow=simpleDate.parse(rowArray[1].substring(8, 10)+"/"
+									+rowArray[1].substring(5, 7)+"/"
+									+rowArray[1].substring(0, 4));
+			    			
+			    			if(!dateRow.before(initDate) && !dateRow.after(endDate))
+			    			{
+			    				RhmvcMarcacion entidad=new RhmvcMarcacion();
+				    			entidad.setnCodmarcacion(new BigDecimal(getSiguienteCorrelativoGlobalMarcacion()));
+				    			entidad.setvCodpersonal(rowArray[0].trim());
+				    			entidad.setnCodorigen(new Short("1"));
+				    			entidad.setnCodtipo(new Short("1"));//ENTRADA PROVISIONAL HASTA DEFINIR LAS REGLAS		    					    			
+				    			entidad.setdFecha(dateRow);
+				    			entidad.setnHora(new Short(rowArray[1].substring(11).split(":")[0]));
+				    			entidad.setnMinuto(new Short(rowArray[1].substring(11).split(":")[1]));
+				    			entidad.setnSegundo(new Short(rowArray[1].substring(11).split(":")[2]));		 
+				    			System.out.println("Insertando ::: Fecha : "+rowArray[1].substring(8, 10)+"/"
+										+rowArray[1].substring(5, 7)+"/"
+										+rowArray[1].substring(0, 4)+" Personal : "+rowArray[0].trim());
+				    			marcacionDespatch.insertarMarcacion(entidad);
+			    			}		    					    			
+			    		} catch (Exception e) {		    			
+			    			e.printStackTrace();
+			    		}
+	    			}		    				    	    
+	    		}	    		
+	    	}
+	    	FileOutputStream fileOut;//
+			fileOut = new FileOutputStream(folderPathImport+"workbookOut.xlsx");//
+			wb.write(fileOut);//
+			fileOut.close();//
+	    	br.close();						
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	public String getSiguienteCorrelativoGlobalMarcacion()
+	{
+		MarcacionDespatch marcacionDespatch = new MarcacionDespatch();
+		try {
+			RhmvcMarcacion correlativo=marcacionDespatch.getCorrelativoGlobalMarcacion();
+			if(correlativo!=null)
+			{
+				return ""+(Long.parseLong(""+correlativo.getnCodmarcacion())+1);
+			}
+			else
+			{
+				//devuelve correlativo en 1				
+				return "1";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}				
+	}
+
+	
+}

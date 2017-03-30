@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="GesPer">
+
+<resultMap id="reportePersonal-out" type="hashMap">  
+    
+    <result column="V_CODPERSONAL" 		jdbcType="VARCHAR" 		property="V_CODPERSONAL"		/>
+	<result column="V_CODTIPO" 			jdbcType="VARCHAR" 		property="V_CODTIPO" 	/>
+	<result column="V_DESAPEPAT" 		jdbcType="VARCHAR" 		property="V_DESAPEPAT" 	/>
+	<result column="V_DESAPEMAT" 		jdbcType="VARCHAR" 		property="V_DESAPEMAT" 	/>
+	<result column="V_DESNOMBRES" 		jdbcType="VARCHAR"		property="V_DESNOMBRES" 	/>	
+	<result column="V_CODESCALA" 		jdbcType="VARCHAR"		property="V_CODESCALA" 	/>
+	<result column="V_DESCARNIV" 		jdbcType="VARCHAR"		property="V_DESCARNIV" 	/>
+	<result column="N_NUMDEP" 			jdbcType="VARCHAR"		property="N_NUMDEP" 	/>
+	<result column="N_FLGACTIVO" 		jdbcType="VARCHAR"		property="N_FLGACTIVO" 	/>
+	<result column="V_NOMUSUREG" 		jdbcType="VARCHAR"		property="V_NOMUSUREG" 	/>
+	<result column="D_FECREG" 			jdbcType="VARCHAR"		property="D_FECREG" 	/>
+	<result column="V_NOMUSUMOD" 		jdbcType="VARCHAR"		property="V_NOMUSUMOD" 	/>
+	<result column="D_FECMOD" 			jdbcType="VARCHAR"		property="D_FECMOD" 	/>
+	<result column="V_CORREOE" 			jdbcType="VARCHAR"		property="V_CORREOE" 	/>
+	<result column="V_CODESCALAREMUN" 	jdbcType="VARCHAR"		property="V_CODESCALAREMUN" 	/>
+	<result column="V_CODCARGO" 		jdbcType="VARCHAR"		property="V_CODCARGO" 	/>		
+	<result column="V_FLGRESTUPA" 		jdbcType="VARCHAR"		property="V_FLGRESTUPA" 	/>
+	<result column="V_FLGALERT" 		jdbcType="VARCHAR"		property="V_FLGALERT" 	/>
+	<result column="V_FLGCONG" 			jdbcType="VARCHAR"		property="V_FLGCONG" 	/>
+	<result column="V_FLGARCH" 			jdbcType="VARCHAR"		property="V_FLGARCH" 	/>
+	<result column="V_FLGBNDASIG" 		jdbcType="VARCHAR"		property="V_FLGBNDASIG" 	/>	
+	<result column="V_COTIPODOCID" 		jdbcType="VARCHAR"		property="V_COTIPODOCID" 	/>
+	<result column="D_FECNAC" 			jdbcType="VARCHAR"		property="D_FECNAC" 	/>	
+	<result column="V_DESDEP" 			jdbcType="VARCHAR"		property="V_DESDEP" 	/>
+	<result column="N_NUMINT" 			jdbcType="VARCHAR"		property="N_NUMINT" 	/>
+	<result column="V_DESINT" 			jdbcType="VARCHAR"		property="V_DESINT" 	/>
+	<result column="V_DESTIPO" 			jdbcType="VARCHAR"		property="V_DESTIPO" 	/>
+	<result column="V_NOMCARGO" 		jdbcType="VARCHAR"		property="V_NOMCARGO" 	/>
+	<result column="ESTADO" 			jdbcType="VARCHAR"		property="ESTADO" 	/>
+	<result column="V_DESABR" 			jdbcType="VARCHAR"		property="V_DESABR" 	/>
+	<result column="V_DESTDOCIDE"		jdbcType="VARCHAR"		property="V_DESTDOCIDE" 	/>
+       
+  </resultMap>
+  
+  <select id="reportePersonal" resultMap="reportePersonal-out" parameterType="hashMap">
+  	select
+			p.v_codpersonal,
+			p.v_codtipo,
+			p.v_desapepat,
+			p.v_desapemat,
+			p.v_desnombres,
+			p.v_codescala,
+			p.v_descarniv,
+			p.n_numdep,
+			p.n_flgactivo,
+			p.v_nomusureg,
+			TO_CHAR(p.d_fecreg,'DD/MM/YYYY') d_fecreg,
+			p.v_nomusumod,
+			p.d_fecmod,
+			nvl(p.v_correoe,' ') v_correoe,
+			p.v_codescalaremun,
+			p.v_codcargo,
+			p.v_flgrestupa,
+			p.v_flgalert,
+			p.v_flgcong,
+			p.v_flgarch,
+			p.v_flgbndasig,
+			p.v_codtipodocid,
+			nvl(TO_CHAR(p.d_fecnac,'DD/MM/YYYY'),' ') d_fecnac,
+			
+			d.v_desdep,
+			i.n_numint,
+			i.v_desint,
+			tp.v_destipo,
+			cp.v_nomcargo,
+			case when p.n_flgactivo=1 then 'ACTIVO' else 'INACTIVO' end estado,
+			td.v_desabr,
+			td.v_destdocide 
+
+from prtbc_personal p, tdtbc_dependencia d, tdtbc_intendencia i, prtbc_tipopers tp, simintra1.sitb_percargo cp, simintra1.sitb_tdocide td
+
+where p.n_numdep=d.n_numdep
+      and d.n_numint=i.n_numint
+      and p.v_codtipo=tp.v_codtipo
+      and p.v_codcargo=cp.v_codcargo 
+      and p.v_codtipodocid=td.v_codtdocide
+	<if test="PARAM_INTENDENCIA != null" >
+	AND d.n_numint=#{PARAM_INTENDENCIA}
+	</if>
+	<if test="PARAM_DEPENDENCIA != null" >
+	AND p.n_numdep=#{PARAM_DEPENDENCIA}
+	</if>	
+	<if test="PARAM_TIPO != null" >
+	AND p.v_codtipo=#{PARAM_TIPO}
+	</if>
+	<if test="PARAM_CARGO != null" >
+	AND p.v_codcargo=#{PARAM_CARGO}
+	</if>
+	<if test="PARAM_ESTADO != null" >
+	AND p.n_flgactivo=#{PARAM_ESTADO}
+	</if>	
+	ORDER BY i.n_numint asc, p.n_numdep asc, p.v_desapepat	
+  </select>
+  
+  <resultMap id="reportePersonalIndividual-out" type="hashMap">  
+    
+    <result column="V_CODPERSONAL" 		jdbcType="VARCHAR" 		property="V_CODPERSONAL"		/>
+	<result column="V_CODTIPO" 			jdbcType="VARCHAR" 		property="V_CODTIPO" 	/>
+	<result column="V_DESAPEPAT" 		jdbcType="VARCHAR" 		property="V_DESAPEPAT" 	/>
+	<result column="V_DESAPEMAT" 		jdbcType="VARCHAR" 		property="V_DESAPEMAT" 	/>
+	<result column="V_DESNOMBRES" 		jdbcType="VARCHAR"		property="V_DESNOMBRES" 	/>	
+	<result column="V_CODESCALA" 		jdbcType="VARCHAR"		property="V_CODESCALA" 	/>
+	<result column="V_DESCARNIV" 		jdbcType="VARCHAR"		property="V_DESCARNIV" 	/>
+	<result column="N_NUMDEP" 			jdbcType="VARCHAR"		property="N_NUMDEP" 	/>
+	<result column="N_FLGACTIVO" 		jdbcType="VARCHAR"		property="N_FLGACTIVO" 	/>
+	<result column="V_NOMUSUREG" 		jdbcType="VARCHAR"		property="V_NOMUSUREG" 	/>
+	<result column="D_FECREG" 			jdbcType="VARCHAR"		property="D_FECREG" 	/>
+	<result column="V_NOMUSUMOD" 		jdbcType="VARCHAR"		property="V_NOMUSUMOD" 	/>
+	<result column="D_FECMOD" 			jdbcType="VARCHAR"		property="D_FECMOD" 	/>
+	<result column="V_CORREOE" 			jdbcType="VARCHAR"		property="V_CORREOE" 	/>
+	<result column="V_CODESCALAREMUN" 	jdbcType="VARCHAR"		property="V_CODESCALAREMUN" 	/>
+	<result column="V_CODCARGO" 		jdbcType="VARCHAR"		property="V_CODCARGO" 	/>		
+	<result column="V_FLGRESTUPA" 		jdbcType="VARCHAR"		property="V_FLGRESTUPA" 	/>
+	<result column="V_FLGALERT" 		jdbcType="VARCHAR"		property="V_FLGALERT" 	/>
+	<result column="V_FLGCONG" 			jdbcType="VARCHAR"		property="V_FLGCONG" 	/>
+	<result column="V_FLGARCH" 			jdbcType="VARCHAR"		property="V_FLGARCH" 	/>
+	<result column="V_FLGBNDASIG" 		jdbcType="VARCHAR"		property="V_FLGBNDASIG" 	/>	
+	<result column="V_COTIPODOCID" 		jdbcType="VARCHAR"		property="V_COTIPODOCID" 	/>
+	<result column="D_FECNAC" 			jdbcType="VARCHAR"		property="D_FECNAC" 	/>	
+	<result column="V_DESDEP" 			jdbcType="VARCHAR"		property="V_DESDEP" 	/>
+	<result column="N_NUMINT" 			jdbcType="VARCHAR"		property="N_NUMINT" 	/>
+	<result column="V_DESINT" 			jdbcType="VARCHAR"		property="V_DESINT" 	/>
+	<result column="V_DESTIPO" 			jdbcType="VARCHAR"		property="V_DESTIPO" 	/>
+	<result column="V_NOMCARGO" 		jdbcType="VARCHAR"		property="V_NOMCARGO" 	/>
+	<result column="ESTADO" 			jdbcType="VARCHAR"		property="ESTADO" 	/>
+	<result column="V_DESABR" 			jdbcType="VARCHAR"		property="V_DESABR" 	/>
+	<result column="V_DESTDOCIDE"		jdbcType="VARCHAR"		property="V_DESTDOCIDE" 	/>	
+	<result column="D_FECINI"			jdbcType="VARCHAR"		property="D_FECINI" 	/>
+	<result column="D_FECFIN"			jdbcType="VARCHAR"		property="D_FECFIN" 	/>
+	<result column="DEPESTADO"			jdbcType="VARCHAR"		property="DEPESTADO" 	/>
+	<result column="PRINCIPAL"			jdbcType="VARCHAR"		property="PRINCIPAL" 	/>
+       
+  </resultMap>
+  
+  <select id="reportePersonalIndividual" resultMap="reportePersonalIndividual-out" parameterType="hashMap">
+  	select
+      p.v_codpersonal,
+      pd.v_codtipo,
+      p.v_desapepat,
+      p.v_desapemat,
+      p.v_desnombres,
+      p.v_codescala,
+      p.v_descarniv,
+      p.n_numdep,
+      p.n_flgactivo,
+      p.v_nomusureg,
+      TO_CHAR(p.d_fecreg,'DD/MM/YYYY') d_fecreg,
+      p.v_nomusumod,
+      p.d_fecmod,
+      nvl(p.v_correoe,' ') v_correoe,
+      p.v_codescalaremun,
+      pd.v_codcargo,
+      p.v_flgrestupa,
+      p.v_flgalert,
+      p.v_flgcong,
+      p.v_flgarch,
+      p.v_flgbndasig,
+      p.v_codtipodocid,
+      nvl(TO_CHAR(p.d_fecnac,'DD/MM/YYYY'),' ') d_fecnac,
+      
+      d.v_desdep,
+      i.n_numint,
+      i.v_desint,
+      tp.v_destipo,
+      cp.v_nomcargo,
+      case when p.n_flgactivo=1 then 'ACTIVO' else 'INACTIVO' end estado,
+      td.v_desabr,
+      td.v_destdocide,
+      
+      nvl(TO_CHAR(pd.d_fecini,'DD/MM/YYYY'),' ') d_fecini,
+      nvl(TO_CHAR(pd.d_fecfin,'DD/MM/YYYY'),' ') d_fecfin,
+      case when pd.v_flgact='S' then 'ACTIVO' else 'INACTIVO' end depestado,
+      case when pd.v_flgprin='S' then 'SI' else 'NO' end principal 
+
+from prtbc_personal p, tdtbc_dependencia d, tdtbc_intendencia i, prtbc_tipopers tp, simintra1.sitb_percargo cp, simintra1.sitb_tdocide td, rrhhsys.rhtbd_personal pd
+
+where pd.n_numdep=d.n_numdep
+      and d.n_numint=i.n_numint
+      and pd.v_codtipo=tp.v_codtipo
+      and pd.v_codcargo=cp.v_codcargo 
+      and p.v_codtipodocid=td.v_codtdocide
+      and pd.v_codpersonal=p.v_codpersonal
+	<if test="PARAM_INTENDENCIA != null" >
+	AND d.n_numint=#{PARAM_INTENDENCIA}
+	</if>
+	<if test="PARAM_DEPENDENCIA != null" >
+	AND p.n_numdep=#{PARAM_DEPENDENCIA}
+	</if>	
+	<if test="PARAM_TIPO != null" >
+	AND p.v_codtipo=#{PARAM_TIPO}
+	</if>
+	<if test="PARAM_CARGO != null" >
+	AND p.v_codcargo=#{PARAM_CARGO}
+	</if>
+	<if test="PARAM_ESTADO != null" >
+	AND p.n_flgactivo=#{PARAM_ESTADO}
+	</if>	
+	<if test="PARAM_TIPODOC != null" >
+	AND p.v_codtipodocid=#{PARAM_TIPODOC}
+	</if>
+	<if test="PARAM_DOC != null" >
+	AND p.v_codpersonal=#{PARAM_DOC}
+	</if>
+	<if test="PARAM_MULTIDEPENDENCIA != null" >
+	AND FNC_NRODEP_X_PERSONAL(p.v_codpersonal) <![CDATA[ > ]]> 1
+	</if>	
+	ORDER BY i.n_numint asc, p.n_numdep asc, p.v_desapepat	
+  </select>
+  	
+</mapper>

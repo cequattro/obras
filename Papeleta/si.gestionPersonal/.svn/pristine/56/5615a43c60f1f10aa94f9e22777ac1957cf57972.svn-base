@@ -1,0 +1,79 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.implementacion;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.comun.MyBatisConnectionFactory;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTMarcacion;
+import pe.gob.sunafil.gestionpersonal.persistence.client.PrtbcPersonalMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.RhmvcMarcacionMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonalExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacion;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacionExample;
+
+public class IMPMarcacion implements INTMarcacion {
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	public IMPMarcacion(){
+		  sqlSessionFactory=MyBatisConnectionFactory.getSqlSessionFactory();		  		  
+	  }
+		
+	public int insertarMarcacion(RhmvcMarcacion entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhmvcMarcacionMapper mapper = sqlSession.getMapper(RhmvcMarcacionMapper.class);		
+		try {
+			mapper.insertSelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error insertarMarcacion "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}		
+	
+	public RhmvcMarcacion getCorrelativoGlobalMarcacion() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcMarcacionExample example = new RhmvcMarcacionExample();
+		example.createCriteria().andCorrelativoActual();
+		try {
+			RhmvcMarcacionMapper mapper = sqlSession.getMapper (RhmvcMarcacionMapper. class);
+			List <RhmvcMarcacion> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getCorrelativoGlobalMarcacion "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public boolean getExistePersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		PrtbcPersonalExample example = new PrtbcPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andNFlgactivoEqualTo(new Short("1"));
+		try {
+			PrtbcPersonalMapper mapper = sqlSession.getMapper (PrtbcPersonalMapper. class);
+			List <PrtbcPersonal> allRecords = mapper.selectByExample(example);		
+			return !allRecords.isEmpty();
+		} catch (Exception e) {
+        	System.out.println("Error getExistePersonal "+e.getMessage());   
+        	return false;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+}

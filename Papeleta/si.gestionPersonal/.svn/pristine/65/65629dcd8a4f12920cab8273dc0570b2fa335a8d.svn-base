@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+
+		<h:form id="formInicio">
+
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="BÚSQUEDA DE CARGOS" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				<center>
+				<h:panelGrid columns="6" align="center">
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Descripcion &nbsp;&nbsp;" />
+					<p:inputText style="width: 120px"
+						value="#{cargosBean.filtro.vNomcargo}" maxlength="20">
+						<p:ajax event="change" />
+					</p:inputText>
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Estado &nbsp;&nbsp;" />
+					<h:selectOneMenu style="width:120px" id="estado"
+						value="#{cargosBean.filtro.vFlgact}">
+						<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+						<f:selectItem itemLabel="ACTIVO" itemValue="#{'1'}" />
+						<f:selectItem itemLabel="INACTIVO" itemValue="#{'0'}" />
+						<p:ajax event="change" />
+					</h:selectOneMenu>
+
+				</h:panelGrid>
+				</center>
+				<br/>
+
+				<center>
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{cargosBean.buscarCargo}" update=":formInicio" />
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Nuevo" icon="icon-zadd" action="#{cargosBean.desplegarOpcionAgregar}" update=":formAgregar" />
+     				<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Limpiar" icon="icon-escoba"
+						action="#{cargosBean.limpiar}" update="@form" />
+				</center>
+
+				<p:commandButton icon="ui-icon-circle-plus"
+					action="#{cargosBean.desplegarOpcionAgregar}" update=":formAgregar"
+					title="AGREGAR" style="float: right; clear: both;" rendered="false"/>
+				<p:dataTable id="datatable" value="#{cargosBean.listaCargos}"
+					var="item" widgetVar="usrTable"
+					emptyMessage="No se encontraron resultados" paginator="true"
+					rows="20"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,40,100">
+					<p:column headerText="Nombre de Cargo">
+						<h:outputText value="#{item.vNomcargo}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Estado">
+						<h:outputText value="#{cargosBean.mostrarEstado(item.vFlgact)}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Opción" style="text-align:center;">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{cargosBean.desplegarOpcionEditar(item)}"
+							update=":formEditar" title="EDITAR" />
+					</p:column>
+				</p:dataTable>
+
+
+
+				<br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">	        
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value="Editar Turno " />	        		      
+	         
+	        </p:fieldset>
+	        </center>
+			</p:fieldset>
+
+		</h:form>
+		<center>
+		<h:form id="formMensajesPrincipal">
+					<p:messages id="msgMensajesConsolidadoPrincipal" closable="true"
+						escape="false" showDetail="false" />
+		</h:form>
+		</center>
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog widgetVar="formDialogWidgetAgregar" modal="true">
+			<h:form id="formAgregar">
+				<p:fieldset style="text-align: left;" legend="Agregar Cargo">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Nombre de Cargo:" />
+						<p:inputText id="addNomCargo" style="width: 170px"
+							value="#{cargosBean.nuevoCargo.vNomcargo}" maxlength="60">
+						</p:inputText>
+						<p:outputLabel value="" />
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Grabar" icon="icon-disk"
+							action="#{cargosBean.agregar()}" process="@this, addNomCargo"
+							update=":formInicio, :formMensajesAdd, :formMensajesPrincipal, :formAgregar" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="formDialogWidgetEditar" modal="true">
+			<h:form id="formEditar">
+				<p:fieldset style="text-align: left;" legend="Editar Cargo">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="Nombre de Cargo:" />
+						<p:inputText id="editCargo" style="width: 170px"
+							value="#{cargosBean.editarCargo.vNomcargo}" maxlength="50">
+						</p:inputText>
+						<p:outputLabel />
+						
+						<p:outputLabel value="&nbsp;&nbsp; Estado &nbsp;" />
+						<h:selectOneMenu id="editEstado" style="width:170px" 
+							value="#{cargosBean.editarCargo.vFlgact}">
+							<f:selectItem itemLabel="----" itemValue="#{null}" />
+							<f:selectItem itemLabel="ACTIVO" itemValue="#{'1'}" />
+							<f:selectItem itemLabel="INACTIVO" itemValue="#{'0'}" />
+						</h:selectOneMenu>
+						<p:outputLabel value="" />
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Actualizar" icon="ui-icon-circle-check"
+							action="#{cargosBean.actualizar()}" process="@this,editCargo,editEstado"
+							update=":formInicio, :formMensajesEdit, :formMensajesPrincipal, :formEditar" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

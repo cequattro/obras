@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="BÚSQUEDA DE MARCACIONES"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<h:panelGrid columns="4" >
+	<p:outputLabel for="buttonb" value="Fecha de inicio &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+   	<p:calendar id="buttonb" showOn="button" size="10"  value="#{marcacionBean.fMarcacionI}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+   		<f:convertDateTime timeZone="America/Lima" />
+   	</p:calendar>
+   	
+   	<p:outputLabel for="buttonbf" value="&nbsp;&nbsp;&nbsp;Fecha de fin &nbsp;&nbsp;" />
+   	<p:calendar id="buttonbf" showOn="button" size="10"  value="#{marcacionBean.fMarcacionF}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+   		<f:convertDateTime timeZone="America/Lima" />
+   	</p:calendar>
+	</h:panelGrid>
+	<h:panelGrid columns="3" >
+	<p:outputLabel value="Intendencia" />
+    <h:selectOneMenu style="width:345px" value="#{marcacionBean.selectedIntendencia}" >             
+        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+        <f:selectItems value="#{marcacionBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />     
+        <p:ajax event="change" update="@form" listener="#{marcacionBean.itemChangeIntendencia()}"/>
+    </h:selectOneMenu>
+    <p:outputLabel value="" />
+	
+	<p:outputLabel value="Dependencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+	 <p:autoComplete id="acSimple" value="#{marcacionBean.txt1}" completeMethod="#{marcacionBean.completeText}" size="81" minQueryLength="3" readonly="#{(marcacionBean.selectedIntendencia==null) or (marcacionBean.selectedIntendencia.equals(''))}" >
+	 <p:ajax event="itemSelect" listener="#{marcacionBean.onItemSelect}" update="msgMensajesConsolidadoGlobal" />
+	 </p:autoComplete>
+	 <p:outputLabel value="" />
+	 </h:panelGrid>
+	
+	<h:panelGrid columns="8" >
+	    
+    <p:outputLabel value="Tipo Doc Personal"/>
+	<h:selectOneMenu style="width:120px" id="tipodoc" value="#{marcacionBean.filtro.vCodtipodocid}">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />
+         <f:selectItems value="#{marcacionBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+         <p:ajax event="change" />
+     </h:selectOneMenu>
+     <p:outputLabel value="Nro Doc Personal" />
+     <p:inputText style="width: 120px" value="#{marcacionBean.filtro.vCodpersonal}" onkeypress="return isNumberKeyNL(this);">
+     <p:ajax event="change" />
+     </p:inputText>    
+     <p:outputLabel value="Tipo de Personal &nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipoper" value="#{marcacionBean.filtro.vCodtipo}">             
+             <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+             <f:selectItems value="#{personalBean.listaTipoPersonal}" var="tipo" itemLabel="#{tipo.vDestipo}" itemValue="#{tipo.vCodtipo}" />
+             <p:ajax event="change" />
+         </h:selectOneMenu>
+    <p:outputLabel value=""/>     
+    
+	</h:panelGrid>
+	
+	<center>
+	<p:commandButton value="Buscar" icon="icon-zsearch" action="#{marcacionBean.buscarMarcacion}" update=":formInicio" />
+	<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />     
+    <p:commandButton value="Limpiar" icon="icon-escoba" action="#{marcacionBean.limpiar}" update="@form"/>
+	</center>
+	
+	<p:dataTable id="datatable" value="#{marcacionBean.listaMarcaciones}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Nro Documento" >
+	                <h:outputText value="#{item.vCodpersonal}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Apellidos y Nombres" >
+	                <h:outputText value="#{item.vDesapepat} #{item.vDesapemat} #{item.vDesnombres}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Fecha" >
+	                <h:outputText value="#{item.dFechastr}"/>
+	            </p:column>
+	            <p:column headerText="Hora" >
+	                <h:outputText value="#{marcacionBean.completarDosDigitos(item.nHora)} : #{marcacionBean.completarDosDigitos(item.nMinuto)}"/>
+	            </p:column>	            
+	            <p:column headerText="Tipo" >
+	            	<h:outputText value="#{item.vDestipo}"/>
+	            </p:column>
+	            <p:column headerText="Origen" >
+	            	<h:outputText value="#{item.vDesorigen}"/>
+	            </p:column>
+	            <p:column headerText="Opción" style="text-align:center;" >	            
+	            	<p:commandButton icon="ui-icon-comment" update=":dlgRefFormDetalleE" title="JUSTIFICAR" action="#{marcacionBean.selectEditar(item)}" rendered="#{item.nCodorigen==1}" immediate="true" />
+	            	<p:commandButton icon="ui-icon-circle-zoomin" update=":dlgRefFormDetalleV" title="VER DETALLE DE JUSTIFICACIÓN" action="#{marcacionBean.selectVer(item)}" rendered="#{item.nCodorigen==2}" immediate="true" />
+	            	<h:outputText value="&nbsp;&nbsp;&nbsp;" rendered="#{item.nCodorigen==2}"/>		            	
+	            	<p:commandButton icon="ui-icon-circle-close" update=":formUpload3" title="ELIMINAR" action="#{marcacionBean.dialogReferenciaEliminar(item)}" rendered="#{item.nCodorigen==2}" process="@this" immediate="true" />
+	            	
+	            </p:column>
+	        </p:dataTable>
+	        
+	        <br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <p:commandButton icon="ui-icon-comment" title="JUSTIFICAR"/>
+	        <p:outputLabel value=" Justificar, Formato de hora 24 (Valor: 0-23) " />	 
+	        <p:commandButton icon="ui-icon-circle-close" title="ELIMINAR"/>
+	        <p:outputLabel value=" Eliminar Justificación" />              
+	        </p:fieldset>
+	        </center>
+	        	 	
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>	
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{marcacionBean.txt1}" />            
+        </p:panelGrid>
+    </p:dialog>
+    
+    <p:dialog widgetVar="dialogWidgetDetalleE" modal="true">
+		   <h:form id="dlgRefFormDetalleE">
+		   	<p:fieldset style="text-align: left;" legend="Justificación">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo" />
+		         <h:selectOneMenu style="width:100px" value="#{marcacionBean.justificacion.nCodtipo}" >             
+		         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		         <f:selectItems value="#{marcacionBean.listaTipoMarcacion}" var="tipo" itemLabel="#{tipo.vDestipo}" itemValue="#{tipo.nCodtipo}" />     
+		         <p:ajax event="change" update="@form"/>
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		     
+		     	 <p:outputLabel for="buttoneee" value="Fecha" />
+		         <p:calendar id="buttoneee" showOn="button" size="10"  value="#{marcacionBean.justificacion.dFecha}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />		         
+		         
+		         <p:outputLabel value="Hora" />
+		         <p:inputText style="width: 50px" value="#{marcacionBean.justificacion.nHora}" onkeypress="return soloNumeros(event);" maxlength="2" >
+				 <p:ajax event="change" />
+				 </p:inputText>
+        		 <p:outputLabel value=" " />
+        		 
+        		 <p:outputLabel value="Minuto" />
+        		 <p:inputText style="width: 50px" value="#{marcacionBean.justificacion.nMinuto}" onkeypress="return soloNumeros(event);" maxlength="2">
+				 <p:ajax event="change" />
+				 </p:inputText>
+        		 <p:outputLabel value=" " />
+        		 
+        		 <p:outputLabel value="Tipo Justificación" />
+		         <h:selectOneMenu style="width:100px" value="#{marcacionBean.justificacion.nCodtipjus}" >             
+		         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		         <f:selectItems value="#{marcacionBean.listaTipoJustificacion}" var="tipo" itemLabel="#{tipo.vDestipjus}" itemValue="#{tipo.nCodtipjus}" />     
+		         <p:ajax event="change" update="@form"/>
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Motivo" />
+        		 <p:inputText style="width: 100px" value="#{marcacionBean.justificacion.vMotjus}" maxlength="150">
+				 <p:ajax event="change" />
+				 </p:inputText>
+        		 <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>     
+				 		     
+	           <center>
+	           <p:commandButton value="Justificar" icon="ui-icon-circle-check" action="#{marcacionBean.justificar}" process="@this, buttoneee" update=":formInicio, :formMensajesEdit" />	           
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidget3" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload3" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar la justificación seleccionada cuya fecha es #{marcacionBean.getFormatDate(marcacionBean.justificacionEliminar.dFecha)} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{marcacionBean.eliminarJustificacion()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget3.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetDetalleV" modal="true">
+		   <h:form id="dlgRefFormDetalleV">
+		   	<p:fieldset style="text-align: left;" legend="Ver Justificación">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo Justificación: " />
+		         <p:outputLabel value="#{marcacionBean.justificacionVer.vDestipjus}" />
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Motivo: " />
+				 <p:outputLabel value="#{marcacionBean.justificacionVer.vMotjus}" />
+        		 <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>				 		     	           
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,534 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.axis.AxisFault;
+import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+import org.reniec.rel.ReniecBean;
+
+import pe.gob.sunafil.gestionpersonal.bean.Permisos;
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonalDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocideExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.utils.FacesUtils;
+import pe.gob.sunafil.gestionpersonal.bean.Persona;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaReniecDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.TurnoDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.TurnoDiaDespatch;
+import pe.gob.sunafil.gestionpersonal.reniecws.ReniecWebService;
+import pe.gob.sunafil.gestionpersonal.utils.EnviarMail;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
+@ManagedBean(name = "turnoDiaBean")
+@SessionScoped
+public class TurnoDiaBean implements Serializable {
+	private static final long serialVersionUID = 5154405390560909774L;
+
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario PGP_Usuario;
+	@ManagedProperty("#{loginBean.PGP_Permisos}")
+	private Permisos PGP_Permisos;
+	private List<RhtbcTurnodia> listaTurnoDia;
+	private RhtbcTurno turnoSeleccionado=new RhtbcTurno();
+	//private RhtbcTurnodia filtro=new RhtbcTurnodia();
+	private RhtbcTurnodia nuevoTurnodia =new RhtbcTurnodia();
+	private String anteriorDia;
+	private RhtbcTurnodia editarTurnodia =new RhtbcTurnodia();
+	
+	private List<RhtbcTurnodia> listaDetTurnoDia;
+	private RhtbcTurnodia eliminarTurnodia;
+	
+
+	public RhtbcTurnodia getNuevoTurnodia() {
+		return nuevoTurnodia;
+	}
+
+	public void setNuevoTurnodia(RhtbcTurnodia nuevoTurnodia) {
+		this.nuevoTurnodia = nuevoTurnodia;
+	}
+
+	
+	public String getAnteriorDia() {
+		return anteriorDia;
+	}
+
+	public void setAnteriorDia(String anteriorDia) {
+		this.anteriorDia = anteriorDia;
+	}
+
+	public RhtbcTurnodia getEditarTurnodia() {
+		return editarTurnodia;
+	}
+
+	public void setEditarTurnodia(RhtbcTurnodia editarTurnodia) {
+		this.editarTurnodia = editarTurnodia;
+	}
+
+	public RhtbcTurnodia getEliminarTurnodia() {
+		return eliminarTurnodia;
+	}
+
+	public void setEliminarTurnodia(RhtbcTurnodia eliminarTurnodia) {
+		this.eliminarTurnodia = eliminarTurnodia;
+	}
+
+	public List<RhtbcTurnodia> getListaDetTurnoDia() {
+		return listaDetTurnoDia;
+	}
+
+	public void setListaDetTurnoDia(List<RhtbcTurnodia> listaDetTurnoDia) {
+		this.listaDetTurnoDia = listaDetTurnoDia;
+	}
+
+	private static Logger logger = Logger.getLogger(MenuBean.class.getName());
+	
+	
+
+	public RhtbcTurno getTurnoSeleccionado() {
+		return turnoSeleccionado;
+	}
+
+	public void setTurnoSeleccionado(RhtbcTurno turnoSeleccionado) {
+		this.turnoSeleccionado = turnoSeleccionado;
+	}
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Permisos getPGP_Permisos() {
+		return PGP_Permisos;
+	}
+
+	public void setPGP_Permisos(Permisos pGP_Permisos) {
+		PGP_Permisos = pGP_Permisos;
+	}
+
+	public List<RhtbcTurnodia> getListaTurnoDia() {
+		return listaTurnoDia;
+	}
+
+	public void setListaTurnoDia(List<RhtbcTurnodia> listaTurnoDia) {
+		this.listaTurnoDia = listaTurnoDia;
+	}
+	
+    public void nuevoTurnoDia(){}
+	
+	public void limpiar(){}
+	
+	public String selectTurno(RhtbcTurno seleccionado)
+	{
+		turnoSeleccionado=seleccionado;
+		cargarListaDetalleTurnoDia();
+		String vista = "pretty:turnoDiaPretty";
+		// CODIGO
+		return vista;
+	}
+	
+	/**************************************************************
+	 ****************  CODIGO PARA AGREGAR TURNO  *****************
+	 **************************************************************/
+
+	public void dialogDetalleAbrir(){
+		//reset detalle
+		nuevoTurnodia=new RhtbcTurnodia();
+		//dependenciaSeleccionada3 = null;
+		//dFecini=new Date();
+		//end reset detalle
+		RequestContext.getCurrentInstance().execute("formDialogWidgetAgregarTurnoDia.show()");
+	}
+	
+	public void agregar(){
+		
+		TurnoDiaDespatch turnoDiaDespatch = new TurnoDiaDespatch();
+		if(errorEnAlgunCampo(nuevoTurnodia,false))
+			return;
+		
+		try {		
+			nuevoTurnodia.setvDesturnodia(nuevoTurnodia.getvDesturnodia().toUpperCase());
+			
+			nuevoTurnodia.setnCodturno(turnoSeleccionado.getnCodturno());
+			nuevoTurnodia.setnCodturnodia(new Short(getSiguienteCorrelativoTurnoDia(turnoSeleccionado.getnCodturno())));
+			nuevoTurnodia.setvDesturnoabr(nuevoTurnodia.getvDesturnodia().substring(0, 3).toUpperCase());
+			turnoDiaDespatch.insertarDetalleTurnoDia(nuevoTurnodia);	
+			mostrarMensajeInfo("Turno Dia Agregado");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		cargarListaDetalleTurnoDia();
+		RequestContext.getCurrentInstance().execute("formDialogWidgetAgregarTurnoDia.hide()");
+	}
+	
+	/**************************************************************
+	 ****************  		FIN AGREGAR TURNO  	  *****************
+	 **************************************************************/
+	
+	
+	/*****************************************************************
+	 ****************  CODIGO PARA ACTUALIZAR TURNO  *****************
+	 *****************************************************************/
+	
+	public void desplegarOpcionEditar(RhtbcTurnodia item){
+		editarTurnodia=item;//turno actual
+		anteriorDia=item.getvDesturnodia();
+		System.out.println("Anterior:"+anteriorDia);
+		RequestContext.getCurrentInstance().execute("formDialogWidgetEditar.show()");
+	}
+
+	public void actualizar(){
+		TurnoDiaDespatch turnoDespatch=new TurnoDiaDespatch();
+		editarTurnodia.setvDesturnodia(anteriorDia.toUpperCase());
+		if(errorEnAlgunCampo(editarTurnodia,true))
+			return ;
+		try {
+			//cargarListaDetalleTurnoDia();
+			//if(!turnoDespatch.getTieneTurnoDiaRepetidoUpdate(editarTurnodia.getvDesturnodia(),editarTurnodia.getnCodturno(),editarTurnodia.getnCodturnodia())){
+				turnoDespatch.actualizarTurno(editarTurnodia);
+				mostrarMensajeInfo("Detalle actualizado.");		
+				System.out.println("editado");
+			//}
+			//else{
+				//mostrarMensajeError("Turno Repetido");
+				//return;
+			//}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cargarListaDetalleTurnoDia();
+		RequestContext.getCurrentInstance().execute("formDialogWidgetEditar.hide()");
+		
+	}
+	
+	/*****************************************************************
+	 ****************  	  	FIN ACTUALIZAR TURNO 	 *****************
+	 *****************************************************************/
+
+	
+	/***************************************************************
+	 ****************  CODIGO PARA ELIMINAR TURNO  *****************
+	 ***************************************************************/
+	
+	public void selectEliminar(RhtbcTurnodia item){
+		eliminarTurnodia=new RhtbcTurnodia();
+		eliminarTurnodia.setvDesturnodia(item.getvDesturnodia());
+		//eliminarDetTurno.setnCorper(item.getnCorper());//agregar ncorper a la vista VstDetpersonalrrhh y regenerar
+		eliminarTurnodia=item;
+		RequestContext.getCurrentInstance().execute("formDialogEliminarTurnoDia.show()");
+	}
+	
+	public void eliminar()
+	{
+		TurnoDiaDespatch turnoDiaDespatch = new TurnoDiaDespatch();
+		try {					
+			//eliminar detalle	
+			if(turnoDiaDespatch.getTienePersonalAsignado(eliminarTurnodia))
+			{
+				mostrarMensajeError("No se puede eliminar turno porque ha realizado movimientos.");
+				return;
+			}
+			turnoDiaDespatch.eliminarTurnoDia(eliminarTurnodia);
+			//post load
+			cargarListaDetalleTurnoDia();
+			//mostrarMensajeInfo("Detalle fue eliminado.");			
+		} catch (Exception e) {
+			cargarListaDetalleTurnoDia();
+			//mostrarMensajeError("Hubo problemas con la eliminación.");			
+		}
+	}
+	
+	/***************************************************************
+	 ****************  	   FIN ELIMINAR TURNO  	   *****************
+	 ***************************************************************/
+	
+	
+	/******************************************************
+	 ****************  FUNCIONES COMUNES  *****************
+	 ******************************************************/
+	
+	
+	private boolean seRepite(RhtbcTurnodia nuevo,boolean actualizando){
+		boolean seRepite=false;
+		//cargarListaTurnos();
+		for (Iterator iterator = listaTurnoDia.iterator(); iterator.hasNext();) {
+			RhtbcTurnodia rhtbcTurno = (RhtbcTurnodia) iterator.next();
+			seRepite=iguales(rhtbcTurno,nuevo);
+			if(seRepite)
+			{
+				if(actualizando && anteriorDia.equals(nuevo.getvDesturnodia()))
+					seRepite=false;
+				break;
+			}
+		}
+		System.out.println("Se repite:"+seRepite);
+		return seRepite;
+	}
+	
+	private boolean iguales(RhtbcTurnodia primero,RhtbcTurnodia segundo){
+		//	MostrarDatos(primero);MostrarDatos(segundo);
+			if(primero.getvDesturnodia().toUpperCase().equals(segundo.getvDesturnodia().toUpperCase()) )
+				return true;
+			else
+				return false;
+		}
+	
+	public void cargarListaDetalleTurnoDia()
+	{
+		TurnoDiaDespatch turnoDiaDespatch=new TurnoDiaDespatch();
+		try {
+			listaTurnoDia=turnoDiaDespatch.getTurnosDia(turnoSeleccionado.getnCodturno());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getSiguienteCorrelativoTurnoDia(Short nCodturno)
+	{
+		TurnoDiaDespatch turnoDiaDespatch=new TurnoDiaDespatch();
+		try {
+			RhtbcTurnodia correlativo=turnoDiaDespatch.getCorrelativoTurnoDia(nCodturno);
+			if(correlativo!=null)
+			{
+				return ""+(correlativo.getnCodturnodia()+1);
+			}
+			else
+			{
+				//devuelve correlativo en 1				
+				return "1";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}				
+	}
+	
+	private boolean diaValido(String dia){
+		if("LUNES".equals(dia.toUpperCase().trim()))
+			return true;
+		if("MARTES".equals(dia.toUpperCase().trim()))
+			return true;
+		if("MIERCOLES".equals(dia.toUpperCase().trim()))
+			return true;
+		if("JUEVES".equals(dia.toUpperCase().trim()))
+			return true;
+		if("VIERNES".equals(dia.toUpperCase().trim()))
+			return true;
+		if("SABADO".equals(dia.toUpperCase().trim()))
+			return true;
+		if("DOMINGO".equals(dia.toUpperCase().trim()))
+			return true;
+		return false;
+	}
+	
+	private boolean errorNumerico(Short numero,int opcion){
+		short error1=0,error2;
+		switch (opcion) {
+			case 1://Tolerancia
+				error2=30;
+				break;
+			case 2://Hora
+				error2=24;
+				break;
+			case 3://minutos
+				error2=60;
+				error1=-1;
+				break;
+		default:
+			error2=0;
+			break;
+		}
+		if(numero>=error2 || numero<=error1)
+			return true;
+		else
+			return false;
+	}
+	private boolean diaValido(RhtbcTurnodia nuevo,boolean actualizando){
+		if(nuevo.getvDesturnodia()!=null && !"".equals(nuevo.getvDesturnodia().trim())){
+			if(!diaValido(nuevo.getvDesturnodia()))
+				{
+					mostrarMensajeError("Debe escribir un dia valido");
+					return false;
+				}
+			else{
+				if(seRepite(nuevo, actualizando)){
+					mostrarMensajeError("Dia Repetido");
+					return false;
+				}
+				else return true;
+			}
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una Descripcion.");
+			return true;
+		}
+	}
+	
+	private boolean toleranciaValida(RhtbcTurnodia nuevo){
+		if(nuevo.getnTolerancia()!=null){
+			if(errorNumerico(nuevo.getnTolerancia(),1)){
+				mostrarMensajeError("La tolerancia debe ser un maximo de 30 minutos");
+				return false;
+			}else return true;
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una Tolerancia.");
+			return true;
+		}
+	}
+	private boolean errorEnAlgunCampo(RhtbcTurnodia nuevo,boolean actualizando){
+		if(!diaValido(nuevo,actualizando))return true;
+		if(!toleranciaValida(nuevo)) return true;
+		if(!horasValidas(nuevo))return true;
+		if(!minutosValidos(nuevo))return true;
+		return false;
+	}
+	private boolean horasValidas(RhtbcTurnodia nuevo){
+		if(horasValidasInicio(nuevo) && horasValidasFin(nuevo))
+		{
+				if(nuevo.getnHoraini()>=nuevo.getnHorafin()){
+				mostrarMensajeError("La Hora de inicio no puede ser mayor o igual a la Hora de Fin");
+					return false;
+				}
+				else return true;
+		}
+		else 
+			return false;
+	}
+	
+	private boolean horasValidasInicio(RhtbcTurnodia nuevo) {
+		// TODO Auto-generated method stub
+		if(nuevo.getnHoraini()!=null ){
+			if(errorNumerico(nuevo.getnHoraini(),2)){
+				mostrarMensajeError("Debe escribir una Hora de Inicio de 0 - 23");
+				return false;
+			}else 
+				return true;
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una Hora de Inicio.");
+			return false;
+		}
+	}
+
+	private boolean horasValidasFin(RhtbcTurnodia nuevo){
+		if(nuevo.getnHorafin()!=null ){
+			if(errorNumerico(nuevo.getnHorafin(),2)){
+				mostrarMensajeError("Debe escribir una Hora de Fin de 0 - 23");
+				return false;
+				}
+			else return true;
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una Hora de Fin.");
+			return false;
+		}
+	}
+	
+	private boolean minutosValidos(RhtbcTurnodia nuevo){
+		if(minutosValidosInicio(nuevo) && minutosValidosFin(nuevo))
+			return true;
+		else
+			return false;
+	}
+	
+	private boolean minutosValidosInicio(RhtbcTurnodia nuevo){
+		if(nuevo.getnMinutoini()!=null ){
+			if(errorNumerico(nuevo.getnMinutoini(),3)){
+				mostrarMensajeError("Debe escribir una cantidad de minutos de 0-59");
+				return false;
+			}
+			else 
+				return true;
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una cantidad de minutos de Inicio.");
+			return false;
+		}
+	}
+	
+	private boolean minutosValidosFin(RhtbcTurnodia nuevo){
+		if(nuevo.getnMinutofin()!=null ){
+			if(errorNumerico(nuevo.getnMinutofin(),3)){
+				mostrarMensajeError("Debe escribir una cantidad de minutos de Fin de 0-59");
+				return false;
+			}
+			else return true;
+		}
+		else{
+			mostrarMensajeError("Debe Escribir una cantidad de minutos de fin.");
+			return false;
+		}
+	}
+	
+	/**********************************************************
+	 ****************  FIN FUNCIONES COMUNES  *****************
+	 **********************************************************/
+	
+	
+	/*****************************************************************
+	 ****************  CODIGO PARA MOSTRAR MENSAJES  *****************
+	 *****************************************************************/
+	
+	public void mostrarMensajeInfo(String msg)
+	{
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg));
+	}
+	
+	public void mostrarMensajeError(String msg)
+	{
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+	}
+	
+	/*****************************************************************
+	 ****************  		FIN MOSTRAR MENSAJES  	 *****************
+	 *****************************************************************/
+}

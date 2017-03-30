@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" >
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@//10.1.200.30:1521/DESASUNA" userId="RRHHSYS" password="RRHHSYS" />
+    <javaModelGenerator targetPackage="pe.gob.sunafil.gestionpersonal.persistence.model" targetProject="PersonalMBG" />
+    <sqlMapGenerator targetPackage="pe.gob.sunafil.gestionpersonal.persistence.map" targetProject="PersonalMBG" />
+    <javaClientGenerator targetPackage="pe.gob.sunafil.gestionpersonal.persistence.client" targetProject="PersonalMBG" type="XMLMAPPER" />
+    <table schema="SIMINTRA1" tableName="SITB_TDOCIDE" >
+      <columnOverride column="V_CODTDOCIDE" property="id" />
+      <columnOverride column="V_DESTDOCIDE" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_REGIONAL" >
+      <columnOverride column="V_CODREG" property="id" />
+      <columnOverride column="V_NOMREG" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_PROVINCIA" >
+      <columnOverride column="V_CODPRO" property="id" />
+      <columnOverride column="V_DESPRO" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_DISTRITO" >
+      <columnOverride column="V_CODDIS" property="id" />
+      <columnOverride column="V_DESDIS" property="descripcion" />
+    </table>        
+            
+    <table schema="TRAMITE" tableName="TDTBC_DEPENDENCIA" >
+    </table>    
+    <table schema="TRAMITE" tableName="TDTBC_INTENDENCIA" >
+    </table>          
+    
+    <table schema="TRAMITE" tableName="PRTBC_PERSONAL" >
+    </table>
+    <table schema="TRAMITE" tableName="PRTBC_TIPOPERS" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_PERCARGO" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_ESCALAREMUN" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="RHMVC_MARCACION" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVC_PERTURNO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_ORIGEN" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TIPOMARCACION" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TURNO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TURNODIA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERSONAL" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TIPOJUS" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_CARGAMASIVA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_ERRCARMAS" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_FERXINT" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_DEPENRRHH" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="VST_PERSONALRRHH" >
+    </table>    
+    <table schema="RRHHSYS" tableName="VST_TURNOPERSONALRRHH" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_DETPERSONALRRHH" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_MARCACIONRRHH" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_FERIADORRHH" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_ERRORESRRHH" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_ERRORESCABRRHH" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="RHMVC_PERMISOS" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHMVD_PERMISOXEST" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_ESTPERMISO" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="VST_PERMISOS" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="RHTBC_SINDICATO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERXSINDICATO" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_PROFESION" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERXPROFESION" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_ENTFINANCIERA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERXENTFINANCIERA" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_SEGURO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERXSEGURO" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_REGPENSIONARIO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERXREGPENSIONARIO" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_PERDIRECCION" >
+    </table>    
+    <table schema="SIMINTRA1" tableName="SITB_ZONA" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_TIPVIA" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_ESTADOCIVIL" >
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_VINCULFAMILI" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBD_DEPENDIENTES" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_TIPORESOL" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_RESOLUCION" >
+    </table>    
+    <table schema="RRHHSYS" tableName="RHTBC_CARGOSINDICA" >
+    </table>
+    <table schema="RRHHSYS" tableName="RHTBC_CLASCAR" >
+    </table>
+    
+    <table schema="RRHHSYS" tableName="VST_SINDICATO" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_PROFESION" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_ENTFINANCIERA" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_SEGURO" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_REGPENSIONARIO" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_DIRECCIONES" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_DEPENDIENTES" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_RESOLUCION" >
+    </table>
+    <table schema="RRHHSYS" tableName="VST_TIPORESOLUCION" >
+    </table>
+    
+  </context>
+</generatorConfiguration>

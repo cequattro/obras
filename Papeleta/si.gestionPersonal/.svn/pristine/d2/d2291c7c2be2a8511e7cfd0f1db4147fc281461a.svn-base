@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="NUEVO TURNO"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Turno por Personal">
+	<h:panelGrid columns="3" >             
+
+         <p:outputLabel value="Apellidos y Nombres"/>
+         <p:outputLabel style="width: 120px" value="#{personalBean.selectedPersonalT.vDesapepat} #{personalBean.selectedPersonalT.vDesapemat} #{personalBean.selectedPersonalT.vDesnombres}" id="apenom" />
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Dependencia"/>
+         <p:outputLabel style="width: 120px" value="#{personalBean.selectedPersonalT.vDesdep}" id="dep" />
+         <p:outputLabel value=""/>                  
+         
+         <p:outputLabel value="Turno"/>
+		 <h:selectOneMenu style="width:120px" id="tipodoc" value="#{personalBean.nuevoPerTurno.nCodturno}">             
+	     <f:selectItem itemLabel="---" itemValue="#{null}" />
+	     <f:selectItems value="#{personalBean.listaTurno}" var="tipo" itemLabel="#{tipo.vDesturno}" itemValue="#{tipo.nCodturno}" />
+	     <p:ajax event="change" update="@form" listener="#{personalBean.itemChangeTurno()}"/>
+	     </h:selectOneMenu>
+	     <p:outputLabel value=""/>
+	     
+	     <p:outputLabel value="" rendered="#{personalBean.nuevoPerTurno.nCodturno!=null and personalBean.nuevoPerTurno.nCodturno!=0}"/>	     
+	     <p:dataList value="#{personalBean.listaTurnoDia}" var="car" type="ordered" rendered="#{personalBean.nuevoPerTurno.nCodturno!=null and personalBean.nuevoPerTurno.nCodturno!=0}">
+	     <f:facet name="header">
+	     Detalle de Turno
+	     </f:facet>
+	     D&iacute;a: #{car.vDesturnodia}, Tolerancia: #{car.nTolerancia} minutos, Hora de Entrada: #{car.nHoraini} : #{car.nMinutoini}<p:outputLabel value=", Hora de Salida: #{car.nHorafin} : #{car.nMinutofin}" rendered="#{car.nHorafin!=-1}"></p:outputLabel><p:outputLabel value="&nbsp;"/>
+	     </p:dataList>
+	     <p:outputLabel value="" rendered="#{personalBean.nuevoPerTurno.nCodturno!=null and personalBean.nuevoPerTurno.nCodturno!=0}"/>
+	     
+	     <p:outputLabel value="Estado" rendered="false"/>
+		 <h:selectOneMenu style="width:120px" id="tipoactivo" value="#{personalBean.nuevoPerTurno.vFlgact}" rendered="false">             
+             <f:selectItem itemLabel="---" itemValue="#{null}" />
+        	 <f:selectItem itemLabel="ACTIVO" itemValue="#{'S'}" />
+        	 <f:selectItem itemLabel="INACTIVO" itemValue="#{'N'}" />           
+         </h:selectOneMenu>
+         <p:outputLabel value="" rendered="false"/>
+         
+         <p:outputLabel for="button1" value="Fecha inicio" />
+    	 <p:calendar id="button1" showOn="button" size="10"  value="#{personalBean.nuevoPerTurno.dFecinicio}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=""/>
+    	 
+     </h:panelGrid>    	           
+     
+     <h:panelGrid columns="6" >          	 
+    	 
+    	 <p:outputLabel for="button2" value="Fecha fin" rendered="false" />
+    	 <p:calendar id="button2" showOn="button" size="10"  value="#{personalBean.nuevoPerTurno.dFecfin}" pattern="dd/MM/yyyy" locale="es" navigator="true" rendered="false" maxlength="10" />
+    	 <p:outputLabel value="" rendered="false"/>
+     
+     </h:panelGrid>     		                            
+    
+	</p:fieldset>		 	
+	
+		<center>
+     	<h:panelGrid columns="3" style="text-align: center;">
+     		 <p:commandButton value="Grabar" icon="icon-disk" action="#{personalBean.guardarTurnoPersonal}" update="@form"/>
+     		 <p:commandButton value="Limpiar" icon="icon-escoba" action="#{personalBean.limpiarTurnoPersonal}" update="@form" immediate="true"/>   
+     		 <p:commandButton value="Regresar" icon="ui-icon-arrowthick-1-w" action="#{personalBean.verPersonalAfterTurno}" update="@form" immediate="true"/>  		      		
+    	</h:panelGrid>
+    	</center>
+    	
+    <p:fieldset style="text-align: left;" legend="Detalle de Turno">	
+    	
+    <p:dataTable id="datatable" value="#{personalBean.listaTurnoPersonal}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Fecha Inicio" >
+	                <h:outputText value="#{personalBean.getFormatDate(item.dFecinicio)}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Fecha Fin" >
+	                <h:outputText value="#{personalBean.getFormatDate(item.dFecfin)}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Tipo de Turno" >
+	                <h:outputText value="#{item.vDesturno}"/>
+	            </p:column>
+	            <p:column headerText="Estado" >
+	                <h:outputText value="#{item.estado}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="text-align:center;" >	            
+	            		
+	            	<p:commandButton icon="ui-icon-pencil" action="#{personalBean.dialogTurnoE(item)}" title="EDITAR" update=":dlgRefFormDetalleE" immediate="true"/>	
+	            	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            	<p:commandButton icon="ui-icon-zoomin" action="#{personalBean.dialogTurnoVer(item)}" title="VER" update=":dlgRefFormDetalleV" immediate="true"/>
+	            	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="#{item.vFlgact.equals('S')}" />
+	            	<p:commandButton icon="ui-icon-circle-close" action="#{personalBean.dialogTurnoEliminar(item)}" title="ELIMINAR" update=":formUpload3" process="@this" rendered="#{item.vFlgact.equals('S')}" immediate="true" />	            		            	
+	            	
+	            </p:column>
+	        </p:dataTable>
+	        
+	        <br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <p:commandButton icon="ui-icon-pencil" title="EDITAR"/>
+	        <p:outputLabel value="Editar Detalle "/>
+	        <p:commandButton icon="ui-icon-zoomin" title="VER"/>
+	        <p:outputLabel value="Ver Detalle " />	        
+	        <p:commandButton icon="ui-icon-circle-close" title="ELIMINAR"/>
+	        <p:outputLabel value="Eliminar Detalle" />
+	        </p:fieldset>
+	        </center>
+	        
+	</p:fieldset>        
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/> 		
+	
+	<p:dialog widgetVar="dialogWidget3" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload3" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle del turno #{personalBean.eliminarPerTurnoV.vDesturno} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarPerTurno()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget3.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetDetalleE" modal="true">
+		   <h:form id="dlgRefFormDetalleE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Turno Por Personal">	              
+				 
+		     <h:panelGrid columns="3" >
+		         
+		         <p:outputLabel value="Turno"/>
+				 <h:selectOneMenu style="width:120px" id="tipoper" value="#{personalBean.editarPerTurno.nCodturno}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaTurno}" var="tipo" itemLabel="#{tipo.vDesturno}" itemValue="#{tipo.nCodturno}" />
+	     			 <p:ajax event="change" update=":dlgRefFormDetalleE" listener="#{personalBean.itemChangeTurnoE()}"/>
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="" rendered="#{personalBean.editarPerTurno.nCodturno!=null and personalBean.editarPerTurno.nCodturno!=0}"/>	     
+			     <p:dataList value="#{personalBean.listaTurnoDiaE}" var="car" type="ordered" rendered="#{personalBean.editarPerTurno.nCodturno!=null and personalBean.editarPerTurno.nCodturno!=0}">
+			     <f:facet name="header">
+			     Detalle de Turno
+			     </f:facet>
+			     D&iacute;a: #{car.vDesturnodia}, Tolerancia: #{car.nTolerancia} minutos, Hora de Entrada: #{car.nHoraini} : #{car.nMinutoini}<p:outputLabel value=", Hora de Salida: #{car.nHorafin} : #{car.nMinutofin}" rendered="#{car.nHorafin!=-1}"></p:outputLabel><p:outputLabel value="&nbsp;"/>
+			     </p:dataList>
+			     <p:outputLabel value="" rendered="#{personalBean.editarPerTurno.nCodturno!=null and personalBean.editarPerTurno.nCodturno!=0}"/>                                   				 				 
+		         
+		         <p:outputLabel for="buttoneee" value="Fecha de inicio" />
+		         <p:calendar id="buttoneee" showOn="button" size="10"  value="#{personalBean.editarPerTurno.dFecinicio}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">		         
+		         <f:convertDateTime timeZone="America/Lima" />
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel for="buttonee" value="Fecha de fin" rendered="#{personalBean.editarPerTurno.vFlgact.equals('N')}" />
+		         <p:calendar id="buttonee" showOn="button" size="10"  value="#{personalBean.editarPerTurno.dFecfin}" pattern="dd/MM/yyyy" locale="es" navigator="true" rendered="#{personalBean.editarPerTurno.vFlgact.equals('N')}" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " rendered="#{personalBean.editarPerTurno.vFlgact.equals('N')}" />
+		         
+		         <p:outputLabel value="Estado"/>
+				 <h:selectOneMenu style="width:120px" id="tipoactivoe" value="#{personalBean.editarPerTurno.vFlgact}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		        	 <f:selectItem itemLabel="ACTIVO" itemValue="#{'S'}" />
+		        	 <f:selectItem itemLabel="INACTIVO" itemValue="#{'N'}" /> 
+		        	 <p:ajax event="change" update=":dlgRefFormDetalleE" />          
+		         </h:selectOneMenu>
+         		 <p:outputLabel value=""/>
+         		 
+		         
+		     </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarPerTurno(true)}" process="@this, buttoneee, buttonee" update=":formInicio, :formMensajesEdit, :formUploadBaja" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit"  closable="true" escape="false" showDetail="false"/>			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetDetalleV" modal="true">
+		   <h:form id="dlgRefFormDetalleV">
+		   	<p:fieldset style="text-align: left;" legend="Ver Detalle">	              
+				 
+		     <h:panelGrid columns="3" >
+		         
+		         <p:outputLabel value="Turno"/>		         
+				 <h:selectOneMenu style="width:120px" id="tipoper" value="#{personalBean.zoomPerTurno.nCodturno}" disabled="true">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaTurno}" var="tipo" itemLabel="#{tipo.vDesturno}" itemValue="#{tipo.nCodturno}" />	     			 
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="" rendered="#{personalBean.zoomPerTurno.nCodturno!=null and personalBean.zoomPerTurno.nCodturno!=0}"/>	     
+			     <p:dataList value="#{personalBean.listaTurnoDiaZ}" var="car" type="ordered" rendered="#{personalBean.zoomPerTurno.nCodturno!=null and personalBean.zoomPerTurno.nCodturno!=0}">
+			     <f:facet name="header">
+			     Detalle de Turno
+			     </f:facet>
+			     D&iacute;a: #{car.vDesturnodia}, Tolerancia: #{car.nTolerancia} minutos, Hora de Entrada: #{car.nHoraini} : #{car.nMinutoini}<p:outputLabel value=", Hora de Salida: #{car.nHorafin} : #{car.nMinutofin}" rendered="#{car.nHorafin!=-1}"></p:outputLabel><p:outputLabel value="&nbsp;"/>
+			     </p:dataList>
+			     <p:outputLabel value="" rendered="#{personalBean.zoomPerTurno.nCodturno!=null and personalBean.zoomPerTurno.nCodturno!=0}"/>                                   				 				 		         		         
+         		 
+		         
+		     </h:panelGrid>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetBaja" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBaja" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea que desea poner en estado INACTIVO el turno #{personalBean.editarPerTurnoV.vDesturno} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.actualizarPerTurno(false)}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidgetBaja.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

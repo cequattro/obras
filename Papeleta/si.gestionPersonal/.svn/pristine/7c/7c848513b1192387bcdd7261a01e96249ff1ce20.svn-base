@@ -1,0 +1,276 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.springframework.util.StringUtils;
+
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonalDespatch;
+import pe.gob.sunafil.gestionpersonal.utils.FacesUtils;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+
+import pe.gob.sunafil.gestionpersonal.txt.*;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+@ManagedBean(name="marcacionBean")
+@SessionScoped
+public class MarcacionBean  implements Serializable {
+	
+	private static final long serialVersionUID = -2255841932878027343L;
+
+	private static Logger logger = Logger.getLogger(MarcacionBean.class.getName());
+	
+	private PersonalDespatch personalDespatch= new PersonalDespatch();
+	
+	//De TXT a EXCEL
+	private UploadedFile fileTxt;
+	private Boolean uploadedTxt;
+	private Boolean convertedTxt;
+	private StreamedContent fileDownloadTxt;
+	private Date fCargaI=new Date();
+	private Date fCargaF=new Date();
+	
+	public Date getfCargaI() {
+		return fCargaI;
+	}
+
+	public void setfCargaI(Date fCargaI) {
+		this.fCargaI = fCargaI;
+	}
+
+	public Date getfCargaF() {
+		return fCargaF;
+	}
+
+	public void setfCargaF(Date fCargaF) {
+		this.fCargaF = fCargaF;
+	}
+
+	public Boolean getUploadedTxt() {
+		return uploadedTxt;
+	}
+
+	public void setUploadedTxt(Boolean uploadedTxt) {
+		this.uploadedTxt = uploadedTxt;
+	}
+
+	public Boolean getConvertedTxt() {
+		return convertedTxt;
+	}
+
+	public void setConvertedTxt(Boolean convertedTxt) {
+		this.convertedTxt = convertedTxt;
+	}	
+	
+	public UploadedFile getFileTxt() {
+		return fileTxt;
+	}
+
+	public void setFileTxt(UploadedFile fileTxt) {
+		this.fileTxt = fileTxt;
+	}	
+
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario  PGP_Usuario;
+	
+	/**
+	 * Constructor
+	 */
+	public MarcacionBean() {
+		
+	}		
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}	
+    
+    public StreamedContent getFileDownloadTxt() {
+    	exportTxt();
+        return fileDownloadTxt;
+    }        
+    
+    public void resetTxt()
+    {
+    	setUploadedTxt(false);
+    	setConvertedTxt(false);
+    }        
+    
+    public void convertTxt()
+    {
+    	System.out.println("begin validator");
+        tramaConverterTxt converter = new tramaConverterTxt();
+        try {
+        	tramaConverterTxt.setCurDate(personalDespatch.currentDate());
+        	tramaConverterTxt.setInitDate(fCargaI);
+        	tramaConverterTxt.setEndDate(fCargaF);
+			System.out.println("fecha actual para conversor ::: "+tramaConverterTxt.getCurDate());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();			
+			tramaConverterTxt.setCurDate(new Date().toLocaleString());
+		}
+        converter.Process();
+        //System.out.println(validator.getErrorLog());
+        mostrarMensajeInfo("Archivo convertido a EXCEL satisfactoriamente.");
+        //FacesMessage message = new FacesMessage("", "Archivo convertido a EXCEL satisfactoriamente.");
+        //FacesContext.getCurrentInstance().addMessage(null, message);        
+        System.out.println("end validator");
+        setConvertedTxt(true);
+    }        
+    
+    public void exportTxt()
+    {
+    	//InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/resources/txt/temporal_TramaBN_libros.txt");
+    	InputStream stream;
+		try {
+			String rutaXls=Funciones.ObtProp_Resources("ruta.xls");
+			stream = new FileInputStream(rutaXls+"/workbookOut.xlsx");
+			//stream = new FileInputStream("D://Willy//fileconverter//code//EPS Exclusions//RewriteBN//workbookOut.xlsx");
+			fileDownloadTxt = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "xls_bn"+personalDespatch.currentDate().replace("/", "-")+".xlsx");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}       
+    }
+    
+    
+    
+    public void uploadTxt() {    
+    	if(fCargaI!=null){}
+    	else
+    	{
+    		mostrarMensajeError("Ingrese Fecha de inicio");
+    	}
+    	if(fCargaF!=null){}
+    	else
+    	{
+    		mostrarMensajeError("Ingrese Fecha de fin");
+    	}
+    	if(fCargaI.after(fCargaF))
+    	{
+    		mostrarMensajeError("La fecha de inicio debe ser menor o igual a la fecha de fin");
+    	}
+        if(fileTxt != null) {        	
+        	//if(!fileTxt.getFileName().toUpperCase().contains(".TXT") && !fileTxt.getFileName().toUpperCase().contains(".PAGOS"))
+        	if(!fileTxt.getFileName().toUpperCase().contains(".DAT"))
+        	{
+        		mostrarMensajeError("Debe seleccionar un archivo texto con extensión DAT.");
+        		//FacesMessage message = new FacesMessage("", "Debe seleccionar un archivo texto con extensión DAT.");
+	            //FacesContext.getCurrentInstance().addMessage(null, message);
+	            return;
+        	}        	
+        	
+        	System.out.println("begin upload");
+            //FacesMessage message = new FacesMessage("", fileTxt.getFileName() + " fue subido.");
+            //String messageString=fileTxt.getFileName() + " fue subido.";
+            //FacesContext.getCurrentInstance().addMessage(null, message);
+            InputStream in;
+			try {
+				in = fileTxt.getInputstream();
+				String rutaXls=Funciones.ObtProp_Resources("ruta.xls");
+				File file = new File(rutaXls+"/temporal.txt");
+				//File file = new File("D://Willy//fileconverter//code//EPS Exclusions//RewriteBN//temporal.txt");
+				OutputStream out = new FileOutputStream(file);
+		        byte[] buf = new byte[1024];
+		        int len;
+		        while((len=in.read(buf))>0){
+		            out.write(buf,0,len);
+		        }
+		        out.close();
+		        in.close();
+		        System.out.println("end upload");
+		        
+		        System.out.println("begin validator");
+		        tramaValidatorTxt validator = new tramaValidatorTxt();        
+		        validator.Process();
+		        System.out.println(validator.getErrorLog());
+		        if(tramaValidatorTxt.isHayError())
+		        {
+		        	//message = new FacesMessage("", validator.getErrorLog());		        	
+			        //FacesContext.getCurrentInstance().addMessage(null, message);
+			        mostrarMensajeError(validator.getErrorLog());
+			        setUploadedTxt(false);
+		        }
+		        else
+		        {
+		        	//message = new FacesMessage("", this.fileTxt.getFileName() + " fue subido y validado de manera satisfactoria. Usted ya puede generar el archivo EXCEL.");
+		        	//FacesContext.getCurrentInstance().addMessage(null, message);
+		        	mostrarMensajeInfo(this.fileTxt.getFileName() + " fue subido y validado de manera satisfactoria. Usted ya puede generar el archivo EXCEL.");
+		        	setUploadedTxt(true);
+		        }
+		        validator.resetErrorLog();//resetea la cadena log de errores y flag hayError
+		        System.out.println("end validator");		        
+		        
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				mostrarMensajeError(fileTxt.getFileName() + " no fue subido, contactar con el administrador.");
+				//message = new FacesMessage("", fileTxt.getFileName() + " no fue subido, contactar con el administrador.");
+	            //FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+            
+            
+            
+        }
+        else
+        {
+        	mostrarMensajeError("Seleccione un archivo.");
+        	//FacesMessage message = new FacesMessage("", "Seleccione un archivo.");
+            //FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+            
+    public String verMarcacion(){
+    	resetTxt();
+		String vista="pretty:marcacionPretty";
+        //CODIGO
+        return  vista;
+	}     
+    
+    public void mostrarMensajeInfo(String msg)
+	{		
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg));
+	}
+	
+	public void mostrarMensajeError(String msg)
+	{
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+	}
+
+}

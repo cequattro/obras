@@ -1,0 +1,1219 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.axis.AxisFault;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+import org.reniec.rel.ReniecBean;
+
+import pe.gob.sunafil.gestionpersonal.bean.Permisos;
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonalDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocideExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.utils.FacesUtils;
+import pe.gob.sunafil.gestionpersonal.bean.Persona;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaReniecDespatch;
+import pe.gob.sunafil.gestionpersonal.reniecws.ReniecWebService;
+import pe.gob.sunafil.gestionpersonal.utils.EnviarMail;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.ReporteDespatch;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
+
+@ManagedBean(name = "reporteBean")
+@SessionScoped
+public class ReporteBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5154405390560909774L;
+
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario PGP_Usuario;
+	@ManagedProperty("#{loginBean.PGP_Permisos}")
+	private Permisos PGP_Permisos;
+
+	private static Logger logger = Logger.getLogger(MenuBean.class.getName());
+
+	// REPORTE PERSONAL
+	private List<VstPersonalrrhh> listaPersonal;
+	private VstPersonalrrhh filtro = new VstPersonalrrhh();
+	private List<SitbTdocide> listaTipoDoc;
+	private String txt1;
+	private List<TdtbcDependencia> dependenciasAutocomplete;
+	private TdtbcDependencia dependenciaSeleccionada;
+	private String selectedIntendencia;
+	private List <TdtbcIntendencia> listaIntendencia;
+	private List<Map> lstRptPersonal;	
+	private boolean chkMultidependencia=false;
+	
+	//REPORTE INASISTENCIAS
+	private VstPersonalrrhh filtroIn = new VstPersonalrrhh();
+	private String txt2;
+	private List<TdtbcDependencia> dependenciasAutocompleteIn;
+	private TdtbcDependencia dependenciaSeleccionadaIn;
+	private String selectedIntendenciaIn;	
+	private List<Map> lstRptInasistencia;	
+	private String mes;
+	private String anio;
+	
+	//REPORTE TARDANZAS
+	private VstPersonalrrhh filtroTar = new VstPersonalrrhh();
+	private String txt3;
+	private List<TdtbcDependencia> dependenciasAutocompleteTar;
+	private TdtbcDependencia dependenciaSeleccionadaTar;
+	private String selectedIntendenciaTar;	
+	private List<Map> lstRptTardanza;	
+	private String mesTar;
+	private String anioTar;		
+
+	public boolean isChkMultidependencia() {
+		return chkMultidependencia;
+	}
+
+	public void setChkMultidependencia(boolean chkMultidependencia) {
+		this.chkMultidependencia = chkMultidependencia;
+	}
+
+	public VstPersonalrrhh getFiltroTar() {
+		return filtroTar;
+	}
+
+	public void setFiltroTar(VstPersonalrrhh filtroTar) {
+		this.filtroTar = filtroTar;
+	}
+
+	public String getTxt3() {
+		return txt3;
+	}
+
+	public void setTxt3(String txt3) {
+		this.txt3 = txt3;
+	}
+
+	public List<TdtbcDependencia> getDependenciasAutocompleteTar() {
+		return dependenciasAutocompleteTar;
+	}
+
+	public void setDependenciasAutocompleteTar(
+			List<TdtbcDependencia> dependenciasAutocompleteTar) {
+		this.dependenciasAutocompleteTar = dependenciasAutocompleteTar;
+	}
+
+	public TdtbcDependencia getDependenciaSeleccionadaTar() {
+		return dependenciaSeleccionadaTar;
+	}
+
+	public void setDependenciaSeleccionadaTar(
+			TdtbcDependencia dependenciaSeleccionadaTar) {
+		this.dependenciaSeleccionadaTar = dependenciaSeleccionadaTar;
+	}
+
+	public String getSelectedIntendenciaTar() {
+		return selectedIntendenciaTar;
+	}
+
+	public void setSelectedIntendenciaTar(String selectedIntendenciaTar) {
+		this.selectedIntendenciaTar = selectedIntendenciaTar;
+	}
+
+	public List<Map> getLstRptTardanza() {
+		return lstRptTardanza;
+	}
+
+	public void setLstRptTardanza(List<Map> lstRptTardanza) {
+		this.lstRptTardanza = lstRptTardanza;
+	}
+
+	public String getMesTar() {
+		return mesTar;
+	}
+
+	public void setMesTar(String mesTar) {
+		this.mesTar = mesTar;
+	}
+
+	public String getAnioTar() {
+		return anioTar;
+	}
+
+	public void setAnioTar(String anioTar) {
+		this.anioTar = anioTar;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getAnio() {
+		return anio;
+	}
+
+	public void setAnio(String anio) {
+		this.anio = anio;
+	}
+
+	public VstPersonalrrhh getFiltroIn() {
+		return filtroIn;
+	}
+
+	public void setFiltroIn(VstPersonalrrhh filtroIn) {
+		this.filtroIn = filtroIn;
+	}
+
+	public String getTxt2() {
+		return txt2;
+	}
+
+	public void setTxt2(String txt2) {
+		this.txt2 = txt2;
+	}
+
+	public List<TdtbcDependencia> getDependenciasAutocompleteIn() {
+		return dependenciasAutocompleteIn;
+	}
+
+	public void setDependenciasAutocompleteIn(
+			List<TdtbcDependencia> dependenciasAutocompleteIn) {
+		this.dependenciasAutocompleteIn = dependenciasAutocompleteIn;
+	}
+
+	public TdtbcDependencia getDependenciaSeleccionadaIn() {
+		return dependenciaSeleccionadaIn;
+	}
+
+	public void setDependenciaSeleccionadaIn(
+			TdtbcDependencia dependenciaSeleccionadaIn) {
+		this.dependenciaSeleccionadaIn = dependenciaSeleccionadaIn;
+	}
+
+	public String getSelectedIntendenciaIn() {
+		return selectedIntendenciaIn;
+	}
+
+	public void setSelectedIntendenciaIn(String selectedIntendenciaIn) {
+		this.selectedIntendenciaIn = selectedIntendenciaIn;
+	}
+
+	public List<Map> getLstRptInasistencia() {
+		return lstRptInasistencia;
+	}
+
+	public void setLstRptInasistencia(List<Map> lstRptInasistencia) {
+		this.lstRptInasistencia = lstRptInasistencia;
+	}
+
+	public List<Map> getLstRptPersonal() {
+		return lstRptPersonal;
+	}
+
+	public void setLstRptPersonal(List<Map> lstRptPersonal) {
+		this.lstRptPersonal = lstRptPersonal;
+	}
+
+	public List<TdtbcIntendencia> getListaIntendencia() {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		try {
+			listaIntendencia=personalDespatch.getIntendencia(PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			listaIntendencia=null;
+			e.printStackTrace();
+		}
+		return listaIntendencia;
+	}
+
+	public void setListaIntendencia(List<TdtbcIntendencia> listaIntendencia) {
+		this.listaIntendencia = listaIntendencia;
+	}
+	
+	public String getSelectedIntendencia() {
+		return selectedIntendencia;
+	}
+
+	public void setSelectedIntendencia(String selectedIntendencia) {
+		this.selectedIntendencia = selectedIntendencia;
+	}	
+
+	public String getTxt1() {
+		return txt1;
+	}
+
+	public void setTxt1(String txt1) {
+		this.txt1 = txt1;
+	}
+
+	public List<TdtbcDependencia> getDependenciasAutocomplete() {
+		return dependenciasAutocomplete;
+	}
+
+	public void setDependenciasAutocomplete(
+			List<TdtbcDependencia> dependenciasAutocomplete) {
+		this.dependenciasAutocomplete = dependenciasAutocomplete;
+	}
+
+	public TdtbcDependencia getDependenciaSeleccionada() {
+		return dependenciaSeleccionada;
+	}
+
+	public void setDependenciaSeleccionada(
+			TdtbcDependencia dependenciaSeleccionada) {
+		this.dependenciaSeleccionada = dependenciaSeleccionada;
+	}
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Permisos getPGP_Permisos() {
+		return PGP_Permisos;
+	}
+
+	public void setPGP_Permisos(Permisos pGP_Permisos) {
+		PGP_Permisos = pGP_Permisos;
+	}
+
+	public List<VstPersonalrrhh> getListaPersonal() {
+		return listaPersonal;
+	}
+
+	public void setListaPersonal(List<VstPersonalrrhh> listaPersonal) {
+		this.listaPersonal = listaPersonal;
+	}
+
+	public VstPersonalrrhh getFiltro() {
+		return filtro;
+	}
+
+	public void setFiltro(VstPersonalrrhh filtro) {
+		this.filtro = filtro;
+	}
+
+	public List<SitbTdocide> getListaTipoDoc() {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		try {
+			listaTipoDoc = personalDespatch.getTipoDocRemitente();
+		} catch (Exception e) {
+			listaTipoDoc = null;
+			e.printStackTrace();
+		}
+		return listaTipoDoc;
+	}
+
+	public void setListaTipoDoc(List<SitbTdocide> listaTipoDoc) {
+		this.listaTipoDoc = listaTipoDoc;
+	}	
+
+	public String getFormatDate(Date date) {
+		return new SimpleDateFormat("dd/MM/yyyy").format(date);
+	}
+
+	public String verRptPersonal() {
+		chkMultidependencia=false;
+		selectedIntendencia="";
+		txt1 = "";
+		dependenciaSeleccionada = null;
+		listaPersonal = null;
+		lstRptPersonal = null;
+		filtro = new VstPersonalrrhh();
+		String vista = "pretty:rptPersonalPretty";
+		// CODIGO
+		return vista;
+	}
+
+	public List<String> completeText(String query) {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		dependenciasAutocomplete = new ArrayList<TdtbcDependencia>();
+		try {
+			dependenciasAutocomplete = personalDespatch
+					.getAutocompletarDependenciaEIntendencia(query,
+							selectedIntendencia);
+							//PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		List<String> results = new ArrayList<String>();
+
+		for (Iterator iterator = dependenciasAutocomplete.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			results.add(tdtbcDependencia.getvDesdep());
+		}
+		return results;
+	}
+
+	public void onItemSelect(SelectEvent event) {
+		for (Iterator iterator = dependenciasAutocomplete.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			if (event.getObject().toString()
+					.equals(tdtbcDependencia.getvDesdep())) {
+				dependenciaSeleccionada = tdtbcDependencia;
+				filtro.setnNumdep(dependenciaSeleccionada.getnNumdep());
+			}
+		}
+	}		
+	
+	public void itemChangeIntendencia()
+	{
+		if(selectedIntendencia == null || "".equals(selectedIntendencia.trim()))
+		{
+			txt1 = "";
+			dependenciaSeleccionada = null;
+		}
+	}	
+	
+	public StreamedContent rptPersonal(long dat)
+	{		
+		//valida
+		if(filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim()))
+		{
+			if("03".equals(filtro.getvCodtipodocid().trim()))
+			{
+				if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()))
+				{
+					if(filtro.getvCodpersonal().trim().length()!=8)
+					{
+						mostrarMensajeError("Debe ingresar un número de DNI de 8 dígitos.");						
+						return null;
+					}
+				}
+				else
+				{
+					mostrarMensajeError("Debe ingresar un número de DNI de 8 dígitos.");					
+					return null;
+				}
+			}
+			else if("06".equals(filtro.getvCodtipodocid().trim()) || "08".equals(filtro.getvCodtipodocid().trim()))
+			{
+				if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim())){}
+				else
+				{
+					mostrarMensajeError("Debe ingresar un nro de documento.");					
+					return null;
+				}
+			}
+		}
+		if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()))
+		{
+			if(filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim())){}
+			else
+			{
+				mostrarMensajeError("Debe seleccionar un tipo de documento.");				
+				return null;
+			}
+		}
+		//end valida
+		long rnd=System.currentTimeMillis();
+		try {
+			if("".equals(selectedIntendencia.trim()))
+			{
+				selectedIntendencia=null;
+			}
+			if (txt1 != null && !"".equals(txt1)) {
+			} else {
+				filtro.setnNumdep(null);
+			}
+			if (filtro.getvCodtipo() != null && !"".equals(filtro.getvCodtipo())) {
+			} else {
+				filtro.setvCodtipo(null);
+			}
+			if (filtro.getvCodcargo() != null && !"".equals(filtro.getvCodcargo())) {
+			} else {
+				filtro.setvCodcargo(null);
+			}
+			System.out.println("Activo :::: "+filtro.getnFlgactivo());
+			ReporteDespatch reporteDespatch=new ReporteDespatch();
+			Map parametros = new HashMap();			
+			parametros.put("PARAM_INTENDENCIA", selectedIntendencia);			
+			parametros.put("PARAM_DEPENDENCIA", filtro.getnNumdep());
+			parametros.put("PARAM_TIPO", filtro.getvCodtipo());
+			parametros.put("PARAM_CARGO", filtro.getvCodcargo());
+			parametros.put("PARAM_ESTADO", (filtro.getnFlgactivo()==-1)?null:filtro.getnFlgactivo());
+			if((filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()) && filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim())) || chkMultidependencia)
+			{
+				if(chkMultidependencia)
+				{
+					System.out.println("Entro a multidependencia");
+					parametros.put("PARAM_TIPODOC", null);
+					parametros.put("PARAM_DOC", null);
+					parametros.put("PARAM_MULTIDEPENDENCIA", "1");
+					lstRptPersonal=reporteDespatch.reportePersonalIndividual(parametros);
+				}
+				else
+				{
+					parametros.put("PARAM_TIPODOC", filtro.getvCodtipodocid());
+					parametros.put("PARAM_DOC", filtro.getvCodpersonal());
+					parametros.put("PARAM_MULTIDEPENDENCIA", null);
+					lstRptPersonal=reporteDespatch.reportePersonalIndividual(parametros);
+				}				
+			}
+			else
+			{
+				lstRptPersonal=reporteDespatch.reportePersonal(parametros);
+			}
+			
+			if(lstRptPersonal!=null)
+			{
+				List<String> intendenciasList=new ArrayList<String>();
+				Workbook wb = new XSSFWorkbook();
+			    Sheet sheet = wb.createSheet("REPORTE PERSONAL");
+			    
+			    Font font = wb.createFont();
+	    	    font.setColor(HSSFColor.BLACK.index);
+	    	    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	    	    CellStyle style0 = wb.createCellStyle();
+	    	    style0.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style0.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style0.setFont(font);	
+	    	    CellStyle style1 = wb.createCellStyle();
+	    	    style1.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style1.setFont(font);
+	    	    style1.setBorderBottom(CellStyle.BORDER_THIN);
+	    	    style1.setBorderTop(CellStyle.BORDER_THIN);
+	    	    style1.setBorderRight(CellStyle.BORDER_THIN);
+	    	    style1.setBorderLeft(CellStyle.BORDER_THIN);
+			    
+			    int lineNum=0;
+			    Row row = sheet.createRow((short)lineNum);
+			    Cell cell=row.createCell(0);
+			    cell.setCellValue("REPORTE DE PERSONAL ");
+			    cell.setCellStyle(style0);
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            0, //first row (0-based)
+	    	            0, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue("Fecha actual "+getFormatDate(new Date())+".");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            1, //first row (0-based)
+	    	            1, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue(" ");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            2, //first row (0-based)
+	    	            2, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    cell=row.createCell(0);
+	    	    cell.setCellValue("N° ");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(1);
+	    	    cell.setCellValue("TIPO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(2);
+	    	    cell.setCellValue("NRO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(3);
+	    	    cell.setCellValue("APELLIDO PATERNO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(4);
+	    	    cell.setCellValue("APELLIDO MATERNO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(5);
+	    	    cell.setCellValue("NOMBRES");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(6);
+	    	    cell.setCellValue("INTENDENCIA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(7);
+	    	    cell.setCellValue("DEPENDENCIA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(8);
+	    	    cell.setCellValue("TIPO DE PERSONAL");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(9);
+	    	    cell.setCellValue("CARGO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(10);
+	    	    cell.setCellValue("ESTADO DE PERSONAL");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(11);
+	    	    cell.setCellValue("FECHA DE NACIMIENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(12);
+	    	    cell.setCellValue("FECHA DE REGISTRO");
+	    	    cell.setCellStyle(style1);
+	    	    if((filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()) && filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim())) || chkMultidependencia)
+	    	    {
+	    	    	cell=row.createCell(13);
+		    	    cell.setCellValue("FECHA INICIO EN DEPENDENCIA");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(14);
+		    	    cell.setCellValue("FECHA FIN EN DEPENDENCIA");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(15);
+		    	    cell.setCellValue("ESTADO EN DEPENDENCIA");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(16);
+		    	    cell.setCellValue("DEPENDENCIA PRINCIPAL");
+		    	    cell.setCellStyle(style1);
+	    	    }
+	    	    for (Iterator iterator = lstRptPersonal.iterator(); iterator
+						.hasNext();) {
+					Map map = (Map) iterator.next();
+					lineNum++;
+					System.out.println("row : "+lineNum+" ::: "+map.get("V_CODPERSONAL"));
+					row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue((lineNum-3)+"");
+		    	    row.createCell(1).setCellValue(map.get("V_DESABR")+"");
+		    	    row.createCell(2).setCellValue(map.get("V_CODPERSONAL")+"");
+		    	    row.createCell(3).setCellValue(map.get("V_DESAPEPAT")+"");
+		    	    row.createCell(4).setCellValue(map.get("V_DESAPEMAT")+"");
+		    	    row.createCell(5).setCellValue(map.get("V_DESNOMBRES")+"");
+		    	    row.createCell(6).setCellValue(map.get("V_DESINT")+"");
+		    	    row.createCell(7).setCellValue(map.get("V_DESDEP")+"");
+		    	    row.createCell(8).setCellValue(map.get("V_DESTIPO")+"");
+		    	    row.createCell(9).setCellValue(map.get("V_NOMCARGO")+"");
+		    	    row.createCell(10).setCellValue(map.get("ESTADO")+"");
+		    	    row.createCell(11).setCellValue(map.get("D_FECNAC")+"");
+		    	    row.createCell(12).setCellValue(map.get("D_FECREG")+"");
+		    	    if((filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()) && filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim())) || chkMultidependencia)
+		    	    {
+		    	    	row.createCell(13).setCellValue(map.get("D_FECINI")+"");
+		    	    	row.createCell(14).setCellValue(map.get("D_FECFIN")+"");
+		    	    	row.createCell(15).setCellValue(map.get("DEPESTADO")+"");
+		    	    	row.createCell(16).setCellValue(map.get("PRINCIPAL")+"");
+		    	    }
+				}
+	    	    FileOutputStream fileOut;
+	    	    String rutaRpt=Funciones.ObtProp_Resources("ruta.reportes");
+	    	    fileOut = new FileOutputStream(rutaRpt+"/rptPersonal"+rnd+".xlsx");
+				wb.write(fileOut);
+				fileOut.close();
+				InputStream stream;
+				try {
+					stream = new FileInputStream(rutaRpt+"/rptPersonal"+rnd+".xlsx");					
+					StreamedContent fileDownload = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "rptPersonal-"+rnd+".xlsx");
+					return fileDownload;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				} 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			lstRptPersonal=null;
+			return null;
+		}
+		return null;				
+	}
+	
+	public String verRptInasistencia() {
+		selectedIntendenciaIn="";
+		txt2 = "";
+		dependenciaSeleccionadaIn = null;		
+		lstRptInasistencia = null;
+		filtroIn = new VstPersonalrrhh();
+		String vista = "pretty:rptInasistenciaPretty";
+		// CODIGO
+		return vista;
+	}
+	
+	public void itemChangeIntendenciaIn()
+	{
+		if(selectedIntendenciaIn == null || "".equals(selectedIntendenciaIn.trim()))
+		{
+			txt2 = "";
+			dependenciaSeleccionadaIn = null;
+		}
+	}
+	
+	public List<String> completeTextIn(String query) {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		dependenciasAutocompleteIn = new ArrayList<TdtbcDependencia>();
+		try {
+			dependenciasAutocompleteIn = personalDespatch
+					.getAutocompletarDependenciaEIntendencia(query,
+							selectedIntendenciaIn);
+							//PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		List<String> results = new ArrayList<String>();
+
+		for (Iterator iterator = dependenciasAutocompleteIn.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			results.add(tdtbcDependencia.getvDesdep());
+		}
+		return results;
+	}
+
+	public void onItemSelectIn(SelectEvent event) {
+		for (Iterator iterator = dependenciasAutocompleteIn.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			if (event.getObject().toString()
+					.equals(tdtbcDependencia.getvDesdep())) {
+				dependenciaSeleccionadaIn = tdtbcDependencia;
+				filtroIn.setnNumdep(dependenciaSeleccionadaIn.getnNumdep());
+			}
+		}
+	}
+	
+	public StreamedContent rptInasistencia(long dat)
+	{
+		//valida
+		if(!reporteValidado(true,mes,anio,selectedIntendenciaIn,filtroIn.getvCodtipodocid(),filtroIn.getvCodpersonal()))
+			return null;
+		//end valida
+		long rnd=System.currentTimeMillis();
+		try {
+			if("".equals(selectedIntendenciaIn.trim()))
+			{
+				selectedIntendenciaIn=null;
+			}
+			if (txt2 != null && !"".equals(txt2)) {
+			} else {
+				filtroIn.setnNumdep(null);
+			}						
+			ReporteDespatch reporteDespatch=new ReporteDespatch();
+			Map parametros = new HashMap();			
+			parametros.put("PARAM_MES", mes);
+			parametros.put("PARAM_ANIO", anio);
+			parametros.put("PARAM_INTENDENCIA", selectedIntendenciaIn);			
+			parametros.put("PARAM_DEPENDENCIA", filtroIn.getnNumdep());
+			if(filtroIn.getvCodpersonal()!=null && !"".equals(filtroIn.getvCodpersonal().trim()) && filtroIn.getvCodtipodocid()!=null && !"".equals(filtroIn.getvCodtipodocid().trim()))
+			{
+				parametros.put("PARAM_TIPODOC", filtroIn.getvCodtipodocid());
+				parametros.put("PARAM_DOC", filtroIn.getvCodpersonal());
+			}			
+			lstRptInasistencia=reporteDespatch.reporteInasistencia(parametros);
+			
+			
+			if(lstRptInasistencia!=null)
+			{
+				List<String> intendenciasList=new ArrayList<String>();
+				Workbook wb = new XSSFWorkbook();
+			    Sheet sheet = wb.createSheet("REPORTE INASISTENCIAS");
+			    
+			    Font font = wb.createFont();
+	    	    font.setColor(HSSFColor.BLACK.index);
+	    	    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	    	    CellStyle style0 = wb.createCellStyle();
+	    	    style0.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style0.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style0.setFont(font);	
+	    	    CellStyle style1 = wb.createCellStyle();
+	    	    style1.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style1.setFont(font);
+	    	    style1.setBorderBottom(CellStyle.BORDER_THIN);
+	    	    style1.setBorderTop(CellStyle.BORDER_THIN);
+	    	    style1.setBorderRight(CellStyle.BORDER_THIN);
+	    	    style1.setBorderLeft(CellStyle.BORDER_THIN);
+			    
+			    int lineNum=0;
+			    Row row = sheet.createRow((short)lineNum);
+			    Cell cell=row.createCell(0);
+			    cell.setCellValue("REPORTE DE INASISTENCIAS ");
+			    cell.setCellStyle(style0);
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            0, //first row (0-based)
+	    	            0, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue("Período: "+getMesFormat(mes)+"-"+anio+", Fecha actual "+getFormatDate(new Date())+".");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            1, //first row (0-based)
+	    	            1, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue(" ");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            2, //first row (0-based)
+	    	            2, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    cell=row.createCell(0);
+	    	    cell.setCellValue("N° ");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(1);
+	    	    cell.setCellValue("FECHA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(2);
+	    	    cell.setCellValue("TIPO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(3);
+	    	    cell.setCellValue("NRO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(4);
+	    	    cell.setCellValue("APELLIDOS Y NOMBRES");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(5);
+	    	    cell.setCellValue("DEPENDENCIA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(6);
+	    	    cell.setCellValue("INTENDENCIA");
+	    	    cell.setCellStyle(style1);	    	    	    	    
+	    	    for (Iterator iterator = lstRptInasistencia.iterator(); iterator
+						.hasNext();) {
+					Map map = (Map) iterator.next();
+					lineNum++;
+					System.out.println("row : "+lineNum+" ::: "+map.get("V_CODPERSONAL"));
+					row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue((lineNum-3)+"");
+		    	    row.createCell(1).setCellValue(map.get("V_FECHA")+"");
+		    	    row.createCell(2).setCellValue(map.get("V_DESABR")+"");
+		    	    row.createCell(3).setCellValue(map.get("V_CODPERSONAL")+"");
+		    	    row.createCell(4).setCellValue(map.get("NOMBRES")+"");
+		    	    row.createCell(5).setCellValue(map.get("V_DESDEP")+"");
+		    	    row.createCell(6).setCellValue(map.get("V_DESINT")+"");		    	    		    	   
+				}
+	    	    FileOutputStream fileOut;
+	    	    String rutaRpt=Funciones.ObtProp_Resources("ruta.reportes");
+	    	    fileOut = new FileOutputStream(rutaRpt+"/rptInasistencia"+rnd+".xlsx");
+				wb.write(fileOut);
+				fileOut.close();
+				InputStream stream;
+				try {
+					stream = new FileInputStream(rutaRpt+"/rptInasistencia"+rnd+".xlsx");					
+					StreamedContent fileDownload = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "rptInasistencia-"+rnd+".xlsx");
+					return fileDownload;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				} 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			lstRptInasistencia=null;
+			return null;
+		}
+		return null;
+	}
+	
+	public String verRptTardanza() {
+		selectedIntendenciaTar="";
+		txt3 = "";
+		dependenciaSeleccionadaTar = null;		
+		lstRptTardanza = null;
+		filtroTar = new VstPersonalrrhh();
+		String vista = "pretty:rptTardanzaPretty";
+		// CODIGO
+		return vista;
+	}
+	
+	public void itemChangeIntendenciaTar()
+	{
+		if(selectedIntendenciaTar == null || "".equals(selectedIntendenciaTar.trim()))
+		{
+			txt3 = "";
+			dependenciaSeleccionadaTar = null;
+		}
+	}
+	
+	public List<String> completeTextTar(String query) {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		dependenciasAutocompleteTar = new ArrayList<TdtbcDependencia>();
+		try {
+			dependenciasAutocompleteTar = personalDespatch
+					.getAutocompletarDependenciaEIntendencia(query,
+							selectedIntendenciaTar);
+							//PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		List<String> results = new ArrayList<String>();
+
+		for (Iterator iterator = dependenciasAutocompleteTar.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			results.add(tdtbcDependencia.getvDesdep());
+		}
+		return results;
+	}
+
+	public void onItemSelectTar(SelectEvent event) {
+		for (Iterator iterator = dependenciasAutocompleteTar.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			if (event.getObject().toString()
+					.equals(tdtbcDependencia.getvDesdep())) {
+				dependenciaSeleccionadaTar = tdtbcDependencia;
+				filtroTar.setnNumdep(dependenciaSeleccionadaTar.getnNumdep());
+			}
+		}
+	}
+	
+	public boolean reporteValidado(boolean opcion,String mes,String anio,String selectedIntendencia,String codTipoDocId,String codPersonal){
+		if(mes!=null && !"".equals(mes.trim())){}
+		else
+		{
+			mostrarMensajeError("Debe seleccionar un mes.");				
+			return false;
+		}
+		if(anio!=null && !"".equals(anio.trim())){}
+		else
+		{
+			mostrarMensajeError("Debe seleccionar un año.");				
+			return false;
+		}
+		try {
+			ReporteDespatch reporteDespatch=new ReporteDespatch();
+			String fechadmy=reporteDespatch.ObtieneFechaDMY();
+			
+			System.out.println("["+fechadmy.split("/")[2].substring(0, 4)+"]");
+			
+			if(Integer.parseInt(anio)>Integer.parseInt(fechadmy.split("/")[2].substring(0, 4)))
+			{
+				mostrarMensajeError("No puede ver el reporte de un año futuro.");				
+				return false;
+			}
+			
+			if(Integer.parseInt(anio)==Integer.parseInt(fechadmy.split("/")[2].substring(0, 4)) &&
+					Integer.parseInt(mes)>Integer.parseInt(fechadmy.split("/")[1]))
+			{
+				mostrarMensajeError("No puede ver el reporte de un mes futuro.");				
+				return false;
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if(selectedIntendencia!=null && !"".equals(selectedIntendencia.trim())){}
+		else
+		{
+			mostrarMensajeError("Debe seleccionar una intendencia.");				
+			return false;
+		}
+		if(codTipoDocId!=null && !"".equals(codTipoDocId.trim()))
+		{
+			if("03".equals(codTipoDocId.trim()))
+			{
+				if(codPersonal!=null && !"".equals(codPersonal.trim()))
+				{
+					if(codPersonal.trim().length()!=8)
+					{
+						mostrarMensajeError("Debe ingresar un número de DNI de 8 dígitos.");						
+						return false;
+					}
+				}
+				else
+				{
+					mostrarMensajeError("Debe ingresar un número de DNI de 8 dígitos.");					
+					return false;
+				}
+			}
+			else if("06".equals(codTipoDocId.trim()) || "08".equals(codTipoDocId.trim()))
+			{
+				if(codPersonal!=null && !"".equals(codPersonal.trim())){}
+				else
+				{
+					mostrarMensajeError("Debe ingresar un nro de documento.");					
+					return false;
+				}
+			}
+		}
+		if(codPersonal!=null && !"".equals(codPersonal.trim()))
+		{
+			if(codTipoDocId!=null && !"".equals(codTipoDocId.trim())){}
+			else
+			{
+				mostrarMensajeError("Debe seleccionar un tipo de documento.");				
+				return false;
+			}
+		}
+		return true;
+	}
+	public StreamedContent rptTardanza(long dat)
+	{
+		//valida
+		if(!reporteValidado(true,mesTar,anioTar,selectedIntendenciaTar,filtroTar.getvCodtipodocid(),filtroTar.getvCodpersonal()))
+			return null;
+		//end valida
+		long rnd=System.currentTimeMillis();
+		try {
+			if("".equals(selectedIntendenciaTar.trim()))
+			{
+				selectedIntendenciaTar=null;
+			}
+			if (txt3 != null && !"".equals(txt3)) {
+			} else {
+				filtroTar.setnNumdep(null);
+			}						
+			ReporteDespatch reporteDespatch=new ReporteDespatch();
+			Map parametros = new HashMap();			
+			parametros.put("PARAM_MES", mesTar);
+			parametros.put("PARAM_ANIO", anioTar);
+			parametros.put("PARAM_INTENDENCIA", selectedIntendenciaTar);			
+			parametros.put("PARAM_DEPENDENCIA", filtroTar.getnNumdep());
+			if(filtroTar.getvCodpersonal()!=null && !"".equals(filtroTar.getvCodpersonal().trim()) && filtroTar.getvCodtipodocid()!=null && !"".equals(filtroTar.getvCodtipodocid().trim()))
+			{
+				parametros.put("PARAM_TIPODOC", filtroTar.getvCodtipodocid());
+				parametros.put("PARAM_DOC", filtroTar.getvCodpersonal());
+			}			
+			lstRptTardanza=reporteDespatch.reporteTardanza(parametros);
+			
+			
+			if(lstRptTardanza!=null)
+			{
+				List<String> intendenciasList=new ArrayList<String>();
+				Workbook wb = new XSSFWorkbook();
+			    Sheet sheet = wb.createSheet("REPORTE TARDANZAS");
+			    
+			    Font font = wb.createFont();
+	    	    font.setColor(HSSFColor.BLACK.index);
+	    	    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	    	    CellStyle style0 = wb.createCellStyle();
+	    	    style0.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style0.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style0.setFont(font);	
+	    	    CellStyle style1 = wb.createCellStyle();
+	    	    style1.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style1.setFont(font);
+	    	    style1.setBorderBottom(CellStyle.BORDER_THIN);
+	    	    style1.setBorderTop(CellStyle.BORDER_THIN);
+	    	    style1.setBorderRight(CellStyle.BORDER_THIN);
+	    	    style1.setBorderLeft(CellStyle.BORDER_THIN);
+			    
+			    int lineNum=0;
+			    Row row = sheet.createRow((short)lineNum);
+			    Cell cell=row.createCell(0);
+			    cell.setCellValue("REPORTE DE TARDANZAS ");
+			    cell.setCellStyle(style0);
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            0, //first row (0-based)
+	    	            0, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue("Período: "+getMesFormat(mesTar)+"-"+anioTar+", Fecha actual "+getFormatDate(new Date())+".");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            1, //first row (0-based)
+	    	            1, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue(" ");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            2, //first row (0-based)
+	    	            2, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    cell=row.createCell(0);
+	    	    cell.setCellValue("N° ");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(1);
+	    	    cell.setCellValue("FECHA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(2);
+	    	    cell.setCellValue("HORA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(3);
+	    	    cell.setCellValue("TIPO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(4);
+	    	    cell.setCellValue("NRO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(5);
+	    	    cell.setCellValue("APELLIDOS Y NOMBRES");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(6);
+	    	    cell.setCellValue("DEPENDENCIA");
+	    	    cell.setCellStyle(style1);	    	    	    	    
+	    	    cell=row.createCell(7);
+	    	    cell.setCellValue("INTENDENCIA");
+	    	    cell.setCellStyle(style1);
+	    	    for (Iterator iterator = lstRptTardanza.iterator(); iterator
+						.hasNext();) {
+					Map map = (Map) iterator.next();
+					lineNum++;
+					System.out.println("row : "+lineNum+" ::: "+map.get("V_CODPERSONAL"));
+					row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue((lineNum-3)+"");
+		    	    row.createCell(1).setCellValue(map.get("V_FECHA")+"");
+		    	    row.createCell(2).setCellValue(map.get("HORA")+"");
+		    	    row.createCell(3).setCellValue(map.get("V_DESABR")+"");
+		    	    row.createCell(4).setCellValue(map.get("V_CODPERSONAL")+"");
+		    	    row.createCell(5).setCellValue(map.get("NOMBRES")+"");
+		    	    row.createCell(6).setCellValue(map.get("V_DESDEP")+"");
+		    	    row.createCell(7).setCellValue(map.get("V_DESINT")+"");		    	    		    	   
+				}
+	    	    FileOutputStream fileOut;
+	    	    String rutaRpt=Funciones.ObtProp_Resources("ruta.reportes");
+	    	    fileOut = new FileOutputStream(rutaRpt+"/rptTardanza"+rnd+".xlsx");
+				wb.write(fileOut);
+				fileOut.close();
+				InputStream stream;
+				try {
+					stream = new FileInputStream(rutaRpt+"/rptTardanza"+rnd+".xlsx");					
+					StreamedContent fileDownload = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "rptTardanza-"+rnd+".xlsx");
+					return fileDownload;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				} 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			lstRptTardanza=null;
+			return null;
+		}
+		return null;
+	}
+	
+	public String getMesFormat(String nro)
+	{
+		switch (Integer.parseInt(nro)) {
+		case 1:
+			return "ENERO";			
+			
+		case 2:
+			return "FEBRERO";
+			
+		case 3:
+			return "MARZO";
+			
+		case 4:
+			return "ABRIL";
+			
+		case 5:
+			return "MAYO";
+			
+		case 6:
+			return "JUNIO";
+			
+		case 7:
+			return "JULIO";
+			
+		case 8:
+			return "AGOSTO";
+			
+		case 9:
+			return "SEPTIEMBRE";
+			
+		case 10:
+			return "OCTUBRE";
+			
+		case 11:
+			return "NOVIEMBRE";
+			
+		case 12:
+			return "DICIEMBRE";
+
+		default:
+			return "";
+		}
+		
+	}
+	
+	public void checkedChangeMultidependencia()
+	{
+		if(chkMultidependencia)
+		{
+			selectedIntendencia="";
+			txt1="";
+			dependenciaSeleccionada = null;
+			filtro.setvCodtipodocid(null);
+			filtro.setvCodpersonal(null);
+		}
+	}
+	
+	public void mostrarMensajeInfo(String msg)
+	{		
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg));
+	}
+	
+	public void mostrarMensajeError(String msg)
+	{
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+	}
+
+}

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4827bca7-5666-40e9-8ad9-a40192c772d4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<parameter name="fechaActual" class="java.lang.String"/>
+	<parameter name="fechaDesde" class="java.lang.String"/>
+	<parameter name="fechaHasta" class="java.lang.String"/>
+	<parameter name="codPersonal" class="java.lang.String"/>
+	<parameter name="nomPersonal" class="java.lang.String"/>
+	<parameter name="totalSobretiempo" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="hEntrada" class="java.lang.String"/>
+	<field name="hSalida" class="java.lang.String"/>
+	<field name="sobretiempo" class="java.lang.String"/>
+	<field name="turno" class="java.lang.String"/>
+	<field name="observacion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="116" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="31" width="555" height="20" uuid="b526c245-78f1-4e50-8482-c6957b66deac"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[CONTROL DE ASISTENCIA]]></text>
+			</staticText>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="false">
+				<reportElement key="image-1" mode="Opaque" x="0" y="0" width="146" height="31" forecolor="#000000" backcolor="#FFFFFF" uuid="8ff31de7-7d1c-4d3e-954a-90697c099974"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{PV_RUTA_IMAGEN}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="360" y="0" width="195" height="20" uuid="ed3eb49f-d0b0-43fa-a59d-adf5e6906d8e"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de Impresión: "+$P{fechaActual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="51" width="555" height="20" uuid="abb93e13-82d7-4c38-959b-80bc7f2bf555"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Desde: "+$P{fechaDesde}+" Hasta: "+$P{fechaHasta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="71" width="555" height="20" uuid="47cef166-1355-4054-947c-7ef4b64f19ba"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Código Personal: "+$P{codPersonal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="91" width="555" height="20" uuid="2e257e1e-f5aa-4f99-b40b-a0e34881bf66"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Apellidos y Nombres: "+$P{nomPersonal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="6" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="3" width="547" height="20" uuid="e66311d0-3936-40a5-aab4-223cbd3d3965"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="3" width="61" height="20" uuid="4168c432-3b7e-4652-b5b5-7c299b898c99"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="69" y="3" width="77" height="20" uuid="a8129ffb-2bed-4e94-9946-38efdc859d16"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Hora de Entrada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="3" width="77" height="20" uuid="7679aeba-6fb9-4f98-9f27-2feb27ea3f06"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Hora de Salida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="3" width="62" height="20" uuid="8a4909be-9d90-4273-9a3c-0651ec692d01"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sobretiempo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="3" width="75" height="20" uuid="f0738113-94d1-4390-86b4-ff7c6b491fa5"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Turno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="3" width="179" height="20" uuid="5528e729-c5d6-40bc-b989-bd86b1aa21f0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Observacion]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="0" width="61" height="20" uuid="4142904a-4f03-4844-b3c0-32974af2d37e"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="0" width="77" height="20" uuid="f8f3c414-ebac-4a4d-9d7e-c223c18d5080"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hEntrada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="0" width="77" height="20" uuid="4cd00afa-f2be-4ab8-820c-37a831bf68ea"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hSalida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="223" y="0" width="62" height="20" uuid="09b8d4ff-23e0-4984-b6da-fc178fb8e1b0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sobretiempo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="285" y="0" width="75" height="20" uuid="fcebe184-594d-4a75-a130-ccd004524ef5"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{turno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="179" height="20" uuid="02dbf9af-f997-4f4b-83e4-5669f17d0829"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observacion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="13" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="11" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="223" y="0" width="62" height="20" uuid="a5e692a2-1177-4047-bc58-0d5b5c562bd4"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalSobretiempo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="125" y="0" width="98" height="20" uuid="741460d6-7e33-4ae5-8a00-7380d42152ae"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total de Sobretiempo:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

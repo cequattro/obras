@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="MIS PERMISOS" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				<h:panelGrid columns="4" align="center">
+					<p:outputLabel for="buttonb"
+						value="Fecha de inicio &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:calendar id="buttonb" showOn="button" size="10"
+						value="#{misPermisosBean.filtro.dFecini}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de inicio válida">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+
+					<p:outputLabel for="buttonbf"
+						value="&nbsp;&nbsp;&nbsp;Fecha de fin &nbsp;&nbsp;" />
+					<p:calendar id="buttonbf" showOn="button" size="10"
+						value="#{misPermisosBean.filtro.dFecfin}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de fin válida">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+					
+					<p:outputLabel value="Estado" />
+				    <h:selectOneMenu style="width:145px" value="#{misPermisosBean.filtro.nCodestper}" >             
+					         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+					         <f:selectItems value="#{misPermisosBean.listaEstadoPermiso}" var="tipo" itemLabel="#{tipo.vDesestper}" itemValue="#{tipo.nCodestper}" />     
+					 </h:selectOneMenu>	
+				    
+				    <p:outputLabel value="&nbsp;&nbsp;&nbsp;Motivo" />
+				     <h:selectOneMenu style="width:145px" value="#{misPermisosBean.filtro.nCodtipjus}" >             
+					         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+					         <f:selectItems value="#{misPermisosBean.listaTipoJustificacion}" var="tipo" itemLabel="#{tipo.vDestipjus}" itemValue="#{tipo.nCodtipjus}" />     
+					 </h:selectOneMenu>	
+				    
+					
+					
+				</h:panelGrid>
+				<br />
+				<CENTER>
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{misPermisosBean.buscarPermisos()}"
+						update=":formInicio" />						
+	                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+	                 <p:commandButton value="Nuevo" icon="icon-zadd"
+						action="#{misPermisosBean.nuevo()}"
+						update=":formInicio" />
+	                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+	                 <p:commandButton value = "Limpiar" icon="icon-escoba"
+	                 ajax="false" title="Exportar" action="#{reporteErrorBean.limpiar()}"/>				 					 
+				</CENTER>
+				<br />	
+				
+				<p:dataTable id="datatable"
+					value="#{misPermisosBean.listaPermisosPersonal}" var="item"
+					widgetVar="usrTable" emptyMessage="No se encontraron resultados"
+					paginator="true" rows="20"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,40,100">
+					
+					<p:column headerText="Fecha">
+						<h:outputText value="#{item.dFecini}" style="text-align: center !important;"/>
+					</p:column>
+					<p:column headerText="Hora Inicio">
+						<h:outputText value="#{item.nHoraini}" />
+					</p:column>					
+					<p:column headerText="Hora Fin">
+						<h:outputText value="#{item.nHorfin}"
+							style="width:50px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>					
+					<p:column headerText="Motivo">
+						<h:outputText value="#{item.vDestipjus}" />
+					</p:column>
+					<p:column headerText="Estado">
+						<h:outputText value="#{item.vDesestper}" />
+					</p:column>
+					<p:column headerText="Opción" style="text-align:center;" >
+						<p:commandButton icon="ui-icon-pencil" title="EDITAR" action="#{misPermisosBean.selectEditar(item)}" rendered="#{item.vDesestper.equals('SOLICITADO')}" />	
+	            		<p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="#{item.vDesestper.equals('SOLICITADO')}" />
+	            		<p:commandButton icon="ui-icon-search" title="VER DETALLE" action="#{misPermisosBean.selectEditar(item)}" rendered="#{!item.vDesestper.equals('SOLICITADO')}" />
+	            		<p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="#{!item.vDesestper.equals('SOLICITADO')}" />
+	            		<p:commandButton icon="ui-icon-document" title="EXPORTAR PDF" action="#{misPermisosBean.selectEditar(item)}" />
+					</p:column>
+					
+				</p:dataTable>
+
+				<br />
+
+				<center>
+				<p:fieldset styleClass="leyenda-back">
+				
+				<span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+				<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        	<p:outputLabel value="Editar &nbsp;&nbsp;&nbsp;&nbsp;" />
+	        	
+	        	<span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="VER DETALLE">
+				<span class="ui-button-icon-left ui-icon ui-c ui-icon-search"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        	<p:outputLabel value="Ver Detalle &nbsp;&nbsp;&nbsp;&nbsp;" />
+	        	
+	        	<span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EXPORTAR">
+				<span class="ui-button-icon-left ui-icon ui-c ui-icon-document"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        	<p:outputLabel value="Exportar &nbsp;&nbsp;&nbsp;&nbsp;" />
+				
+		        <p:outputLabel value=" Formato de hora 24 (Valor: 0-23) " /> 
+		        <p:outputLabel value=" Formato de minutos 60 (Valor: 0-59) " />
+		        
+	        	</p:fieldset>
+				</center>
+
+			</p:fieldset>
+
+			<center>
+				<p:messages id="msgMensajesConsolidadoGlobal" closable="true"
+					escape="false" showDetail="false" />
+			</center>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

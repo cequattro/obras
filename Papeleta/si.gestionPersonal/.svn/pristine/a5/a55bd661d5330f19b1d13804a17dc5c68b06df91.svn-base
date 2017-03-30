@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/gestionpersonal/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.Periodo"  		alias="Periodo"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.Permisos" 		alias="permisosBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.Usuario"  		alias="Usuario"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.MenuPadre"  	alias="menuPadreBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.MenuHijo"  		alias="menuHijoBean"/>	
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.Persona"		alias="Persona"/>
+		<typeAlias type="org.reniec.rel.ReniecBean"						alias="ReniecBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide"  alias="SitbTdocideBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.bean.Combo"  alias="comboBean"/>		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia"  alias="TdtbcDependenciaBean"/>		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia"  alias="TdtbcIntendenciaBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal"  alias="PrtbcPersonalBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers"  alias="PrtbcTipopersBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo"  alias="SitbPercargoBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun"  alias="SitbEscalaremunBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacion"  alias="RhmvcMarcacionBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno"  alias="RhmvcPerturnoBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcOrigen"  alias="RhtbcOrigenBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTipomarcacion"  alias="RhtbcTipomarcacionBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno"  alias="RhtbcTurnoBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia"  alias="RhtbcTurnodiaBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal"  alias="RhtbdPersonalBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTipojus"  alias="RhtbcTipojusBean"/>		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcCargamasiva"  alias="RhtbcCargamasivaBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcErrcarmas"  alias="RhtbcErrcarmasBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcFerxint"  alias="RhtbcFerxintBean"/>
+		
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh"  alias="VstPersonalrrhhBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh"  alias="VstTurnopersonalrrhhBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh"  alias="VstDetpersonalrrhhBean"/>
+		<typeAlias type="pe.gob.sunafil.gestionpersonal.persistence.model.VstMarcacionrrhh"  alias="VstMarcacionrrhhBean"/>
+		
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />				
+				
+			</dataSource>
+
+		</environment>
+		
+		<!-- PARA PRODUCCION:--> 
+		<!-- <environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSTRAMITEEXT" />
+			</dataSource>			
+		</environment> --> 
+		
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XLogin.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XSeguridad.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XLogueo.xml" />		 		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XPersona.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XPersonaReniec.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XWebService.xml" />	
+		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/SitbTdocideMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XCombos.xml" />		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/TdtbcDependenciaMapper.xml" />		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/TdtbcIntendenciaMapper.xml" />		 		 		 		 		 
+		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XReporte.xml" />		 		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XTrazabilidad.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptUsuario.xml" />		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptProcedimiento.xml" />	 
+		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/PrtbcPersonalMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/PrtbcTipopersMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/SitbPercargoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/SitbEscalaremunMapper.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhmvcMarcacionMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhmvcPerturnoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcOrigenMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcTipomarcacionMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcTurnoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcTurnodiaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbdPersonalMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcTipojusMapper.xml" />		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcCargamasivaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcErrcarmasMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/RhtbcFerxintMapper.xml" />
+		 
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/VstPersonalrrhhMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/VstTurnopersonalrrhhMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/VstDetpersonalrrhhMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/persistence/map/VstMarcacionrrhhMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptPersonal.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptInasistencia.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptTardanza.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptSaleTemprano.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptNoMarcacion.xml" />
+		 <mapper resource="pe/gob/sunafil/gestionpersonal/mybatis/xml/XRptMisMarcaciones.xml" />
+		 
+	</mappers>
+</configuration>
+

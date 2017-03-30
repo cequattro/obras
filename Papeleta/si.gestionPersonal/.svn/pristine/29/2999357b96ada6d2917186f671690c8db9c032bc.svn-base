@@ -1,0 +1,779 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.implementacion;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.comun.MyBatisConnectionFactory;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.client.PrtbcPersonalMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.PrtbcTipopersMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.RhmvcPerturnoMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.RhtbcTurnoMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.RhtbcTurnodiaMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.RhtbdPersonalMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.SitbEscalaremunMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.SitbPercargoMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.SitbTdocideMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.TdtbcDependenciaMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.VstDetpersonalrrhhMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.VstPersonalrrhhMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.client.VstTurnopersonalrrhhMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonalExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonalExample.Criterion;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopersExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturnoExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnoExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodiaExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonalExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremunExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargoExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocideExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependenciaExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhhExample;
+//import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonalExample.Criteria;
+//import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhhExample.Criteria;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhhExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhhExample;
+import pe.gob.sunafil.gestionpersonal.persistence.client.TdtbcIntendenciaMapper;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendenciaExample;
+
+public class IMPPersonal implements INTPersonal {
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	public IMPPersonal(){
+		  sqlSessionFactory=MyBatisConnectionFactory.getSqlSessionFactory();		  		  
+	  }
+		
+	/*
+	 * Recupera el autocompletado por dependencia e intendencia
+	 * @see pe.gob.sunafil.tramiteext.mybatis.interfase.INTRegistrar#getAutocompletarDependenciaEIntendencia(java.lang.String, java.lang.String)
+	 */
+	public List <TdtbcDependencia> getAutocompletarDependenciaEIntendencia(String query, String nNumint) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		TdtbcDependenciaExample example = new TdtbcDependenciaExample();
+		example.createCriteria().andNFlgactivoEqualTo(new Short("1")).andVDesdepLike("SUNAFIL%").andNNumintEqualTo(new BigDecimal(nNumint)).andVDesdepLike("%"+query.toUpperCase()+"%");
+		//example.createCriteria().andNFlgactivoEqualTo(new Short("1")).andVDesdepLike("SUNAFIL%").andVDesdepLike("%"+query.toUpperCase()+"%");
+		try {
+			TdtbcDependenciaMapper mapper = sqlSession.getMapper (TdtbcDependenciaMapper. class);
+			List <TdtbcDependencia> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getAutocompletarDependenciaEIntendencia "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}	
+	
+	public List<PrtbcPersonal> getAutoCompletarPersonal(String query) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		PrtbcPersonalExample example= new PrtbcPersonalExample();
+		example.or().andVDesnombresLike("%"+query.toUpperCase()+"%");
+		example.or().andVDesapepatLike("%"+query.toUpperCase()+"%");
+		example.or().andVDesapematLike("%"+query.toUpperCase()+"%");
+		//.andVDesnombresLike("%"+query.toUpperCase()+"%");
+		//.andVDesapepatLike("%"+query.toUpperCase()+"%");
+		//.andVDesapematLike("%"+query.toUpperCase()+"%");
+		try {
+			PrtbcPersonalMapper mapper = sqlSession.getMapper (PrtbcPersonalMapper. class);
+			List <PrtbcPersonal> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getAutocompletarPersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+		//example.createCriteria().andv
+	}
+	public List <SitbTdocide> getTipoDocRemitente() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		SitbTdocideExample example = new SitbTdocideExample();
+		example.createCriteria().andDescripcionIsNotNull().andNFlgmpEqualTo(new BigDecimal(1)).andIdNotEqualTo("09");
+		try {
+			SitbTdocideMapper mapper = sqlSession.getMapper (SitbTdocideMapper. class);
+			List <SitbTdocide> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTipoDocRemitente "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <PrtbcPersonal> getPersonal(PrtbcPersonal filtro) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		PrtbcPersonalExample example = new PrtbcPersonalExample();
+		pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonalExample.Criteria dinamicCriteria=example.createCriteria();
+		dinamicCriteria.andVCodpersonalIsNotNull();
+		if(filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim()))
+		{
+			dinamicCriteria.andVCodtipodocidEqualTo(filtro.getvCodtipodocid());
+		}
+		if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()))
+		{
+			dinamicCriteria.andVCodpersonalEqualTo(filtro.getvCodpersonal());
+		}
+		if(filtro.getnNumdep()!=null)
+		{
+			dinamicCriteria.andNNumdepEqualTo(filtro.getnNumdep());
+		}
+		if(filtro.getvDesapepat()!=null && !"".equals(filtro.getvDesapepat().trim()))
+		{
+			dinamicCriteria.andVDesapepatLike("%"+filtro.getvDesapepat().toUpperCase()+"%");
+		}
+		if(filtro.getvDesapemat()!=null && !"".equals(filtro.getvDesapemat().trim()))
+		{
+			dinamicCriteria.andVDesapematLike("%"+filtro.getvDesapemat().toUpperCase()+"%");
+		}
+		if(filtro.getvDesnombres()!=null && !"".equals(filtro.getvDesnombres().trim()))
+		{
+			dinamicCriteria.andVDesnombresLike("%"+filtro.getvDesnombres().toUpperCase()+"%");
+		}
+		example.or(dinamicCriteria);
+		try {
+			PrtbcPersonalMapper mapper = sqlSession.getMapper (PrtbcPersonalMapper. class);
+			List <PrtbcPersonal> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getPersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <VstPersonalrrhh> getPersonalRRHH(VstPersonalrrhh filtro) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		VstPersonalrrhhExample example = new VstPersonalrrhhExample();
+		pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhhExample.Criteria dinamicCriteria=example.createCriteria();
+		dinamicCriteria.andVCodpersonalIsNotNull();
+		if(filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim()))
+		{
+			dinamicCriteria.andVCodtipodocidEqualTo(filtro.getvCodtipodocid());
+		}
+		if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()))
+		{
+			dinamicCriteria.andVCodpersonalEqualTo(filtro.getvCodpersonal());
+		}
+		if(filtro.getnNumint()!=null)
+		{
+			dinamicCriteria.andNNumintEqualTo(filtro.getnNumint());
+		}
+		if(filtro.getnNumdep()!=null)
+		{
+			dinamicCriteria.andNNumdepEqualTo(filtro.getnNumdep());
+		}
+		if(filtro.getvDesapepat()!=null && !"".equals(filtro.getvDesapepat().trim()))
+		{
+			dinamicCriteria.andVDesapepatLike("%"+filtro.getvDesapepat().toUpperCase()+"%");
+		}
+		if(filtro.getvDesapemat()!=null && !"".equals(filtro.getvDesapemat().trim()))
+		{
+			dinamicCriteria.andVDesapematLike("%"+filtro.getvDesapemat().toUpperCase()+"%");
+		}
+		if(filtro.getvDesnombres()!=null && !"".equals(filtro.getvDesnombres().trim()))
+		{
+			dinamicCriteria.andVDesnombresLike("%"+filtro.getvDesnombres().toUpperCase()+"%");
+		}
+		example.or(dinamicCriteria);
+		example.setOrderByClause("V_DESDEP ASC, V_DESAPEPAT ASC");
+		try {
+			VstPersonalrrhhMapper mapper = sqlSession.getMapper (VstPersonalrrhhMapper. class);
+			List <VstPersonalrrhh> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getPersonalRRHH "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <PrtbcTipopers> getTipoPersonal() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		PrtbcTipopersExample example = new PrtbcTipopersExample();
+		example.createCriteria().andNFlgactivoEqualTo(new Short("1"));
+		example.setOrderByClause("v_destipo");
+		try {
+			PrtbcTipopersMapper mapper = sqlSession.getMapper (PrtbcTipopersMapper. class);
+			List <PrtbcTipopers> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTipoPersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <SitbPercargo> getCargos() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		SitbPercargoExample example = new SitbPercargoExample();
+		example.createCriteria().andVFlgactEqualTo("1");
+		example.setOrderByClause("v_nomcargo");
+		try {
+			SitbPercargoMapper mapper = sqlSession.getMapper (SitbPercargoMapper. class);
+			List <SitbPercargo> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getCargos "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <SitbEscalaremun> getEscalas() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		SitbEscalaremunExample example = new SitbEscalaremunExample();
+		example.createCriteria().andVFlgactEqualTo("1");
+		example.setOrderByClause("v_nomescala");
+		try {
+			SitbEscalaremunMapper mapper = sqlSession.getMapper (SitbEscalaremunMapper. class);
+			List <SitbEscalaremun> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getEscalas "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public int insertarPersonal(PrtbcPersonal entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		PrtbcPersonalMapper mapper = sqlSession.getMapper(PrtbcPersonalMapper.class);		
+		try {
+			mapper.insertSelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error insertarPersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int actualizarPersonal(PrtbcPersonal entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		PrtbcPersonalMapper mapper = sqlSession.getMapper(PrtbcPersonalMapper.class);		
+		try {
+			mapper.updateByPrimaryKeySelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error actualizarPersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public TdtbcDependencia getDependenciaPorCodigo(Short nNumdep) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		TdtbcDependenciaExample example = new TdtbcDependenciaExample();
+		example.createCriteria().andNFlgactivoEqualTo(new Short("1")).andNNumdepEqualTo(nNumdep);
+		try {
+			TdtbcDependenciaMapper mapper = sqlSession.getMapper (TdtbcDependenciaMapper. class);
+			List <TdtbcDependencia> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getDependencia "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <TdtbcIntendencia> getIntendencia(String nNumint) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		TdtbcIntendenciaExample example = new TdtbcIntendenciaExample();
+		if("1".equals(nNumint))
+		{
+			example.createCriteria().andNNumintIsNotNull();			
+		}
+		else
+		{
+			example.createCriteria().andNNumintEqualTo(new BigDecimal(nNumint));
+		}
+		try {
+			TdtbcIntendenciaMapper mapper = sqlSession.getMapper (TdtbcIntendenciaMapper. class);
+			List <TdtbcIntendencia> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getIntendencia "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <RhtbcTurno> getTurnos() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbcTurnoExample example = new RhtbcTurnoExample();
+		example.createCriteria().andVFlgactEqualTo("S"); 
+		try {
+			RhtbcTurnoMapper mapper = sqlSession.getMapper (RhtbcTurnoMapper. class);
+			List <RhtbcTurno> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTurnos "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <RhtbcTurnodia> getTurnoDia(Short nCodturno) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbcTurnodiaExample example = new RhtbcTurnodiaExample();
+		example.createCriteria().andNCodturnoEqualTo(nCodturno);
+		try {
+			RhtbcTurnodiaMapper mapper = sqlSession.getMapper (RhtbcTurnodiaMapper. class);
+			List <RhtbcTurnodia> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTurnoDia "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <VstTurnopersonalrrhh> getTurnoPersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		VstTurnopersonalrrhhExample example = new VstTurnopersonalrrhhExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal);
+		try {
+			VstTurnopersonalrrhhMapper mapper = sqlSession.getMapper (VstTurnopersonalrrhhMapper. class);
+			List <VstTurnopersonalrrhh> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTurnoPersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <VstTurnopersonalrrhh> getTurnoPersonal(String vCodpersonal,Date fecha) throws Exception{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		VstTurnopersonalrrhhExample example = new VstTurnopersonalrrhhExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andDFecfinGreaterThanOrEqualTo(fecha).andDFecinicioLessThanOrEqualTo(fecha);
+		try {
+			VstTurnopersonalrrhhMapper mapper = sqlSession.getMapper (VstTurnopersonalrrhhMapper. class);
+			List <VstTurnopersonalrrhh> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getTurnoPersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	public List <RhtbdPersonal> getDetallePersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal);
+		try {
+			RhtbdPersonalMapper mapper = sqlSession.getMapper (RhtbdPersonalMapper. class);
+			List <RhtbdPersonal> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getDetallePersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public RhmvcPerturno getCorrelativoGlobalPerTurno() throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andCorrelativoActual();
+		try {
+			RhmvcPerturnoMapper mapper = sqlSession.getMapper (RhmvcPerturnoMapper. class);
+			List <RhmvcPerturno> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getCorrelativoGlobalPerTurno "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public int insertarPerTurno(RhmvcPerturno entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhmvcPerturnoMapper mapper = sqlSession.getMapper(RhmvcPerturnoMapper.class);		
+		try {
+			mapper.insertSelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error insertarPerTurno "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int insertarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);		
+		try {
+			mapper.insertSelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error insertarDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int actualizarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);		
+		try {
+			mapper.updateByPrimaryKeySelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error actualizarDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int eliminarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);		
+		try {
+			mapper.deleteByPrimaryKey(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error eliminarDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public RhtbdPersonal getCorrelativoGlobalDetalle(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andCorrelativoPorPersona(vCodpersonal);
+		try {
+			RhtbdPersonalMapper mapper = sqlSession.getMapper (RhtbdPersonalMapper. class);
+			List <RhtbdPersonal> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getCorrelativoGlobalDetalle "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public List <VstDetpersonalrrhh> getVistaDetallePersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		VstDetpersonalrrhhExample example = new VstDetpersonalrrhhExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal);
+		try {
+			VstDetpersonalrrhhMapper mapper = sqlSession.getMapper (VstDetpersonalrrhhMapper. class);
+			List <VstDetpersonalrrhh> allRecords = mapper.selectByExample(example);		
+			return allRecords;
+		} catch (Exception e) {
+        	System.out.println("Error getVistaDetallePersonal "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public int disableDetallePersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal);
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);	
+		RhtbdPersonal det=new RhtbdPersonal();
+		det.setvFlgprin("N");
+		try {
+			mapper.updateByExampleSelective(det, example);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error disableDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int disableFlgActDetallePersonal(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal);
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);	
+		RhtbdPersonal det=new RhtbdPersonal();
+		det.setvFlgact("N");
+		try {
+			mapper.updateByExampleSelective(det, example);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error disableFlgActDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int eliminarPerTurno(RhmvcPerturno entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhmvcPerturnoMapper mapper = sqlSession.getMapper(RhmvcPerturnoMapper.class);		
+		try {
+			mapper.deleteByPrimaryKey(entidad.getnCodperturno());
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error eliminarPerTurno "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int actualizarPerTurno(RhmvcPerturno entidad) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhmvcPerturnoMapper mapper = sqlSession.getMapper(RhmvcPerturnoMapper.class);		
+		try {
+			mapper.updateByPrimaryKeySelective(entidad);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error actualizarPerTurno "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public int disableDateDetallePersonal(String vCodpersonal, Date dFecfin) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andVFlgactEqualTo("S").andDFecfinIsNull();
+		RhtbdPersonalMapper mapper = sqlSession.getMapper(RhtbdPersonalMapper.class);	
+		RhtbdPersonal det=new RhtbdPersonal();
+		det.setdFecfin(dFecfin);
+		try {
+			mapper.updateByExampleSelective(det, example);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error disableDateDetallePersonal "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public String currentDate() throws Exception 
+	{
+		SqlSession session=sqlSessionFactory.openSession();
+		try {
+			String result="";					
+			ResultSet rs=session.getConnection().prepareStatement("select TO_CHAR(SYSDATE, 'dd/MM/yyyy') fecha from dual").executeQuery();
+			while(rs.next())
+			{
+				result=rs.getString("fecha");
+			}
+			return result;
+		} catch (Exception e) {
+			System.out.println("Error obteniendo la fecha de base de datos ::: "+e.getMessage());
+			return "";
+		}finally {
+			session.close();
+		}
+	}
+	
+	public boolean getTieneTurnoActivo(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andVFlgactEqualTo("S");
+		try {
+			RhmvcPerturnoMapper mapper = sqlSession.getMapper (RhmvcPerturnoMapper. class);
+			List <RhmvcPerturno> allRecords = mapper.selectByExample(example);		
+			return !allRecords.isEmpty();
+		} catch (Exception e) {
+        	System.out.println("Error getCorrelativoGlobalPerTurno "+e.getMessage());   
+        	return false;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public int disableDatePerTurno(String vCodpersonal, Date dFecfin) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andVFlgactEqualTo("S").andDFecfinIsNull();
+		RhmvcPerturnoMapper mapper = sqlSession.getMapper(RhmvcPerturnoMapper.class);	
+		RhmvcPerturno det=new RhmvcPerturno();
+		det.setdFecfin(dFecfin);
+		det.setvFlgact("N");
+		try {
+			mapper.updateByExampleSelective(det, example);
+			sqlSession.commit();
+			return 1;
+		} catch (Exception e) {			
+			System.out.println("Error disableDatePerTurno "+e.getMessage());   
+        	return 0;
+		} finally{
+			sqlSession.close();			
+		}
+	}
+	
+	public RhtbdPersonal getMinDateDetalle(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andMinDatePorPersona(vCodpersonal);
+		try {
+			RhtbdPersonalMapper mapper = sqlSession.getMapper (RhtbdPersonalMapper. class);
+			List <RhtbdPersonal> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getMinDateDetalle "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public RhmvcPerturno getMinDatePerTurno(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andMinDatePorPersona(vCodpersonal);
+		try {
+			RhmvcPerturnoMapper mapper = sqlSession.getMapper (RhmvcPerturnoMapper. class);
+			List <RhmvcPerturno> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getMinDatePerTurno "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public RhmvcPerturno getMaxDatePerTurno(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andMaxDatePorPersona(vCodpersonal);
+		try {
+			RhmvcPerturnoMapper mapper = sqlSession.getMapper (RhmvcPerturnoMapper. class);
+			List <RhmvcPerturno> allRecords = mapper.selectByExample(example);		
+			return allRecords.get(0);
+		} catch (Exception e) {
+        	System.out.println("Error getMaxDatePerTurno "+e.getMessage());   
+        	return null;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public boolean getTieneOtroTurnoActivo(String vCodpersonal, Short nCodperturno) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhmvcPerturnoExample example = new RhmvcPerturnoExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andVFlgactEqualTo("S").andNCodperturnoNotEqualTo(nCodperturno);
+		try {
+			RhmvcPerturnoMapper mapper = sqlSession.getMapper (RhmvcPerturnoMapper. class);
+			List <RhmvcPerturno> allRecords = mapper.selectByExample(example);		
+			return !allRecords.isEmpty();
+		} catch (Exception e) {
+        	System.out.println("Error getTieneOtroTurnoActivo "+e.getMessage());   
+        	return false;
+        } finally {
+        	sqlSession.close ();
+		}
+	}
+	
+	public boolean getTieneDetalleActivo(String vCodpersonal) throws Exception
+	{
+		SqlSession sqlSession = sqlSessionFactory.openSession();		
+		RhtbdPersonalExample example = new RhtbdPersonalExample();
+		example.createCriteria().andVCodpersonalEqualTo(vCodpersonal).andVFlgactEqualTo("S");
+		try {
+			RhtbdPersonalMapper mapper = sqlSession.getMapper (RhtbdPersonalMapper. class);
+			List <RhtbdPersonal> allRecords = mapper.selectByExample(example);		
+			return !allRecords.isEmpty();
+		} catch (Exception e) {
+        	System.out.println("Error getTieneDetalleActivo "+e.getMessage());   
+        	return false;
+        } finally {
+        	sqlSession.close ();
+		}
+	}				
+	
+}

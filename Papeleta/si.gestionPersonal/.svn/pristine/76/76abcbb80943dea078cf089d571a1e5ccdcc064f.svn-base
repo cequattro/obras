@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="MIS MARCACIONES" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+
+
+				<p:fieldset style="text-align: center;">
+					<p:outputLabel for="buttonb" value="Fecha de inicio" />
+					<p:calendar id="buttonb" showOn="button" size="10"
+						value="#{reporteMarcacionBean.fCargaI}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de inicio válida"
+						requiredMessage="Debe ingresar fecha de inicio" required="true">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+
+					<p:outputLabel for="buttonbf"
+						value="&nbsp;&nbsp;&nbsp;Fecha de fin" />
+					<p:calendar id="buttonbf" showOn="button" size="10"
+						value="#{reporteMarcacionBean.fCargaF}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de fin válida"
+						requiredMessage="Debe ingresar fecha de fin" required="true">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+
+					<br />
+					<br />
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{reporteMarcacionBean.buscarMarcacion()}"
+						update=":formInicio" />
+					<p:dataTable id="datatable"
+						value="#{reporteMarcacionBean.listaMarcacion}" var="item"
+						widgetVar="usrTable" emptyMessage="No se encontraron resultados"
+						paginator="true" rows="20"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="20,40,100">
+						<p:column headerText="Codigo Personal">
+							<h:outputText value="#{item.vCodpersonal}"
+								style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+						</p:column>
+						<p:column headerText="Apellidos">
+							<h:outputText value="#{item.vDesapepat} #{item.vDesapemat} "
+								style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+						</p:column>
+						<p:column headerText="Nombres">
+							<h:outputText value="#{item.vDesnombres}"
+								style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+						</p:column>
+						<p:column headerText="Tipo Persona">
+							<h:outputText value="#{item.tipopersona}" />
+						</p:column>
+						<p:column headerText="Fecha">
+							<h:outputText value="#{item.dFechastr} " />
+						</p:column>
+						<p:column headerText="Hora">
+							<h:outputText value="#{item.getHoraMinutosSegundos()} " />
+						</p:column>
+						<p:column headerText="Tipo">
+							<h:outputText value="#{item.vDestipo}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:fieldset>
+
+
+			</p:fieldset>
+
+			<br />
+
+			<center>
+				<p:messages id="msgMensajesConsolidadoGlobal" closable="true"
+					escape="false" showDetail="false" />
+			</center>
+
+		</h:form>
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+
+	</ui:define>
+</ui:composition>
+</html>

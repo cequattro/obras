@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="BÚSQUEDA DE PERSONAL"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<h:panelGrid columns="3" >
+	<p:outputLabel value="Intendencia" />
+    <h:selectOneMenu style="width:345px" value="#{personalBean.selectedIntendencia}" >             
+        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+        <f:selectItems value="#{personalBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />     
+        <p:ajax event="change" update="@form" listener="#{personalBean.itemChangeIntendencia()}"/>
+    </h:selectOneMenu>
+    <p:outputLabel value="" />
+	
+	<p:outputLabel value="Dependencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+	 <p:autoComplete scrollHeight="250" id="acSimple" value="#{personalBean.txt1}" completeMethod="#{personalBean.completeText}" size="81" minQueryLength="3" readonly="#{(personalBean.selectedIntendencia==null) or (personalBean.selectedIntendencia.equals(''))}" >
+	 <p:ajax event="itemSelect" listener="#{personalBean.onItemSelect}" update="msgMensajesConsolidadoGlobal" />
+	 </p:autoComplete>
+	 <p:outputLabel value="" />
+	 </h:panelGrid>
+	
+	<h:panelGrid columns="8" >	
+	
+	<p:outputLabel value="Apellido Paterno" />
+    <p:inputText style="width: 120px" value="#{personalBean.filtro.vDesapepat}" maxlength="60">
+    <p:ajax event="change" />
+    </p:inputText>
+    <p:outputLabel value="Apellido Materno" />
+    <p:inputText style="width: 120px" value="#{personalBean.filtro.vDesapemat}" maxlength="60">
+    <p:ajax event="change" />
+    </p:inputText> 
+	<p:outputLabel value="Nombres" />
+    <p:inputText style="width: 120px" value="#{personalBean.filtro.vDesnombres}" maxlength="60">
+    <p:ajax event="change" />
+    </p:inputText>
+    <p:outputLabel value="" />
+    <p:outputLabel value="" /> 
+	    
+    <p:outputLabel value="Tipo Doc Personal"/>
+	<h:selectOneMenu style="width:120px" id="tipodoc" value="#{personalBean.filtro.vCodtipodocid}">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />
+         <f:selectItems value="#{personalBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+         <p:ajax event="change" />
+     </h:selectOneMenu>
+     <p:outputLabel value="Nro Doc Personal" />
+     <p:inputText style="width: 120px" value="#{personalBean.filtro.vCodpersonal}" onkeypress="return isNumberKeyNL(this);">
+     <p:ajax event="change" />
+     </p:inputText>    
+     <p:outputLabel value="" />
+     <p:outputLabel value="" />     
+    
+	</h:panelGrid>
+	
+	<center>
+	<p:commandButton value="Buscar" icon="icon-zsearch" action="#{personalBean.buscarPersonal}" update=":formInicio" />
+	<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+     <p:commandButton value="Nuevo" icon="icon-zadd" action="#{personalBean.nuevo}" update=":formInicio" rendered="#{personalBean.modoCompleto}" />
+     <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{personalBean.modoCompleto}" />
+     <p:commandButton value="Limpiar" icon="icon-escoba" action="#{personalBean.verPersonal(true)}" update="@form"/>
+	</center>
+	
+	<p:dataTable id="datatable" value="#{personalBean.listaPersonal}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Dependencia" style="width:290px !important; white-space: normal !important;">
+	                <h:outputText value="#{item.vDesdep}"/>
+	            </p:column>             	            
+	            <p:column headerText="Apellidos y Nombres" >
+	                <h:outputText value="#{item.vDesapepat} #{item.vDesapemat} #{item.vDesnombres}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Nro Documento" >
+	                <h:outputText value="#{item.vCodpersonal}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Ingreso" >
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecreg)}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="text-align:center;" >	            
+	            	<p:commandButton icon="ui-icon-pencil" title="EDITAR" action="#{personalBean.selectEditar(item)}" rendered="#{personalBean.modoCompleto}" />	
+	            	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="false" />
+	            	<p:commandButton icon="ui-icon-clock" title="CONFIGURAR TURNO" action="#{personalBean.selectEditarT(item)}" rendered="false" />
+	            </p:column>
+	        </p:dataTable>
+	        
+	        <br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+			
+	        <p:outputLabel value="Editar Detalle "  rendered="#{personalBean.modoCompleto}" />
+	        	        
+	        </p:fieldset>
+	        </center>
+	        	 	
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>	
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{personalBean.txt1}" />            
+        </p:panelGrid>
+    </p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

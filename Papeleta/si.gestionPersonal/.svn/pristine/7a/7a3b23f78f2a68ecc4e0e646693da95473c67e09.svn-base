@@ -1,0 +1,256 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.axis.AxisFault;
+import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+import org.reniec.rel.ReniecBean;
+
+import pe.gob.sunafil.gestionpersonal.bean.Permisos;
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonalDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocideExample;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.utils.FacesUtils;
+import pe.gob.sunafil.gestionpersonal.bean.Persona;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonaReniecDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.TurnoDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.TurnoDiaDespatch;
+import pe.gob.sunafil.gestionpersonal.reniecws.ReniecWebService;
+import pe.gob.sunafil.gestionpersonal.utils.EnviarMail;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
+@ManagedBean(name = "turnoDiaBean")
+@SessionScoped
+public class TurnoDiaBean implements Serializable {
+	private static final long serialVersionUID = 5154405390560909774L;
+
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario PGP_Usuario;
+	@ManagedProperty("#{loginBean.PGP_Permisos}")
+	private Permisos PGP_Permisos;
+	private List<RhtbcTurnodia> listaTurnoDia;
+	private RhtbcTurno turnoSeleccionado=new RhtbcTurno();
+	//private RhtbcTurnodia filtro=new RhtbcTurnodia();
+	private RhtbcTurnodia nuevoTurnodia =new RhtbcTurnodia();
+	
+	private RhtbcTurnodia selectTurnodia =new RhtbcTurnodia();
+	
+	private List<RhtbcTurnodia> listaDetTurnoDia;
+	private RhtbcTurnodia eliminarTurnodia;
+	
+
+	public RhtbcTurnodia getNuevoTurnodia() {
+		return nuevoTurnodia;
+	}
+
+	public void setNuevoTurnodia(RhtbcTurnodia nuevoTurnodia) {
+		this.nuevoTurnodia = nuevoTurnodia;
+	}
+
+	public RhtbcTurnodia getSelectTurnodia() {
+		return selectTurnodia;
+	}
+
+	public void setSelectTurnodia(RhtbcTurnodia selectTurnodia) {
+		this.selectTurnodia = selectTurnodia;
+	}
+
+	public List<RhtbcTurnodia> getListaDetTurnoDia() {
+		return listaDetTurnoDia;
+	}
+
+	public void setListaDetTurnoDia(List<RhtbcTurnodia> listaDetTurnoDia) {
+		this.listaDetTurnoDia = listaDetTurnoDia;
+	}
+
+	private static Logger logger = Logger.getLogger(MenuBean.class.getName());
+	
+	
+
+	public RhtbcTurno getTurnoSeleccionado() {
+		return turnoSeleccionado;
+	}
+
+	public void setTurnoSeleccionado(RhtbcTurno turnoSeleccionado) {
+		this.turnoSeleccionado = turnoSeleccionado;
+	}
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Permisos getPGP_Permisos() {
+		return PGP_Permisos;
+	}
+
+	public void setPGP_Permisos(Permisos pGP_Permisos) {
+		PGP_Permisos = pGP_Permisos;
+	}
+
+	public List<RhtbcTurnodia> getListaTurnoDia() {
+		return listaTurnoDia;
+	}
+
+	public void setListaTurnoDia(List<RhtbcTurnodia> listaTurnoDia) {
+		this.listaTurnoDia = listaTurnoDia;
+	}
+	
+    public void nuevoTurnoDia(){}
+	
+	public void limpiar(){}
+	
+	public String selectTurno(RhtbcTurno seleccionado)
+	{
+		turnoSeleccionado=seleccionado;
+		cargarListaDetalleTurnoDia();
+		String vista = "pretty:turnoDiaPretty";
+		// CODIGO
+		return vista;
+	}
+	
+	public void agregar(){
+		
+		TurnoDiaDespatch turnoDiaDespatch = new TurnoDiaDespatch();
+		try {		
+			//reset los otros detalles a no principal
+			//personalDespatch.disableDetallePersonal(selectedPersonal.getvCodpersonal());
+			//end reset los otros detalles a no principal
+			
+			nuevoTurnodia.setnCodturnodia(selectTurnodia.getnCodturnodia());
+			
+			
+			
+			
+			
+			turnoDiaDespatch.insertarDetalleTurnoDia(nuevoTurnodia);						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		cargarListaDetalleTurnoDia();
+		RequestContext.getCurrentInstance().execute("dialogWidgetDetalle.hide()");
+	}
+	
+	public void cargarListaDetalleTurnoDia()
+	{
+		TurnoDiaDespatch turnoDiaDespatch=new TurnoDiaDespatch();
+		try {
+			listaTurnoDia=turnoDiaDespatch.getTurnosDia(turnoSeleccionado.getnCodturno());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void selectEditar(RhtbcTurnodia item){}
+	
+	
+	
+	public void selectEliminar(RhtbcTurnodia item){
+		eliminarTurnodia=new RhtbcTurnodia();
+		eliminarTurnodia.setvDesturnodia(item.getvDesturnodia());
+		//eliminarDetTurno.setnCorper(item.getnCorper());//agregar ncorper a la vista VstDetpersonalrrhh y regenerar
+		eliminarTurnodia=item;
+		RequestContext.getCurrentInstance().execute("formDialogEliminarTurnoDia.show()");
+	}
+	
+	public void eliminar()
+	{
+		TurnoDiaDespatch turnoDiaDespatch = new TurnoDiaDespatch();
+		try {					
+			//eliminar detalle	
+			turnoDiaDespatch.eliminarTurnoDia(eliminarTurnodia);
+			//post load
+			cargarListaDetalleTurnoDia();
+			//mostrarMensajeInfo("Detalle fue eliminado.");			
+		} catch (Exception e) {
+			cargarListaDetalleTurnoDia();
+			//mostrarMensajeError("Hubo problemas con la eliminación.");			
+		}
+	}
+	
+	
+	
+	
+	public void dialogDetalleAbrir(){
+		//reset detalle
+		nuevoTurnodia=new RhtbcTurnodia();
+		//dependenciaSeleccionada3 = null;
+		//dFecini=new Date();
+		//end reset detalle
+		RequestContext.getCurrentInstance().execute("formDialogWidgetAgregarTurnoDia.show()");
+	}
+	
+	public String getSiguienteCorrelativoTurnoDia(Short nCodturno)
+	{
+		TurnoDiaDespatch turnoDiaDespatch=new TurnoDiaDespatch();
+		try {
+			RhtbcTurnodia correlativo=turnoDiaDespatch.getCorrelativoTurnoDia(nCodturno);
+			if(correlativo!=null)
+			{
+				return ""+(correlativo.getnCodturnodia()+1);
+			}
+			else
+			{
+				//devuelve correlativo en 1				
+				return "1";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}				
+	}
+	
+	
+	
+	
+	
+	
+
+}

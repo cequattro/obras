@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="MisMarcaciones">
+
+<resultMap id="reporteMisMarcaciones-out" type="hashMap">  
+    
+    <result column="CURRENT_DIA" 		jdbcType="VARCHAR" 		property="fecha"/>
+	<result column="ENTRADAS" 			jdbcType="VARCHAR" 		property="hEntrada"/>
+	<result column="SALIDAS" 			jdbcType="VARCHAR" 		property="hSalida"/>
+	<result column="SOBRETIEMPO" 		jdbcType="VARCHAR" 		property="sobretiempo"/>
+	<result column="TURNO" 				jdbcType="VARCHAR"		property="turno"/>	
+	<result column="OBSERVACION" 		jdbcType="VARCHAR"		property="observacion"/>	
+       
+  </resultMap>
+  
+  <select id="reporteMisMarcaciones" resultMap="reporteMisMarcaciones-out" parameterType="hashMap">
+  
+  select  
+       TO_CHAR(DIAS.CURRENT_DIA,'DD/MM/YYYY') CURRENT_DIA, 
+       NVL(fn_concat_entrada(#{PARAM_NRODOC},DIAS.CURRENT_DIA),' ') ENTRADAS,
+       NVL(fn_concat_salida(#{PARAM_NRODOC},DIAS.CURRENT_DIA),' ') SALIDAS,
+       CASE WHEN fn_concat_salida(#{PARAM_NRODOC},DIAS.CURRENT_DIA) IS NOT NULL THEN
+       
+       (       
+       CASE WHEN fn_sobretiempo(#{PARAM_NRODOC},DIAS.CURRENT_DIA)>=0 THEN fn_sobretiempo(#{PARAM_NRODOC},DIAS.CURRENT_DIA) ELSE '0' END
+       ) 
+       
+       ELSE '0' END SOBRETIEMPO,
+       NVL(fn_turno_x_fecha(#{PARAM_NRODOC},DIAS.CURRENT_DIA),'SIN TURNO') TURNO,
+       NVL(fn_motivo_justificacion('40489176',DIAS.CURRENT_DIA),' ') observacion
+from 
+(select to_date(#{PARAM_STR_FI},'DDMMYYYY') + rownum -1 CURRENT_DIA 
+ from all_objects 
+ where rownum <![CDATA[ <= ]]> to_date(#{PARAM_STR_FF},'DDMMYYYY')-to_date(#{PARAM_STR_FI},'DDMMYYYY')+1) DIAS
+ WHERE (fn_concat_entrada(#{PARAM_NRODOC},DIAS.CURRENT_DIA) IS NOT NULL OR fn_concat_salida(#{PARAM_NRODOC},DIAS.CURRENT_DIA) IS NOT NULL)
+
+  </select>
+        
+</mapper>

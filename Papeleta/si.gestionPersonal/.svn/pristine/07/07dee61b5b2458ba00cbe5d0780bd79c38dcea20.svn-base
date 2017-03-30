@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+
+		<h:form id="formInicio">
+
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="BÚSQUEDA DE FERIADOS" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				
+				<h:panelGrid columns="3" align="center">
+				
+					<p:outputLabel value="Intendencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+				    <h:selectOneMenu style="width:345px" value="#{feriadoBean.filtro.nNumint}" >             
+				        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+				        <f:selectItems value="#{marcacionBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />     
+				        <p:ajax event="change" update="@form"/>
+				    </h:selectOneMenu>
+				    <p:outputLabel value="" />				
+
+				</h:panelGrid>
+				
+				<h:panelGrid columns="4" align="center">
+					<p:outputLabel for="buttonb"
+						value="Fecha de inicio &nbsp;&nbsp;" />
+					<p:calendar id="buttonb" showOn="button" size="10"
+						value="#{feriadoBean.fechaI}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de inicio válida">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+
+					<p:outputLabel for="buttonbf"
+						value="&nbsp;&nbsp;&nbsp;Fecha de fin &nbsp;&nbsp;" />
+					<p:calendar id="buttonbf" showOn="button" size="10"
+						value="#{feriadoBean.fechaF}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de fin válida">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+				</h:panelGrid>
+				
+				<br/>
+
+				<center>
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{feriadoBean.buscarFeriado}" update=":formInicio" />
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Nuevo" icon="icon-zadd" action="#{feriadoBean.desplegarOpcionAgregar}" update=":formAgregar" />
+     				<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Limpiar" icon="icon-escoba"
+						action="#{feriadoBean.limpiar}" update="@form" />
+				</center>
+
+				<p:commandButton icon="ui-icon-circle-plus"
+					action="#{feriadoBean.desplegarOpcionAgregar}" update=":formAgregar"
+					title="AGREGAR" style="float: right; clear: both;" rendered="false"/>
+					
+				<p:dataTable id="datatable" value="#{feriadoBean.listaFeriados}"
+					var="item" widgetVar="usrTable"
+					emptyMessage="No se encontraron resultados" paginator="true"
+					rows="20"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,40,100">
+					<p:column headerText="Intendencia">
+						<h:outputText value="#{item.vDesint}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Fecha">
+						<h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfer)}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Recuperable">
+						<h:outputText value="#{feriadoBean.getFormatEstado(item.vFlgrec)}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Motivo">
+						<h:outputText value="#{item.vMotfer}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Opción" style="text-align:center;">
+						<p:commandButton icon="ui-icon-circle-close"
+							action="#{feriadoBean.selectEliminar(item)}" process="@this"
+							update=":formEliminar" title="ELIMINAR" rendered="#{item.vFlgregmar.equals('N')}" />
+					</p:column>
+				</p:dataTable>
+
+
+
+				<br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">	        
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value="Editar Feriado " />	        		      
+	         
+	        </p:fieldset>
+	        </center>
+			</p:fieldset>
+
+		</h:form>
+		<center>
+		<h:form id="formMensajesPrincipal">
+					<p:messages id="msgMensajesConsolidadoPrincipal" closable="true"
+						escape="false" showDetail="false" />
+		</h:form>
+		</center>
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog widgetVar="formDialogWidgetAgregar" modal="true">
+			<h:form id="formAgregar">
+				<p:fieldset style="text-align: left;" legend="Agregar Feriado">
+				
+					<h:panelGrid columns="3">
+						<p:outputLabel value="Intendencia" />
+					    <h:selectOneMenu style="width:345px" value="#{feriadoBean.selIntendenciaAdd}" id="intadd" >             
+					        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+					        <f:selectItems value="#{marcacionBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />					        
+					    </h:selectOneMenu>
+					    <p:outputLabel value="" />						
+					</h:panelGrid>
+					
+					<h:panelGrid columns="4" align="center">
+						<p:outputLabel for="buttonbadd"
+							value="Fecha de inicio &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+						<p:calendar id="buttonbadd" showOn="button" size="10"
+							value="#{feriadoBean.fechaIAdd}" pattern="dd/MM/yyyy"
+							locale="es" navigator="true" maxlength="10"
+							converterMessage="Debe ingresar una fecha de inicio válida">
+							<f:convertDateTime timeZone="America/Lima" />
+						</p:calendar>
+	
+						<p:outputLabel for="buttonbfadd"
+							value="&nbsp;&nbsp;&nbsp;Fecha de fin &nbsp;&nbsp;" />
+						<p:calendar id="buttonbfadd" showOn="button" size="10"
+							value="#{feriadoBean.fechaFAdd}" pattern="dd/MM/yyyy"
+							locale="es" navigator="true" maxlength="10"
+							converterMessage="Debe ingresar una fecha de fin válida">
+							<f:convertDateTime timeZone="America/Lima" />
+						</p:calendar>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="3">
+					
+						 <p:outputLabel value="Recuperable" />				         
+					     <p:selectBooleanCheckbox id="pregRecuperable" value="#{feriadoBean.chkRecuperable}" >
+					     </p:selectBooleanCheckbox>
+					     <p:outputLabel value="&nbsp;" />
+					     
+					     <p:outputLabel value="Motivo" />     				         	 
+						 <p:inputTextarea id="armotivo" rows="6" cols="25" value="#{feriadoBean.motivo}" onkeyup="this.value = this.value.toUpperCase();" maxlength="150" />
+						 <p:outputLabel value="&nbsp;" />
+						 
+					</h:panelGrid>
+					
+					<center>
+						<p:commandButton value="Grabar" icon="icon-disk"
+							action="#{feriadoBean.agregar()}" process="@this, intadd, buttonbadd, buttonbfadd, pregRecuperable, armotivo"
+							update=":formInicio, :formMensajesAdd, :formMensajesPrincipal, :formAgregar" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>		
+		
+		<p:dialog widgetVar="formDialogEliminarFeriado" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formEliminar" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el feriado seleccionado?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{feriadoBean.eliminar()}" update=":formInicio , :formMensajesPrincipal" icon="ui-icon-circle-arrow-e" oncomplete="formDialogEliminarFeriado.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

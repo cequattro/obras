@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">SISTEMA DE GESTIÓN DE RECURSOS HUMANOS</ui:insert></title>
+	<h:outputStylesheet name="nombreDeSistema.css" library="css" />
+	<h:outputStylesheet name="login.css" library="css" />
+	<h:outputScript name="validacion.js" library="js"/>	
+	<h:outputScript name="util.js" library="js"/>
+</h:head>
+
+<h:body onload="javascript:window.history.forward(1);" >
+
+	<!-- Se va a usar Tablas para ordenarlo Se puede usar Div  -->
+
+	
+	
+	<table cellpadding="0" cellspacing="0" align="center" border="0" class="tablaPrincipal">
+		<tr>
+			<td colspan="2" style="padding: 0px; border: 1px solid black;">
+				<ui:insert name="cabecera">
+					<p:graphicImage value="/resources/images/principal/cabeceraP.png"/>
+				</ui:insert>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="controlClase" align="left">				
+					<ui:insert name="datosUsuario">
+						<h:panelGrid columns="12">
+							<h:outputLabel value="Bienvenido:" />
+							<h:outputText value="#{menuBean.PGP_Usuario.v_desnombres} #{menuBean.PGP_Usuario.v_desapepat} #{menuBean.PGP_Usuario.v_desapemat}" />
+							&nbsp;
+							<h:outputLabel value="Perfil:" />
+							<h:outputText value="#{menuBean.PGP_Permisos.v_desper}" />							
+							<!-- &nbsp;
+							<h:outputLabel value="Fecha:"/>
+							<h:outputText value="#{cargaAppBean.s_fecha}"/> -->	
+							&nbsp;
+							<h:outputLabel value="Dependencia:"/>
+							<h:outputText value="#{menuBean.PGP_Usuario.v_desdep}"/>																				
+							
+						</h:panelGrid>	
+						<h:panelGrid columns="1" style="width:977px !important; white-space: normal !important; text-align: right !important;">							
+							<p:commandLink value="Cerrar Sesi&oacute;n" action="#{menuBean.efectuarSalir}" style="font: bold !important; color: red !important;"/>							
+						</h:panelGrid>					
+					</ui:insert>
+				
+			</td>
+		</tr>
+		
+		<tr >
+			<td style="padding: 0px; vertical-align: top;">										
+					<ui:insert name="menu2">
+					
+	                <script type="text/javascript">  
+				       //<![CDATA[
+				       	function fn_ingresar111(){
+				       		document.getElementById("formInicio1:btnIngresar111").click();
+				   	    }	
+				       	function fn_enterB(){
+				       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+				       			fn_ingresar111();
+				       		}
+				       	}
+				       	function soloNumeros(e) {
+				       		var key = window.event ? window.event.keyCode : e.which;
+				       		return (key <= 13 || (key >= 48 && key <= 57));
+				       	}	
+				       	function isNumberKeyNL(evt){
+				       		
+				       		/**  UPPER MAYUSCULA **/////////////
+				       		var tecla; 
+				       	    if(navigator.appName.indexOf("Netscape")!= -1){
+				       	    	tecla= event.keyCode;
+				       	    }else {
+				       	    	tecla= event.keyCode;
+				       	    }
+				       	    //alert("tecla=>"+tecla);
+				       	    var key = String.fromCharCode(tecla);
+				       	    //alert("key=>"+key);
+				       		key = key.toUpperCase();
+				       		//alert("key.toUpperCase()=>"+key);
+				       		event.keyCode = key.charCodeAt(0);
+				       		////////////////////////////////////
+				       		
+				       		var charCode = (evt.which) ? evt.which : event.keyCode;
+				       		//alert(charCode);
+				       		var tipo =document.getElementById("formInicio:tipodoc").value;//document.formInicio.tipodoc.value;	 
+				       		if(tipo=="03"){	
+				       			evt.maxLength = 8;
+				       			if (charCode != 31 && (charCode < 48 || charCode > 57)){					
+				       				return false;
+				       			}else{
+				       				return true;
+				       			}
+				       			
+				       		} else if(tipo=="09"){	
+				       			evt.maxLength = 11;
+				       			if (charCode != 31 && (charCode < 48 || charCode > 57)){					
+				       				return false;
+				       			}else{
+				       				return true;
+				       			}
+				       			
+				       		} else {//El CARNET DE EXTRANJERIA Y PASAPORTE TIENEN COMO MAXIMO 12 DIGITOS(NO ES UNA LONGITUD EXACTA) Y ES ALFANUMERICO
+				       				evt.maxLength = 11;
+				       				if ( charCode == 32 ) return false; //para que no ingrese espacios
+				       				if ( charCode > 47 && charCode < 58 ) return true;//numeros
+				       				if ( charCode > 64 && charCode < 91 ) return true;//letras mayusculas
+				       				if ( charCode > 96 && charCode < 123) return true;//letras minusculas
+				       				//if (charCode == 43 || charCode == 45) return true;//son el "+" y el "-"
+				       				if (charCode == 45) return true;//es el "-"
+				       				return false;	//todo lo demas negado
+				       		}
+				       	}
+				 		//]]>
+					</script> 	
+	                				
+						<h:form id="formMenu2" rendered="#{cargaAppBean.menu=='h'}" styleClass="menuClase">						
+							 <p:menu model="#{menuBean.menuModel}" rendered="#{cargaAppBean.menu=='h'}"/>						 
+						</h:form>
+					</ui:insert>
+				
+			</td>
+			<td style="vertical-align: super;padding: 0px;" colspan="2">
+				<div id="contenido" class="contenidoClase">
+					<ui:insert name="contenido">
+					</ui:insert>
+				</div> 
+				<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+					header="Status" draggable="false" closable="false"
+					position="center" resizable="false">
+					<h:outputText value="Espere porfavor..." />
+					<br />
+					<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+				</p:dialog>
+				<p:idleMonitor onactive="sessionTimeOutDialog.show();" timeout="#{session.maxInactiveInterval * 1000}" />
+           		<p:dialog header="Su sessión ha caducado" widgetVar="sessionTimeOutDialog"
+            			modal="true" fixedCenter="true" closable="false" width="400" visible="false">
+                		<h:outputText value="Volver a entrar a la aplicación" /><br />
+                		<input id="confirmBackToLogin" type="button" value="Aceptar"
+                   	onclick="window.location='#{facesContext.externalContext.requestContextPath}';" />
+           		</p:dialog>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding-top: 5px;">
+				<ui:insert name="pie">
+					<fieldset style="margin: 0px;border: 1px solid #D8DCDF; "> 
+
+						<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0px;">
+							<tr>
+								<td width="100%" align="center" valign="middle" class="contenido_negrita">
+										Elaborado por la Oficina General de Tecnologías de la Información y Comunicaciones - SUNAFIL
+								</td>
+							</tr>
+							<tr>
+								<td align="center" valign="middle" class="contenido_especial">
+										Copyright © 2016 Aplicativo de Gestión de Recursos Humanos. Todos los Derechos Reservados. Perú. Telef. (511) 390 2777, &nbsp;Correo electrónico soporte@sunafil.gob.pe
+								</td>
+							</tr>								
+							
+						</table>
+
+					</fieldset>
+				</ui:insert>
+			</td>
+		</tr>
+	</table>
+   
+
+</h:body>
+</html>

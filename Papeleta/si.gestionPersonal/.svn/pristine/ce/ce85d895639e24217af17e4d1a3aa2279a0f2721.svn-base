@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				elementFormDefault="qualified"
+				targetNamespace="http://ocpsoft.com/prettyfaces/3.3.3"
+				xmlns="http://ocpsoft.com/prettyfaces/3.3.3">
+
+<!-- =========================GENERAL==============================================-->
+	<url-mapping id="principal">
+		<pattern value="/principal" />
+		<view-id value="/faces/principal.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="pdfObservado">
+		<pattern value="/Observado" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/observado.pdf" />
+	</url-mapping>
+	
+	<url-mapping id="manual">
+		<pattern value="/Manual" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/manual.pdf" />
+	</url-mapping>
+	
+	<url-mapping id="ejemploPretty">
+		<pattern value="/ejemploModulo" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/lst_ejemploModulo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="banDecisorPretty">
+		<pattern value="/bandejaDecisor" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/bandejaDecisor.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="banRegPretty">
+		<pattern value="/bandejaRegistrados" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/bandejaRegistrados.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="banObsPretty">
+		<pattern value="/bandejaObservados" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/bandejaObservados.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="banNopPretty">
+		<pattern value="/bandejaNoPresentados" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/bandejaNoPresentados.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="nuevoRegPretty">
+		<pattern value="/nuevoRegistro" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/nuevoRegistro.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="editarRegPretty">
+		<pattern value="/editarRegistro" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/editarRegistro.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dlgRefPretty">
+		<pattern value="/dlgReferencia" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/dlgReferencia.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptPorProcedimentoPretty">
+		<pattern value="/rptProcedimiento" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptPorProcedimiento.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptPorUsuarioPretty">
+		<pattern value="/rptUsuario" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptPorUsuario.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptConsolidadoPretty">
+		<pattern value="/rptConsolidado" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptConsolidado.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="busquedaPretty">
+		<pattern value="/busqueda" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/busqueda.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="genCargoPretty">
+		<pattern value="/genCargo" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/generarCargo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="hisCargoPretty">
+		<pattern value="/hisCargo" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/historicoCargo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="regionalPretty">
+		<pattern value="/intendenciaRegional" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/regional.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="personalPretty">
+		<pattern value="/personal" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/personal.xhtml" />
+	</url-mapping>
+		
+	<url-mapping id="personalTurnoPretty">
+		<pattern value="/personalTurno" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/personalTurno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="nuevoPersonalPretty">
+		<pattern value="/nuevoPersonal" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/nuevoPersonal.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="editarPersonalPretty">
+		<pattern value="/editarPersonal" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/editarPersonal.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptPersonalPretty">
+		<pattern value="/rptPersonal" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptPersonal.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptInasistenciaPretty">
+		<pattern value="/rptInasistencia" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptInasistencia.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptTardanzaPretty">
+		<pattern value="/rptTardanza" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptTardanza.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="rptSalenTempranoPretty">
+		<pattern value="/rptSTemprano" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/rptSTemprano.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="turnoPersonalPretty">
+		<pattern value="/turnoPersonal" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/turnoPersonal.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="marcacionPretty">
+		<pattern value="/marcacion" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/marcacion.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="turnoPretty">
+		<pattern value="/turno" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/turno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="turnoDiaPretty">
+		<pattern value="/turnoDia" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/turnoDia.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="personalMarcacionPretty">
+		<pattern value="/personalMarcacion" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/personalMarcacion.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="misMarcacionesPretty">
+		<pattern value="/misMarcaciones" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/misMarcaciones.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="miPersonalMarcacionesPretty">
+		<pattern value="/miPersonalMarcaciones" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/miPersonalMarcaciones.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="cargosPretty">
+		<pattern value="/cargos" />
+		<view-id value="/faces/jsfDocs/modulos/ejemplo/cargos.xhtml" />
+	</url-mapping>
+	
+<!-- =========================SEGURIDAD============================================== -->	
+	<url-mapping id="login">
+		<pattern value="/" />
+		<view-id value="/faces/jsfDocs/seguridad/login.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="mnt_contrasena">
+		<pattern value="/Mantenimiento/Contrasena" />
+		<view-id value="/faces/jsfDocs/seguridad/mtn_contrasena.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="NewContrasena">
+		<pattern value="/Mantenimiento/NewContrasena" />
+		<view-id value="/faces/jsfDocs/seguridad/contrasena.xhtml" />
+	</url-mapping>
+	
+	
+
+		
+</pretty-config>

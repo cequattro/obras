@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="NUEVO PERMISO "/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Nuevo Permiso">
+	
+	<h:panelGrid columns="4" >
+	
+		<p:outputLabel for="buttonb"
+			value="Fecha" />
+		<p:calendar id="buttonb" showOn="button" size="10"
+			value="#{misPermisosBean.fRegistroI}" pattern="dd/MM/yyyy"
+			locale="es" navigator="true" maxlength="10"
+			converterMessage="Debe ingresar una fecha válida">
+			<f:convertDateTime timeZone="America/Lima" />
+		</p:calendar>
+		
+		<p:outputLabel value="&nbsp;&nbsp;&nbsp;Motivo" />
+	    <h:selectOneMenu style="width:100px" value="#{misPermisosBean.codTipoJust}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{misPermisosBean.listaTipoJustificacion}" var="tipo" itemLabel="#{tipo.vDestipjus}" itemValue="#{tipo.nCodtipjus}" />     
+		 </h:selectOneMenu>		
+    	 
+     </h:panelGrid>
+     
+     <h:panelGrid columns="10" >
+     
+     	<p:outputLabel value="Hora Inicio" />       
+        <p:inputText style="width: 40px" value="#{misPermisosBean.spinhi}" maxlength="2" onkeypress="return isNumberKey(this);"></p:inputText>
+        <p:outputLabel value="&nbsp;&nbsp;" />
+        <p:inputText style="width: 40px" value="#{misPermisosBean.spinmi}" maxlength="2" onkeypress="return isNumberKey(this);"></p:inputText>
+        <p:outputLabel value="&nbsp;&nbsp;" />A
+        
+        <p:outputLabel value="Hora Fin" />       
+        <p:inputText style="width: 40px" value="#{misPermisosBean.spinhf}" maxlength="2" onkeypress="return isNumberKey(this);"></p:inputText>
+        <p:outputLabel value="&nbsp;&nbsp;" />
+        <p:inputText style="width: 40px" value="#{misPermisosBean.spinmf}" maxlength="2" onkeypress="return isNumberKey(this);"></p:inputText>
+        <p:outputLabel value="&nbsp;&nbsp;" />
+        
+     
+     </h:panelGrid>
+     
+     <h:panelGrid>
+     
+     	<p:outputLabel value="Observación / Comentarios"/>
+        <p:inputTextarea id="obs" rows="5" cols="50" counter="display" maxlength="300" counterTemplate="quedan {0} caracteres." autoResize="false" value="#{misPermisosBean.observacion}" />
+        <h:outputText id="display" />
+                
+        <p:fileUpload mode="simple" skinSimple="true"/>
+        
+        <p:outputLabel value="Respuesta"/>
+        <p:inputTextarea id="rpta" rows="2" cols="50" maxlength="300" autoResize="false" disabled="true"  />        
+        
+     
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>          
+	 	
+	</p:fieldset>	 	
+	
+		<center>
+     	<h:panelGrid columns="3" style="text-align: center;">
+     		 <p:commandButton value="Guardar" icon="icon-disk" action="#{misPermisosBean.guardar}" update="@form"/>
+     		 <p:commandButton value="Limpiar" icon="icon-escoba" action="#{misPermisosBean.nuevo}" update="@form"/>
+     		 <p:commandButton value="Regresar" icon="ui-icon-arrowthick-1-w" action="#{misPermisosBean.verPermisos()}" update="@form"/>     		 
+    	</h:panelGrid>
+    	</center>
+    	
+    	<p:commandButton value="&nbsp;Aceptar" action="#{personalBean.getDatosReniec()}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" update="@form" />
+								 
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>						 
+    	    	    	    	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>			
+		
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="CARGA DE MARCACIONES"/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="3" >
+   	<p:graphicImage value="/resources/images/principal/txt.png"/>
+   	<p:graphicImage value="/resources/images/principal/arrow.png"/>
+   	<p:graphicImage value="/resources/images/principal/db.png"/>
+   	</h:panelGrid>
+	
+	<p:fieldset style="text-align: left;" legend="Primer paso" rendered="#{!marcacionBean.uploadedTxt}">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">			
+			
+				
+					<p:outputLabel for="buttonb" value="Fecha de inicio"/>
+			    	<p:calendar id="buttonb" showOn="button" size="10"  value="#{marcacionBean.fCargaI}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida" requiredMessage="Debe ingresar fecha de inicio" required="true">
+			    		<f:convertDateTime timeZone="America/Lima" />
+			    	</p:calendar>
+			    	
+			    	<p:outputLabel for="buttonbf" value="&nbsp;&nbsp;&nbsp;Fecha de fin" />
+			    	<p:calendar id="buttonbf" showOn="button" size="10"  value="#{marcacionBean.fCargaF}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida" requiredMessage="Debe ingresar fecha de fin" required="true">
+			    		<f:convertDateTime timeZone="America/Lima" />
+			    	</p:calendar>
+				
+				<br/><br/>
+			 
+			    <p:fileUpload value="#{marcacionBean.fileTxt}" mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Validar Archivo" ajax="false" action="#{marcacionBean.uploadTxt}" update=":formUpload:messages,:formValidator" icon="ui-icon-arrowthick-1-n" />
+			</h:form>
+			</p:fieldset>
+			<p:fieldset style="text-align: left;" legend="Segundo paso" rendered="#{marcacionBean.uploadedTxt}">
+			<h:form id="formValidator" style="text-align: center;">
+				<br /><br />
+				<p:commandButton value="Cargar Data" ajax="false" actionListener="#{marcacionBean.convertTxt}" update=":formValidator" rendered="#{marcacionBean.uploadedTxt and !marcacionBean.convertedTxt}" icon="ui-icon-gear" />
+				<br /><br />
+				
+				<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+				    <p:graphicImage name="/resources/images/ajaxloadingbar.gif" />
+				</p:dialog>
+			
+			    <p:commandButton value="Ver Resumen de Carga" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" rendered="#{marcacionBean.convertedTxt}">
+			        <p:fileDownload value="#{marcacionBean.fileDownloadTxt}" />
+			    </p:commandButton>			    
+			    			    		  							    			    
+			    <br /><br />
+			    <p:commandButton value="Nueva carga" ajax="false" actionListener="#{marcacionBean.resetTxt}" update=":formUpload,:formValidator" rendered="#{marcacionBean.uploadedTxt or marcacionBean.convertedTxt}" icon="ui-icon-newwin" />
+			 
+				<script type="text/javascript">
+				function start() {
+				    PF('statusDialog').show();
+				}
+				 
+				function stop() {
+				    PF('statusDialog').hide();
+				}
+				</script>
+				<br /><br />				
+			</h:form>
+			</p:fieldset>
+			
+			<br/>
+			
+			<center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <p:outputLabel value="(*) Datos Obligatorios" />	        	       
+	        </p:fieldset>
+	        </center>
+	        	 	
+	</p:fieldset>	
+	
+	
+	<br/>
+	
+	<center>
+		<h:form id="formMensajes">
+			<p:messages id="msgMensajesConsolidado"  closable="true" escape="false" showDetail="false" />
+		</h:form>
+	</center>						
+			
+	<br/>
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>		
+	
+		
+	</ui:define>
+</ui:composition>	
+</html>	

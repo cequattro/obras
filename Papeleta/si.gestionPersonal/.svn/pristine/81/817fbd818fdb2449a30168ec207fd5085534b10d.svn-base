@@ -1,0 +1,213 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.despachadores;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPPersonal;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+
+public class PersonalDespatch {
+	
+	 private static final PersonalDespatch instance = new PersonalDespatch();
+	 
+	 private INTPersonal personalDAO;
+	 private static Logger logger = Logger.getLogger(LoginDespatch.class.getName());
+	 
+	 public PersonalDespatch() {
+		 personalDAO = new IMPPersonal();
+	    }	 
+	 
+	 public List <TdtbcDependencia> getAutocompletarDependenciaEIntendencia(String query, String nNumint) throws Exception
+	 {
+		 return personalDAO.getAutocompletarDependenciaEIntendencia(query, nNumint);
+	 }
+	 
+	 public List <SitbTdocide> getTipoDocRemitente() throws Exception
+	 {
+		 return personalDAO.getTipoDocRemitente();
+	 }
+	 
+	 public List <PrtbcPersonal> getPersonal(PrtbcPersonal filtro) throws Exception
+	 {
+		 return personalDAO.getPersonal(filtro);
+	 }
+	 
+	 public List <VstPersonalrrhh> getPersonalRRHH(VstPersonalrrhh filtro) throws Exception
+	 {
+		 return personalDAO.getPersonalRRHH(filtro);
+	 }
+	 
+	 public List <PrtbcTipopers> getTipoPersonal() throws Exception
+	 {
+		 return personalDAO.getTipoPersonal();
+	 }
+	 
+	 public List <SitbPercargo> getCargos() throws Exception
+	 {
+		 return personalDAO.getCargos();
+	 }
+	 
+	 public List <SitbEscalaremun> getEscalas() throws Exception
+	 {
+		 return personalDAO.getEscalas();
+	 }
+	 
+	 public int insertarPersonal(PrtbcPersonal entidad) throws Exception
+	 {
+		 return personalDAO.insertarPersonal(entidad);
+	 }
+	 
+	 public TdtbcDependencia getDependenciaPorCodigo(Short nNumdep) throws Exception
+	 {
+		 return personalDAO.getDependenciaPorCodigo(nNumdep);
+	 }
+	 
+	 public int actualizarPersonal(PrtbcPersonal entidad) throws Exception
+	 {
+		 return personalDAO.actualizarPersonal(entidad);
+	 }
+	 
+	 public List <TdtbcIntendencia> getIntendencia(String nNumint) throws Exception
+	 {
+		 return personalDAO.getIntendencia(nNumint);
+	 }
+	 
+	 public List <RhtbcTurno> getTurnos() throws Exception
+	 {
+		 return personalDAO.getTurnos();
+	 }
+	 
+	 public List <RhtbcTurnodia> getTurnoDia(Short nCodturno) throws Exception
+	 {
+		 return personalDAO.getTurnoDia(nCodturno);
+	 }
+	 
+	 public List <VstTurnopersonalrrhh> getTurnoPersonal(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getTurnoPersonal(vCodpersonal);
+	 }
+	 
+	 public List <RhtbdPersonal> getDetallePersonal(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getDetallePersonal(vCodpersonal);
+	 }
+	 
+	 public RhmvcPerturno getCorrelativoGlobalPerTurno() throws Exception
+	 {
+		 return personalDAO.getCorrelativoGlobalPerTurno();
+	 }
+	 
+	 public int insertarPerTurno(RhmvcPerturno entidad) throws Exception
+	 {
+		 return personalDAO.insertarPerTurno(entidad);
+	 }
+	 
+	 public int insertarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	 {
+		 return personalDAO.insertarDetallePersonal(entidad);
+	 }
+		
+	 public int actualizarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	 {
+		 return personalDAO.actualizarDetallePersonal(entidad);
+	 }
+	
+	 public int eliminarDetallePersonal(RhtbdPersonal entidad) throws Exception
+	 {
+		 return personalDAO.eliminarDetallePersonal(entidad);
+	 }
+	 
+	 public RhtbdPersonal getCorrelativoGlobalDetalle(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getCorrelativoGlobalDetalle(vCodpersonal);
+	 }
+	 
+	 public List <VstDetpersonalrrhh> getVistaDetallePersonal(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getVistaDetallePersonal(vCodpersonal);
+	 }
+	 
+	 public int disableDetallePersonal(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.disableDetallePersonal(vCodpersonal);
+	 }
+	 
+	 public int disableFlgActDetallePersonal(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.disableFlgActDetallePersonal(vCodpersonal);
+	 }
+	 
+	 public int eliminarPerTurno(RhmvcPerturno entidad) throws Exception
+	 {
+		 return personalDAO.eliminarPerTurno(entidad);
+	 }
+	 
+	 public int actualizarPerTurno(RhmvcPerturno entidad) throws Exception
+	 {
+		 return personalDAO.actualizarPerTurno(entidad);
+	 }
+	 
+	 public int disableDateDetallePersonal(String vCodpersonal, Date dFecfin) throws Exception
+	 {
+		 return personalDAO.disableDateDetallePersonal(vCodpersonal, dFecfin);
+	 }
+	 
+	 public String currentDate() throws Exception
+	 {
+		 return personalDAO.currentDate();
+	 }
+	 
+	 public boolean getTieneTurnoActivo(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getTieneTurnoActivo(vCodpersonal);
+	 }
+	 
+	 public int disableDatePerTurno(String vCodpersonal, Date dFecfin) throws Exception
+	 {
+		 return personalDAO.disableDatePerTurno(vCodpersonal, dFecfin);
+	 }
+	 
+	 public RhtbdPersonal getMinDateDetalle(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getMinDateDetalle(vCodpersonal);
+	 }
+	 
+	 public RhmvcPerturno getMinDatePerTurno(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getMinDatePerTurno(vCodpersonal);
+	 }
+	 
+	 public RhmvcPerturno getMaxDatePerTurno(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getMaxDatePerTurno(vCodpersonal);
+	 }
+	 
+	 public boolean getTieneOtroTurnoActivo(String vCodpersonal, Short nCodperturno) throws Exception
+	 {
+		 return personalDAO.getTieneOtroTurnoActivo(vCodpersonal, nCodperturno);
+	 }
+	 
+	 public boolean getTieneDetalleActivo(String vCodpersonal) throws Exception
+	 {
+		 return personalDAO.getTieneDetalleActivo(vCodpersonal);
+	 }
+	 	 
+}

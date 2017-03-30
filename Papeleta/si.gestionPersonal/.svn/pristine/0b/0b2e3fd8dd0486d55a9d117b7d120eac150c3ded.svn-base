@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<h:form id="formInicio">
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="MARCACIONES POR PERSONA" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+
+
+				
+				
+				
+				<h:panelGrid columns="9">
+					<p:outputLabel value="Tipo de Documento:" />
+					<p:outputLabel value="&nbsp;" />
+					<h:selectOneMenu style="width:120px" id="tipodoc"
+						value="#{rptMarcacionUnaPersonaBean.filtroMarcaciones.vCodtipodocid}">
+						<f:selectItem itemLabel="---"
+							itemValue="#{null}" />
+						<f:selectItems
+							value="#{rptMarcacionUnaPersonaBean.listaTipoDoc}" var="tipo"
+							itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+						<p:ajax event="change" />
+					</h:selectOneMenu>
+
+					<p:outputLabel value="Nro Doc Personal:" />
+					<p:outputLabel value="&nbsp;" />
+					<p:inputText id="docPersonal" style="width: 120px"
+						value="#{rptMarcacionUnaPersonaBean.filtroMarcaciones.vCodpersonal}"
+						onkeypress="return isNumberKeyNL(this);">
+					</p:inputText>
+
+					<p:outputLabel value="&nbsp;" />
+					<p:outputLabel value="&nbsp;" />
+					<p:outputLabel value="&nbsp;" />
+					
+					<p:outputLabel value="Nombres:" />
+					<p:outputLabel value="&nbsp;" />
+					<p:inputText id="nombre" style="width: 120px"
+						value="#{rptMarcacionUnaPersonaBean.filtroMarcaciones.vDesnombres}">
+					</p:inputText>
+					
+					<p:outputLabel value="Apellido Paterno:" />
+					<p:outputLabel value="&nbsp;" />
+					<p:inputText id="apPaterno" style="width: 120px"
+						value="#{rptMarcacionUnaPersonaBean.filtroMarcaciones.vDesapepat}">
+					</p:inputText>
+					
+					<p:outputLabel value="Apellido Materno:" />
+					<p:outputLabel value="&nbsp;" />
+					<p:inputText id="apMaterno" style="width: 120px"
+						value="#{rptMarcacionUnaPersonaBean.filtroMarcaciones.vDesapemat}">
+					</p:inputText>
+					
+					</h:panelGrid>
+					<h:panelGrid columns="9">
+					<p:outputLabel for="buttonb" value="Fecha de inicio &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:calendar id="buttonb" showOn="button" size="10"
+						value="#{rptMarcacionUnaPersonaBean.fCargaI}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de inicio válida"
+						requiredMessage="Debe ingresar fecha de inicio" required="true">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+
+					<p:outputLabel for="buttonbf"
+						value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fecha de fin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:calendar id="buttonbf" showOn="button" size="10"
+						value="#{rptMarcacionUnaPersonaBean.fCargaF}" pattern="dd/MM/yyyy"
+						locale="es" navigator="true" maxlength="10"
+						converterMessage="Debe ingresar una fecha de fin válida"
+						requiredMessage="Debe ingresar fecha de fin" required="true">
+						<f:convertDateTime timeZone="America/Lima" />
+					</p:calendar>
+					
+					
+			
+
+				</h:panelGrid>
+				
+				<br />
+
+				<center>
+					<p:commandButton value="Buscar Personal"
+						icon="icon-zsearch" process="@this,nombre,apPaterno,apMaterno,docPersonal,buttonb,buttonbf"
+						action="#{rptMarcacionUnaPersonaBean.buscarPersonal}" update=":formInicio" />
+									
+					 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+										 					 
+					 <p:commandButton value= "Limpiar"  icon="icon-escoba" action="#{rptMarcacionUnaPersonaBean.limpiar}" update="@form"/>
+					 
+					 </center>
+					<br />
+					
+					<p:fieldset style="text-align: left;" legend="Lista de Personal">
+					
+					<p:dataTable id="datatable2"
+					value="#{rptMarcacionUnaPersonaBean.listaPersonal}" var="item"
+					widgetVar="usrTable" emptyMessage="No se encontraron resultados"
+					paginator="true" rows="5"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10">
+					<p:column headerText="Nro Documento">
+						<h:outputText value="#{item.vCodpersonal}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Apellidos y Nombres">
+						<h:outputText
+							value="#{item.vDesapepat} #{item.vDesapemat} #{item.vDesnombres}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Opción" style="text-align:center;">
+						<p:commandButton title="SELECCIONAR"
+							icon="ui-icon-person" process="@this"
+							action="#{rptMarcacionUnaPersonaBean.seleccionarParaVisualizar(item)}"
+							update=":formInicio" />
+					</p:column>
+				</p:dataTable>
+					
+					</p:fieldset>
+					
+					<br />
+					
+					
+					<p:fieldset style="text-align: left;" legend="Marcación de Personal Seleccionado" rendered="#{funcionesBean.elementosEnLista(rptMarcacionUnaPersonaBean.listaMarcacion)==true}">
+					
+					<h:panelGrid columns="1"  style="text-align: right;width:750px;">
+															
+					<p:commandButton icon="ui-icon-document" rendered="#{funcionesBean.elementosEnLista(rptMarcacionUnaPersonaBean.listaMarcacion)==true}"
+	                    title="Exportar" value="Exportar" action="#{rptMarcacionUnaPersonaBean.rptMarcacionesPDF(System.currentTimeMillis())}" onclick="this.form.target = '_blank'" ajax="false" />	                    					 
+					 
+					 </h:panelGrid><br />
+					
+					<p:dataTable id="datatable" rendered="#{funcionesBean.elementosEnLista(rptMarcacionUnaPersonaBean.listaMarcacion)==true}"
+						value="#{rptMarcacionUnaPersonaBean.listaMarcacion}" var="item"
+						widgetVar="usrTable" emptyMessage="No se encontraron resultados"
+						paginator="true" rows="20"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="20,40,100">
+						<p:column headerText="Codigo Personal">
+							<h:outputText value="#{item.vCodpersonal}"
+								style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+						</p:column>
+						<p:column headerText="Apellidos y Nombres">
+							<h:outputText value="#{item.vDesapepat} #{item.vDesapemat} #{item.vDesnombres}"
+								style="white-space: normal !important; text-align: center !important;" />
+						</p:column>
+						<p:column headerText="Fecha">
+							<h:outputText value="#{item.dFechastr} " />
+						</p:column>
+						<p:column headerText="Hora">
+							<h:outputText value="#{item.getHoraMinutos()} " />
+						</p:column>
+						<p:column headerText="Tipo">
+							<h:outputText value="#{item.vDestipo}" />
+						</p:column>
+						<p:column headerText="Origen">
+							<h:outputText value="#{item.vDesorigen}" />
+						</p:column>
+						<p:column headerText="Opción" style="text-align:center;" >
+							<p:commandButton icon="ui-icon-circle-zoomin" update=":formDetalleJustificacion" title="VER DETALLE DE JUSTIFICACIÓN" 
+							action="#{rptMarcacionUnaPersonaBean.selectVerJustificacion(item)}" rendered="#{item.nCodorigen==2}" immediate="true" />           	
+	            		</p:column>
+					</p:dataTable>
+					
+					</p:fieldset>
+					
+					<br/>
+					   <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="VER MARCACIONES DE PERSONAL">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-check"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Ver Marcaciones de Personal" /> 	        
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="VER DETALLE DE JUSTIFICACIÓN">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-circle-zoomin"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Ver Detalle Justificacion" />  
+	        </p:fieldset>
+	        </center>
+	
+				
+
+
+			</p:fieldset>
+
+			<br />
+
+			<center>
+				<p:messages id="msgMensajesConsolidadoGlobal" closable="true"
+					escape="false" showDetail="false" />
+			</center>
+
+		</h:form>
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+		
+		<p:dialog widgetVar="formDialogWidgetVerMarcaciones" modal="true">
+		
+		
+			<center>
+				<h:form id="formMensajesMarcaciones">
+					<p:messages id="msgMensajesConsolidadoMarcaciones"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+		</p:dialog>
+	
+	<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+			
+	<p:dialog widgetVar="dialogWidgetDetalleJustificacion" modal="true">
+		   <h:form id="formDetalleJustificacion">
+		   	<p:fieldset style="text-align: left;" legend="Ver Justificación">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo Justificación" />
+		     	 <p:outputLabel value=":" />
+				 <h:outputText value="#{rptMarcacionUnaPersonaBean.justificacionVerTipo} " />
+		         
+		         <p:outputLabel value="Motivo" />
+		         <p:outputLabel value=":" />
+				 <p:inputTextarea id="armotivo" rows="6" cols="25" value="#{rptMarcacionUnaPersonaBean.justificacionVerMotivo}" onkeyup="this.value = this.value.toUpperCase();" maxlength="150" readonly="true"/>
+        		 
+		     </h:panelGrid>				 		     	           
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+	</p:dialog>
+		
+
+	</ui:define>
+</ui:composition>
+</html>

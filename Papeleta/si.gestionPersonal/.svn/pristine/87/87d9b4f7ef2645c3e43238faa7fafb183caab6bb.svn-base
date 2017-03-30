@@ -1,0 +1,40 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.despachadores;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPMarcacion;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTMarcacion;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacion;
+
+public class MarcacionDespatch {
+	
+	 private static final MarcacionDespatch instance = new MarcacionDespatch();
+	 
+	 private INTMarcacion marcacionDAO;
+	 private static Logger logger = Logger.getLogger(LoginDespatch.class.getName());
+	 
+	 public MarcacionDespatch() {
+		 marcacionDAO = new IMPMarcacion();
+	    }	 
+	 
+	 public int insertarMarcacion(RhmvcMarcacion entidad) throws Exception
+	 {
+		 return marcacionDAO.insertarMarcacion(entidad);
+	 }	 	 
+	 
+	 public RhmvcMarcacion getCorrelativoGlobalMarcacion() throws Exception
+	 {
+		 return marcacionDAO.getCorrelativoGlobalMarcacion();
+	 }
+	 
+	 public boolean getExistePersonal(String vCodpersonal) throws Exception
+	 {
+		 return marcacionDAO.getExistePersonal(vCodpersonal);
+	 }
+	 	 
+}

@@ -1,0 +1,16 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.interfase;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcMarcacion;
+
+public interface INTMarcacion {
+
+	public int insertarMarcacion(RhmvcMarcacion entidad) throws Exception;	
+	
+	public RhmvcMarcacion getCorrelativoGlobalMarcacion() throws Exception;
+	
+}

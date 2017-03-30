@@ -1,0 +1,305 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.MarcacionDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.ReporteDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstMarcacionrrhh;
+
+@ManagedBean(name="misMarcacionesBean")
+@SessionScoped
+public class MisMarcacionesBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(MisMarcacionesBean.class.getName());
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario  PGP_Usuario;
+	private Date fCargaI=new Date();
+	private Date fCargaF=new Date();
+	private List<VstMarcacionrrhh>listaMarcacion;
+	private String justificacionVerTipo;
+	private String justificacionVerMotivo;
+	
+	/*
+	 * METODOS GET Y SET
+	 * */
+
+	public String getJustificacionVerTipo() {
+		return justificacionVerTipo;
+	}
+
+	public void setJustificacionVerTipo(String justificacionVerTipo) {
+		this.justificacionVerTipo = justificacionVerTipo;
+	}
+
+	public String getJustificacionVerMotivo() {
+		return justificacionVerMotivo;
+	}
+
+	public void setJustificacionVerMotivo(String justificacionVerMotivo) {
+		this.justificacionVerMotivo = justificacionVerMotivo;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setListaMarcacion(List<VstMarcacionrrhh> listaMarcacion) {
+		this.listaMarcacion = listaMarcacion;
+	}
+
+	public void setfCargaI(Date fCargaI) {
+		this.fCargaI = fCargaI;
+	}
+
+	public void setfCargaF(Date fCargaF) {
+		this.fCargaF = fCargaF;
+	}
+
+	public Date getfCargaI() {
+		return fCargaI;
+	}
+
+	public Date getfCargaF() {
+		return fCargaF;
+	}
+
+	public List<VstMarcacionrrhh> getListaMarcacion() {
+		return listaMarcacion;
+	}
+
+	
+	
+	/*
+	 * METODO PARA LIMPIAR PANTALLA 
+	 * */
+	
+	public void limpiar(){
+		fCargaI=new Date();
+		fCargaF=new Date();
+		listaMarcacion=null;
+	}
+	
+	/*
+	 * METODO PARA BUSCAR LAS MARCACIONES DEL USUARIO EN UN RANGO DE FECHAS
+	 * */
+	public void buscarMarcacion(){
+		
+    	if(!FuncionesFechas.validaFecha(fCargaI, fCargaF))
+    	{	
+    		listaMarcacion=null;
+    		return ;}
+    	MarcacionDespatch marcacionDespatch=new MarcacionDespatch();
+		try {
+			//listaMarcacion=marcacionDespatch.getMarcacionesPorCodigo(PGP_Usuario.getV_codpersonal());
+			/*for(int i=0;i<listaMarcacion.size();i++)
+			{
+				if(listaMarcacion.get(i).getdFecha().after(fCargaI) && listaMarcacion.get(i).getdFecha().before(fCargaF)){
+					System.out.println("Entroo\nLista ["+(i+1)+"]:"+listaMarcacion.get(i).getdFecha());
+				}
+			}*/
+			
+			listaMarcacion=marcacionDespatch.getMarcacionesPorCodigoFecha(PGP_Usuario.getV_codpersonal(),fCargaI,fCargaF);//"44436285"
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+    }
+	
+	/*
+	 * METODO PARA MOSTRAR CUADRO DE DIALOGO DONDE ESTAN LOS DETALLES DE SU MARCACION POR JUSTIFICACION
+	 * */
+	public void selectVerJustificacion(VstMarcacionrrhh item)
+    {    	
+    	justificacionVerMotivo=item.getvMotjus();
+    	justificacionVerTipo=item.getvDestipjus();
+    	RequestContext.getCurrentInstance().execute("dialogWidgetDetalleJustificacion.show()");
+    }
+	
+	/*
+	 * METODO PARA MOSTRAR LA VISTA REPORTE MARCACION SIN ESTO NO SE MOSTRARIA EL REPORTE MARCACION
+	 * */
+	 public String verMarcacion(){
+		 limpiar();
+			String vista="pretty:misMarcacionesPretty";
+	        //CODIGO
+	        return  vista;
+		}   
+	 
+	 public boolean elementosEnLista(){
+		 if(listaMarcacion==null)
+			 return false;
+		 if(listaMarcacion.size()==0)
+			 return false;
+		 return true;
+	 }
+	 public StreamedContent rptMarcaciones(long dat)
+		{
+			//valida
+			if(!FuncionesFechas.validaFecha(fCargaI,fCargaF))
+			{
+				limpiar();
+				return null;
+			}
+				
+			//end valida
+			long rnd=System.currentTimeMillis();
+			try {
+				
+				if(listaMarcacion!=null)
+				{
+					Workbook wb = new XSSFWorkbook();
+				    Sheet sheet = wb.createSheet("REPORTE MARCACIONES");
+				    
+				    Font font = wb.createFont();
+		    	    font.setColor(HSSFColor.BLACK.index);
+		    	    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		    	    CellStyle style0 = wb.createCellStyle();
+		    	    style0.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		    	    style0.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		    	    style0.setFont(font);	
+		    	    CellStyle style1 = wb.createCellStyle();
+		    	    style1.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		    	    style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		    	    style1.setFont(font);
+		    	    style1.setBorderBottom(CellStyle.BORDER_THIN);
+		    	    style1.setBorderTop(CellStyle.BORDER_THIN);
+		    	    style1.setBorderRight(CellStyle.BORDER_THIN);
+		    	    style1.setBorderLeft(CellStyle.BORDER_THIN);
+				    
+				    int lineNum=0;
+				    Row row = sheet.createRow((short)lineNum);
+				    Cell cell=row.createCell(0);
+				    cell.setCellValue("MIS MARCACIONES");
+				    cell.setCellStyle(style0);
+		    	    sheet.addMergedRegion(new CellRangeAddress(
+		    	            0, //first row (0-based)
+		    	            0, //last row  (0-based)
+		    	            0, //first column (0-based)
+		    	            3  //last column  (0-based)
+		    	    ));
+		    	    ++lineNum;
+		    	    row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue("Fecha actual "+getFormatDate(new Date())+".");
+		    	    sheet.addMergedRegion(new CellRangeAddress(
+		    	            1, //first row (0-based)
+		    	            1, //last row  (0-based)
+		    	            0, //first column (0-based)
+		    	            3  //last column  (0-based)
+		    	    ));
+		    	    ++lineNum;
+		    	    row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue(" ");
+		    	    sheet.addMergedRegion(new CellRangeAddress(
+		    	            2, //first row (0-based)
+		    	            2, //last row  (0-based)
+		    	            0, //first column (0-based)
+		    	            3  //last column  (0-based)
+		    	    ));
+		    	    ++lineNum;
+		    	    row = sheet.createRow((short)lineNum);
+		    	    cell=row.createCell(0);
+		    	    cell.setCellValue("N° ");
+		    	    cell.setCellStyle(style1);
+		    	    /*cell=row.createCell(2);
+		    	    cell.setCellValue("TIPO DE DOCUMENTO");
+		    	    cell.setCellStyle(style1);*/
+		    	    cell=row.createCell(1);
+		    	    cell.setCellValue("NRO DE DOCUMENTO");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(2);
+		    	    cell.setCellValue("APELLIDOS Y NOMBRES");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(3);
+		    	    cell.setCellValue("FECHA MARCACION");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(4);
+		    	    cell.setCellValue("HORA");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(5);
+		    	    cell.setCellValue("TIPO");
+		    	    cell.setCellStyle(style1);
+		    	    cell=row.createCell(6);
+		    	    cell.setCellValue("ORIGEN");
+		    	    cell.setCellStyle(style1);
+		    	    for (Iterator iterator = listaMarcacion.iterator(); iterator.hasNext();) {
+		    	    	lineNum++;
+						VstMarcacionrrhh obj = (VstMarcacionrrhh) iterator.next();
+						row = sheet.createRow((short)lineNum);
+						row.createCell(0).setCellValue((lineNum-3)+"");
+						row.createCell(1).setCellValue(obj.getvCodpersonal());
+						row.createCell(2).setCellValue(obj.getvDesapepat()+" "+obj.getvDesapemat()+" "+obj.getvDesnombres());
+						row.createCell(3).setCellValue(obj.getdFechastr());
+						row.createCell(4).setCellValue(obj.getHoraMinutosSegundos());
+						row.createCell(5).setCellValue(obj.getvDestipo());
+						row.createCell(6).setCellValue(obj.getvDesorigen());
+					}
+		    	    
+		    	    FileOutputStream fileOut;
+		    	    String rutaRpt=Funciones.ObtProp_Resources("ruta.reportes");
+		    	    fileOut = new FileOutputStream(rutaRpt+"/rptMarcaciones"+rnd+".xlsx");
+					wb.write(fileOut);
+					fileOut.close();
+					InputStream stream;
+					try {
+						stream = new FileInputStream(rutaRpt+"/rptMarcaciones"+rnd+".xlsx");					
+						StreamedContent fileDownload = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "rptMarcaciones-"+rnd+".xlsx");
+						return fileDownload;
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return null;
+					} 
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+			return null;
+		}
+	 
+	 public String getFormatDate(Date date) {
+			return new SimpleDateFormat("dd/MM/yyyy").format(date);
+		}
+	
+}

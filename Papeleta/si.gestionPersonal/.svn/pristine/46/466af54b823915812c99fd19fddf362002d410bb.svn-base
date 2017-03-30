@@ -1,0 +1,57 @@
+mtpe.pie=nada	
+mtpe.title=nada
+
+mtpe.login.error.usuario=El Usuario no existe.
+mtpe.login.error.contrasena=La Contrasena ingresada es Incorrecta.
+mtpe.login.error.estado=El Usuario Ingresado se encuentra Inactivo.
+mtpe.login.error.permisos=El Usuario no cuenta con los Permisos para ingresar a este Sistema.
+#BENVENUTO
+mtpe.login.error.nuevo=Usted ingresó por primera vez al sistema, por razones de seguridad debe cambiar su contraseña. RECUERDE no revelar su contraseña a nadie.
+mtpe.login.error.meses=Su contraseña no ha sido actualizada en cuatro meses o más, por favor actualícela. RECUERDE no revelar su contraseña a nadie.
+mtpe.login.error.expira=Por razones de seguridad, su contraseña expirará dentro de {0} día(s), por lo que deberá cambiarla antes de la fecha de expiración.
+mtpe.login.error.repite1=La contraseña que usted intenta actualizar ya ha sido asignada como temporal.
+mtpe.login.error.repite2=La contraseña que usted intenta actualizar ya ha sido utilizada en sus {0} últimas modificaciones.
+#FIN BENVENUTO
+mtpe.pie.mintra=Ministerio de Trabajo y Promoci&oacute;n del Empleo
+mtpe.pie.sistema=Copyright &copy; 2012. Todos los Derechos Reservados.
+
+# -- standard errors --
+errors.header=<br><table border="0" align="center" width="90%"><tr><td align="center" class="contenido_negrita">Error en Validación</td></tr><tr><td class="contenido_negrita"> <br>Se encontraron los sgtes. Errores:<br></td></tr><tr><td class="contenido"><ul>
+errors.prefix=<LI>
+errors.suffix=</LI>
+errors.footer=</ul></td></tr></table><br>
+# -- validator --
+errors.invalid={0} is invalid.
+errors.maxlength={0} can not be greater than {1} characters.
+errors.minlength={0} can not be less than {1} characters.
+errors.range={0} is not in the range {1} through {2}.
+errors.required={0} is required.
+errors.byte={0} must be an byte.
+errors.date={0} is not a date.
+errors.double={0} must be an double.
+errors.float={0} must be an float.
+errors.integer={0} must be an integer.
+errors.long={0} must be an long.
+errors.short={0} must be an short.
+errors.creditcard={0} is not a valid credit card number.
+errors.email={0} is an invalid e-mail address.
+# -- other --
+errors.cancel=Operation cancelled.
+errors.detail={0}
+errors.general=The process did not complete. Details should follow.
+errors.token=Request could not be completed. Operation is not in sequence.
+ruta.reportes=/filesrrhh/marcaciones/temporal
+#ruta.reportes=D://Willy//plantilla//si.plantillaseg//WebContent//jsfDocs//modulos//ejemplo/
+ruta.cargo=/filesTramiteExt/cargos
+#ruta.cargo=D://Willy//pdfcargo/
+ruta.pdfs=/filesTramiteExt/pdfs
+#ruta.pdfs=D://Willy//pdf/
+# -- welcome --
+
+#para manipular carga
+ruta.xls=/filesrrhh/marcaciones/cargas
+#ruta.xls=D://Willy//fileconverter//rrhh/
+
+sufijo=TramaBN
+breakpLine=\r\n
+breakpLineWriter=\r\n

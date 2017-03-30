@@ -1,0 +1,12 @@
+package com.demo.unitest;
+
+public class foo {
+	static int i=0;
+	public static void main(String... args) {		
+		{
+			++i;
+			i+=i/(--i-1);
+		}
+		System.out.println(i);		
+	}
+}

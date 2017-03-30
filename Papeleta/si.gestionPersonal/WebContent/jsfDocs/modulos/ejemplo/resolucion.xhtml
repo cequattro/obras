@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+
+		<h:form id="formInicio">
+
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="BÚSQUEDA DE RESOLUCIÓN" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				<h:panelGrid columns="9" align="center">
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Tipo de Resolución &nbsp;&nbsp;" />
+					 <h:selectOneMenu style="width:120px" value="#{resolucionBean.filtro.nCortipres}" >             
+			         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+			         <f:selectItems value="#{resolucionBean.listaTiposResolucion}" var="tipo" itemLabel="#{tipo.vDestipres}" itemValue="#{tipo.nCortipres}" />
+			         <p:ajax event="change" />     		         
+			         </h:selectOneMenu>
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Número de Resolucion &nbsp;&nbsp;" />
+					<p:inputText style="width: 120px"
+						value="#{resolucionBean.filtro.vNumres}" maxlength="20" onkeypress="return soloNumeros(event);">
+						<p:ajax event="change" />
+					</p:inputText>
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Año de resolución &nbsp;&nbsp;" />
+					<p:inputText style="width: 120px"
+						value="#{resolucionBean.filtro.vAnores}" maxlength="20" onkeypress="return soloNumeros(event);">
+						<p:ajax event="change" />
+					</p:inputText>
+
+
+
+
+				</h:panelGrid>
+
+				<br/>
+
+				<center>
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{resolucionBean.buscarResolucion}" update=":formInicio" />
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Nuevo" icon="icon-zadd" action="#{resolucionBean.desplegarOpcionAgregar}" update=":formAgregar" />
+     				<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Limpiar" icon="icon-escoba"
+						action="#{resolucionBean.limpiar}" update="@form" />
+				</center>
+					
+				<p:dataTable id="datatable" value="#{resolucionBean.listaResoluciones}"
+					var="item" widgetVar="usrTable"
+					emptyMessage="No se encontraron resultados" paginator="true"
+					rows="20"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,40,100">
+					<p:column headerText="Tipo de Resolución">
+						<h:outputText value="#{item.vDestipres}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Número de Resolucion">
+						<h:outputText value="#{item.vNumres}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Año de Resolucion">
+						<h:outputText value="#{item.vAnores}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>					
+					<p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+		                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+		            </p:column>
+		            <p:column headerText="Fecha de Fin" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+		                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+		            </p:column>
+					<p:column headerText="Opción" style="text-align:center;">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{resolucionBean.desplegarOpcionEditar(item)}"
+							update=":formEditar" title="EDITAR" />
+													
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+						
+						<p:commandButton icon="ui-icon-circle-close" title="ELIMINAR"
+							action="#{resolucionBean.selectEliminar(item)}" process="@this"
+							update=":formEliminar" />
+							
+						<h:outputText value="&nbsp;&nbsp;&nbsp;"/>
+						                 
+	                	<p:commandButton icon="ui-icon-document" action="#{resolucionBean.dialogReferencia(item)}" id="lupa" onkeydown="" title="ADJUNTAR PDF">
+    					</p:commandButton>
+    					
+    					<h:outputText value="&nbsp;&nbsp;&nbsp;"/>
+    					
+	    				<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" title="DESCARGAR PDF" rendered="#{item.vNomarchiv!=null}">
+				        <p:fileDownload value="#{resolucionBean.download(item)}" />
+				    	</p:commandButton>
+				    	
+					</p:column>
+				</p:dataTable>
+
+
+
+				<br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">	        
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Editar Resolución " />	        	        		           	      
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="ELIMINAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-circle-close"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Eliminar Resolución"  />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="ADJUNTAR PDF">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-document"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Adjuntar PDF"  />  
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="DESCARGAR PDF">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-arrowthick-1-s"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        
+	        <p:outputLabel value=" Descargar PDF"  />
+	        </p:fieldset>
+	        </center>
+
+
+
+			</p:fieldset>
+
+		</h:form>
+		<h:form id="formMensajesEliminar">
+					<p:messages id="msgMensajesConsolidadoEliminar" closable="true"
+						escape="false" showDetail="false" />
+		</h:form>
+		
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog widgetVar="formDialogWidgetAgregar" modal="true">
+			<h:form id="formAgregar">
+				<p:fieldset style="text-align: left;" legend="Agregar Resolución">
+					<h:panelGrid columns="3">
+					
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Tipo de Resolución" />
+						<h:selectOneMenu style="width:120px" value="#{resolucionBean.nuevaResolucion.nCortipres}" id="tipo" >             
+				        <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+				        <f:selectItems value="#{resolucionBean.listaTiposResolucion}" var="tipo" itemLabel="#{tipo.vDestipres}" itemValue="#{tipo.nCortipres}" />				        	        
+				        </h:selectOneMenu>
+				        <p:outputLabel value="" />
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Número de Resolución" />
+						<p:inputText style="width: 120px"
+						value="#{resolucionBean.nuevaResolucion.vNumres}" maxlength="20" id="numres" onkeypress="return soloNumeros(event);">						
+						</p:inputText>
+						<p:outputLabel value="" />
+						
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Año de Resolución" />
+						<p:inputText style="width: 120px"
+						value="#{resolucionBean.nuevaResolucion.vAnores}" maxlength="20" id="aniores" onkeypress="return soloNumeros(event);">
+						</p:inputText>
+						<p:outputLabel value="" />	
+						
+						<p:outputLabel for="buttonerfi" value="&nbsp;&nbsp;&nbsp;&nbsp;  Fecha inicio" />
+				        <p:calendar id="buttonerfi" showOn="button" size="10"  value="#{resolucionBean.dFeciniResolucion}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+				        <f:convertDateTime timeZone="America/Lima" />		         
+				        </p:calendar>
+				        <p:outputLabel value=" " />	
+				        
+				        <p:outputLabel for="buttonerff" value="&nbsp;&nbsp;&nbsp;&nbsp;  Fecha fin" />
+				        <p:calendar id="buttonerff" showOn="button" size="10"  value="#{resolucionBean.dFecfinResolucion}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+				        <f:convertDateTime timeZone="America/Lima" />		         
+				        </p:calendar>
+				        <p:outputLabel value=" " />										
+						
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Grabar" icon="icon-disk"
+							action="#{resolucionBean.agregar()}" process="@this, tipo, numres, aniores, buttonerfi, buttonerff"
+							update=":formInicio, :formMensajesAdd" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="formDialogWidgetEditar" modal="true">
+			<h:form id="formEditar">
+				<p:fieldset style="text-align: left;" legend="Editar Turno">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Tipo de Resolución" />
+						<h:selectOneMenu style="width:120px" value="#{resolucionBean.editarResolucion.nCortipres}" id="tipoe" >             
+				        <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+				        <f:selectItems value="#{resolucionBean.listaTiposResolucion}" var="tipo" itemLabel="#{tipo.vDestipres}" itemValue="#{tipo.nCortipres}" />				        	        
+				        </h:selectOneMenu>
+				        <p:outputLabel value="" />
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Número de Resolución" />
+						<p:inputText style="width: 120px"
+						value="#{resolucionBean.editarResolucion.vNumres}" maxlength="20" id="numrese" onkeypress="return soloNumeros(event);">						
+						</p:inputText>
+						<p:outputLabel value="" />
+						
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Año de Resolución" />
+						<p:inputText style="width: 120px"
+						value="#{resolucionBean.editarResolucion.vAnores}" maxlength="20" id="aniorese" onkeypress="return soloNumeros(event);">
+						</p:inputText>
+						<p:outputLabel value="" />	
+						
+						<p:outputLabel for="buttonerfie" value="&nbsp;&nbsp;&nbsp;&nbsp;  Fecha inicio" />
+				        <p:calendar id="buttonerfie" showOn="button" size="10"  value="#{resolucionBean.dFeciniResolucionE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+				        <f:convertDateTime timeZone="America/Lima" />		         
+				        </p:calendar>
+				        <p:outputLabel value=" " />	
+				        
+				        <p:outputLabel for="buttonerffe" value="&nbsp;&nbsp;&nbsp;&nbsp;  Fecha fin" />
+				        <p:calendar id="buttonerffe" showOn="button" size="10"  value="#{resolucionBean.dFecfinResolucionE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+				        <f:convertDateTime timeZone="America/Lima" />		         
+				        </p:calendar>
+				        <p:outputLabel value=" " />							
+
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Actualizar" icon="ui-icon-circle-check"
+							action="#{resolucionBean.actualizar()}" process="@this, tipoe, numrese, aniorese, buttonerfie, buttonerffe"
+							update=":formInicio, :formMensajesEdit" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="formDialogEliminar" modal="true">
+			<p:fieldset style="text-align: left;width:477px !important;"
+				legend="Confirmar">
+				<h:form id="formEliminar" enctype="multipart/form-data"
+					style="text-align: center;">
+					<br />
+					<h:panelGrid columns="2">
+						<p:graphicImage value="/resources/images/principal/warning.png" />
+						<h:outputText style="font-weight:bold !important;"
+							value="Está seguro que desea eliminar la resolución #{resolucionBean.eliminarResolucion.vNumres} del año #{resolucionBean.eliminarResolucion.vAnores} ?" />
+					</h:panelGrid>
+					<br />
+					<br />
+					<p:commandButton value="Confirmar" action="#{resolucionBean.eliminar()}"
+						update=":formInicio, :formMensajesEliminar" icon="ui-icon-circle-arrow-e"
+						oncomplete="formDialogEliminar.hide();" />
+					<br />
+					<br />
+				</h:form>
+			</p:fieldset>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Adjuntar PDF">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="false" />
+			 	<br/>
+			    <p:fileUpload value="#{resolucionBean.file}" mode="simple" skinSimple="true" />
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{resolucionBean.upload()}" update=":formInicio:growl" icon="ui-icon-arrowthick-1-n" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>
+</html>

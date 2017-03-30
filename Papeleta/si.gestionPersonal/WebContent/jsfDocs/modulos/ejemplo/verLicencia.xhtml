@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="VER LICENCIA "/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Ver Licencia">
+	
+	<h:panelGrid columns="2" >
+	
+	<p:outputLabel value="Intendencia:" />
+	<p:outputLabel value="SEDE CENTRAL" />
+	
+	<p:outputLabel value="Dependencia:" />
+	<p:outputLabel value="SUNAFIL-OFICINA GENERAL DE TECNOLOGIAS DE LA INFORMACION Y COMUNICACIONES" />
+	
+	</h:panelGrid>
+	
+	<h:panelGrid columns="4" >
+	
+	<p:outputLabel value="Tipo Documento:" />
+	<p:outputLabel value="DNI" />
+	
+	<p:outputLabel value="Nro Documento:" />
+	<p:outputLabel value="44436285" />
+	
+	</h:panelGrid>
+	
+	<h:panelGrid columns="2" >
+	
+	<p:outputLabel value="Colaborador:" />
+	<p:outputLabel value="WILLY CASTRO ALVARADO" />
+	
+	</h:panelGrid>
+	
+	<h:panelGrid columns="4" >
+	
+		<p:outputLabel for="buttonb"
+			value="Fecha Inicio" />
+		<p:calendar id="buttonb" showOn="button" size="10" disabled="true"
+			value="#{'13/02/2017'}" pattern="dd/MM/yyyy"
+			locale="es" navigator="true" maxlength="10"
+			converterMessage="Debe ingresar una fecha válida">
+			<f:convertDateTime timeZone="America/Lima" />
+		</p:calendar>
+		
+		<p:outputLabel for="buttonbf"
+			value="Fecha Fin" />
+		<p:calendar id="buttonbf" showOn="button" size="10" disabled="true"
+			value="#{'15/02/2017'}" pattern="dd/MM/yyyy"
+			locale="es" navigator="true" maxlength="10"
+			converterMessage="Debe ingresar una fecha válida">
+			<f:convertDateTime timeZone="America/Lima" />
+		</p:calendar>
+		
+		<p:outputLabel value="Motivo" />
+	    <h:selectOneMenu style="width:145px" value="#{1}" id="cboMotivo" disabled="true" >             
+	        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+	        <f:selectItem itemLabel="DESCANSO MÉDICO" itemValue="#{1}" />     
+	        <f:selectItem itemLabel="POR CAPACITACIÓN" itemValue="#{2}" />
+	        <f:selectItem itemLabel="PARTICULAR" itemValue="#{3}" />
+	    </h:selectOneMenu>				
+    	 
+     </h:panelGrid>
+     
+     <h:panelGrid>
+     
+     	<p:outputLabel value="Observación / Comentarios"/>
+        <p:inputTextarea id="obs" rows="5" cols="50" counter="display" maxlength="300" counterTemplate="quedan {0} caracteres." autoResize="false" value="#{'ADJUNTO MI CERTIFICADO MÉDICO Y RECETA'}" disabled="true" />
+        
+        <p:commandButton value="Descargar Adjunto" ajax="false" icon="ui-icon-arrowthick-1-s" />
+                
+        <p:outputLabel value="Respuesta"/>
+        <p:inputTextarea id="rpta" rows="2" cols="50" counter="display" maxlength="300" counterTemplate="quedan {0} caracteres." autoResize="false" />
+        <h:outputText id="display" />
+     
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>          
+	 	
+	</p:fieldset>	 	
+	
+		<center>
+     	<h:panelGrid columns="4" style="text-align: center;">
+     		 <p:commandButton value="Aprobar" icon="ui-icon-check" update="@form"/>
+     		 <p:commandButton value="Observar" icon="ui-icon-minusthick" update="@form"/>
+     		 <p:commandButton value="Rechazar" icon="ui-icon-closethick" update="@form"/>
+     		 <p:commandButton value="Regresar" icon="ui-icon-arrowthick-1-w" action="#{misLicenciasBean.miPersonalLicencias()}" update="@form"/>      		 
+    	</h:panelGrid>
+    	</center>
+    	
+    	<p:commandButton value="&nbsp;Aceptar" action="#{personalBean.getDatosReniec()}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" update="@form" />
+								 
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>						 
+    	    	    	    	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>			
+		
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,56 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.implementacion;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.comun.MyBatisConnectionFactory;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTReporte;
+
+public class IMPReporte implements INTReporte {
+	
+	private SqlSessionFactory sqlSessionFactory;
+	
+	public IMPReporte(){
+		  sqlSessionFactory=MyBatisConnectionFactory.getSqlSessionFactory();		  		  
+	  }
+		
+	public List<Map> reportePersonal(Map parametros) throws Exception 
+	{	
+		List<Map> resultado=new ArrayList<Map>();			
+		SqlSession session = sqlSessionFactory.openSession();
+		
+		try {				
+			resultado=session.selectList("GesPer.reportePersonal", parametros);			 
+			return resultado;			
+		} catch (Exception e) {			
+			System.out.println("Error reportePersonal "+e.getMessage());   
+        	return null;
+		} finally {
+			session.close();
+		}
+
+	}
+	
+	public List<Map> reportePersonalIndividual(Map parametros) throws Exception 
+	{	
+		List<Map> resultado=new ArrayList<Map>();			
+		SqlSession session = sqlSessionFactory.openSession();
+		
+		try {				
+			resultado=session.selectList("GesPer.reportePersonalIndividual", parametros);			 
+			return resultado;			
+		} catch (Exception e) {			
+			System.out.println("Error reportePersonal "+e.getMessage());   
+        	return null;
+		} finally {
+			session.close();
+		}
+
+	}
+	
+}

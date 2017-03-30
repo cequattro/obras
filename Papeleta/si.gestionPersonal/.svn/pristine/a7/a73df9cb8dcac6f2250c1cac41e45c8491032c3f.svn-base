@@ -1,0 +1,462 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
+import pe.gob.sunafil.gestionpersonal.bean.Permisos;
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.funciones.Funciones;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.PersonalDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.ReporteDespatch;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.ReporteSTempranoDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+
+@ManagedBean(name = "reporteSTempranoBean")
+@SessionScoped
+public class ReporteSTempranoBean {
+
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario PGP_Usuario;
+	@ManagedProperty("#{loginBean.PGP_Permisos}")
+	private Permisos PGP_Permisos;
+	
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Permisos getPGP_Permisos() {
+		return PGP_Permisos;
+	}
+
+	public void setPGP_Permisos(Permisos pGP_Permisos) {
+		PGP_Permisos = pGP_Permisos;
+	}
+
+	private List<SitbTdocide> listaTipoDoc;
+	private VstPersonalrrhh filtro = new VstPersonalrrhh();
+	private List<Map> listaReporteSTemprano;
+	private List<TdtbcDependencia> dependenciasAutocomplete;
+	private TdtbcDependencia dependenciaSeleccionada;
+	private List <TdtbcIntendencia> listaIntendencia;
+	private String intendenciaSeleccionada;	
+	private String mes;
+	private String anio;
+	private String dependenciaParaAutocompletar;
+	
+	public VstPersonalrrhh getFiltro() {
+		return filtro;
+	}
+
+	public void setFiltro(VstPersonalrrhh filtro) {
+		this.filtro = filtro;
+	}
+
+	public List<Map> getListaReporteSTemprano() {
+		return listaReporteSTemprano;
+	}
+
+	public void setListaReporteSTemprano(List<Map> listaReporteSTemprano) {
+		this.listaReporteSTemprano = listaReporteSTemprano;
+	}
+
+	public List<TdtbcDependencia> getDependenciasAutocomplete() {
+		return dependenciasAutocomplete;
+	}
+
+	public void setDependenciasAutocomplete(
+			List<TdtbcDependencia> dependenciasAutocomplete) {
+		this.dependenciasAutocomplete = dependenciasAutocomplete;
+	}
+
+	public TdtbcDependencia getDependenciaSeleccionada() {
+		return dependenciaSeleccionada;
+	}
+
+	public void setDependenciaSeleccionada(TdtbcDependencia dependenciaSeleccionada) {
+		this.dependenciaSeleccionada = dependenciaSeleccionada;
+	}
+
+	public String getIntendenciaSeleccionada() {
+		return intendenciaSeleccionada;
+	}
+
+	public void setIntendenciaSeleccionada(String intendenciaSeleccionada) {
+		this.intendenciaSeleccionada = intendenciaSeleccionada;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getAnio() {
+		return anio;
+	}
+
+	public void setAnio(String anio) {
+		this.anio = anio;
+	}
+
+	public String getDependenciaParaAutocompletar() {
+		return dependenciaParaAutocompletar;
+	}
+
+	public void setDependenciaParaAutocompletar(String dependenciaParaAutocompletar) {
+		this.dependenciaParaAutocompletar = dependenciaParaAutocompletar;
+	}
+
+	public List <TdtbcIntendencia> getListaIntendencia() {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		try {
+			listaIntendencia=personalDespatch.getIntendencia(PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			listaIntendencia=null;
+			e.printStackTrace();
+		}
+		return listaIntendencia;
+	}
+
+	public void setListaIntendencia(List <TdtbcIntendencia> listaIntendencia) {
+		this.listaIntendencia = listaIntendencia;
+	}
+	
+	public List<SitbTdocide> getListaTipoDoc() {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		try {
+			listaTipoDoc = personalDespatch.getTipoDocRemitente();
+		} catch (Exception e) {
+			listaTipoDoc = null;
+			e.printStackTrace();
+		}
+		return listaTipoDoc;
+	}
+
+	public void setListaTipoDoc(List<SitbTdocide> listaTipoDoc) {
+		this.listaTipoDoc = listaTipoDoc;
+	}
+	
+	public void itemChangeIntendencia()
+	{
+		if(intendenciaSeleccionada == null || "".equals(intendenciaSeleccionada.trim()))
+		{
+			dependenciaParaAutocompletar = "";
+			dependenciaSeleccionada = null;
+		}
+	}
+	
+	public String verRptSTemprano() {
+		intendenciaSeleccionada="";
+		dependenciaParaAutocompletar = "";
+		dependenciaSeleccionada = null;
+		listaReporteSTemprano=null;
+		filtro = new VstPersonalrrhh();
+		mes="";
+		anio="";
+		String vista = "pretty:rptSalenTempranoPretty";
+		// CODIGO
+		return vista;
+	}
+	
+	public List<String> completeDependencia(String query) {
+		PersonalDespatch personalDespatch = new PersonalDespatch();
+		dependenciasAutocomplete = new ArrayList<TdtbcDependencia>();
+		try {
+			dependenciasAutocomplete = personalDespatch.getAutocompletarDependenciaEIntendencia(query,intendenciaSeleccionada);
+							//PGP_Usuario.getN_numint());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		List<String> results = new ArrayList<String>();
+
+		for (Iterator iterator = dependenciasAutocomplete.iterator(); iterator.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator.next();
+			results.add(tdtbcDependencia.getvDesdep());
+		}
+		return results;
+	}
+	
+	public void onItemSelect(SelectEvent event) {
+		for (Iterator iterator = dependenciasAutocomplete.iterator(); iterator
+				.hasNext();) {
+			TdtbcDependencia tdtbcDependencia = (TdtbcDependencia) iterator
+					.next();
+			if (event.getObject().toString()
+					.equals(tdtbcDependencia.getvDesdep())) {
+				dependenciaSeleccionada = tdtbcDependencia;
+				filtro.setnNumdep(dependenciaSeleccionada.getnNumdep());
+			}
+		}
+	}
+
+	public boolean reporteValidado(boolean opcion,String mes,String anio,String selectedIntendencia,String codTipoDocId,String codPersonal){
+		if(mes!=null && !"".equals(mes.trim())){}
+		else
+		{
+			Funciones.mostrarMensajeError("Debe seleccionar un mes.");				
+			return false;
+		}
+		if(anio!=null && !"".equals(anio.trim())){}
+		else
+		{
+			Funciones.mostrarMensajeError("Debe seleccionar un año.");				
+			return false;
+		}
+		try {
+			ReporteDespatch reporteDespatch=new ReporteDespatch();
+			String fechadmy=reporteDespatch.ObtieneFechaDMY();
+			
+			System.out.println("["+fechadmy.split("/")[2].substring(0, 4)+"]");
+			
+			if(Integer.parseInt(anio)>Integer.parseInt(fechadmy.split("/")[2].substring(0, 4)))
+			{
+				Funciones.mostrarMensajeError("No puede ver el reporte de un año futuro.");				
+				return false;
+			}
+			
+			if(Integer.parseInt(anio)==Integer.parseInt(fechadmy.split("/")[2].substring(0, 4)) &&
+					Integer.parseInt(mes)>Integer.parseInt(fechadmy.split("/")[1]))
+			{
+				Funciones.mostrarMensajeError("No puede ver el reporte de un mes futuro.");				
+				return false;
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		/*if(selectedIntendencia!=null && !"".equals(selectedIntendencia.trim())){}
+		else
+		{
+			Funciones.mostrarMensajeError("Debe seleccionar una intendencia.");				
+			return false;
+		}*/
+		if(Funciones.documentoNoValido(filtro.getvCodtipodocid(), filtro.getvCodpersonal())){
+			return false;
+		}
+		return true;
+	}
+	
+	public StreamedContent rptSTemprano(long dat)
+	{
+		//valida
+		if(!reporteValidado(true,mes,anio,intendenciaSeleccionada,filtro.getvCodtipodocid(),filtro.getvCodpersonal()))
+			return null;
+		//end valida
+		long rnd=System.currentTimeMillis();
+		try {
+			if("".equals(intendenciaSeleccionada.trim()))
+			{
+				intendenciaSeleccionada=null;
+			}
+			if (dependenciaParaAutocompletar != null && !"".equals(dependenciaParaAutocompletar)) {
+			} else {
+				filtro.setnNumdep(null);
+			}						
+			ReporteSTempranoDespatch reporteDespatch=new ReporteSTempranoDespatch();
+			Map parametros = new HashMap();			
+			parametros.put("PARAM_MES", mes);
+			parametros.put("PARAM_ANIO", anio);
+			parametros.put("PARAM_INTENDENCIA", intendenciaSeleccionada);			
+			parametros.put("PARAM_DEPENDENCIA", filtro.getnNumdep());
+			if(filtro.getvCodpersonal()!=null && !"".equals(filtro.getvCodpersonal().trim()) && filtro.getvCodtipodocid()!=null && !"".equals(filtro.getvCodtipodocid().trim()))
+			{
+				parametros.put("PARAM_TIPODOC", filtro.getvCodtipodocid());
+				parametros.put("PARAM_NRODOC", filtro.getvCodpersonal());
+			}			
+			listaReporteSTemprano=reporteDespatch.reporteSTemprano(parametros);
+			
+			if(listaReporteSTemprano!=null)
+			{
+				List<String> intendenciasList=new ArrayList<String>();
+				Workbook wb = new XSSFWorkbook();
+			    Sheet sheet = wb.createSheet("REPORTE SALIDAS TEMPRANAS");
+			    
+			    Font fontTitle = wb.createFont();
+			    fontTitle.setColor(HSSFColor.BLACK.index);
+			    fontTitle.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			    fontTitle.setFontHeightInPoints(new Short("15"));
+			    
+			    Font font = wb.createFont();
+	    	    font.setColor(HSSFColor.BLACK.index);
+	    	    font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	    	    CellStyle style0 = wb.createCellStyle();
+	    	    style0.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style0.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style0.setFont(fontTitle);	
+	    	    CellStyle style1 = wb.createCellStyle();
+	    	    style1.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+	    	    style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    	    style1.setFont(font);
+	    	    style1.setBorderBottom(CellStyle.BORDER_THIN);
+	    	    style1.setBorderTop(CellStyle.BORDER_THIN);
+	    	    style1.setBorderRight(CellStyle.BORDER_THIN);
+	    	    style1.setBorderLeft(CellStyle.BORDER_THIN);
+			    
+			    int lineNum=0;
+			    Row row = sheet.createRow((short)lineNum);
+			    Cell cell=row.createCell(0);
+			    cell.setCellValue("REPORTE DE SALIDAS TEMPRANAS ");
+			    cell.setCellStyle(style0);
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            0, //first row (0-based)
+	    	            0, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue("Período: "+FuncionesFechas.getMesFormat(mes)+"-"+anio+".");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            1, //first row (0-based)
+	    	            1, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue("Fecha de Generación de Reporte: "+FuncionesFechas.getFormatDate(new Date())+". ");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            2, //first row (0-based)
+	    	            2, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    row.createCell(0).setCellValue(" ");
+	    	    sheet.addMergedRegion(new CellRangeAddress(
+	    	            3, //first row (0-based)
+	    	            3, //last row  (0-based)
+	    	            0, //first column (0-based)
+	    	            3  //last column  (0-based)
+	    	    ));
+	    	    ++lineNum;
+	    	    row = sheet.createRow((short)lineNum);
+	    	    
+	    	    cell=row.createCell(0);
+	    	    cell.setCellValue("N° ");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(1);
+	    	    cell.setCellValue("TIPO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(2);
+	    	    cell.setCellValue("NRO DE DOCUMENTO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(3);
+	    	    cell.setCellValue("APELLIDOS Y NOMBRES");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(4);
+	    	    cell.setCellValue("REGIMEN");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(5);
+	    	    cell.setCellValue("TURNO");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(6);
+	    	    cell.setCellValue("DÍA");
+	    	    cell.setCellStyle(style1);	    	    	    	    
+	    	    cell=row.createCell(7);
+	    	    cell.setCellValue("FECHA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(8);
+	    	    cell.setCellValue("HORA FIJADA DE SALIDA");
+	    	    cell.setCellStyle(style1);
+	    	    cell=row.createCell(9);
+	    	    cell.setCellValue("HORA MARCACIÓN");
+	    	    cell.setCellStyle(style1);	    	    
+	    	    cell=row.createCell(10);
+	    	    cell.setCellValue("MINUTOS FALTANTES");
+	    	    cell.setCellStyle(style1);	  	    	    
+	    	    cell=row.createCell(11);
+	    	    cell.setCellValue("ACUMULADO MENSUAL DE MINUTOS FALTANTES");
+	    	    cell.setCellStyle(style1);	    	    	    	    
+	    	    cell=row.createCell(12);
+	    	    cell.setCellValue("DEPENDENCIA");
+	    	    cell.setCellStyle(style1);	    	    	    	    
+	    	    cell=row.createCell(13);
+	    	    cell.setCellValue("INTENDENCIA");
+	    	    cell.setCellStyle(style1);
+	    	    
+	    	    for (Iterator iterator = listaReporteSTemprano.iterator(); iterator
+						.hasNext();) {
+					Map map = (Map) iterator.next();
+					lineNum++;
+					System.out.println("row : "+lineNum+" ::: "+map.get("V_CODPERSONAL"));
+					row = sheet.createRow((short)lineNum);
+		    	    row.createCell(0).setCellValue((lineNum-4)+"");
+		    	    row.createCell(1).setCellValue(map.get("V_DESABR")+"");
+		    	    row.createCell(2).setCellValue(map.get("V_CODPERSONAL")+"");
+		    	    row.createCell(3).setCellValue(map.get("NOMBRES")+"");
+		    	    row.createCell(4).setCellValue(map.get("REGIMEN")+"");
+		    	    row.createCell(5).setCellValue(map.get("TURNO")+"");
+		    	    row.createCell(6).setCellValue(map.get("V_DESDIA")+"");		    	    
+		    	    row.createCell(7).setCellValue(map.get("V_FECHA")+"");
+		    	    row.createCell(8).setCellValue(map.get("IDEAL")+"");
+		    	    row.createCell(9).setCellValue(map.get("HORA")+"");			    	    
+		    	    row.createCell(10).setCellValue(map.get("MINSTEM")+"");
+		    	    row.createCell(11).setCellValue(map.get("TOTMINST")+"");		    	    		    	   
+		    	    row.createCell(12).setCellValue(map.get("V_DESDEP")+"");
+		    	    row.createCell(13).setCellValue(map.get("V_DESINT")+"");		    	    		    	   
+				}
+	    	    FileOutputStream fileOut;
+	    	    String rutaRpt=Funciones.ObtProp_Resources("ruta.reportes");
+	    	    fileOut = new FileOutputStream(rutaRpt+"/rptSTemprano"+rnd+".xlsx");
+				wb.write(fileOut);
+				fileOut.close();
+				InputStream stream;
+				try {
+					stream = new FileInputStream(rutaRpt+"/rptSTemprano"+rnd+".xlsx");					
+					StreamedContent fileDownload = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "rptSTemprano-"+rnd+".xlsx");
+					return fileDownload;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				} 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			listaReporteSTemprano=null;
+			return null;
+		}
+		return null;
+	}
+	
+}

@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+
+		<h:form id="formInicio">
+
+			<p:fieldset>
+				<p:toolbar>
+					<p:toolbarGroup align="center" styleClass="ui-widget-header"
+						style="border: 0px !important;text-align: center;">
+						<p:outputLabel value="BÚSQUEDA DE TURNO" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				<h:panelGrid columns="9" align="center">
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Descripcion &nbsp;&nbsp;" />
+					<p:inputText style="width: 120px"
+						value="#{turnoBean.filtro.vDesturno}" maxlength="20">
+						<p:ajax event="change" />
+					</p:inputText>
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Estado &nbsp;&nbsp;" />
+					<h:selectOneMenu style="width:120px" id="estado"
+						value="#{turnoBean.filtro.vFlgact}">
+						<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+						<f:selectItem itemLabel="ACTIVO" itemValue="#{'S'}" />
+						<f:selectItem itemLabel="INACTIVO" itemValue="#{'N'}" />
+						<p:ajax event="change" />
+					</h:selectOneMenu>
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:outputLabel value="Marca &nbsp;&nbsp;" />
+					<h:selectOneMenu style="width:120px" id="marca"
+						value="#{turnoBean.filtro.vFlgnomarca}">
+						<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+						<f:selectItem itemLabel="SI" itemValue="#{'S'}" />
+						<f:selectItem itemLabel="NO" itemValue="#{'N'}" />
+						<p:ajax event="change" />
+					</h:selectOneMenu>
+
+
+
+
+				</h:panelGrid>
+
+				<br/>
+
+				<center>
+					<p:commandButton value="Buscar" icon="icon-zsearch"
+						action="#{turnoBean.buscarTurno}" update=":formInicio" />
+					<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Nuevo" icon="icon-zadd" action="#{turnoBean.desplegarOpcionAgregar}" update=":formAgregar" />
+     				<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+					<p:commandButton value="Limpiar" icon="icon-escoba"
+						action="#{turnoBean.limpiar}" update="@form" />
+				</center>
+
+				<p:commandButton icon="ui-icon-circle-plus"
+					action="#{turnoBean.desplegarOpcionAgregar}" update=":formAgregar"
+					title="AGREGAR" style="float: right; clear: both;" rendered="false"/>
+				<p:dataTable id="datatable" value="#{turnoBean.listaTurno}"
+					var="item" widgetVar="usrTable"
+					emptyMessage="No se encontraron resultados" paginator="true"
+					rows="20"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,40,100">
+					<p:column headerText="Descripcion">
+						<h:outputText value="#{item.vDesturno}"
+							style="width:130px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Estado">
+						<h:outputText value="#{item.mostrarEstado()}"
+							style="width:250px !important; white-space: normal !important; text-align: center !important;" />
+					</p:column>
+					<p:column headerText="Marca">
+						<h:outputText value="#{item.mostrarMarca()}" />
+					</p:column>
+					<p:column headerText="Opción" style="text-align:center;">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{turnoBean.desplegarOpcionEditar(item)}"
+							update=":formEditar" title="EDITAR" />
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" />
+						<p:commandButton icon="ui-icon-suitcase" title="Turno Dia"
+							action="#{turnoDiaBean.selectTurno(item)}" />
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" />
+						<p:commandButton icon="ui-icon-circle-close" title="ELIMINAR"
+							action="#{turnoBean.selectEliminar(item)}" process="@this"
+							update=":formEliminar" />
+					</p:column>
+				</p:dataTable>
+
+
+
+				<br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <p:commandButton icon="ui-icon-pencil" title="EDITAR" />
+	        <p:outputLabel value="Editar Turno " />
+	        <p:commandButton icon="ui-icon-circle-close" title="ELIMINAR" />
+	        <p:outputLabel value="Eliminar Turno"  />	   
+	        <p:commandButton icon="ui-icon-suitcase" title="TURNO DIA" />
+	        <p:outputLabel value="Turno Dia" />	     
+	        </p:fieldset>
+	        </center>
+
+
+
+			</p:fieldset>
+
+		</h:form>
+		<h:form id="formMensajesEliminar">
+					<p:messages id="msgMensajesConsolidadoEliminar" closable="true"
+						escape="false" showDetail="false" />
+		</h:form>
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog widgetVar="formDialogWidgetAgregar" modal="true">
+			<h:form id="formAgregar">
+				<p:fieldset style="text-align: left;" legend="Agregar Turno">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;  Descripcion" />
+						<p:inputText id="addDesTurno" style="width: 120px"
+							value="#{turnoBean.nuevoTurno.vDesturno}" maxlength="60">
+							
+						</p:inputText>
+						<p:outputLabel />												
+
+						<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp; Marca &nbsp;" />
+						<h:selectOneMenu style="width:120px" id="addMarca"
+							value="#{turnoBean.nuevoTurno.vFlgnomarca}">
+							<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+							<f:selectItem itemLabel="SI" itemValue="#{'S'}" />
+							<f:selectItem itemLabel="NO" itemValue="#{'N'}" />
+							
+						</h:selectOneMenu>
+						<p:outputLabel value="" />
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Agregar" icon="ui-icon-plusthick"
+							action="#{turnoBean.agregar()}" process="@this, addDesTurno, addMarca"
+							update=":formInicio, :formMensajesAdd" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="formDialogWidgetEditar" modal="true">
+			<h:form id="formEditar">
+				<p:fieldset style="text-align: left;" legend="Editar Turno">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="Descripcion" />
+						<p:inputText id="editDesTurno" style="width: 120px"
+							value="#{turnoBean.editarTurno.vDesturno}" maxlength="60">
+						</p:inputText>
+						<p:outputLabel />
+						
+						<p:outputLabel value="&nbsp;&nbsp; Marca &nbsp;" />
+						<h:selectOneMenu id="editMarca" style="width:120px"
+							value="#{turnoBean.editarTurno.vFlgnomarca}">
+							<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+							<f:selectItem itemLabel="SI" itemValue="#{'S'}" />
+							<f:selectItem itemLabel="NO" itemValue="#{'N'}" />
+						</h:selectOneMenu>
+						<p:outputLabel value="" />
+						
+						<p:outputLabel value="&nbsp;&nbsp; Estado &nbsp;" />
+						<h:selectOneMenu id="editEstado" style="width:120px" 
+							value="#{turnoBean.editarTurno.vFlgact}">
+							<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+							<f:selectItem itemLabel="ACTIVO" itemValue="#{'S'}" />
+							<f:selectItem itemLabel="INACTIVO" itemValue="#{'N'}" />
+						</h:selectOneMenu>
+						<p:outputLabel value="" />
+					</h:panelGrid>
+					<center>
+						<p:commandButton value="Actualizar" icon="ui-icon-circle-check"
+							action="#{turnoBean.actualizar()}" process="@this,editDesTurno,editMarca,editEstado"
+							update=":formInicio, :formMensajesEdit" />
+					</center>
+				</p:fieldset>
+			</h:form>
+
+			<center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+
+		<p:dialog widgetVar="formDialogEliminar" modal="true">
+			<p:fieldset style="text-align: left;width:477px !important;"
+				legend="Confirmar">
+				<h:form id="formEliminar" enctype="multipart/form-data"
+					style="text-align: center;">
+					<br />
+					<h:panelGrid columns="2">
+						<p:graphicImage value="/resources/images/principal/warning.png" />
+						<h:outputText style="font-weight:bold !important;"
+							value="Está seguro que desea eliminar el turno seleccionado?" />
+					</h:panelGrid>
+					<br />
+					<br />
+					<p:commandButton value="Confirmar" action="#{turnoBean.eliminar()}"
+						update=":formInicio, :formMensajesEliminar" icon="ui-icon-circle-arrow-e"
+						oncomplete="formDialogEliminar.hide();" />
+					<br />
+					<br />
+				</h:form>
+			</p:fieldset>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Tardanza">
+
+<resultMap id="reporteTardanza-out" type="hashMap">  
+    
+    <result column="MES" 				jdbcType="VARCHAR" 		property="MES"		/>
+	<result column="ANIO" 				jdbcType="VARCHAR" 		property="ANIO" 	/>
+	<result column="FECHA" 				jdbcType="VARCHAR" 		property="FECHA" 	/>
+	<result column="V_FECHA" 			jdbcType="VARCHAR" 		property="V_FECHA" 	/>
+	<result column="V_CODPERSONAL" 		jdbcType="VARCHAR"		property="V_CODPERSONAL" 	/>	
+	<result column="TARDO" 				jdbcType="VARCHAR"		property="TARDO" 	/>
+	<result column="NOMBRES" 			jdbcType="VARCHAR"		property="NOMBRES" 	/>
+	<result column="N_NUMDEP" 			jdbcType="VARCHAR"		property="N_NUMDEP" 	/>
+	<result column="V_DESDEP" 			jdbcType="VARCHAR"		property="V_DESDEP" 	/>
+	<result column="N_NUMINT" 			jdbcType="VARCHAR"		property="N_NUMINT" 	/>
+	<result column="V_DESINT" 			jdbcType="VARCHAR"		property="V_DESINT" 	/>
+	<result column="V_CODTIPODOCID" 	jdbcType="VARCHAR"		property="V_CODTIPODOCID" 	/>
+	<result column="V_DESABR" 			jdbcType="VARCHAR"		property="V_DESABR" 	/>
+	<result column="V_DESTDOCIDE" 		jdbcType="VARCHAR"		property="V_DESTDOCIDE" 	/>	
+       
+  </resultMap>
+  
+  <select id="reporteTardanza" resultMap="reporteTardanza-out" parameterType="hashMap">
+  select 
+TO_CHAR(DIA_DE_MES.fecha,'MM') MES,
+TO_CHAR(DIA_DE_MES.fecha,'YYYY') ANIO,
+DIA_DE_MES.FECHA, 
+TO_CHAR(DIA_DE_MES.fecha,'DD/MM/YYYY') V_FECHA,
+p.V_CODPERSONAL, 
+FNC_TARDO(p.v_codpersonal, DIA_DE_MES.fecha) TARDO,
+P.V_DESAPEPAT||' '||P.V_DESAPEMAT||' '||P.V_DESNOMBRES NOMBRES,
+P.N_NUMDEP,
+D.V_DESDEP,
+D.N_NUMINT,
+I.V_DESINT,
+p.V_CODTIPODOCID,
+td.V_DESABR,
+td.V_DESTDOCIDE 
+from
+(
+select to_date('01.'||#{PARAM_MES}||'.'||#{PARAM_ANIO},'dd.mm.yyyy')+level-1 FECHA
+ from dual 
+ connect by level <![CDATA[ <= ]]> TO_CHAR(LAST_DAY(to_date('01.'||#{PARAM_MES}||'.'||#{PARAM_ANIO},'dd.mm.yyyy')),'DD')
+) DIA_DE_MES, 
+prtbc_personal p, 
+SIMINTRA1.SITB_FERIADOS F,
+TDTBC_DEPENDENCIA D,
+TDTBC_INTENDENCIA I,
+simintra1.sitb_tdocide td
+WHERE 
+DIA_DE_MES.fecha NOT IN (select to_date(T.D_FECHA,'dd.mm.yyyy') from rrhhsys.rhmvc_marcacion t)
+AND FNC_TARDO(p.v_codpersonal, DIA_DE_MES.fecha)>=1
+AND DIA_DE_MES.FECHA=F.D_FECFER(+)
+AND F.D_FECFER IS NULL
+AND P.N_NUMDEP=D.N_NUMDEP
+AND D.N_NUMINT=I.N_NUMINT
+and p.v_codtipodocid=td.v_codtdocide
+<if test="PARAM_INTENDENCIA != null" >
+AND d.n_numint=#{PARAM_INTENDENCIA}
+</if>
+<if test="PARAM_DEPENDENCIA != null" >
+AND p.n_numdep=#{PARAM_DEPENDENCIA}
+</if>
+<if test="PARAM_TIPODOC != null" >
+AND p.v_codtipodocid=#{PARAM_TIPODOC}
+</if>
+<if test="PARAM_NRODOC != null" >
+AND p.v_codpersonal=#{PARAM_NRODOC}
+</if>
+order by p.v_codpersonal asc,DIA_DE_MES.FECHA asc
+
+  </select>
+        
+</mapper>

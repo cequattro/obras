@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="REPORTE DE PERSONAL"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<h:panelGrid columns="3" >
+	<p:outputLabel value="Intendencia" />
+    <h:selectOneMenu style="width:345px" value="#{reporteBean.selectedIntendencia}" id="cboIntendencia" disabled="#{reporteBean.chkMultidependencia}" >             
+        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+        <f:selectItems value="#{reporteBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />     
+        <p:ajax event="change" update="@form" listener="#{reporteBean.itemChangeIntendencia()}"/>
+    </h:selectOneMenu>
+    <p:outputLabel value="" />
+	
+	<p:outputLabel value="Dependencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+	 <p:autoComplete scrollHeight="250" id="acSimple" value="#{reporteBean.txt1}" completeMethod="#{reporteBean.completeText}" size="81" minQueryLength="3" readonly="#{(reporteBean.selectedIntendencia==null) or (reporteBean.selectedIntendencia.equals(''))}" >
+	 <p:ajax event="itemSelect" listener="#{reporteBean.onItemSelect}" update="msgMensajesConsolidadoGlobal" />
+	 </p:autoComplete>
+	 <p:outputLabel value="" />
+	 </h:panelGrid>
+	
+	<h:panelGrid columns="8" >	
+	
+	<p:outputLabel value="Régimen Laboral &nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipoper" value="#{reporteBean.filtro.vCodtipo}">             
+             <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+             <f:selectItems value="#{personalBean.listaTipoPersonal}" var="tipo" itemLabel="#{tipo.vDestipo}" itemValue="#{tipo.vCodtipo}" />
+             <p:ajax event="change" />
+         </h:selectOneMenu>
+    <p:outputLabel value="&nbsp;&nbsp; Cargo &nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipocargo" value="#{reporteBean.filtro.vCodcargo}">             
+             <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+             <f:selectItems value="#{personalBean.listaCargoPersonal}" var="tipo" itemLabel="#{tipo.vNomcargo}" itemValue="#{tipo.vCodcargo}" />  
+             <p:ajax event="change" />           
+         </h:selectOneMenu> 
+	<p:outputLabel value="&nbsp;&nbsp; Estado &nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipoactivo" value="#{reporteBean.filtro.nFlgactivo}">             
+             <f:selectItem itemLabel="--TODOS--" itemValue="#{-1}" />
+        	 <f:selectItem itemLabel="ACTIVO" itemValue="#{1}" />
+        	 <f:selectItem itemLabel="INACTIVO" itemValue="#{0}" />       
+        	 <p:ajax event="change" />    
+         </h:selectOneMenu>
+    <p:outputLabel value="" />
+    <p:outputLabel value="" />
+    
+    <p:outputLabel value="Tipo Doc Personal"/>
+	<h:selectOneMenu style="width:120px" id="tipodoc" value="#{reporteBean.filtro.vCodtipodocid}" disabled="#{reporteBean.chkMultidependencia}">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />
+         <f:selectItems value="#{reporteBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+         <p:ajax event="change" />
+     </h:selectOneMenu>
+     <p:outputLabel value="Nro Doc" />
+     <p:inputText style="width: 120px" value="#{reporteBean.filtro.vCodpersonal}" onkeypress="return isNumberKeyNL(this);" disabled="#{reporteBean.chkMultidependencia}" id="nrodoc">
+     <p:ajax event="change" />
+     </p:inputText>    
+     <p:outputLabel value="" />
+     <p:outputLabel value="" />
+     <p:outputLabel value="" />
+     <p:outputLabel value="" />          
+    
+	</h:panelGrid>
+	
+	<h:panelGrid columns="2">
+		
+     <p:outputLabel value="Mostrar Solo Personal con Varias Dependencias" for="pregMultidependencia" />
+     <p:selectBooleanCheckbox id="pregMultidependencia" value="#{reporteBean.chkMultidependencia}" >
+     <p:ajax event="change" process="@this" update="cboIntendencia,acSimple,tipodoc,nrodoc" listener="#{reporteBean.checkedChangeMultidependencia()}" />
+     </p:selectBooleanCheckbox>
+	
+	</h:panelGrid>
+	
+	<center>
+	<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="Exportar" icon="icon-xls" title="Exportar" rendered="true" update="msgMensajesConsolidadoGlobal">
+      <p:fileDownload value="#{reporteBean.rptPersonal(System.currentTimeMillis())}" />
+  	</p:commandButton>
+	</center>		
+	        	 	
+	</p:fieldset>	
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{reporteBean.txt1}" />            
+        </p:panelGrid>
+    </p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,168 @@
+package pe.gob.sunafil.gestionpersonal.managedBeans;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
+
+import pe.gob.sunafil.gestionpersonal.bean.Usuario;
+import pe.gob.sunafil.gestionpersonal.mybatis.despachadores.MarcacionDespatch;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstMarcacionrrhh;
+
+@ManagedBean(name="reporteMarcacionBean")
+@SessionScoped
+public class ReporteMarcacionBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(ReporteMarcacionBean.class.getName());
+	@ManagedProperty("#{loginBean.PGP_Usuario}")
+	private Usuario  PGP_Usuario;
+	private Date fCargaI=new Date();
+	private Date fCargaF=new Date();
+	private List<VstMarcacionrrhh>listaMarcacion;
+	private String justificacionVerTipo;
+	private String justificacionVerMotivo;
+	
+	/*
+	 * METODOS GET Y SET
+	 * */
+
+	public String getJustificacionVerTipo() {
+		return justificacionVerTipo;
+	}
+
+	public void setJustificacionVerTipo(String justificacionVerTipo) {
+		this.justificacionVerTipo = justificacionVerTipo;
+	}
+
+	public String getJustificacionVerMotivo() {
+		return justificacionVerMotivo;
+	}
+
+	public void setJustificacionVerMotivo(String justificacionVerMotivo) {
+		this.justificacionVerMotivo = justificacionVerMotivo;
+	}
+
+	public void setPGP_Usuario(Usuario pGP_Usuario) {
+		PGP_Usuario = pGP_Usuario;
+	}
+
+	public Usuario getPGP_Usuario() {
+		return PGP_Usuario;
+	}
+
+	public void setListaMarcacion(List<VstMarcacionrrhh> listaMarcacion) {
+		this.listaMarcacion = listaMarcacion;
+	}
+
+	public void setfCargaI(Date fCargaI) {
+		this.fCargaI = fCargaI;
+	}
+
+	public void setfCargaF(Date fCargaF) {
+		this.fCargaF = fCargaF;
+	}
+
+	public Date getfCargaI() {
+		return fCargaI;
+	}
+
+	public Date getfCargaF() {
+		return fCargaF;
+	}
+
+	public List<VstMarcacionrrhh> getListaMarcacion() {
+		return listaMarcacion;
+	}
+
+	
+	
+	/*
+	 * METODO PARA LIMPIAR PANTALLA 
+	 * */
+	
+	public void limpiar(){
+		fCargaI=new Date();
+		fCargaF=new Date();
+		listaMarcacion=null;
+	}
+	
+	/*
+	 * METODO PARA BUSCAR LAS MARCACIONES DEL USUARIO EN UN RANGO DE FECHAS
+	 * */
+	public void buscarMarcacion(){
+		
+    	if(fCargaI.after(fCargaF))
+    	{
+    		limpiar();
+    		mostrarMensajeError("Fecha de Inicio debe ser menor q Fecha Final");
+    		return;
+    	}
+    	Date hoy= new Date();
+    	System.out.println("Fecha:"+hoy);
+    	if(fCargaI.after(hoy)|| fCargaF.after(hoy)){
+    		limpiar();
+    		mostrarMensajeError("Fechas Fuera de Rango ");
+    		return;
+    	}
+    	MarcacionDespatch marcacionDespatch=new MarcacionDespatch();
+		try {
+			//listaMarcacion=marcacionDespatch.getMarcacionesPorCodigo(PGP_Usuario.getV_codpersonal());
+			/*for(int i=0;i<listaMarcacion.size();i++)
+			{
+				if(listaMarcacion.get(i).getdFecha().after(fCargaI) && listaMarcacion.get(i).getdFecha().before(fCargaF)){
+					System.out.println("Entroo\nLista ["+(i+1)+"]:"+listaMarcacion.get(i).getdFecha());
+				}
+			}*/
+			listaMarcacion=marcacionDespatch.getMarcacionesPorCodigoFecha(PGP_Usuario.getV_codpersonal(),fCargaI,fCargaF);//"44436285"
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+    }
+	
+	/*
+	 * METODO PARA MOSTRAR CUADRO DE DIALOGO DONDE ESTAN LOS DETALLES DE SU MARCACION POR JUSTIFICACION
+	 * */
+	public void selectVerJustificacion(VstMarcacionrrhh item)
+    {    	
+    	justificacionVerMotivo=item.getvMotjus();
+    	justificacionVerTipo=item.getvDestipjus();
+    	RequestContext.getCurrentInstance().execute("dialogWidgetDetalleJustificacion.show()");
+    }
+	
+	/*
+	 * METODO PARA MOSTRAR LA VISTA REPORTE MARCACION SIN ESTO NO SE MOSTRARIA EL REPORTE MARCACION
+	 * */
+	 public String verMarcacion(){
+		 limpiar();
+			String vista="pretty:reporteMarcacionPretty";
+	        //CODIGO
+	        return  vista;
+		}     
+	 
+	 /*
+	  * METODOS PARA MOSTRAR MENSAJES
+	  * */
+	 public void mostrarMensajeInfo(String msg)
+		{		
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg));
+		}
+		
+		public void mostrarMensajeError(String msg)
+		{
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+		}
+}

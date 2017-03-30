@@ -1,0 +1,1990 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="EDITAR PERSONAL "/>      		 
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Personal">
+	<h:panelGrid columns="6" >
+	
+		 <p:outputLabel value="Tipo Documento &nbsp;&nbsp;&nbsp;"/>
+		 <h:selectOneMenu style="width:120px" id="tipodoc" value="#{personalBean.selectedPersonal.vCodtipodocid}" readonly="true" disabled="true">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />
+         <f:selectItems value="#{personalBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+     	 </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Nro Documento" />
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vCodpersonal}" readonly="true"/>
+         <p:outputLabel value=""/>                  
+
+         <p:outputLabel value="Apellido Paterno"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vDesapepat}" id="apepat" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Apellido Materno"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vDesapemat}" id="apemat" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel value="Nombres"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vDesnombres}" id="nombres" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />       
+         
+         <p:outputLabel for="button" value="Fecha nacimiento" />
+    	 <p:calendar id="button" showOn="button" size="10"  value="#{personalBean.selectedPersonal.dFecnac}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida" >
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " />
+    	 
+    	 <p:outputLabel value="Teléfono Fijo"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vNumtelfij}" id="tfij" maxlength="10" onkeypress="return soloNumeros(event);">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Teléfono Celular"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vNumtelcel}" id="tcel" maxlength="10" onkeypress="return soloNumeros(event);">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Correo Institucional"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vCorreoins}" id="corins" maxlength="90">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         
+         <p:outputLabel value="Correo Personal"/>
+         <p:inputText style="width: 120px" value="#{personalBean.selectedPersonal.vCorreoper}" id="corper" maxlength="90">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />         
+    	 
+    	 <p:outputLabel value="Estado"/>
+		 <h:selectOneMenu style="width:120px" id="tipoactivo" value="#{personalBean.selectedPersonal.nFlgactivo}">             
+             <f:selectItem itemLabel="---" itemValue="#{null}" />
+        	 <f:selectItem itemLabel="ACTIVO" itemValue="#{1}" />
+        	 <f:selectItem itemLabel="INACTIVO" itemValue="#{0}" />  
+        	 <p:ajax event="change" update="@form" />         
+         </h:selectOneMenu>
+         <p:outputLabel value=""/>
+         
+         <p:outputLabel for="buttonb" value="Fecha de baja" rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" />
+    	 <p:calendar id="buttonb" showOn="button" size="10"  value="#{personalBean.fechaBaja}" pattern="dd/MM/yyyy" locale="es" navigator="true" rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" maxlength="10" converterMessage="Debe ingresar una fecha de baja válida">
+    	 <f:convertDateTime timeZone="America/Lima" />
+    	 </p:calendar>
+    	 <p:outputLabel value=" " rendered="#{personalBean.selectedPersonal.nFlgactivo==0}" />
+    	 
+     </h:panelGrid>
+     
+     </p:fieldset>
+     
+     <br/>
+     
+     <p:fieldset style="text-align: left;" legend="Detalle" rendered="false">    	      
+         
+     <h:panelGrid columns="3" >
+         
+         <p:outputLabel value="Correo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+         <p:inputText style="width: 275px" value="#{personalBean.selectedPersonal.vCorreoe}" id="correo" maxlength="100">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=""/>                                             
+         
+    </h:panelGrid>                         
+    
+	</p:fieldset>
+	 	
+		 	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">
+     		 <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.editar(true)}" update="@form, :formUploadBaja"/>   
+     		 <p:commandButton value="Regresar" icon="ui-icon-arrowthick-1-w" action="#{personalBean.verPersonalReturn}" update="@form" immediate="true"/>  		      		
+    	</h:panelGrid>
+    	</center>
+    	
+    	<p:fieldset style="text-align: left;" legend="Información de Personal">	        
+		    <p:tabView>
+		    	<p:tab title="Dirección">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableDirecciones" value="#{personalBean.listaDirecciones}" 
+				                         var="item" widgetVar="usrTableDirecciones"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Región / Provincia / Distrito" >
+				                <h:outputText value="#{item.vDesdis}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Tipo de Zona" >
+				                <h:outputText value="#{item.vDeszon}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Tipo de Vía" >
+				                <h:outputText value="#{item.vDestvia}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Zona" >
+				                <h:outputText value="#{item.vDeszona}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column> 
+				            <p:column headerText="Dirección" >
+				                <h:outputText value="#{item.vDireccion}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>      
+				            <p:column headerText="Fecha de Registro" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecreg)}"/>
+				            </p:column>				     
+				            <p:column headerText="Última Dirección" >
+				                <h:outputText value="#{personalBean.getFormatFlgUlt(item.vFlgdirult)}"/>
+				            </p:column>            				            
+				            <p:column headerText="Opción">	    
+				            				            		            				
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleDireccionE" title="EDITAR" action="#{personalBean.dialogDetalleDireccionE(item)}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarDireccion(item)}" process="@this" update=":formUploadBajaDetalleDireccion" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleDireccion()}" update=":dlgRefFormDetalle" title="AGREGAR DIRECCIÓN" value="Agregar Dirección"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Profesión">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableProfesion" value="#{personalBean.listaProfesion}" 
+				                         var="item" widgetVar="usrTableProfesion"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Profesión" >
+				                <h:outputText value="#{item.vDesprof}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>          
+				            <p:column headerText="Fecha de Registro" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecreg)}"/>
+				            </p:column>				                 
+				            <p:column headerText="Opción">	    
+				            				            	
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleProfesionE" title="EDITAR" action="#{personalBean.dialogDetalleProfesionE(item)}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarProfesion(item)}" process="@this" update=":formUploadBajaDetalleProfesion" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleProfesion()}" update=":dlgRefFormDetalleProfesion" title="AGREGAR PROFESIÓN" value="Agregar Profesión"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Régimen Pensionario">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableRegPensionario" value="#{personalBean.listaRegPensionario}" 
+				                         var="item" widgetVar="usrTableRegPensionario"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Tipo de Régimen Pensionario" >
+				                <h:outputText value="#{item.vDesregpen}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>      
+				            <p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+				            </p:column>				                 
+				            <p:column headerText="Fecha de Fin" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+				            </p:column>
+				            <p:column headerText="Estado" rendered="false" >
+				                <h:outputText value="#{personalBean.getFormatFlgAct(item.vFlgact)}"/>
+				            </p:column>
+				            <p:column headerText="Opción">	    
+				            				            	
+	            				<p:commandButton icon="ui-icon-zoomin" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleRegPensionarioE" title="EDITAR" action="#{personalBean.dialogDetalleRegPensionarioE(item)}" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarRegPensionario(item)}" process="@this" update=":formUploadBajaDetalleRegPensionario" rendered="#{item.vFlgact.equals('S')}" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleRegPensionario()}" update=":dlgRefFormDetalleRegPensionario" title="AGREGAR RÉGIMEN PENSIONARIO" value="Agregar Régimen Pensionario"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Seguro">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableSeguro" value="#{personalBean.listaSeguro}" 
+				                         var="item" widgetVar="usrTableSeguro"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Tipo de Seguro" >
+				                <h:outputText value="#{item.vDesseguro}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>      
+				            <p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+				            </p:column>				                 
+				            <p:column headerText="Fecha de Fin" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+				            </p:column>
+				            <p:column headerText="Estado" rendered="false" >
+				                <h:outputText value="#{personalBean.getFormatFlgAct(item.vFlgact)}"/>
+				            </p:column>
+				            <p:column headerText="Opción">	    
+				            				            	
+	            				<p:commandButton icon="ui-icon-zoomin" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleSeguroE" title="EDITAR" action="#{personalBean.dialogDetalleSeguroE(item)}" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarSeguro(item)}" process="@this" update=":formUploadBajaDetalleSeguro" rendered="#{item.vFlgact.equals('S')}" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleSeguro()}" update=":dlgRefFormDetalleSeguro" title="AGREGAR SEGURO" value="Agregar Seguro"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="SCTR">
+		        	<h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableSeguroSCTR" value="#{personalBean.listaSeguroSCTR}" 
+				                         var="item" widgetVar="usrTableSeguroSCTR"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Tipo de Seguro" >
+				                <h:outputText value="#{item.vDesseguro}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>      
+				            <p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+				            </p:column>				                 
+				            <p:column headerText="Fecha de Fin" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+				            </p:column>
+				            <p:column headerText="Estado" rendered="false" >
+				                <h:outputText value="#{personalBean.getFormatFlgAct(item.vFlgact)}"/>
+				            </p:column>
+				            <p:column headerText="Opción">	    
+				            				            	
+	            				<p:commandButton icon="ui-icon-zoomin" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleSeguroSCTRE" title="EDITAR" action="#{personalBean.dialogDetalleSeguroSCTRE(item)}" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarSeguroSCTR(item)}" process="@this" update=":formUploadBajaDetalleSeguroSCTR" rendered="#{item.vFlgact.equals('S')}" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleSeguroSCTR()}" update=":dlgRefFormDetalleSeguroSCTR" title="AGREGAR SEGURO SCTR" value="Agregar Seguro SCTR"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Entidad Financiera">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableEntFinanciera" value="#{personalBean.listaEntfinanciera}" 
+				                         var="item" widgetVar="usrTableEntFinanciera"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Entidad Financiera" >
+				                <h:outputText value="#{item.vDesentfin}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Número de Cuenta" >
+				                <h:outputText value="#{item.vNumcuenta}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Número de CCI" >
+				                <h:outputText value="#{item.vCodcci}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>          
+				            <p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+				            </p:column>				                 
+				            <p:column headerText="Fecha de Fin" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+				            </p:column>
+				            <p:column headerText="Estado" rendered="false" >
+				                <h:outputText value="#{personalBean.getFormatFlgAct(item.vFlgact)}"/>
+				            </p:column>
+				            <p:column headerText="Opción">	    
+				            				            	
+	            				<p:commandButton icon="ui-icon-zoomin" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleEntFinancieraE" title="EDITAR" action="#{personalBean.dialogDetalleEntFinancieraE(item)}" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarEntFinanciera(item)}" process="@this" update=":formUploadBajaDetalleEntFinanciera" rendered="#{item.vFlgact.equals('S')}" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleEntFinanciera()}" update=":dlgRefFormDetalleEntFinanciera" title="AGREGAR ENTIDAD FINANCIERA" value="Agregar Entidad Financiera"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Sindicato">
+		            <h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                		                
+		                <p:dataTable id="datatableSindicato" value="#{personalBean.listaSindicato}" 
+				                         var="item" widgetVar="usrTableSindicato"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Sindicato" >
+				                <h:outputText value="#{item.vDessindic}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Cargo Sindical" >
+				                <h:outputText value="#{item.vDescarsin}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>	           
+				            <p:column headerText="Fecha de Inicio" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+				            </p:column>
+				            <p:column headerText="Fecha de Fin" >
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecfin)}"/>
+				            </p:column>	
+				            <p:column headerText="Estado" rendered="false">
+				                <h:outputText value="#{personalBean.getFormatFlgAct(item.vFlgact)}"/>
+				            </p:column>          
+				            <p:column headerText="Opción">	    
+				            
+				            	<p:commandButton icon="ui-icon-zoomin" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleSindicatoE" title="EDITAR" action="#{personalBean.dialogDetalleSindicatoE(item)}" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarSindicato(item)}" process="@this" update=":formUploadBajaDetalleSindicato" rendered="#{item.vFlgact.equals('S')}" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleSindicato()}" update=":dlgRefFormDetalleSindicato" title="AGREGAR SINDICATO" value="Agregar Sindicato"/>
+	        
+		            </h:panelGrid>
+		        </p:tab>		        
+		        <p:tab title="Dependientes">
+		        	<h:panelGrid columns="1" style="text-align: center;width:710px;">
+		                
+		                <p:dataTable id="datatableDependientes" value="#{personalBean.listaDependientes}" 
+				                         var="item" widgetVar="usrTableDependientes"   
+				                         emptyMessage="No se encontraron resultados"
+				                         paginator="true" rows="20"  
+				                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+				                         rowsPerPageTemplate="20,40,100">
+				            <p:column headerText="Apellidos y Nombres" >
+				                <h:outputText value="#{item.vApepatmat} #{item.vApematmat} #{item.vNombres}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Vinculo" >
+				                <h:outputText value="#{item.vDesvinfam}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Tipo de Documento" >
+				                <h:outputText value="#{item.vDesabr}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>
+				            <p:column headerText="Nro Documento" >
+				                <h:outputText value="#{item.vNumdoc}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column> 
+				            <p:column headerText="Género" >
+				                <h:outputText value="#{item.vGenero}" style="width:150px !important; white-space: normal !important; text-align: center !important;"/>
+				            </p:column>      
+				            <p:column headerText="Fecha de Nacimiento" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecnac)}"/>
+				            </p:column>
+				            <p:column headerText="Edad" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+				                <h:outputText value="#{funcionesFechasBean.getEdad(item.dFecnac)}"/>
+				            </p:column>				                      				            
+				            <p:column headerText="Opción">	    
+				            				            		            				
+	            				<p:commandButton icon="ui-icon-pencil" update=":dlgRefFormDetalleDependienteE" title="EDITAR" action="#{personalBean.dialogDetalleDependienteE(item)}" immediate="true"/>	
+	            				<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            				<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminarDependiente(item)}" process="@this" update=":formUploadBajaDetalleDependiente" immediate="true" />        				            					            			            		            
+				            	
+				            </p:column>
+				        </p:dataTable>
+				        <p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalleDependiente()}" update=":dlgRefFormDetalleDependiente" title="AGREGAR DEPENDIENTE" value="Agregar Dependiente"/>
+				        
+		            </h:panelGrid>
+		        </p:tab>
+		    </p:tabView>
+		</p:fieldset>
+		
+		<br/>
+    	
+    	<p:fieldset style="text-align: left;" legend="Detalle de Dependencia">
+    	
+    	<p:commandButton icon="ui-icon-circle-plus" action="#{personalBean.dialogDetalle()}" update=":dlgRefFormDetalle" title="AGREGAR DETALLE" style="float: right; clear: both;"/>
+    	<p:dataTable id="datatable" value="#{personalBean.listaDetPersonal}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Intendencia" >
+	                <h:outputText value="#{item.vDesint}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Dependencia" >
+	                <h:outputText value="#{item.vDesdep}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Régimen Laboral" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{item.vDestipo}"/>
+	            </p:column>
+	            <p:column headerText="Cargo" >
+	                <h:outputText value="#{item.vNomcargo}"/>
+	            </p:column>	
+	            <p:column headerText="Escala" >
+	                <h:outputText value="#{item.vNomescala}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Inicio">
+	                <h:outputText value="#{funcionesFechasBean.getFormatDate(item.dFecini)}"/>
+	            </p:column>            
+	            <p:column headerText="Opción" >	            
+	            	
+	            	<p:commandButton icon="ui-icon-zoomin" action="#{personalBean.dialogDetalleE(item)}" update=":dlgRefFormDetalleE" title="VER" rendered="#{item.vFlgact.equals('N')}" immediate="true"/>
+	            	<p:commandButton icon="ui-icon-pencil" action="#{personalBean.dialogDetalleE(item)}" update=":dlgRefFormDetalleE" title="EDITAR" rendered="#{item.vFlgact.equals('S')}" immediate="true"/>	
+	            	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            	<p:commandButton icon="ui-icon-circle-close" 
+	                                 title="ELIMINAR" action="#{personalBean.dialogReferenciaEliminar(item)}" process="@this" update=":formUpload3" rendered="#{item.vFlgact.equals('S')}" immediate="true" />
+	                
+	                <p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="#{item.vFlgprin.equals('S') and item.vFlgact.equals('S')}" />    
+	                <p:graphicImage value="/resources/images/iconos/zuser.png" height="16px" width="16px" id="fade" rendered="#{item.vFlgprin.equals('S') and item.vFlgact.equals('S')}" title="DEPENDENCIA PRINCIPAL"/>
+	                             
+	                <p:outputLabel value="&nbsp;&nbsp;&nbsp;" rendered="#{item.vFlgprin.equals('N') and item.vFlgact.equals('S')}" />             
+	                <p:commandButton icon="icon-zup" action="#{personalBean.dialogSetPrincipal(item)}" title="ESTABLECER COMO DEPENDENCIA PRINCIPAL" rendered="#{item.vFlgprin.equals('N') and item.vFlgact.equals('S')}" process="@this" update=":formUpload4" immediate="true"/>		            		            	
+	            	
+	            </p:column>
+	        </p:dataTable>
+	        
+	        <br/>
+	        
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="VER">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-zoomin"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        <p:outputLabel value="Ver " />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="AGREGAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-circle-plus"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        <p:outputLabel value="Agregar " />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="EDITAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-pencil"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        <p:outputLabel value="Editar " />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="ELIMINAR">
+			<span class="ui-button-icon-left ui-icon ui-c ui-icon-circle-close"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        <p:outputLabel value="Eliminar " />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="DEPENDENCIA PRINCIPAL">
+			<span class="ui-button-icon-left ui-icon ui-c icon-zuser"></span><span class="ui-button-text ui-c">ui-button</span></span>	        
+	        <p:outputLabel value="Dependencia Principal Actual " />
+	        
+	        <span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" title="ESTABLECER COMO DEPENDENCIA PRINCIPAL">
+			<span class="ui-button-icon-left ui-icon ui-c icon-zup"></span><span class="ui-button-text ui-c">ui-button</span></span>
+	        <p:outputLabel value="Establecer Como Dependencia Principal" />
+	        
+	        
+	        </p:fieldset>
+	        </center>
+	        
+	        </p:fieldset>
+	        
+	</p:fieldset>
+	
+	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+	</center>
+    	    	    	    	
+	</h:form>
+	
+	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>		
+	
+	<script type="text/javascript">  
+       //<![CDATA[
+       	function fn_ingresar(){
+       		document.getElementById("dlgRefFormDetalleDependiente:btnIngresar").click();
+   	    }		
+       	function fn_enterDNI(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar();
+       		}
+       	}	       	
+ 		//]]>
+	</script>
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{personalBean.txt3}" />            
+        </p:panelGrid>
+    </p:dialog>
+    
+    <p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg2">
+        <p:panelGrid id="output2" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{personalBean.txt4}" />            
+        </p:panelGrid>
+    </p:dialog>
+    
+    <p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlgProfesion">
+        <p:panelGrid id="outputProfesion" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{personalBean.txtProfesion}" />            
+        </p:panelGrid>
+    </p:dialog>
+    
+    <p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlgProfesionE">
+        <p:panelGrid id="outputProfesionE" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{personalBean.txtProfesionE}" />            
+        </p:panelGrid>
+    </p:dialog>
+    
+    <p:dialog widgetVar="dialogWidgetDetalle" modal="true">
+		   <h:form id="dlgRefFormDetalle">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Detalle">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Intendencia" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.selectedIntendencia3}" >             
+		         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />
+		         <f:selectItem itemLabel="DIRECCIONES REGIONALES" itemValue="#{-1}" />     
+		         <p:ajax event="change" update="@form" listener="#{personalBean.itemChangeIntendencia3()}"/>
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		     
+		     	 <p:outputLabel value="Dependencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+				 <p:autoComplete id="acSimple" value="#{personalBean.txt3}" completeMethod="#{personalBean.completeText3}" size="80" minQueryLength="3" readonly="#{(personalBean.selectedIntendencia3==null) or (personalBean.selectedIntendencia3.equals(''))}" >
+				 <p:ajax event="itemSelect" listener="#{personalBean.onItemSelect3}" update=":formInicio:msgMensajesConsolidadoGlobal" />
+				 </p:autoComplete>
+				 <p:outputLabel value="" />
+				 
+		     </h:panelGrid>     
+				 
+		     <h:panelGrid columns="9" >
+		     
+		     	<p:outputLabel for="buttone" value="Fecha de inicio" />
+		         <p:calendar id="buttone" showOn="button" size="10"  value="#{personalBean.dFecini}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel value="Régimen Laboral &nbsp;&nbsp;"/>
+				 <h:selectOneMenu style="width:120px" id="tipoper" value="#{personalBean.nuevoDetPersonal.vCodtipo}" disabled="#{personalBean.deshabilitarTipoYEscala}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaTipoPersonal}" var="tipo" itemLabel="#{tipo.vDestipo}" itemValue="#{tipo.vCodtipo}" />
+		             <p:ajax event="change" update=":dlgRefFormDetalle:destaquepanela,:dlgRefFormDetalle:resolpanela,:dlgRefFormDetalle:clascarpanela" />
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>                                   
+				 
+				 <p:outputLabel value="Cargo"/>
+				 <h:selectOneMenu style="width:120px" id="tipocargo" value="#{personalBean.nuevoDetPersonal.vCodcargo}" disabled="#{menuBean.formDisable}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaCargoPersonal}" var="tipo" itemLabel="#{tipo.vNomcargo}" itemValue="#{tipo.vCodcargo}" />
+		             <p:ajax event="change" />             
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Escala"  rendered="false"/>
+				 <h:selectOneMenu  rendered="false" style="width:120px" id="tipoescala" value="#{personalBean.nuevoDetPersonal.vCodescala}" disabled="#{personalBean.deshabilitarTipoYEscala}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaEscala}" var="tipo" itemLabel="#{tipo.vNomescala}" itemValue="#{tipo.vCodescala}" />
+		             <p:ajax event="change" />
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>			         		         	         		        
+		         
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="3" id="clascarpanela" >
+		     
+		     	<p:outputLabel value="Clasificación Cargo" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}"/>
+				 <h:selectOneMenu style="width:120px" id="clascargo" value="#{personalBean.nuevoDetPersonal.nCorclacar}" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaClasificacionesCargo}" var="tipo" itemLabel="#{tipo.vDesclacar}" itemValue="#{tipo.nCorclacar}" />
+		             <p:ajax event="change" />             
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}"/>
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="9" >
+		     
+		    	 <p:outputLabel value="Año Contrato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDetPersonal.vAnocon}" id="anioadd" maxlength="4" onkeypress="return soloNumeros(event);">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="&nbsp; Número de Contrato &nbsp;"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDetPersonal.vNumcon}" id="nrocontractadd" maxlength="10" onkeypress="return soloNumeros(event);">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		         <p:outputLabel value=" " />
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="2">
+		     
+		     <h:panelGrid columns="3" id="destaquepanela">
+		     
+		     <p:outputLabel value="Es Destaque &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}" />
+			 <p:selectOneRadio value="#{personalBean.nuevoDetPersonal.vFlgdes}" id="v_flgdes" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}">		
+			 <p:ajax event="change" update=":dlgRefFormDetalle:resolpanela" process="@this" />	
+			 <f:selectItem itemLabel="SI" itemValue="S" />
+			 <f:selectItem itemLabel="NO" itemValue="N" />
+			 </p:selectOneRadio>
+			 <p:outputLabel value="" rendered="#{personalBean.nuevoDetPersonal.vCodtipo.equals('4')}" />
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="3" id="resolpanela">
+		     
+		     <p:outputLabel value="Resolución"  rendered="#{personalBean.nuevoDetPersonal.vFlgdes.equals('S') and personalBean.nuevoDetPersonal.vCodtipo.equals('4')}" />
+	         <h:selectOneMenu style="width:230px" value="#{personalBean.nuevoDetPersonal.nCodres}" rendered="#{personalBean.nuevoDetPersonal.vFlgdes.equals('S') and personalBean.nuevoDetPersonal.vCodtipo.equals('4')}" >             
+	         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+	         <f:selectItems value="#{personalBean.listaResolucionesDestaque}" var="tipo" itemLabel="#{tipo.vDestipres} #{tipo.vAnores} - #{tipo.vNumres}" itemValue="#{tipo.nCodres}" />
+	         <p:ajax event="change" />     		         
+	         </h:selectOneMenu>
+			 <p:outputLabel value=""  rendered="#{personalBean.nuevoDetPersonal.vFlgdes.equals('S') and personalBean.nuevoDetPersonal.vCodtipo.equals('4')}" />
+		     
+		     </h:panelGrid>
+		     
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalle}" process="@this, buttone" update=":formInicio, :formMensajesAdd" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>	 		
+	
+	<p:dialog widgetVar="dialogWidget3" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload3" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el registro seleccionado cuya dependencia es #{personalBean.eliminarDetPersonalV.vDesdep} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminar()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget3.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetDetalleE" modal="true">
+		   <h:form id="dlgRefFormDetalleE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Detalle">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Intendencia" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.selectedIntendencia4}" >             
+		         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />     
+		         <p:ajax event="change" update="@form" listener="#{personalBean.itemChangeIntendencia4()}"/>
+		         <f:selectItem itemLabel="DIRECCIONES REGIONALES" itemValue="#{-1}" />
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		     
+		     	 <p:outputLabel value="Dependencia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+				 <p:autoComplete id="acSimple2" value="#{personalBean.txt4}" completeMethod="#{personalBean.completeText4}" size="80" minQueryLength="3" readonly="#{(personalBean.selectedIntendencia4==null) or (personalBean.selectedIntendencia4.equals(''))}" >
+				 <p:ajax event="itemSelect" listener="#{personalBean.onItemSelect4}" update=":formInicio:msgMensajesConsolidadoGlobal" />
+				 </p:autoComplete>
+				 <p:outputLabel value="" />
+				 
+		     </h:panelGrid>     
+				 
+		     <h:panelGrid columns="9" >
+		         
+		         <p:outputLabel value="Régimen Laboral &nbsp;&nbsp;"/>
+				 <h:selectOneMenu style="width:120px" id="tipoper" value="#{personalBean.editarDetPersonal.vCodtipo}" disabled="#{menuBean.formDisable}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaTipoPersonal}" var="tipo" itemLabel="#{tipo.vDestipo}" itemValue="#{tipo.vCodtipo}" />
+		             <p:ajax event="change" update=":dlgRefFormDetalleE:destaquepanel,:dlgRefFormDetalleE:resolpanel,:dlgRefFormDetalleE:clascarpanel" />
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>                                   
+				 
+				 <p:outputLabel value="Cargo"/>
+				 <h:selectOneMenu style="width:120px" id="tipocargo" value="#{personalBean.editarDetPersonal.vCodcargo}" disabled="#{menuBean.formDisable}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaCargoPersonal}" var="tipo" itemLabel="#{tipo.vNomcargo}" itemValue="#{tipo.vCodcargo}" />
+		             <p:ajax event="change" />             
+		         </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value=""/>
+		         <p:outputLabel value=""/>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Escala" rendered="false"/>
+				 <h:selectOneMenu style="width:120px" id="tipoescala" value="#{personalBean.editarDetPersonal.vCodescala}" disabled="#{menuBean.formDisable}" rendered="false">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaEscala}" var="tipo" itemLabel="#{tipo.vNomescala}" itemValue="#{tipo.vCodescala}" />
+		             <p:ajax event="change" />
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" rendered="false"/>
+		         
+		         <p:outputLabel for="buttoneee" value="Fecha de inicio" />
+		         <p:calendar id="buttoneee" showOn="button" size="10"  value="#{personalBean.dFeciniE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel for="buttonee" value="Fecha de fin" rendered="#{personalBean.editarDetPersonal.vFlgact.equals('N')}" />
+		         <p:calendar id="buttonee" showOn="button" size="10"  value="#{personalBean.dFecfinE}" pattern="dd/MM/yyyy" locale="es" navigator="true" rendered="#{personalBean.editarDetPersonal.vFlgact.equals('N')}" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " rendered="#{personalBean.editarDetPersonal.vFlgact.equals('N')}" />
+		         
+		         <p:outputLabel value="Estado"/>
+				 <h:selectOneMenu style="width:120px" id="tipoactivoe" value="#{personalBean.editarDetPersonal.vFlgact}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		        	 <f:selectItem itemLabel="ACTIVO" itemValue="#{'S'}" />
+		        	 <f:selectItem itemLabel="INACTIVO" itemValue="#{'N'}" /> 
+		        	 <p:ajax event="change" update=":dlgRefFormDetalleE" />          
+		         </h:selectOneMenu>
+         		 <p:outputLabel value=""/>         		          		 
+         		 		         
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="3" id="clascarpanel" >
+		     
+		     	<p:outputLabel value="Clasificación Cargo" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}"/>
+				 <h:selectOneMenu style="width:120px" id="clascargo" value="#{personalBean.editarDetPersonal.nCorclacar}" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}">             
+		             <f:selectItem itemLabel="---" itemValue="#{null}" />
+		             <f:selectItems value="#{personalBean.listaClasificacionesCargo}" var="tipo" itemLabel="#{tipo.vDesclacar}" itemValue="#{tipo.nCorclacar}" />
+		             <p:ajax event="change" />             
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}"/>
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="9" >
+		     
+		     	 <p:outputLabel value="Año Contrato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDetPersonal.vAnocon}" id="anio" maxlength="4" onkeypress="return soloNumeros(event);">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="&nbsp; Número de Contrato &nbsp;"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDetPersonal.vNumcon}" id="nrocontract" maxlength="10" onkeypress="return soloNumeros(event);">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value=""/>
+		         <p:outputLabel value=""/>
+		         <p:outputLabel value=""/>
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="2">
+		     
+		     <h:panelGrid columns="3" id="destaquepanel">
+		     
+		     <p:outputLabel value="Es Destaque &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}" />
+			 <p:selectOneRadio value="#{personalBean.editarDetPersonal.vFlgdes}" id="v_flgdes" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}">		
+			 <p:ajax event="change" update=":dlgRefFormDetalleE:resolpanel" process="@this" />	
+			 <f:selectItem itemLabel="SI" itemValue="S" />
+			 <f:selectItem itemLabel="NO" itemValue="N" />
+			 </p:selectOneRadio>
+			 <p:outputLabel value="" rendered="#{personalBean.editarDetPersonal.vCodtipo.equals('4')}" />
+		     
+		     </h:panelGrid>
+		     
+		     <h:panelGrid columns="3" id="resolpanel">
+		     
+		     <p:outputLabel value="Resolución"  rendered="#{personalBean.editarDetPersonal.vFlgdes.equals('S') and personalBean.editarDetPersonal.vCodtipo.equals('4')}" />
+	         <h:selectOneMenu style="width:230px" value="#{personalBean.editarDetPersonal.nCodres}" rendered="#{personalBean.editarDetPersonal.vFlgdes.equals('S') and personalBean.editarDetPersonal.vCodtipo.equals('4')}" >             
+	         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+	         <f:selectItems value="#{personalBean.listaResolucionesDestaque}" var="tipo" itemLabel="#{tipo.vDestipres} #{tipo.vAnores} - #{tipo.vNumres}" itemValue="#{tipo.nCodres}" />
+	         <p:ajax event="change" />     		         
+	         </h:selectOneMenu>
+			 <p:outputLabel value=""  rendered="#{personalBean.editarDetPersonal.vFlgdes.equals('S') and personalBean.editarDetPersonal.vCodtipo.equals('4')}" />
+		     
+		     </h:panelGrid>
+		     
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalle(true)}" process="@this, buttoneee, buttonee" update=":formInicio, :formMensajesEdit, :formUploadBajaDetalle" rendered="#{!personalBean.soloVer}" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidget4" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload4" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea establecer como principal dependencia a #{personalBean.principalDetPersonalV.vDesdep} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.principal()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget4.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetBaja" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBaja" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea dar de baja a #{personalBean.selectedPersonal.vDesapepat} #{personalBean.selectedPersonal.vDesapemat} #{personalBean.selectedPersonal.vDesnombres} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.editar(false)}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidgetBaja.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalle" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalle" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea poner en estado INACTIVO la dependencia #{personalBean.txt4} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.actualizarDetalle(false)}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidgetBajaDetalle.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSindicato" modal="true">
+		   <h:form id="dlgRefFormDetalleSindicato">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Sindicato">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Sindicato" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetSindicato.nCodsindic}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSindicato}" var="tipo" itemLabel="#{tipo.vDessindic}" itemValue="#{tipo.nCodsindic}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Cargo Sindical" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetSindicato.nCodcarsin}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCargoSindical}" var="tipo" itemLabel="#{tipo.vDescarsin}" itemValue="#{tipo.nCodcarsin}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel for="buttonesind" value="Fecha de inicio" />
+		         <p:calendar id="buttonesind" showOn="button" size="10"  value="#{personalBean.dFeciniSindicato}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleSindicato}" process="@this, buttonesind" update=":formInicio, :formMensajesAddSindicato" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddSindicato">
+					<p:messages id="msgMensajesConsolidadoAddSindicato"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleProfesion" modal="true">
+		   <h:form id="dlgRefFormDetalleProfesion">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Profesión">
+	           <h:panelGrid columns="3" >      
+	           
+	             <p:outputLabel value="Profesión" />	
+				 <p:autoComplete id="acSimpleProfesion" value="#{personalBean.txtProfesion}" completeMethod="#{personalBean.completeTextProfesion}" size="43" minQueryLength="3" >
+				 <p:ajax event="itemSelect" listener="#{personalBean.onItemSelectProfesion}" update=":formInicio:msgMensajesConsolidadoGlobal" />
+				 </p:autoComplete>
+				 <p:outputLabel value="" />     		     	 		     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleProfesion}" process="@this, acSimpleProfesion" update=":formInicio, :formMensajesAddProfesion" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddProfesion">
+					<p:messages id="msgMensajesConsolidadoAddProfesion"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleEntFinanciera" modal="true">
+		   <h:form id="dlgRefFormDetalleEntFinanciera">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Entidad Financiera">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Entidad Financiera" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetEntFinanciera.nCodentfin}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabEntFinanciera}" var="tipo" itemLabel="#{tipo.vDesentfin}" itemValue="#{tipo.nCodentfin}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		     
+		     	 <p:outputLabel value="Número de Cuenta"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDetEntFinanciera.vNumcuenta}" id="cuentaef" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Número de CCI"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDetEntFinanciera.vCodcci}" id="ccief" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel for="buttoneef" value="Fecha de inicio" />
+		         <p:calendar id="buttoneef" showOn="button" size="10"  value="#{personalBean.dFeciniEntFinanciera}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleEntFinanciera}" process="@this, buttoneef" update=":formInicio, :formMensajesAddEntFinanciera" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddEntFinanciera">
+					<p:messages id="msgMensajesConsolidadoAddEntFinanciera"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSeguro" modal="true">
+		   <h:form id="dlgRefFormDetalleSeguro">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Seguro">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Seguro" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetSeguro.nCodseguro}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSeguro}" var="tipo" itemLabel="#{tipo.vDesseguro}" itemValue="#{tipo.nCodseguro}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttoneseg" value="Fecha de inicio" />
+		         <p:calendar id="buttoneseg" showOn="button" size="10"  value="#{personalBean.dFeciniEntSeguro}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleSeguro}" process="@this, buttoneseg" update=":formInicio, :formMensajesAddSeguro" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddSeguro">
+					<p:messages id="msgMensajesConsolidadoAddSeguro"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSeguroSCTR" modal="true">
+		   <h:form id="dlgRefFormDetalleSeguroSCTR">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Seguro SCTR">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Seguro" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetSeguroSCTR.nCodseguro}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSeguroSCTR}" var="tipo" itemLabel="#{tipo.vDesseguro}" itemValue="#{tipo.nCodseguro}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonesegsctr" value="Fecha de inicio" />
+		         <p:calendar id="buttonesegsctr" showOn="button" size="10"  value="#{personalBean.dFeciniEntSeguroSCTR}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleSeguroSCTR}" process="@this, buttonesegsctr" update=":formInicio, :formMensajesAddSeguroSCTR" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddSeguroSCTR">
+					<p:messages id="msgMensajesConsolidadoAddSeguroSCTR"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleRegPensionario" modal="true">
+		   <h:form id="dlgRefFormDetalleRegPensionario">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Régimen Pensionario">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Régimen" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.nuevoDetRegPensionario.nCodregpen}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabRegPensionario}" var="tipo" itemLabel="#{tipo.vDesregpen}" itemValue="#{tipo.nCodregpen}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonerp" value="Fecha de inicio" />
+		         <p:calendar id="buttonerp" showOn="button" size="10"  value="#{personalBean.dFeciniRegPensionario}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarRegPensionario}" process="@this, buttonerp" update=":formInicio, :formMensajesAddRegPensionario" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddRegPensionario">
+					<p:messages id="msgMensajesConsolidadoAddRegPensionario"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleDireccion" modal="true">
+		   <h:form id="dlgRefFormDetalleDireccion">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Dirección">
+	           <h:panelGrid columns="9" >      
+	           
+	            <p:outputLabel value="Región &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+				<h:selectOneMenu style="width:120px"
+					value="#{personalBean.v_coddep}"
+					id="v_coddep" widgetVar="v_coddep">
+					<f:selectItem itemValue="" itemLabel="--SELECCIONE--"/>
+					<f:selectItems var="lst"
+						value="#{combosBean.listaDepartamentos}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+						
+					<p:ajax event="change"
+							update=":dlgRefFormDetalleDireccion:v_codpro, :dlgRefFormDetalleDireccion:v_coddis"
+							listener="#{personalBean.selCmbDepartamento}">
+					</p:ajax>
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+		
+		        <p:outputLabel value="Provincia"/>
+				<h:selectOneMenu value="#{personalBean.v_codpro}"			
+					id="v_codpro" widgetVar="v_codpro" style="text-align:left;width:120px;">
+					<f:selectItem itemLabel="--SELECCIONE--" itemValue="" />
+					<f:selectItems var="lst" value="#{personalBean.listaProvincias}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+					<p:ajax event="change" update=":dlgRefFormDetalleDireccion:v_coddis"
+						listener="#{personalBean.selCmbProvincia}">
+					</p:ajax>
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+		
+		        <p:outputLabel value="Distrito"/>
+				<h:selectOneMenu value="#{personalBean.v_coddis}"			
+					id="v_coddis" widgetVar="v_coddis" style="text-align:left;width:120px;">
+					<f:selectItem itemLabel="--SELECCIONE--" itemValue="" />
+					<f:selectItems var="lst" value="#{personalBean.listaDistritos}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+						<p:ajax event="change" />
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+				
+				<p:outputLabel value="Tipo de Zona" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.nuevoDetDireccion.vCodzon}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabZona}" var="tipo" itemLabel="#{tipo.vDeszon}" itemValue="#{tipo.vCodzona}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Zona"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDetDireccion.vDeszona}" id="zonad" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Tipo de Vía" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.nuevoDetDireccion.vCodtvia}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabTipoVia}" var="tipo" itemLabel="#{tipo.vDestvia}" itemValue="#{tipo.vCodtvia}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		        </h:panelGrid>
+		         
+		        <h:panelGrid columns="3" >
+		         
+		         <p:outputLabel value="Dirección &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		         <p:inputText style="width: 297px" value="#{personalBean.nuevoDetDireccion.vDireccion}" id="dird" maxlength="100">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>	     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDetalleDireccion}" process="@this" update=":formInicio, :formMensajesAddDireccion" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddDireccion">
+					<p:messages id="msgMensajesConsolidadoAddDireccion"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleDependiente" modal="true">
+		   <h:form id="dlgRefFormDetalleDependiente">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Dependiente">
+	           <h:panelGrid columns="9" >      
+     
+		     	 <p:outputLabel value="Vínculo" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.nuevoDependiente.nCodvinfam}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaVinculo}" var="tipo" itemLabel="#{tipo.vDesvinfam}" itemValue="#{tipo.nCodvinfam}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel value="Tipo Documento"/>
+				 <h:selectOneMenu style="width:120px" id="tipodoc" value="#{personalBean.nuevoDependiente.vCodtdocide}">             
+		         <f:selectItem itemLabel="---" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+		         <p:ajax event="change" update=":dlgRefFormDetalleDependiente" />
+		     	 </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Nro Documento" />
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDependiente.vNumdoc}" onkeypress="return isNumberKeyNL(this);" onkeydown="javascript:fn_enterDNI();">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:commandButton icon="ui-icon-person" action="#{personalBean.getDatosReniecDependiente()}" id="lupaManual" disabled="#{!personalBean.nuevoDependiente.vCodtdocide.equals('03')}" update=":dlgRefFormDetalleDependiente, :formMensajesAddDependiente" title="Traer datos RENIEC">
+    	 		 </p:commandButton> 
+		         
+		         <p:outputLabel value="Apellido Paterno"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDependiente.vApepatmat}" id="apepat" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Apellido Materno"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDependiente.vApematmat}" id="apemat" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Nombres"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.nuevoDependiente.vNombres}" id="nombres" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel value="Género" />
+				 <p:selectOneRadio value="#{personalBean.nuevoDependiente.vGenero}" id="vGenero">		
+				 <p:ajax event="change" process="@this" />	
+				 <f:selectItem itemLabel="F" itemValue="F" />
+				 <f:selectItem itemLabel="M" itemValue="M" />
+				 </p:selectOneRadio>
+				 <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonerpnac" value="Fecha nacimiento" />
+		         <p:calendar id="buttonerpnac" showOn="button" size="10"  value="#{personalBean.dFecNacDependiente}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{personalBean.agregarDependiente}" process="@this, buttonerpnac" update=":formInicio, :formMensajesAddDependiente" />
+	           </center><br/>
+	           <p:commandButton value="&nbsp;Aceptar" action="#{personalBean.getDatosReniecDependiente()}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" update=":dlgRefFormDetalleDependiente" />
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesAddDependiente">
+					<p:messages id="msgMensajesConsolidadoAddDependiente"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleSindicato" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleSindicato" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de sindicato #{personalBean.eliminarDetSindicato.vDessindic} con cargo #{personalBean.eliminarDetSindicato.vDescarsin} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarSindicato()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleProfesion" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleProfesion" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de profesión #{personalBean.eliminarDetProfesion.vDesprof} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarProfesion()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleEntFinanciera" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleEntFinanciera" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de entidad financiera #{personalBean.eliminarDetEntFinanciera.vDesentfin} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarEntFinanciera()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleSeguro" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleSeguro" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de seguro #{personalBean.eliminarDetSeguro.vDesseguro} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarSeguro()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleSeguroSCTR" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleSeguroSCTR" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de seguro #{personalBean.eliminarDetSeguroSCTR.vDesseguro} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarSeguroSCTR()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleRegPensionario" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleRegPensionario" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el detalle de régimen pensionario #{personalBean.eliminarRegPensionario.vDesregpen} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarRegPensionario()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleDireccion" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleDireccion" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar la direccion #{personalBean.eliminarDetDireccion.vDireccion} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarDireccion()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetBajaDetalleDependiente" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUploadBajaDetalleDependiente" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el dependiente #{personalBean.eliminarDependiente.vApepatmat} #{personalBean.eliminarDependiente.vApematmat} #{personalBean.eliminarDependiente.vNombres} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{personalBean.eliminarDependiente()}" update=":formInicio" icon="ui-icon-circle-arrow-e" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSindicatoE" modal="true">
+		   <h:form id="dlgRefFormDetalleSindicatoE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Sindicato">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Sindicato" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetSindicato.nCodsindic}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSindicato}" var="tipo" itemLabel="#{tipo.vDessindic}" itemValue="#{tipo.nCodsindic}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Cargo Sindical" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetSindicato.nCodcarsin}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCargoSindical}" var="tipo" itemLabel="#{tipo.vDescarsin}" itemValue="#{tipo.nCodcarsin}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel for="buttonesindie" value="Fecha de inicio" />
+		         <p:calendar id="buttonesindie" showOn="button" size="10"  value="#{personalBean.dFeciniSindicatoE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel for="buttonesindfe" value="Fecha de fin" />
+		         <p:calendar id="buttonesindfe" showOn="button" size="10"  value="#{personalBean.dFecfinSindicatoE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleSindicato}" process="@this, buttonesindie, buttonesindfe" update=":formInicio, :formMensajesEditSindicato" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditSindicato">
+					<p:messages id="msgMensajesConsolidadoEditSindicato"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleProfesionE" modal="true">
+		   <h:form id="dlgRefFormDetalleProfesionE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Profesión">
+	           <h:panelGrid columns="3" > 
+	           
+	             <p:outputLabel value="Profesión" />	
+				 <p:autoComplete id="acSimpleProfesionE" value="#{personalBean.txtProfesionE}" completeMethod="#{personalBean.completeTextProfesionE}" size="43" minQueryLength="3" >
+				 <p:ajax event="itemSelect" listener="#{personalBean.onItemSelectProfesionE}" update=":formInicio:msgMensajesConsolidadoGlobal" />
+				 </p:autoComplete>
+				 <p:outputLabel value="" />		     	 	     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleProfesion}" process="@this, acSimpleProfesionE" update=":formInicio, :formMensajesEditProfesion" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditProfesion">
+					<p:messages id="msgMensajesConsolidadoEditProfesion"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleEntFinancieraE" modal="true">
+		   <h:form id="dlgRefFormDetalleEntFinancieraE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Entidad Financiera">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Entidad Financiera" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetEntFinanciera.nCodentfin}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabEntFinanciera}" var="tipo" itemLabel="#{tipo.vDesentfin}" itemValue="#{tipo.nCodentfin}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		     
+		     	 <p:outputLabel value="Número de Cuenta"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDetEntFinanciera.vNumcuenta}" id="cuentaef" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Número de CCI"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDetEntFinanciera.vCodcci}" id="ccief" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel for="buttoneefe" value="Fecha de inicio" />
+		         <p:calendar id="buttoneefe" showOn="button" size="10"  value="#{personalBean.dFeciniEntFinancieraE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel for="buttoneeff" value="Fecha de inicio" />
+		         <p:calendar id="buttoneeff" showOn="button" size="10"  value="#{personalBean.dFecfinEntFinancieraE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleEntFinanciera}" process="@this, buttoneefe, buttoneeff" update=":formInicio, :formMensajesEditEntFinanciera" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditEntFinanciera">
+					<p:messages id="msgMensajesConsolidadoEditEntFinanciera"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSeguroE" modal="true">
+		   <h:form id="dlgRefFormDetalleSeguroE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Seguro">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Seguro" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetSeguro.nCodseguro}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSeguro}" var="tipo" itemLabel="#{tipo.vDesseguro}" itemValue="#{tipo.nCodseguro}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonesegi" value="Fecha de inicio" />
+		         <p:calendar id="buttonesegi" showOn="button" size="10"  value="#{personalBean.dFeciniEntSeguroE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+		         
+		         <p:outputLabel for="buttonesegf" value="Fecha de fin" />
+		         <p:calendar id="buttonesegf" showOn="button" size="10"  value="#{personalBean.dFecfinEntSeguroE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleSeguro}" process="@this, buttonesegi, buttonesegf" update=":formInicio, :formMensajesEditSeguro" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditSeguro">
+					<p:messages id="msgMensajesConsolidadoEditSeguro"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleSeguroSCTRE" modal="true">
+		   <h:form id="dlgRefFormDetalleSeguroSCTRE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Seguro SCTR">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Seguro" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetSeguroSCTR.nCodseguro}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabSeguroSCTR}" var="tipo" itemLabel="#{tipo.vDesseguro}" itemValue="#{tipo.nCodseguro}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonesegis" value="Fecha de inicio" />
+		         <p:calendar id="buttonesegis" showOn="button" size="10"  value="#{personalBean.dFeciniEntSeguroSCTRE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+		         
+		         <p:outputLabel for="buttonesegfs" value="Fecha de fin" />
+		         <p:calendar id="buttonesegfs" showOn="button" size="10"  value="#{personalBean.dFecfinEntSeguroSCTRE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleSeguroSCTR}" process="@this, buttonesegis, buttonesegfs" update=":formInicio, :formMensajesEditSeguroSCTR" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditSeguroSCTR">
+					<p:messages id="msgMensajesConsolidadoEditSeguroSCTR"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleRegPensionarioE" modal="true">
+		   <h:form id="dlgRefFormDetalleRegPensionarioE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Régimen Pensionario">
+	           <h:panelGrid columns="3" >      
+     
+		     	 <p:outputLabel value="Tipo de Régimen" />
+		         <h:selectOneMenu style="width:345px" value="#{personalBean.editarDetRegPensionario.nCodregpen}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabRegPensionario}" var="tipo" itemLabel="#{tipo.vDesregpen}" itemValue="#{tipo.nCodregpen}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonerpi" value="Fecha de inicio" />
+		         <p:calendar id="buttonerpi" showOn="button" size="10"  value="#{personalBean.dFeciniRegPensionarioE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de inicio válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel for="buttonerpf" value="Fecha de inicio" />
+		         <p:calendar id="buttonerpf" showOn="button" size="10"  value="#{personalBean.dFecfinRegPensionarioE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de fin válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />	     		     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleRegPensionario}" process="@this, buttonerpi, buttonerpf" update=":formInicio, :formMensajesEditRegPensionario" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditRegPensionario">
+					<p:messages id="msgMensajesConsolidadoEditRegPensionario"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleDireccionE" modal="true">
+		   <h:form id="dlgRefFormDetalleDireccionE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Dirección">
+	           <h:panelGrid columns="9" >      
+	           
+	            <p:outputLabel value="Región &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+				<h:selectOneMenu style="width:120px"
+					value="#{personalBean.v_coddepE}"
+					id="v_coddepE" widgetVar="v_coddepE">
+					<f:selectItem itemValue="" itemLabel="--SELECCIONE--"/>
+					<f:selectItems var="lst"
+						value="#{combosBean.listaDepartamentos}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+						
+					<p:ajax event="change"
+							update=":dlgRefFormDetalleDireccionE:v_codproE, :dlgRefFormDetalleDireccionE:v_coddisE"
+							listener="#{personalBean.selCmbDepartamentoE}">
+					</p:ajax>
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+		
+		        <p:outputLabel value="Provincia"/>
+				<h:selectOneMenu value="#{personalBean.v_codproE}"			
+					id="v_codproE" widgetVar="v_codproE" style="text-align:left;width:120px;">
+					<f:selectItem itemLabel="--SELECCIONE--" itemValue="" />
+					<f:selectItems var="lst" value="#{personalBean.listaProvinciasE}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+					<p:ajax event="change" update=":dlgRefFormDetalleDireccionE:v_coddisE"
+						listener="#{personalBean.selCmbProvinciaE}">
+					</p:ajax>
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+		
+		        <p:outputLabel value="Distrito"/>
+				<h:selectOneMenu value="#{personalBean.v_coddisE}"			
+					id="v_coddisE" widgetVar="v_coddisE" style="text-align:left;width:120px;">
+					<f:selectItem itemLabel="--SELECCIONE--" itemValue="" />
+					<f:selectItems var="lst" value="#{personalBean.listaDistritosE}"
+						itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+						<p:ajax event="change" />
+				</h:selectOneMenu>
+				<p:outputLabel value="" />
+     
+		     	 <p:outputLabel value="Tipo de Zona" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.editarDetDireccion.vCodzon}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabZona}" var="tipo" itemLabel="#{tipo.vDeszon}" itemValue="#{tipo.vCodzona}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />
+		         
+		         <p:outputLabel value="Tipo de Vía" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.editarDetDireccion.vCodtvia}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaCabTipoVia}" var="tipo" itemLabel="#{tipo.vDestvia}" itemValue="#{tipo.vCodtvia}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />		     	
+		         
+		         <p:outputLabel value="Zona"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDetDireccion.vDeszona}" id="zonad" maxlength="50">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		    </h:panelGrid>
+		         
+		    <h:panelGrid columns="3" >     
+		         
+		         <p:outputLabel value="Dirección &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		         <p:inputText style="width: 297px" value="#{personalBean.editarDetDireccion.vDireccion}" id="dird" maxlength="200">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>	     	 
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDetalleDireccion}" process="@this" update=":formInicio, :formMensajesEditDireccion" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditDireccion">
+					<p:messages id="msgMensajesConsolidadoEditDireccion"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+	
+	
+	
+	
+	
+	
+	
+	<p:dialog widgetVar="dialogWidgetDetalleDependienteE" modal="true">
+		   <h:form id="dlgRefFormDetalleDependienteE">
+		   	<p:fieldset style="text-align: left;" legend="Editar Dependiente">
+	           <h:panelGrid columns="9" >      
+     
+		     	 <p:outputLabel value="Vínculo" />
+		         <h:selectOneMenu style="width:120px" value="#{personalBean.editarDependiente.nCodvinfam}" >             
+		         <f:selectItem itemLabel="--SELECCIONE--" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaVinculo}" var="tipo" itemLabel="#{tipo.vDesvinfam}" itemValue="#{tipo.nCodvinfam}" />
+		         <p:ajax event="change" />     		         
+		         </h:selectOneMenu>
+		         <p:outputLabel value="" />	
+		         
+		         <p:outputLabel value="Tipo Documento"/>
+				 <h:selectOneMenu style="width:120px" id="tipodoc" value="#{personalBean.editarDependiente.vCodtdocide}" readonly="true" disabled="true">             
+		         <f:selectItem itemLabel="---" itemValue="#{null}" />
+		         <f:selectItems value="#{personalBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+		         <p:ajax event="change" />
+		     	 </h:selectOneMenu>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Nro Documento" />
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDependiente.vNumdoc}" onkeypress="return isNumberKeyNL(this);" onkeydown="javascript:fn_enterDNI();"  readonly="true">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/> 
+		         
+		         <p:outputLabel value="Apellido Paterno"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDependiente.vApepatmat}" id="apepat" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Apellido Materno"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDependiente.vApematmat}" id="apemat" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=""/>
+		         
+		         <p:outputLabel value="Nombres"/>
+		         <p:inputText style="width: 120px" value="#{personalBean.editarDependiente.vNombres}" id="nombres" maxlength="60">
+		         <p:ajax event="change" />
+		         </p:inputText>
+		         <p:outputLabel value=" " />
+		         
+		         <p:outputLabel value="Género" />
+				 <p:selectOneRadio value="#{personalBean.editarDependiente.vGenero}" id="vGenero">		
+				 <p:ajax event="change" process="@this" />	
+				 <f:selectItem itemLabel="F" itemValue="F" />
+				 <f:selectItem itemLabel="M" itemValue="M" />
+				 </p:selectOneRadio>
+				 <p:outputLabel value="" />	
+		         
+		         <p:outputLabel for="buttonerpnace" value="Fecha nacimiento" />
+		         <p:calendar id="buttonerpnace" showOn="button" size="10"  value="#{personalBean.dFecNacDependienteE}" pattern="dd/MM/yyyy" locale="es" navigator="true" maxlength="10" converterMessage="Debe ingresar una fecha de nacimiento válida">
+		         <f:convertDateTime timeZone="America/Lima" />		         
+		         </p:calendar>
+		         <p:outputLabel value=" " />
+				 
+		     </h:panelGrid>
+		     
+	           <center>
+	           <p:commandButton value="Actualizar" icon="ui-icon-circle-check" action="#{personalBean.actualizarDependiente}" process="@this, buttonerpnace" update=":formInicio, :formMensajesEditDependiente" />
+	           </center>
+	        </p:fieldset>   	   	        	        	                       	               
+		   </h:form>
+		   
+		   <center>
+				<h:form id="formMensajesEditDependiente">
+					<p:messages id="msgMensajesConsolidadoEditDependiente"  closable="true" escape="false" showDetail="false" />			
+				</h:form>
+		   </center>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

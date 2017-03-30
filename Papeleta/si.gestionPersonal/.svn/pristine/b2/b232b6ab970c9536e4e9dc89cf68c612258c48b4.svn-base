@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	
+	<h:form id="formInicio">
+
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="DIAS DE TURNO #{turnoDiaBean.turnoSeleccionado.vDesturno}"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<h:panelGrid columns="2" >
+	<p:outputLabel value="Turno Seleccionado:" />
+    <p:outputLabel value="#{turnoDiaBean.turnoSeleccionado.vDesturno} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:outputLabel value="Formato de hora 24"  />  
+    <p:outputLabel value="(Valor: 0-23)"  /> 
+    <p:outputLabel value=" Formato de minutos 60" />
+    <p:outputLabel value="(Valor: 0-59)"  /> 
+     
+	 </h:panelGrid>
+	
+	<p:commandButton icon="ui-icon-circle-plus" action="#{turnoDiaBean.dialogDetalleAbrir}" update=":formAgregar" title="AGREGAR" style="float: right; clear: both;"/>
+	<p:dataTable id="datatable" value="#{turnoDiaBean.listaTurnoDia}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">	            
+	            <p:column headerText="Descripcion" >
+	                <h:outputText value="#{item.vDesturnodia}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	           
+	            <p:column headerText="Abreviatura" >
+	                <h:outputText value="#{item.vDesturnoabr}"/>
+	            </p:column>	
+	            <p:column headerText="Hora Inicial" >
+	                <h:outputText value="#{turnoDiaBean.completarConCeros(item.nHoraini)}"/>
+	            </p:column>	
+	            <p:column headerText="Minuto Inicial" >
+	                <h:outputText value="#{turnoDiaBean.completarConCeros(item.nMinutoini)}"/>
+	            </p:column>	                      
+	            <p:column headerText="Hora Final" >
+	                <h:outputText value="#{turnoDiaBean.completarConCeros(item.nHorafin)}"/>
+	            </p:column>	                      
+	            <p:column headerText="Minuto Final" >
+	                <h:outputText value="#{turnoDiaBean.completarConCeros(item.nMinutofin)}"/>
+	            </p:column>  
+	            <p:column headerText="Tolerancia" >
+	                <h:outputText value="#{item.nTolerancia}"/>
+	            </p:column>		                                                                  
+	            <p:column headerText="Opción" style="text-align:center;" >	            
+	            	<p:commandButton icon="ui-icon-pencil" title="EDITAR" action="#{turnoDiaBean.desplegarOpcionEditar(item)}" update=":formEditar"/>	
+	            	<p:outputLabel value="&nbsp;&nbsp;&nbsp;" />
+	            	<p:commandButton icon="ui-icon-circle-close" title="ELIMINAR" action="#{turnoDiaBean.selectEliminar(item)}"  process="@this" update=":formEliminar"/>
+	            	
+	            </p:column>
+	        </p:dataTable>
+	
+			<br/>
+			<center>
+			<p:commandButton value="Regresar" icon="ui-icon-arrow-1-w"
+						action="#{turnoBean.verTurno}" update=":formInicio" />
+			</center>
+	        <br/>
+	        <center>
+	        <p:fieldset styleClass="leyenda-back">
+	        <p:commandButton icon="ui-icon-circle-plus" title="AGREGAR" />
+	        <p:outputLabel value="Agregar Turno Dia " />
+	        <p:commandButton icon="ui-icon-pencil" title="EDITAR" />
+	        <p:outputLabel value="Editar Turno Dia " />
+	        <p:commandButton icon="ui-icon-circle-close" title="ELIMINAR" />
+	        <p:outputLabel value="Eliminar Turno Dia "  />    
+	        </p:fieldset>
+	        </center>
+	</p:fieldset>
+	</h:form>
+	<h:form id="formMensajesGlobal">
+					<p:messages id="msgMensajesConsolidadoEliminar" closable="true"
+						escape="false" showDetail="false" />
+	</h:form>
+	<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+	    <p:dialog widgetVar="formDialogWidgetAgregarTurnoDia" modal="true">
+		   <h:form id="formAgregar">
+		   	<p:fieldset style="text-align: left;" legend="Agregar Turno Dia">
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="&nbsp;&nbsp; Dia &nbsp;" />
+						<h:selectOneMenu style="width:120px" id="addDia"
+							value="#{turnoDiaBean.nuevoTurnodia.vDesturnodia}">
+							<f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+							<f:selectItem itemLabel="LUNES" itemValue="#{'LUNES'}" />
+							<f:selectItem itemLabel="MARTES" itemValue="#{'MARTES'}" />
+							<f:selectItem itemLabel="MIERCOLES" itemValue="#{'MIERCOLES'}" />
+							<f:selectItem itemLabel="JUEVES" itemValue="#{'JUEVES'}" />
+							<f:selectItem itemLabel="VIERNES" itemValue="#{'VIERNES'}" />
+							<f:selectItem itemLabel="SABADO" itemValue="#{'SABADO'}" />
+							<f:selectItem itemLabel="DOMINGO" itemValue="#{'DOMINGO'}" />
+						</h:selectOneMenu>
+						
+						<p:outputLabel value="Si no se llena algun campo :"  />
+    					<p:outputLabel value="Se asumira que es cero"  />  
+    					
+						<p:outputLabel value="Hora Inicial" />
+						<p:inputText style="width: 120px" id="addHoraIni"
+							value="#{turnoDiaBean.nuevoTurnodia.nHoraini}" onkeypress="return soloNumeros(event);" maxlength="2">							
+						</p:inputText>
+						
+						<p:outputLabel value="Minuto Inicial" />
+						<p:inputText style="width: 120px" id="addMinIni"
+							value="#{turnoDiaBean.nuevoTurnodia.nMinutoini}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Hora Final" />
+						<p:inputText style="width: 120px" id="addHoraFin"
+							value="#{turnoDiaBean.nuevoTurnodia.nHorafin}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Minuto Final" />
+						<p:inputText style="width: 120px" id="addMinFin"
+							value="#{turnoDiaBean.nuevoTurnodia.nMinutofin}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Tolerancia" />
+						<p:inputText style="width: 120px" id="addTolerancia"
+							value="#{turnoDiaBean.nuevoTurnodia.nTolerancia}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+					</h:panelGrid>
+					<center>
+	           		<p:commandButton value="Agregar" icon="ui-icon-plusthick" action="#{turnoDiaBean.agregar()}" 
+	           		process="@this,addDia,addHoraIni,addMinIni,addHoraFin,addMinFin,addTolerancia" update=":formInicio, :formMensajesAdd" />
+	           		</center>
+				</p:fieldset>
+			</h:form> 
+		  	<center>
+				<h:form id="formMensajesAdd">
+					<p:messages id="msgMensajesConsolidadoAdd" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+	</p:dialog>	 	
+	
+	<p:dialog widgetVar="formDialogWidgetEditar" modal="true">
+			<h:form id="formEditar">
+				<p:fieldset style="text-align: left;" legend="Editar Turno Dia">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="DIA" />
+						<p:outputLabel value="#{turnoDiaBean.editarTurnodia.vDesturnodia}" />
+						
+						<p:outputLabel value="Si no se llena algun campo :"  />
+    					<p:outputLabel value="Se asumira que es cero"  />  
+						
+						<p:outputLabel value="Hora Inicial" />
+						<p:inputText style="width: 120px" id="editHoraIni"
+							value="#{turnoDiaBean.editarTurnodia.nHoraini}" onkeypress="return soloNumeros(event);" maxlength="2">							
+						</p:inputText>
+						
+						<p:outputLabel value="Minuto Inicial" />
+						<p:inputText style="width: 120px" id="editMinIni"
+							value="#{turnoDiaBean.editarTurnodia.nMinutoini}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Hora Final" />
+						<p:inputText style="width: 120px" id="editHoraFin"
+							value="#{turnoDiaBean.editarTurnodia.nHorafin}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Minuto Final" />
+						<p:inputText style="width: 120px" id="editMinFin"
+							value="#{turnoDiaBean.editarTurnodia.nMinutofin}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+						<p:outputLabel value="Tolerancia" />
+						<p:inputText style="width: 120px" id="editTolerancia"
+							value="#{turnoDiaBean.editarTurnodia.nTolerancia}" onkeypress="return soloNumeros(event);" maxlength="2">
+						</p:inputText>
+						
+					</h:panelGrid>
+					<center>
+	           		<p:commandButton value="Editar" icon="ui-icon-pencil" action="#{turnoDiaBean.actualizar()}" 
+	           		process="@this,editHoraIni,editMinIni,editHoraFin,editMinFin,editTolerancia" update=":formInicio, :formMensajesEdit" />
+	           		</center>
+				</p:fieldset>
+			</h:form> 
+		  	<center>
+				<h:form id="formMensajesEdit">
+					<p:messages id="msgMensajesConsolidadoEdit" closable="true"
+						escape="false" showDetail="false" />
+				</h:form>
+			</center>
+		</p:dialog>
+		
+		
+	   <p:dialog widgetVar="formDialogEliminarTurnoDia" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formEliminar" enctype="multipart/form-data" style="text-align: center;">			    
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea eliminar el turno seleccionado?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{turnoDiaBean.eliminar()}" update=":formInicio , :formMensajesGlobal" icon="ui-icon-circle-arrow-e" oncomplete="formDialogEliminarTurnoDia.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	
+	
+		
+	</ui:define>
+</ui:composition>	
+</html>	

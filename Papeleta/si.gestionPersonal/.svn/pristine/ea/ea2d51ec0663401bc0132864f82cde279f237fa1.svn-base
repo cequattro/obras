@@ -1,0 +1,74 @@
+package pe.gob.sunafil.gestionpersonal.mybatis.despachadores;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPPersonal;
+import pe.gob.sunafil.gestionpersonal.mybatis.implementacion.IMPTurno;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTPersonal;
+import pe.gob.sunafil.gestionpersonal.mybatis.interfase.INTTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.PrtbcTipopers;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhmvcPerturno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurno;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbcTurnodia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.RhtbdPersonal;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbEscalaremun;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbPercargo;
+import pe.gob.sunafil.gestionpersonal.persistence.model.SitbTdocide;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcDependencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.TdtbcIntendencia;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstDetpersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstPersonalrrhh;
+import pe.gob.sunafil.gestionpersonal.persistence.model.VstTurnopersonalrrhh;
+
+public class TurnoDespatch {
+	
+	 private static final TurnoDespatch instance = new TurnoDespatch();
+	 
+	 private INTTurno turnoDAO;
+	 private static Logger logger = Logger.getLogger(LoginDespatch.class.getName());
+	 
+	 public TurnoDespatch() {
+		 turnoDAO = new IMPTurno();
+	    }	 
+	 
+	 public List <RhtbcTurno> getTurnos(RhtbcTurno filtros) throws Exception
+	 {
+		 return turnoDAO.getTurnos(filtros);
+	 }
+	 
+	 public int insertarTurno(RhtbcTurno entidad) throws Exception
+	 {
+		 return turnoDAO.insertarTurno(entidad);
+	 }
+	 
+	 public RhtbcTurno getCorrelativoGlobalTurno() throws Exception{
+		 return turnoDAO.getCorrelativoGlobalTurno();
+	 }
+	 
+	 public int actualizarTurno(RhtbcTurno entidad) throws Exception{
+		 return turnoDAO.actualizarTurno(entidad);
+	 }
+	 
+	 public int eliminarTurno(RhtbcTurno entidad) throws Exception{
+		 return turnoDAO.eliminarTurno(entidad);
+	 }
+	 
+	 public boolean getTieneTurno(String vDesturno) throws Exception{
+		 return turnoDAO.getTieneTurno(vDesturno);
+	 }
+	 
+	 public boolean getTieneTurnoRepetidoUpdate(String vDesturno, Short nCodturno) throws Exception{
+		 return turnoDAO.getTieneTurnoRepetidoUpdate(vDesturno, nCodturno);
+	 }
+	 
+	 public boolean getTienePersonalAsignado(RhtbcTurno turno) throws Exception{
+		 return turnoDAO.getTienePersonalAsignado(turno);
+	 }
+	 
+}

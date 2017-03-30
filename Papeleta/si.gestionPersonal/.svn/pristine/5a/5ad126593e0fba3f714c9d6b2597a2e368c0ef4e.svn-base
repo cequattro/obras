@@ -1,0 +1,36 @@
+recurso_bd=java\:comp/env/jdbc/sip
+
+driver=oracle.jdbc.driver.OracleDriver
+nro_pag_bloq=3
+autocommit=false
+nro_registro=9
+#JDBC.DefaultAutoCommit=false
+
+##########################
+#Para ORALOCAL:
+##########################
+#username=TRAMITE
+#password=TRAMITE
+#url=jdbc:oracle:thin:@//10.1.50.233:1521/ORCL
+
+##########################
+#Para PRODSUNA:
+##########################
+#username=RRHHSYS
+#password=rrhhsysprod
+#url=jdbc:oracle:thin:@10.1.200.18:1521:PRODSUNA
+
+##########################
+#Para TESTSUNA:
+##########################
+#username=TRAMITE
+#password=testra_773
+#url=jdbc:oracle:thin:@10.1.200.31:1521:TESTSUNA
+
+##########################
+#Para DESASUNA:
+##########################
+username=RRHHSYS
+password=RRHHSYS
+url=jdbc:oracle:thin:@10.1.200.30:1521:DESASUNA
+
