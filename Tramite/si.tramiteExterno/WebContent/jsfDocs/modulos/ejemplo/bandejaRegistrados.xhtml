@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="BANDEJA REGISTRADOS"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="9" >
+	<p:outputLabel for="button" value="Fecha desde:" />
+    <p:calendar id="button" showOn="button" size="10"  value="#{bandejaBean.fechaI}" pattern="dd/MM/yyyy" locale="es" navigator="true" />
+    <p:outputLabel for="button1" value="Fecha hasta:" />
+    <p:calendar id="button1" showOn="button" size="10" value="#{bandejaBean.fechaF}" pattern="dd/MM/yyyy" locale="es" navigator="true" />          
+    <p:outputLabel value="Hoja de ruta" />
+    <p:inputText id="hruta0" style="width: 120px" value="#{bandejaBean.vNumhoja}" onkeypress="return soloNumeros(event);" maxlength="10"/>
+    <p:outputLabel value=" - " />
+    <p:inputText id="hruta1" style="width: 60px" value="#{bandejaBean.vAniohoja}" onkeypress="return soloNumeros(event);" maxlength="4"/>
+    <p:outputLabel value="" />
+    
+    <p:outputLabel value="Tipo Doc Remitente"/>
+	<h:selectOneMenu style="width:120px" id="tipodoc" value="#{bandejaBean.vCodtipodocid}">             
+         <f:selectItem itemLabel="---" itemValue="#{null}" />
+         <f:selectItems value="#{registrarBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+     </h:selectOneMenu>
+     <p:outputLabel value="Nro Doc Remitente" />
+     <p:inputText style="width: 120px" value="#{bandejaBean.vCodentidad}"/>    
+     <p:outputLabel value="" />
+     <p:outputLabel value="" />
+     <p:outputLabel value="" /> 
+     <p:commandButton value="Buscar" icon="ui-icon-search" action="#{bandejaBean.buscarBandejaRegistrados}" update=":formInicio" />
+    
+	</h:panelGrid>
+	
+	<p:dataTable id="datatable" value="#{bandejaBean.bandejaRegistrados}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja Ruta" >
+	                <h:outputText value="#{item.vNumhoja} - #{item.vAniohoja}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Remitente" >
+	                <h:outputText value="#{item.vDesnombre}" style="width:250px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Trámite" >
+	                <h:outputText value="#{item.vDestram}" style="width:130px !important; white-space: normal !important; text-align: center !important;"  rendered="#{item.vDestram!=null}"/>
+	            </p:column>                    
+	            <p:column headerText="Documento" >
+	                <h:outputText value="#{item.vDestipodoc} #{item.vNumdoc}" style="width:130px !important; white-space: normal !important; text-align: center !important;"  rendered="#{item.vDestipodoc!=null}"/>
+	            </p:column>
+	            <p:column headerText="Asunto" style="width:130px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAsuntodetallado}"/>
+	            </p:column>
+	            <p:column headerText="Destino" style="width:130px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdep}"/>
+	            </p:column>
+	            <p:column headerText="Fecha Emisión" >
+	                <h:outputText value="#{item.dfecregmask}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" >
+	            	<p:commandButton icon="ui-icon-print" 
+	                                 title="IMPRIMIR HOJA DE RUTA" value="H" action="#{bandejaBean.imprimeHojaRuta(item.vNumreg,item.nNumdep,item.vNumanoreg)}" onclick="this.form.target = '_blank'" ajax="false" />
+	                <h:outputText value="&nbsp;"/>                 
+	                <p:commandButton icon="ui-icon-extlink" 
+	                                 title="EDITAR" action="#{bandejaBean.editar(item,0)}" />
+	                <h:outputText value="&nbsp;"/>                 
+	                <p:commandButton icon="ui-icon-document" action="#{bandejaBean.dialogReferencia(item)}" id="lupa" onkeydown="" title="ADJUNTAR PDF">
+    				</p:commandButton>
+    				<h:outputText value="&nbsp;"/>
+    				<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" title="DESCARGAR PDF" rendered="#{item.vDescdoc!=null}">
+			        <p:fileDownload value="#{bandejaBean.download(item)}" />
+			    	</p:commandButton>                 
+	            </p:column>
+	        </p:dataTable>
+	        	 	
+	</p:fieldset>	
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Adjuntar PDF">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="true" />
+			 	<br/>
+			    <p:fileUpload value="#{bandejaBean.file}" mode="simple" skinSimple="true" />
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{bandejaBean.upload(1)}" update=":formInicio:growl" icon="ui-icon-arrowthick-1-n" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

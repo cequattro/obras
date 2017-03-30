@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/tramiteext/mybatis/config/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.Periodo"  		alias="Periodo"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.Permisos" 		alias="permisosBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.Usuario"  		alias="Usuario"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.MenuPadre"  	alias="menuPadreBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.MenuHijo"  		alias="menuHijoBean"/>	
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.Persona"		alias="Persona"/>
+		<typeAlias type="org.reniec.rel.ReniecBean"						alias="ReniecBean"/>
+    </typeAliases>
+ 
+	<environments default="production"> <!-- production/development -->
+		<!-- <environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />				
+				
+			</dataSource>
+
+		</environment> -->
+		
+		<!-- PARA PRODUCCION:--> 
+		<environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSTRAMITEEXT" />
+			</dataSource>			
+		</environment> 
+		
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XLogin.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XSeguridad.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XLogueo.xml" />		 		 
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XPersona.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XPersonaReniec.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XWebService.xml" />		 
+	</mappers>
+</configuration>
+

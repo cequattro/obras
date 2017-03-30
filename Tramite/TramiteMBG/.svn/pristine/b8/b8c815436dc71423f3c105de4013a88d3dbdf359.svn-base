@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" >
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@//10.1.200.30:1521/DESASUNA" userId="TRAMITE" password="destra_753" />
+    <javaModelGenerator targetPackage="pe.gob.sunafil.tramiteext.persistence.model" targetProject="TramiteMBG" />
+    <sqlMapGenerator targetPackage="pe.gob.sunafil.tramiteext.persistence.map" targetProject="TramiteMBG" />
+    <javaClientGenerator targetPackage="pe.gob.sunafil.tramiteext.persistence.client" targetProject="TramiteMBG" type="XMLMAPPER" />
+    <table schema="SIMINTRA1" tableName="SITB_EMPMTPE" >
+     <columnOverride column="V_CODEMP" property="id" />
+     <columnOverride column="D_FECREG" property="fechaRegistro" />
+   </table>
+    <table schema="SIMINTRA1" tableName="SITB_TDOCIDE" >
+      <columnOverride column="V_CODTDOCIDE" property="id" />
+      <columnOverride column="V_DESTDOCIDE" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_REGIONAL" >
+      <columnOverride column="V_CODREG" property="id" />
+      <columnOverride column="V_NOMREG" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_PROVINCIA" >
+      <columnOverride column="V_CODPRO" property="id" />
+      <columnOverride column="V_DESPRO" property="descripcion" />
+    </table>
+    <table schema="SIMINTRA1" tableName="SITB_DISTRITO" >
+      <columnOverride column="V_CODDIS" property="id" />
+      <columnOverride column="V_DESDIS" property="descripcion" />
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_GRUPOTUPA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBD_TUPA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBD_REQTUPA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDMVD_REGREQTUPA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDMVC_REGISTRO" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_TIPODOCTRAMITE" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_CORRELATIVO" >
+    </table>
+    <table schema="TRAMITE" tableName="TDMVC_CORTE" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_ENTIDAD" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBD_CENTROLAB" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_PERXDEP" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_DEPENDENCIA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_TRAMITE" >
+    </table>
+    <table schema="TRAMITE" tableName="TDTBC_INTENDENCIA" >
+    </table>
+    <table schema="TRAMITE" tableName="TDBC_DEPENDENCIASIIT" >
+    </table>
+    <table schema="TRAMITE" tableName="VST_BANDEJASTREX" >
+    </table>
+    <table schema="TRAMITE" tableName="TDMVC_HOJARUTA" >
+    </table>
+    <table schema="TRAMITE" tableName="VST_CONSULTASTREX" >
+    </table>
+    <table schema="TRAMITE" tableName="VST_DIRECCIONESTREX" >
+    </table>    
+    <table schema="TRAMITE" tableName="TDMVD_REGISTRO" >
+    </table>
+    <table schema="TRAMITE" tableName="TDMVD_REGXCORTE" >
+    </table>
+  </context>
+</generatorConfiguration>

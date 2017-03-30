@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="REPORTE POR USUARIO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="4" >
+	<p:outputLabel for="button" value="Fecha desde:" />
+    <p:calendar id="button" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{reporteBean.rptUFI}" />
+    <p:outputLabel for="button1" value="Fecha hasta:" />
+    <p:calendar id="button1" showOn="button" size="10" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{reporteBean.rptUFF}" />
+
+    <p:outputLabel value="Origen" />
+    <h:selectOneMenu style="width:120px" value="#{reporteBean.rptUIntendencia}" >             
+        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaIntendencia}" var="tipo" itemLabel="#{tipo.vDesint}" itemValue="#{tipo.nNumint}" />        
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    <p:outputLabel value="" />              
+    
+	</h:panelGrid>
+	
+	<center>	
+	<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="Exportar" icon="icon-xls" title="Exportar" rendered="true" update="growl">
+      <p:fileDownload value="#{reporteBean.rptPorUsuario(System.currentTimeMillis())}" />
+  	</p:commandButton>
+	</center>
+	 	
+	<h:form id="frmListaEncuesta" rendered="false">
+     	<p:column colspan="4" style="text-align: right">
+	         <p:commandButton value="Salir del sistema" action="#{menuBean.efectuarSalir}" icon="icon-exit"/>  
+    	</p:column>		
+	</h:form>
+	</p:fieldset>	
+	
+	</h:form>	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	<script type="text/javascript">
+	function start() {
+	    //PF('statusDialog').show();
+	    statusDialog.show();
+	}
+	 
+	function stop() {
+	    //PF('statusDialog').hide();
+	    statusDialog.hide();
+	}
+	</script>	
+	
+	</ui:define>
+</ui:composition>	
+</html>	

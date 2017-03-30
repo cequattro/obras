@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="HISTÓRICO CARGO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="4" >
+	
+	<p:outputLabel for="button" value="Fecha Desde:&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:calendar id="button" showOn="button" size="10" value="#{distribucionBean.fechaI}" pattern="dd/MM/yyyy" locale="es" navigator="true" />
+    <p:outputLabel for="button0" value="Fecha Hasta:" />
+    <p:calendar id="button0" showOn="button" size="10" value="#{distribucionBean.fechaF}" pattern="dd/MM/yyyy" locale="es" navigator="true" />
+    
+    </h:panelGrid>
+    <h:panelGrid columns="4" >
+    
+    <p:outputLabel value="Código de Cargo" />
+    <p:inputText id="hruta0" style="width: 120px" value="#{distribucionBean.vCodcorte}" onkeypress="return soloNumeros(event);"/>
+    <p:outputLabel value=" - " />
+    <p:inputText id="hruta1" style="width: 60px" value="#{distribucionBean.vAnocorte}" onkeypress="return soloNumeros(event);" maxlength="4"/>            
+    
+	</h:panelGrid>
+	
+	<center>
+	<p:commandButton value="Buscar" icon="ui-icon-search" action="#{distribucionBean.buscarHistorico}" update=":formInicio" />	
+	</center>
+	
+	<p:dataTable id="datatable" value="#{distribucionBean.lstCargo}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">            	                         	                         
+	            <p:column headerText="Código de Cargo" >
+	                <h:outputText value="#{item.vCodcorte} - #{item.vAnocorte}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Fecha y Hora Distribución" style="width:130px !important; white-space: normal !important; text-align: center !important;">
+	                <h:outputText value="#{registrarBean.getFormatDate(item.dFeccorte)} #{consultaBean.getFormatHourCargo(item.vCodcorte)}"/>
+	            </p:column>                    
+	            <p:column headerText="Cantidad Documentos" >
+	                <h:outputText value="#{item.nCantidad}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Usuario" >
+	                <h:outputText value="#{item.vNomusureg}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="width:100px !important; white-space: normal !important; text-align: center !important;" exportable="false">
+	            	<p:commandButton icon="ui-icon-print" 
+	                                 title="IMPRIMIR" action="#{distribucionBean.generarCargo(item)}" onclick="this.form.target = '_blank'" ajax="false" />
+					<p:outputLabel value="&nbsp;" />	                                 
+	                <p:commandButton icon="ui-icon-document" action="#{distribucionBean.dialogReferencia(item)}" id="lupa" onkeydown="" title="ADJUNTAR PDF">
+    				</p:commandButton>
+    				<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" title="DESCARGAR PDF" rendered="#{item.vObservacion!=null}">
+			        <p:fileDownload value="#{distribucionBean.download(item)}" />
+			    	</p:commandButton>
+	            </p:column>            	            
+	        </p:dataTable>
+	 	
+
+	</p:fieldset>	
+	
+	</h:form>	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Adjuntar PDF">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="false" />
+			 	<br/>
+			    <p:fileUpload value="#{distribucionBean.file}" mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{distribucionBean.upload}" update=":formInicio:growl" icon="ui-icon-arrowthick-1-n" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	</ui:define>
+</ui:composition>	
+</html>	

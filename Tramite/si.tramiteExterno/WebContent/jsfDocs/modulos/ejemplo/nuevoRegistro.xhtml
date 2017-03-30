@@ -1,0 +1,616 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="NUEVO REGISTRO "/>
+      		 <p:outputLabel value="#{registrarBean.registroGuardado.vNumhoja} - #{registrarBean.registroGuardado.vAniohoja}" rendered="#{registrarBean.registroGuardado!=null}"/>
+      		 <p:outputLabel value=" - #{registrarBean.horaRegistro}" rendered="#{registrarBean.registroGuardado!=null}"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<p:fieldset style="text-align: left;" legend="Remitente">
+	<h:panelGrid columns="8" >
+		<p:outputLabel value="Tipo Documento"/>
+		<h:selectOneMenu style="width:120px" id="tipodoc" value="#{registrarBean.tipoDoc}" disabled="#{menuBean.formDisable}">             
+             <f:selectItem itemLabel="---" itemValue="#{null}" />
+             <f:selectItems value="#{registrarBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+             <p:ajax event="change" update="@form" listener="#{registrarBean.itemChangeTipoDocRemitente()}" />
+         </h:selectOneMenu>
+         <p:outputLabel value="Nro Documento" />
+         <p:inputText style="width: 120px" onkeydown="javascript:fn_enterDNI();" value="#{registrarBean.nroDoc}" disabled="#{menuBean.formDisable}" onkeypress="return isNumberKeyNL(this);"/>
+         <p:graphicImage value="/resources/images/principal/question.png" height="16px" width="16px" id="fade" rendered="true"/>
+         <p:tooltip id="toolTipFade" for="fade" value="Presionar ENTER luego de Ingresar Número de documento"></p:tooltip>
+         <p:commandButton icon="icon-search" action="#{registrarBean.dialogRS()}" id="lupaRS" onkeydown="" disabled="#{menuBean.formDisable or !registrarBean.tipoDoc.equals('09')}" update=":dlgRefFormRS">
+    	 </p:commandButton>
+    	 <p:commandButton icon="ui-icon-wrench" action="#{registrarBean.activaRegistroManual()}" id="lupaManual" onkeydown="" disabled="#{menuBean.formDisable or (!registrarBean.tipoDoc.equals('09') and !registrarBean.tipoDoc.equals('03'))}" update="@form" title="Activar registro manual">
+    	 </p:commandButton>
+
+         <p:outputLabel value="Apellido Paterno" rendered="#{registrarBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{registrarBean.apellidoPat}" id="apepat" rendered="#{registrarBean.esDNI}" disabled="#{menuBean.formDisable}" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value="Apellido Materno" rendered="#{registrarBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{registrarBean.apellidoMat}" id="apemat" rendered="#{registrarBean.esDNI}" disabled="#{menuBean.formDisable}" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value="Nombres" rendered="#{registrarBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{registrarBean.nombres}" id="nombres" rendered="#{registrarBean.esDNI}" disabled="#{menuBean.formDisable}" maxlength="60">
+         <p:ajax event="change" />
+         </p:inputText>
+         <p:outputLabel value=" " />
+         <p:outputLabel value=" " />                  
+         
+    </h:panelGrid>     
+    
+    <h:panelGrid columns="3" rendered="#{registrarBean.esRUC}">
+    <p:outputLabel value="Razón Social" />
+    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:inputText style="width: 334px" value="#{registrarBean.razonSocial}" id="razonsoc" disabled="#{menuBean.formDisable}" maxlength="150">
+    <p:ajax event="change" />
+    </p:inputText>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="6" rendered="#{!registrarBean.hayDirecciones}">
+    <p:outputLabel value="Departamento&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu style="width:120px"
+			value="#{registrarBean.v_coddep}"
+			id="v_coddep" widgetVar="v_coddep">
+			<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+			<f:selectItems var="lst"
+				value="#{combosBean.listaDepartamentos}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				
+			<p:ajax event="change"
+					update=":formInicio:v_codpro, :formInicio:v_coddis"
+					listener="#{registrarBean.selCmbDepartamento}">
+			</p:ajax>
+		</h:selectOneMenu>
+         <p:outputLabel value="&nbsp;&nbsp;Provincia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu value="#{registrarBean.v_codpro}"			
+			id="v_codpro" widgetVar="v_codpro" style="text-align:left;width:120px;">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{registrarBean.listaProvincias}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+			<p:ajax event="change" update=":formInicio:v_coddis"
+				listener="#{registrarBean.selCmbProvincia}">
+			</p:ajax>
+		</h:selectOneMenu>
+         <p:outputLabel value="&nbsp;&nbsp;Distrito&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu value="#{registrarBean.v_coddis}"			
+			id="v_coddis" widgetVar="v_coddis" style="text-align:left;width:120px;">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{registrarBean.listaDistritos}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" />
+		</h:selectOneMenu>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3" >
+    <p:outputLabel value="Dirección&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{!registrarBean.hayDirecciones}" />
+	<p:inputText value="#{registrarBean.direccion}" style="width: 510px" id="direccion" disabled="#{menuBean.formDisable}" onkeydown="javascript:fn_enterDireccion();" rendered="#{!registrarBean.hayDirecciones}" onblur="this.value = this.value.toUpperCase();">
+	<p:ajax event="change" />
+	</p:inputText>
+	<p:outputLabel value="" rendered="#{!registrarBean.hayDirecciones}" />
+	
+	<p:outputLabel value="Dirección&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{registrarBean.hayDirecciones}" />
+	<h:selectOneMenu style="width:515px" id="dirsel" value="#{registrarBean.direccionCombo}" rendered="#{registrarBean.hayDirecciones}" disabled="#{menuBean.formDisable}">             
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.direccionesEntSeleccionada}" var="tipo" itemLabel="#{tipo.vDesdep} #{tipo.vDespro} #{tipo.vDesdis} #{tipo.vDircenlab}" itemValue="#{tipo.nCodcenlab}" />
+        <p:ajax event="change" />
+    </h:selectOneMenu>
+	<p:commandButton icon="ui-icon-circle-plus" action="#{registrarBean.addNDireccion()}" id="addDir" onkeydown="" disabled="#{menuBean.formDisable}" rendered="#{registrarBean.hayDirecciones}" update="@form">
+    </p:commandButton>
+    </h:panelGrid>
+    
+	</p:fieldset>
+	
+	<p:fieldset style="text-align: left;" legend=" Validación Ruc" rendered="#{registrarBean.valRuc}">	
+		<h:panelGrid columns="7" >
+			<p:outputLabel value="RUC"/>
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:inputText style="width: 120px" value="#{registrarBean.nroRuc}" onkeydown="javascript:fn_enterRUC();" onkeypress="return soloNumeros(event);" maxlength="11" />
+			<p:graphicImage value="/resources/images/principal/question.png" height="16px" width="16px" id="fadeRuc" rendered="true"/>
+			<p:tooltip id="toolTipFadeRuc" for="fadeRuc" value="Presionar ENTER luego de Ingresar Número de RUC"></p:tooltip>
+			<p:outputLabel value="&nbsp;&nbsp;"/>
+			<p:outputLabel id="mensaje1" style="color:blue;width: 120px" value="#{registrarBean.mensaje}" rendered="#{registrarBean.mostrarMensajeAzul}"/>
+			<p:outputLabel id="mensaje2" style="color:red;width: 120px" value="#{registrarBean.mensaje}" rendered="#{registrarBean.mostrarMensajeRojo}"/>
+		</h:panelGrid>
+	</p:fieldset>
+	
+	
+	<p:fieldset style="text-align: left;" legend="Documento">	
+	
+	<h:panelGrid columns="12" >
+	<p:outputLabel value="Asociar hoja de ruta&nbsp;" />
+    <p:inputText id="hruta0" value="#{registrarBean.hruta0}" style="width: 120px" disabled="true"/>
+    <p:outputLabel value=" - " />
+    <p:inputText id="hruta1" value="#{registrarBean.hruta1}" style="width: 60px" disabled="true"/>
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-search" action="#{registrarBean.dialogReferenciaHR()}" id="lupa3" onkeydown="" disabled="#{menuBean.formDisable}" value="HR" update=":dlgRefFormHR">
+    </p:commandButton>
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-search" action="#{registrarBean.dialogReferencia()}" id="lupa" onkeydown="" disabled="#{menuBean.formDisable}" value="&nbsp;I" update=":dlgRefForm">
+    </p:commandButton>
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-escoba" action="#{registrarBean.cleanHR()}" id="clean1" onkeydown="" disabled="#{menuBean.formDisable}" value="&nbsp;" update="hruta0,hruta1">
+    </p:commandButton>    
+    
+    </h:panelGrid>
+    
+    
+    <h:panelGrid columns="7" >
+    
+    <p:outputLabel value="Trámite&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:120px" value="#{registrarBean.tipoDoc2}" disabled="#{menuBean.formDisable}">
+    	<p:ajax event="change" update=":formInicio:tupades,:formInicio:acSimple,:formInicio:requisitos,:formInicio:lbl1,:formInicio:lbl2,:formInicio" listener="#{registrarBean.itemChangeCategoria()}" process="@this" />             
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaTipoTramite}" var="tipo" itemLabel="#{tipo.vDestram}" itemValue="#{tipo.nCodtram}" />
+    </h:selectOneMenu> 
+    <p:outputLabel value="Tipo de documento" />
+    <h:selectOneMenu style="width:120px" value="#{registrarBean.tipoDocRegistro}" disabled="#{menuBean.formDisable or registrarBean.mostrarFieldsTupa}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaTipoDocTra}" var="tipo" itemLabel="#{tipo.vDestipodoc}" itemValue="#{tipo.nNumtipodoc}" />        
+    </h:selectOneMenu>
+    <p:outputLabel value="Nro Documento" />
+    <p:inputText style="width: 90px" value="#{registrarBean.nroDocRegistro}" disabled="#{menuBean.formDisable or registrarBean.mostrarFieldsTupa}" maxlength="30" />
+    <p:outputLabel value="" />       
+    
+    </h:panelGrid>
+	
+	<h:panelGrid columns="3"  rendered="#{registrarBean.mostrarFieldsTupa}" >
+    
+    <p:outputLabel value="TUPA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:inputText style="width: 60px" value="#{registrarBean.tupa}" onkeydown="javascript:fn_enterTUPA();" disabled="#{menuBean.formDisable}" onkeypress="return soloNumeros(event);" maxlength="4"/>    
+    <p:commandButton icon="icon-search" action="#{registrarBean.dialogTupa()}" id="lupa2" onkeydown="" disabled="#{menuBean.formDisable}" update=":dlgRefFormTupa">
+    </p:commandButton>     
+    
+    </h:panelGrid>
+    
+	<h:panelGrid columns="3"  rendered="#{registrarBean.mostrarCongresales}" >
+    <p:outputLabel value="Origen Congresal&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:selectOneRadio id="v_tipoOrigCongr" value="#{registrarBean.v_tipoOrigCongr}" onchange="">
+    	<p:ajax event="change" update=":formInicio:tupades,:formInicio:acSimple,:formInicio:requisitos,:formInicio:lbl1,:formInicio:lbl2,:formInicio:grComCong" listener="#{registrarBean.itemChangeTipoOrigCongresal()}" process="@this" />
+        <f:selectItem itemLabel="Por Comision" itemValue="COMIS" />
+        <f:selectItem itemLabel="Por Congresista" itemValue="CONGR" />
+    </p:selectOneRadio>
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid id="grComCong" style="text-align: left;">
+    
+    <h:panelGrid columns="3"  rendered="#{registrarBean.mostrarCongresales and registrarBean.mostrarComisiones}" >    
+    <p:outputLabel value="Comisi&oacute;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:510px" value="#{registrarBean.codcom}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaComisiones}" var="com" itemLabel="#{com.vDescom}" itemValue="#{com.vCodcom}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3"  rendered="#{registrarBean.mostrarCongresales and registrarBean.mostrarCongresistas}" >    
+    <p:outputLabel value="Congresista&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:320px" value="#{registrarBean.codcong}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaCongresistas}" var="cong" itemLabel="#{cong.vNomcong}" itemValue="#{cong.vCodcong}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3"  rendered="#{registrarBean.mostrarCongresales}" >
+    
+    <p:outputLabel value="Cargo Congresal" />
+    <h:selectOneMenu style="width:320px" value="#{registrarBean.codcargocong}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{registrarBean.listaCargosCongresales}" var="congt" itemLabel="#{congt.vDescarcon}" itemValue="#{congt.nCodcarcon}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    
+    <p:outputLabel value="Oficial Mayor" />
+    <p:selectBooleanCheckbox value="#{registrarBean.oficialMayor}" />
+    <p:outputLabel value="" />
+    
+    </h:panelGrid>
+    
+    </h:panelGrid>
+	
+	<h:panelGrid columns="3" >       	
+	 
+    <p:outputLabel value=""  rendered="#{registrarBean.mostrarFieldsTupa}" />
+	<p:inputTextarea rows="3" cols="77" value="#{registrarBean.tupaDes}" id="tupades" rendered="#{registrarBean.mostrarFieldsTupa}" disabled="true"/>
+	<p:outputLabel value=""  rendered="#{registrarBean.mostrarFieldsTupa}" disabled="#{menuBean.formDisable}" />
+	
+	<p:outputLabel value="Requisitos" rendered="#{registrarBean.mostrarReq}" id="lbl1" />
+	<p:selectManyCheckbox rendered="#{registrarBean.mostrarReq}" id="requisitos" value="#{registrarBean.reqChoice}">
+		<f:selectItems value="#{registrarBean.requisitosTupaSeleccionado}" var="tipo" itemLabel="#{tipo.vDesreq}" itemValue="#{tipo.nNumreq}" />        
+    </p:selectManyCheckbox>
+    <p:outputLabel value="" rendered="#{registrarBean.mostrarReq}" id="lbl2" />
+	
+	<p:outputLabel value="Dependencia" />	
+	<p:autoComplete id="acSimple" value="#{registrarBean.txt1}" completeMethod="#{registrarBean.completeText}" size="80" disabled="#{registrarBean.mostrarFieldsTupa or registrarBean.mostrarCongresales}" minQueryLength="3" >
+	<p:ajax event="itemSelect" listener="#{registrarBean.onItemSelect}" update="growl" />
+	</p:autoComplete>
+	<p:outputLabel value="" />
+	
+	<p:outputLabel value="Nro. de Folios" />
+    <p:inputText style="width: 60px" value="#{registrarBean.nroFolios}" disabled="#{menuBean.formDisable}" onkeypress="return soloNumeros(event);" maxlength="5"/>
+    <p:outputLabel value="" />
+	
+	<p:outputLabel value="Asunto" />
+	<p:inputTextarea rows="7" cols="77" value="#{registrarBean.asunto}" disabled="#{menuBean.formDisable}" onkeyup="this.value = this.value.toUpperCase();" />
+	<p:outputLabel value="" />
+	
+	<p:outputLabel value="Observaciones&nbsp;" />
+	<p:inputTextarea rows="7" cols="77" value="#{registrarBean.observaciones}" disabled="#{menuBean.formDisable}" onkeyup="this.value = this.value.toUpperCase();" />
+	<p:outputLabel value="" />
+	
+    </h:panelGrid>
+    
+    <h:panelGrid columns="4" >
+	
+	<p:outputLabel value="Prioridad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:120px" value="#{registrarBean.prioridad}" disabled="#{menuBean.formDisable}">                    
+        <f:selectItem itemLabel="NORMAL" itemValue="#{0}" />
+        <f:selectItem itemLabel="URGENTE" itemValue="#{1}" />
+        <f:selectItem itemLabel="MUY URGENTE" itemValue="#{2}" />       
+    </h:selectOneMenu>
+    <p:outputLabel value="Clasificación" rendered="false" />
+    <h:selectOneMenu style="width:120px" disabled="#{menuBean.formDisable}" rendered="false">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItem itemLabel="CONFIDENCIAL" itemValue="#{1}" />
+        <f:selectItem itemLabel="NO CONFIDENCIAL" itemValue="#{2}" />               
+    </h:selectOneMenu>
+	
+	</h:panelGrid>
+	
+	</p:fieldset>
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="3" style="text-align: center;">
+     		 <p:commandButton value="Grabar" icon="icon-disk" rendered="#{!registrarBean.esGrabar}" action="#{registrarBean.grabar}" update="@form"/>
+     		 <p:commandButton value="Limpiar" icon="icon-escoba" rendered="#{!registrarBean.esGrabar}" action="#{registrarBean.nuevoRegistro}" update="@form"/>
+     		 <p:commandButton value="Imprimir" icon="icon-print" rendered="#{registrarBean.esGrabar}" action="#{registrarBean.imprimir}" onclick="this.form.target = '_blank'" ajax="false" /> 
+     		 
+    	</h:panelGrid>
+    	</center>
+    	
+    	<p:commandButton value="&nbsp;Aceptar" action="#{registrarBean.activaRucODni}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" update="growl,apepat,apemat,nombres,razonsoc,@form,:dlgRefFormIni" />								 	    	
+		
+		<p:commandButton value="&nbsp;Aceptar" action="#{registrarBean.activaTupa}"
+								 id="btnIngresar2" widgetVar="btnIngresar2" style="display:none" update="tupades,acSimple,requisitos,lbl1,lbl2,@form" />
+								 						 
+		<p:commandButton value="&nbsp;Aceptar" action="#{registrarBean.validarRuc}"
+								 id="btnIngresar3" widgetVar="btnIngresar3" style="display:none" update="mensaje1,mensaje2,@form" />
+		
+		<p:commandButton icon="icon-search" action="#{registrarBean.dialogReferenciaIni()}" style="display:none"
+								 id="lupaOculta" onkeydown="" update=":dlgRefFormIni"/>
+    	
+    	<center>		
+		<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="true" />					
+		</center>	
+	</h:form>
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>	
+	
+	
+	<script type="text/javascript">  
+       //<![CDATA[
+       	function fn_ingresar(){
+       		document.getElementById("formInicio:btnIngresar").click();
+   	    }
+       	function fn_ingresar2(){
+       		document.getElementById("formInicio:btnIngresar2").click();
+   	    }
+       	function fn_ingresar3(){
+       		document.getElementById("formInicio:lupaOculta").click();
+   	    }	
+       	function fn_ingresar4(){
+       		document.getElementById("formInicio:btnIngresar3").click();
+   	    }		
+       	function fn_enterDNI(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar();
+       		}
+       	}
+       	function fn_enterRUC(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar4();
+       		}
+       	}	
+       	function fn_enterTUPA(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar2();
+       		}
+       	}
+       	function fn_enterDireccion(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar3();
+       		}
+       	}	
+ 		//]]>
+	</script> 	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <h:form id="dlgRefForm">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Nro. de Orden de inspección: " />
+	               <p:inputText value="#{registrarBean.ordInsNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.ordInsAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+	               
+	               <p:outputLabel value="Nro. de Acta de inspección: " />
+	               <p:inputText value="#{registrarBean.actInsNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.actInsAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+	               
+	               <p:outputLabel value="Nro. de Expediente Sancionador: " />
+	               <p:inputText value="#{registrarBean.expSanNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.expSanAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+	               
+	               <p:outputLabel value="Nro. de Resolución de 1era Instancia: " />
+	               <p:inputText value="#{registrarBean.res1erNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.res1erAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+	               
+	               <p:outputLabel value="Nro. de Resolución de 2da Instancia: " />
+	               <p:inputText value="#{registrarBean.res2daNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.res2daAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{registrarBean.buscarI}" update=":dlgRefForm,:formInicio:growl" />
+	           <p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" height="220px" width="19px" id="loaderBar" widgetVar="loaderBar" style="display:none;"/>
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.asociacionPorInspeccion}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="5"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja de ruta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniohr} - #{item.vNrohr}"/>
+	            </p:column>
+	            <p:column headerText="Nro Orden / Razón Social" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText style="color:blue !important;" value="#{item.vAniooic} - #{item.vNrooic}  "/>
+	                <h:outputText style="color:blue !important;" value="#{item.vCodemp} - #{item.vRazsoc}"/>
+	            </p:column>
+	            <p:column headerText="Nro Acta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAnioacta} - #{item.vNroacta}"/>
+	            </p:column>                    
+	            <p:column headerText="Dependencia Acta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepacta}"/>
+	            </p:column>
+	            <p:column headerText="Expediente" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAnioexpsanc} - #{item.vNroexpsan}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Expediente" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepexpsan}"/>
+	            </p:column>
+	            <p:column headerText="Resolución 1era Instancia" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniores1ra} - #{item.vNrores1ra}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Resolución 1era" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepres1ra}"/>
+	            </p:column>
+	            <p:column headerText="Resolución 2da Instancia" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniores2da} - #{item.vNrores2da}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Resolución 2da" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepres2da}"/>
+	            </p:column>
+	            <p:column headerText="Opción" >
+	                <p:commandButton icon="ui-icon-radio-off" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectReferenciaI(item)}" oncomplete="dialogWidget.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple,:formInicio:growl" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>		
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{registrarBean.txt1}" />            
+        </p:panelGrid>
+    </p:dialog>     
+    
+    <p:dialog widgetVar="dialogWidgetTupa" modal="true">
+		   <h:form id="dlgRefFormTupa">
+		   	<p:fieldset style="text-align: left;" legend="Seleccionar TUPA">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Descripción" />
+	               <p:inputText value="#{registrarBean.desTupaPopUp}" style="width: 150px" />
+	               <p:outputLabel value="Código" />
+	               <p:inputText value="#{registrarBean.codTupaPopUp}" style="width: 70px" onkeypress="return soloNumeros(event);" maxlength="4" />	               	               
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{registrarBean.buscarTupa}" update=":dlgRefFormTupa" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.listaProcedimientoPopUp}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Código" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vCodtupa}"/>
+	            </p:column>
+	            <p:column headerText="Descripción" style="width:270px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDestupa}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="width:70px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectTupa(item.vCodtupa,item.vDestupa, item)}" oncomplete="dialogWidgetTupa.hide();" process="@this" update=":formInicio:tupades,:formInicio:acSimple,:formInicio:requisitos,:formInicio:lbl1,:formInicio:lbl2,:formInicio" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>   								
+	
+	<p:dialog widgetVar="dialogWidgetIni" modal="true">
+		   <h:form id="dlgRefFormIni">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="2" >
+	               <p:outputLabel value="Remitente:&nbsp;" />	               
+	               <p:outputLabel value="#{registrarBean.entidadSeleccionada.vDesnombre}" />	               	               	               
+	           </h:panelGrid>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.asociacionPorPersona}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja de Ruta" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vAniohoja} - #{item.registro.vNumhoja}"/>
+	            </p:column>
+	            <p:column headerText="Trámite" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.tramite.vDestram}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vNumdocref}"/>
+	            </p:column>
+	            <p:column headerText="Asunto" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vAsuntodetallado}"/>
+	            </p:column>	           
+	            <p:column headerText="Destino" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.dependenciaDestino.vDesdep}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Emisión" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{registrarBean.getFormatDate(item.registro.dFecreg)}"/>
+	            </p:column> 
+	            <p:column headerText="Opción" style="width:70px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectReferencia(item)}" oncomplete="dialogWidgetIni.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetHR" modal="true">
+		   <h:form id="dlgRefFormHR">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Hoja de Ruta: " />
+	               <p:inputText  value="#{registrarBean.hojaHR}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{registrarBean.anioHR}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />	               	              
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{registrarBean.buscarHR}" update=":dlgRefFormHR,:formInicio:growl" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.asociacionPorHR}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="5"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="5,20,40,100">
+	            <p:column headerText="Hoja de Ruta" style="width:95px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_HOJA}"/>
+	            </p:column>
+	            <p:column headerText="Trámite" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESTRAM}"/>
+	            </p:column>
+	            <p:column headerText="Remitente" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESDEPORI}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Origen" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTORI}"/>
+	            </p:column>	            	            
+	            <p:column headerText="Dependencia Destino" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTDES}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DOCUMENTO}"/>
+	            </p:column>
+	            <p:column headerText="Acciones" style="width:40px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPROVEIDO}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Emisión" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECEMISION}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Recepción" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECRECEP}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Modif." style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECMOD}"/>
+	            </p:column>
+	            <p:column headerText="Motivo Atención" style="width:50px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_MOTIVO}"/>
+	            </p:column> 
+	            <p:column headerText="Opción" style="width:50px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-radio-off" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectReferencia(item.V_HOJA)}" oncomplete="dialogWidgetHR.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>	
+	
+	<p:dialog widgetVar="dialogWidgetRS" modal="true">
+		   <h:form id="dlgRefFormRS">
+		   	<p:fieldset style="text-align: left;" legend="Buscar Empresa Registrada en SUNAFIL">
+	           <h:panelGrid columns="2" >
+	               <p:outputLabel value="Razón Social" />
+	               <p:inputText value="#{registrarBean.rsPopUp}" style="width: 150px" />	               	               	              
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{registrarBean.buscarRazonSocial}" update=":dlgRefFormRS,:formInicio:growl" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.listaEmpresaPopUp}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="RUC" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vCodentidad}"/>
+	            </p:column>
+	            <p:column headerText="Razón Social" style="width:270px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesnombre}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="width:70px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectEntidadByRS(item)}" oncomplete="dialogWidgetRS.hide();" process="@this" update=":formInicio" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

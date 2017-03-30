@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="BANDEJA DE CONSULTAS"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+		
+    <p:outputPanel id="customPanel" style="margin-bottom:10px">
+        <p:selectOneRadio id="customRadio" layout="custom" value="#{consultaBean.tipoBusqueda}">
+        	<p:ajax event="change" update="@form" listener="#{consultaBean.itemChangeBusqueda()}"/>
+            <f:selectItem itemLabel="Red" itemValue="#{1}" />
+            <f:selectItem itemLabel="Green" itemValue="#{2}" />
+            <f:selectItem itemLabel="Blue" itemValue="#{3}" />
+            <f:selectItem itemLabel="White" itemValue="#{4}" />
+        </p:selectOneRadio>
+ 
+
+			<h:panelGrid columns="5" cellpadding="5">
+			<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+            <p:outputLabel value="Por Hoja de ruta" style="font-weight: bold;" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+
+			<p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==1)}" />
+            <p:outputLabel value="Hoja de ruta" rendered="#{(consultaBean.tipoBusqueda==1)}" />
+		    <p:inputText id="hruta0" style="width: 120px" rendered="#{(consultaBean.tipoBusqueda==1)}" value="#{consultaBean.tp1HojaRuta}" onkeypress="return soloNumeros(event);" maxlength="10"/>
+		    <p:outputLabel value=" - " rendered="#{(consultaBean.tipoBusqueda==1)}" />
+		    <p:inputText id="hruta1" style="width: 60px" rendered="#{(consultaBean.tipoBusqueda==1)}" value="#{consultaBean.tp1AnioHR}" onkeypress="return soloNumeros(event);" maxlength="4"/>
+			</h:panelGrid>        
+            
+
+ 			<h:panelGrid columns="6" cellpadding="5">
+            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+            <p:outputLabel value="Por Criterios" style="font-weight: bold;" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            
+            <p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+            <p:outputLabel for="button" value="Fecha de creación" style="font-weight: bold;" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+            <p:outputLabel for="button" value="Fecha desde:" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+		    <p:calendar id="button" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==2)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp2FI}" />
+		    <p:outputLabel for="button1" value="Fecha hasta:" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+		    <p:calendar id="button1" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==2)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp2FF}" />
+		    
+		    </h:panelGrid>        
+            
+
+ 			<h:panelGrid columns="6" cellpadding="5">
+		    
+		    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+			<p:outputLabel value="Tipo Doc Remitente" rendered="#{(consultaBean.tipoBusqueda==2)}"/>
+			<h:selectOneMenu style="width:120px" id="tipodoc" rendered="#{(consultaBean.tipoBusqueda==2)}" value="#{consultaBean.tp2TipoDocRem}">             
+			   <f:selectItem itemLabel="---" itemValue="#{null}" />
+			   <f:selectItems value="#{registrarBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+			</h:selectOneMenu>
+			<p:outputLabel value="Nro Doc Remitente" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+			<p:inputText style="width: 120px" rendered="#{(consultaBean.tipoBusqueda==2)}" value="#{consultaBean.tp2NroDocRem}" onkeypress="return isNumberKeyNL(this);"/>  
+			<p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==2)}" />
+			
+			</h:panelGrid>        
+            
+
+ 			<h:panelGrid columns="3" cellpadding="5" rendered="#{(consultaBean.tipoBusqueda==2)}">
+ 			
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" />			
+			<p:outputLabel value="Remitente&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:inputText style="width: 359px" value="#{consultaBean.tp2Rem}"/>
+			
+			<p:outputLabel value="" />
+			<p:outputLabel value="Asunto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+			<p:inputText style="width: 359px" value="#{consultaBean.tp2Asunto}"/>
+			
+			</h:panelGrid>        
+            
+
+ 			<h:panelGrid columns="8" cellpadding="5" rendered="#{(consultaBean.tipoBusqueda==2)}">
+			
+			<p:outputLabel value="" />
+			<p:outputLabel value="" style="font-weight: bold;" />
+			<p:outputLabel value="Dependencia"/>
+			<h:selectOneMenu style="width:120px" value="#{consultaBean.tp2Dependencia}">             
+		        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		        <f:selectItems value="#{registrarBean.listaDependencia}" var="tipo" itemLabel="#{tipo.vDesdep}" itemValue="#{tipo.nNumdep}" />				       
+		    </h:selectOneMenu>
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+			
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+			<p:outputLabel value="Tipo de documento" />
+		    <h:selectOneMenu style="width:120px" value="#{consultaBean.tp2TipoDoc}">            
+		        <f:selectItem itemLabel="---" itemValue="#{null}" />
+		        <f:selectItems value="#{registrarBean.listaTipoDocTra}" var="tipo" itemLabel="#{tipo.vDestipodoc}" itemValue="#{tipo.nNumtipodoc}" />       
+		    </h:selectOneMenu>
+		    <p:outputLabel value="Nro Documento" />
+    		<p:inputText style="width: 120px" value="#{consultaBean.tp2NroDoc}" />
+		    <p:outputLabel value="Trámite" />
+		    <h:selectOneMenu style="width:120px" value="#{consultaBean.tp2Tramite}">             
+		        <f:selectItem itemLabel="---" itemValue="#{null}" />
+		        <f:selectItems value="#{registrarBean.listaTipoTramite}" var="tipo" itemLabel="#{tipo.vDestram}" itemValue="#{tipo.nCodtram}" />            
+		    </h:selectOneMenu>    		
+			
+		    </h:panelGrid>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 			<h:panelGrid columns="9" cellpadding="5">
+ 			<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+            <p:outputLabel value="Por TUPA" style="font-weight: bold;" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            
+            <p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==3)}" />
+            <p:outputLabel for="button0" value="Fecha desde:" rendered="#{(consultaBean.tipoBusqueda==3)}" />
+		    <p:calendar id="button0" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==3)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp3FI}" />
+		    <p:outputLabel for="button10" value="Fecha hasta:" rendered="#{(consultaBean.tipoBusqueda==3)}" />
+		    <p:calendar id="button10" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==3)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp3FF}" />
+		    <p:outputLabel value="Procedimiento" rendered="#{(consultaBean.tipoBusqueda==3)}" /> 
+		    <h:selectOneMenu style="width:120px" rendered="#{(consultaBean.tipoBusqueda==3)}" value="#{consultaBean.tp3Tupa}" >             
+		        <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+		        <f:selectItems value="#{reporteBean.listaProcedimiento}" var="tipo" itemLabel="#{tipo.vCodtupa} #{tipo.vDestupa}" itemValue="#{tipo.vCodtupa}" />
+		    </h:selectOneMenu>
+		    <p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==3)}" />
+		    <p:outputLabel value="" />
+		    
+
+		    
+ 			</h:panelGrid>
+ 			
+ 			<h:panelGrid columns="9" cellpadding="5">
+			<p:radioButton id="opt4" for="customRadio" itemIndex="3" />
+            <p:outputLabel value="Por Cargo" style="font-weight: bold;" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+            <p:outputLabel value="" />
+
+			<p:outputLabel value="" rendered="#{(consultaBean.tipoBusqueda==4)}" />
+			<p:outputLabel for="button00" value="Fecha Desde:&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{(consultaBean.tipoBusqueda==4)}" />
+		    <p:calendar id="button00" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==4)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp4FI}" />
+		    <p:outputLabel for="button000" value="Fecha Hasta:" rendered="#{(consultaBean.tipoBusqueda==4)}" />
+		    <p:calendar id="button000" showOn="button" size="10" rendered="#{(consultaBean.tipoBusqueda==4)}" pattern="dd/MM/yyyy" locale="es" navigator="true" value="#{consultaBean.tp4FF}" />			
+            
+			</h:panelGrid>  
+			
+			<h:panelGrid columns="9" cellpadding="5">
+			
+			<p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Código de Cargo" rendered="#{(consultaBean.tipoBusqueda==4)}" />
+		    <p:inputText id="hruta00" style="width: 120px" rendered="#{(consultaBean.tipoBusqueda==4)}" value="#{consultaBean.tp4CodCargo}" onkeypress="return soloNumeros(event);"/>
+		    <p:outputLabel value=" - " rendered="#{(consultaBean.tipoBusqueda==4)}" />
+		    <p:inputText id="hruta10" style="width: 60px" rendered="#{(consultaBean.tipoBusqueda==4)}" value="#{consultaBean.tp4AnioCargo}" onkeypress="return soloNumeros(event);" maxlength="4"/>
+		    
+			</h:panelGrid>
+                        
+
+    </p:outputPanel>
+	<div style="text-align:center;">
+			<p:commandButton value="Buscar" icon="ui-icon-search" action="#{consultaBean.buscarBandejaConsultas}" update=":formInicio" />
+			<p:outputLabel value="&nbsp;" />
+		    <p:commandButton value="Exportar" icon="icon-xls" action="#{consultaBean.xlsBusqueda}" onclick="this.form.target = '_blank'" ajax="false" rendered="false" />
+	</div>	
+	
+	<h:commandLink style="float: right; clear: both;" rendered="true">
+                            <p:graphicImage value="/resources/images/iconos/excel.png" width="24" />
+                            <p:dataExporter type="xls" target="datatable" fileName="ListadoDeDocumentos" postProcessor="#{consultaBean.postProcessXLS}" />
+                        </h:commandLink>
+	<p:dataTable id="datatable" value="#{consultaBean.bandejaConsultas}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">            	                         	                         
+	            <p:column headerText="Hoja Ruta" >
+	            	<f:facet name="header">
+		                <h:outputText value="HOJA RUTA" />
+		            </f:facet>
+	                <h:outputText value="#{item.vNumhoja} - #{item.vAniohoja}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Remitente" >
+	            	<f:facet name="header">
+		                <h:outputText value="REMITENTE" />
+		            </f:facet>
+	                <h:outputText value="#{item.vDesnombre}"/>
+	            </p:column>                    
+	            <p:column headerText="Destino" >
+	            	<f:facet name="header">
+		                <h:outputText value="DESTINO" />
+		            </f:facet>
+	                <h:outputText value="#{item.vDesdep}" style="width:130px !important; white-space: normal !important; text-align: center !important;"/>
+	            </p:column>
+	            <p:column headerText="Ubicación" style="width:130px !important; white-space: normal !important; text-align: center !important;" exportable="false" rendered="false" >
+	                <h:outputText value="Ubicación"/>
+	            </p:column>
+	            <p:column headerText="Fecha creación" style="width:100px !important; white-space: normal !important; text-align: center !important;">
+	            	<f:facet name="header">
+		                <h:outputText value="FECHA CREACIÓN" />
+		            </f:facet>
+	                <h:outputText value="#{item.dFechaformateada}"/>
+	            </p:column>
+	            <p:column headerText="Estado">
+	            	<f:facet name="header">
+		                <h:outputText value="ESTADO" />
+		            </f:facet>
+	                <h:outputText value="#{item.nFlgtrexformateado}"/>
+	            </p:column>	
+	            <p:column headerText="Opción" style="width:40px !important; white-space: normal !important; text-align: center !important;" exportable="false">
+	                <p:commandButton icon="icon-msend" 
+	                                 title="SEGUIMIENTO" action="#{consultaBean.dialogSeguimiento(item)}" update=":dlgRefFormSeg"  />
+	            </p:column>            	            
+	        </p:dataTable>
+	        	 	
+	</p:fieldset>	
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Adjuntar PDF">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="false" />
+			 	<br/>
+			    <p:fileUpload mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Subir" ajax="false" icon="ui-icon-arrowthick-1-n" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetSeg" modal="true">
+		   <h:form id="dlgRefFormSeg">
+		   	<p:fieldset style="text-align: left;" legend="Seguimiento">
+	          	    	        
+	        <p:dataTable id="datatable" value="#{consultaBean.detalleTrazabilidad}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Dependencia Origen" style="width:140px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTORI}"/>
+	            </p:column>	            	            
+	            <p:column headerText="Dependencia Destino" style="width:140px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTDES}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:130px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DOCUMENTO}"/>
+	            </p:column>
+	            <p:column headerText="Acciones" style="width:40px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPROVEIDO}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Emisión" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECEMISION}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Recepción" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECRECEP}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Modif." style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECMOD}"/>
+	            </p:column>
+	            <p:column headerText="Motivo Atención" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_MOTIVO}"/>
+	            </p:column>	            
+	        </p:dataTable>
+	        
+	        </p:fieldset> 	                       	              
+		   </h:form>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

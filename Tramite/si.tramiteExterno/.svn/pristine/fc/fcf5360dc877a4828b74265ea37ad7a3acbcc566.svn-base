@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WebService">
+
+	<!-- VERIFICA SI EXISTE SESION ACTIVA 
+	select  
+     	V_SESION 
+     from simintra1.SITBD_WSRENIEC 
+    	where n_corses IN(
+          	select  
+     			MAX(n_corses) 
+    			from simintra1.SITBD_WSRENIEC 
+    		where to_char(D_FECHA,'dd/mm/yyyy') =  to_char(sysdate,'dd/mm/yyyy')
+      
+       			and n_corws=2
+    		)
+	-->
+	<select id="verifySessionWS" resultType="String" parameterType="hashMap" statementType="CALLABLE">	     		    		
+   	{ call SIMINTRA1.PKG_WSRENIEC.SPR_OBT_SESIONWSRENIEC(
+   				'2',
+   				#{P_V_SESION, mode=OUT,jdbcType=VARCHAR,javaType=String}
+   				)
+   			}	
+	</select>
+	
+	
+	<!-- INSERTA UNA NUEVA SESION SI ES QUE NO EXISTE -->
+	<insert id="savenewSessionWS" parameterType="hashMap">
+	insert into 
+	simintra1.sitbd_wsreniec 
+	(n_corses, v_sesion, d_fecha, 
+	v_codsis, 
+	v_esquema, 
+	n_corws)
+	values
+	((select nvl(max(n_corses),0)+1 from SIMINTRA1.SITBD_WSRENIEC), #{v_sesion}, sysdate, 
+	#{v_codsis}, 
+	(select sys_context( 'userenv', 'current_schema' ) from dual), 
+	2)
+	</insert>
+	
+	<update id="">
+		
+	</update>
+
+
+</mapper>

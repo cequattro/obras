@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6b7ad57d-faed-4d76-958e-ea56e69d9df6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="662f53fb-4208-4052-adb7-fa9262bc19af">
+		<field name="vDesreq" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="cur" class="java.lang.String"/>
+	<parameter name="hora" class="java.lang.String"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="entidad" class="java.lang.String"/>
+	<parameter name="tipoDoc" class="java.lang.String"/>
+	<parameter name="nroDoc" class="java.lang.String"/>
+	<parameter name="domicilio" class="java.lang.String"/>
+	<parameter name="asunto" class="java.lang.String"/>
+	<parameter name="reqPendientes" class="java.util.List"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<parameter name="hr" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="493" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="38" width="555" height="35" uuid="e125eaa1-a76b-4fe4-a240-5145acfe37de"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ACTA DE OBSERVACIÓN DE REQUISITO FORMAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="326" width="555" height="97" uuid="54b89187-2485-4f9d-a7ee-676e308a16f6"/>
+				<text><![CDATA[En tal sentido, de conformidad a lo dispuesto por el artículo 125° de la Ley N° 27444, se le concede un plazo
+de dos (2) días hábiles, a partir de la recepción del presente documento, para la subsanación de la(s)
+observación(es) arriba indicadas, caso contrario, se tendrá por no presentado el escrito.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="189" width="555" height="45" uuid="0cf15bea-bba4-4280-9b1c-4f37ddd10fef"/>
+				<text><![CDATA[Asimismo, realizado el análisis al documento presentado y de la revisión de los requisitos formales establecidos en el Texto Único de Procedimientos Administrativos de la Sunafil, se advierte el incumplimiento de los siguientes requisitos formales:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="110" width="555" height="79" uuid="d3e1ca6b-ae6d-44b1-afb2-c191f0746bc1"/>
+				<textFieldExpression><![CDATA["Siendo las "+$P{hora}+" horas del día "+$P{fecha}+", se presentó en el área de Mesa de Partes del Equipo Funcional de la Unidad de Trámite Documentario y Archivo de la Superintendencia Nacional de Fiscalización Laboral, Sunafil, el(la) Sr(a)(ta) "+$P{entidad}+", identificado (a) con "+$P{tipoDoc}+" Nº "+$P{nroDoc}+", domiciliado/a en "+$P{domicilio}+", con el fin de presentar un escrito sobre "+$P{asunto}+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="73" width="555" height="37" uuid="3da7f729-337d-475d-a048-ab6abb48d851"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["HOJA DE RUTA: "+$P{hr}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="234" width="555" height="20" uuid="e85e42e8-0d27-4c22-be2c-aa4ae456f20f"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="4c965344-1dd8-43fc-8f2a-9042f0aa09e6">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{reqPendientes})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="552" uuid="64ac6df1-036b-41ae-a92f-bfccf3aef4de">
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="552" height="20" uuid="26195329-0339-4c76-8fe4-55f960dac3e0"/>
+								<textFieldExpression><![CDATA[$F{vDesreq}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="false">
+				<reportElement key="image-1" mode="Opaque" x="7" y="7" width="146" height="31" forecolor="#000000" backcolor="#FFFFFF" uuid="3bbaba84-ebec-4721-adb5-f2592e0c7ab3"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{PV_RUTA_IMAGEN}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="423" width="264" height="44" uuid="780fd7f7-b618-4e54-9214-4c3bd97b64f9"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[………………………………………
+NOMBRE Y FIRMA
+Auxiliar Administrativo - Sunafil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="264" y="423" width="264" height="44" uuid="7145cd4c-3084-472d-86c2-6039b13b3b4d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[………………………………………
+NOMBRE Y FIRMA
+Administrado]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

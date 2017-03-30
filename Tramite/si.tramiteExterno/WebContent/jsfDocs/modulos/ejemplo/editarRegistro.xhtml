@@ -1,0 +1,562 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<p:commandButton id="btnDefecto" style="display: none;"/>
+	<p:defaultCommand target="btnDefecto"/>
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="#{bandejaBean.pageTitle} REGISTRO "/>
+      		 <p:outputLabel value="#{bandejaBean.itemSeleccionado.vNumhoja} - #{bandejaBean.itemSeleccionado.vAniohoja}"/>
+      		 <p:outputLabel value="&nbsp;&nbsp;"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	<table style="width: 787px !important; white-space: normal !important; text-align: right !important;">
+		<tbody>
+			<tr>
+				<td valign="middle" style="height: 20px; width: 10px;">
+					<h:outputLabel value="&nbsp;" />
+				</td>
+				<td valign="middle" style="height: 20px; width: 40px;">
+					<p:outputLabel style="font-weight: bold !important; color: black !important;" value="Fecha de Registro:#{bandejaBean.itemSeleccionado.dfecregmask}"/>
+				</td>
+			</tr>
+		</tbody>
+   </table>
+
+				
+	<p:fieldset style="text-align: left;" legend="Remitente">
+	<h:panelGrid columns="7" >
+		<p:outputLabel value="Tipo Documento"/>
+		<h:selectOneMenu style="width:120px" id="tipodoc" value="#{bandejaBean.tipoDoc}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}">             
+             <f:selectItem itemLabel="---" itemValue="#{null}" />
+             <f:selectItems value="#{registrarBean.listaTipoDoc}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.id}" />
+             <p:ajax event="change" update="@form" listener="#{bandejaBean.itemChangeTipoDocRemitente()}" />
+         </h:selectOneMenu>
+         <p:outputLabel value="Nro Documento" />
+         <p:inputText style="width: 120px" onkeydown="javascript:fn_enterDNI();" value="#{bandejaBean.nroDoc}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" onkeypress="return isNumberKeyNL(this);"/>
+         <p:graphicImage value="/resources/images/principal/question.png" height="16px" width="16px" id="fade" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR'))}"/>
+         <p:tooltip id="toolTipFade" for="fade" value="Presionar ENTER luego de Ingresar Número de documento" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR'))}"></p:tooltip>
+         <p:outputLabel value="" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" />
+         <p:outputLabel value="" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" />
+         <p:outputLabel value="" />
+
+         <p:outputLabel value="Apellido Paterno" rendered="#{bandejaBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{bandejaBean.apellidoPat}" id="apepat" rendered="#{bandejaBean.esDNI}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}"/>
+         <p:outputLabel value="Apellido Materno" rendered="#{bandejaBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{bandejaBean.apellidoMat}" id="apemat" rendered="#{bandejaBean.esDNI}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}"/>
+         <p:outputLabel value="Nombres" rendered="#{bandejaBean.esDNI}" />
+         <p:inputText style="width: 120px" value="#{bandejaBean.nombres}" id="nombres" rendered="#{bandejaBean.esDNI}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}"/>                  
+         <p:outputLabel value=" " />
+         
+    </h:panelGrid>     
+    
+    <h:panelGrid columns="3" rendered="#{bandejaBean.esRUC}">
+    <p:outputLabel value="Razón Social" />
+    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:inputText style="width: 334px" value="#{bandejaBean.razonSocial}" id="razonsoc" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}"/>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="6" rendered="#{!bandejaBean.hayDirecciones}">
+    <p:outputLabel value="Departamento&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu style="width:120px"
+			value="#{bandejaBean.v_coddep}"
+			id="v_coddep" widgetVar="v_coddep" disabled="false">
+			<f:selectItem itemValue="" itemLabel="- Seleccione -"/>
+			<f:selectItems var="lst"
+				value="#{combosBean.listaDepartamentos}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				
+			<p:ajax event="change"
+					update=":formInicio:v_codpro, :formInicio:v_coddis"
+					listener="#{bandejaBean.selCmbDepartamento}">
+			</p:ajax>
+		</h:selectOneMenu>
+         <p:outputLabel value="&nbsp;&nbsp;Provincia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu value="#{bandejaBean.v_codpro}"			
+			id="v_codpro" widgetVar="v_codpro" style="text-align:left;width:120px;" disabled="false">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{bandejaBean.listaProvincias}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+			<p:ajax event="change" update=":formInicio:v_coddis"
+				listener="#{bandejaBean.selCmbProvincia}">
+			</p:ajax>
+		</h:selectOneMenu>
+         <p:outputLabel value="&nbsp;&nbsp;Distrito&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		<h:selectOneMenu value="#{bandejaBean.v_coddis}"			
+			id="v_coddis" widgetVar="v_coddis" style="text-align:left;width:120px;" disabled="false">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+			<f:selectItems var="lst" value="#{bandejaBean.listaDistritos}"
+				itemValue="#{lst.v_codigo}" itemLabel="#{lst.v_descripcion}" />
+				<p:ajax event="change" />
+		</h:selectOneMenu>
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3" >
+    <p:outputLabel value="Dirección&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" />
+	<p:inputText value="#{bandejaBean.direccion}" style="width: 510px" id="direccionFront" disabled="true" onkeydown="javascript:fn_enterDireccion();" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}"/>
+	<p:outputLabel value="" rendered="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" />
+	
+	<p:outputLabel value="Dirección&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{(!bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" />
+	<p:inputText value="#{bandejaBean.direccionNueva}" style="width: 510px" id="direccion" disabled="#{menuBean.formDisable}" onkeydown="javascript:fn_enterDireccion();" rendered="#{(!bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" onblur="this.value = this.value.toUpperCase();">
+	<p:ajax event="change" />
+	</p:inputText>
+	<p:outputLabel value="" rendered="#{(!bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" />
+	
+	<p:outputLabel value="Dirección&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" rendered="#{(bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" />
+	<h:selectOneMenu style="width:515px" id="dirsel" value="#{bandejaBean.direccionCombo}" rendered="#{(bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" disabled="#{menuBean.formDisable}">             
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.direccionesEntSeleccionada}" var="tipo" itemLabel="#{tipo.vDesdep} #{tipo.vDespro} #{tipo.vDesdis} #{tipo.vDircenlab}" itemValue="#{tipo.nCodcenlab}" />
+        <p:ajax event="change" />
+    </h:selectOneMenu>	
+	<p:commandButton icon="ui-icon-circle-plus" action="#{bandejaBean.addNDireccion()}" id="addDir" onkeydown="" disabled="#{menuBean.formDisable}" rendered="#{(bandejaBean.hayDirecciones) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}" update="@form">
+    </p:commandButton>
+    </h:panelGrid>
+    
+	</p:fieldset>
+	
+	<p:fieldset style="text-align: left;" legend="Documento">	
+	
+	<h:panelGrid columns="12" >
+	<p:outputLabel value="Asociar hoja de ruta&nbsp;" />
+    <p:inputText id="hruta0" value="#{bandejaBean.hruta0}" style="width: 120px" disabled="true"/>
+    <p:outputLabel value=" - " />
+    <p:inputText id="hruta1" value="#{bandejaBean.hruta1}" style="width: 60px" disabled="true"/>
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-search" action="#{bandejaBean.dialogReferenciaHR()}" id="lupa3" onkeydown="" disabled="#{menuBean.formDisable}" value="HR" update=":dlgRefFormHR" rendered="#{(bandejaBean.registroSeleccionado.nFlgasocia==1) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}">
+    </p:commandButton>
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-search" action="#{bandejaBean.dialogReferencia()}" id="lupa" onkeydown="" disabled="#{menuBean.formDisable}" value="&nbsp;I" update=":dlgRefForm" rendered="#{(bandejaBean.registroSeleccionado.nFlgasocia==1) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}">
+    </p:commandButton>    
+    <p:outputLabel value="&nbsp;" />
+    <p:commandButton icon="icon-escoba" action="#{bandejaBean.cleanHR()}" id="clean1" onkeydown="" disabled="#{menuBean.formDisable}" value="&nbsp;" update="hruta0,hruta1" rendered="#{(bandejaBean.registroSeleccionado.nFlgasocia==1) and ((bandejaBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (bandejaBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}">
+    </p:commandButton>
+    
+    </h:panelGrid>
+    
+    
+    <h:panelGrid columns="7" >
+    
+    <p:outputLabel value="Trámite&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:120px" value="#{bandejaBean.tipoDoc2}" disabled="#{(bandejaBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" rendered="#{(!bandejaBean.mostrarFieldsTupa)}">
+    	<p:ajax event="change" update="@form" listener="#{bandejaBean.itemChangeCategoria()}"/>             
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.listaTipoTramite}" var="tipo" itemLabel="#{tipo.vDestram}" itemValue="#{tipo.nCodtram}" />
+    </h:selectOneMenu> 
+    <p:outputLabel value="T.U.P.A" rendered="#{(bandejaBean.mostrarFieldsTupa)}" />
+    <p:outputLabel value="Tipo de documento" />
+    <h:selectOneMenu style="width:120px" value="#{bandejaBean.tipoDocRegistro}" disabled="#{menuBean.formDisable or bandejaBean.mostrarFieldsTupa}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.listaTipoDocTra}" var="tipo" itemLabel="#{tipo.vDestipodoc}" itemValue="#{tipo.nNumtipodoc}" />        
+    </h:selectOneMenu>    
+    <p:outputLabel value="Nro Documento" />
+    <p:inputText style="width: 90px" value="#{bandejaBean.nroDocRegistro}" disabled="#{menuBean.formDisable or bandejaBean.mostrarFieldsTupa}" />
+    <p:outputLabel value="" />       
+    
+    </h:panelGrid>
+	
+	<h:panelGrid columns="3"  rendered="#{bandejaBean.mostrarFieldsTupa}" >
+    
+    <p:outputLabel value="TUPA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:inputText style="width: 60px" value="#{bandejaBean.tupa}" onkeydown="javascript:fn_enterTUPA();" disabled="true"/>    
+    <p:commandButton icon="icon-search" action="#{registrarBean.dialogTupa()}" id="lupa2" onkeydown="" rendered="false">
+    </p:commandButton>     
+    
+    </h:panelGrid>
+    
+    <!-- inicio -->
+    
+    <h:panelGrid columns="3"  rendered="#{bandejaBean.mostrarCongresales}" >
+    <p:outputLabel value="Origen Congresal&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:selectOneRadio id="v_tipoOrigCongr" value="#{bandejaBean.v_tipoOrigCongr}" onchange="">
+    	<p:ajax event="change" update=":formInicio:grComCong" listener="#{bandejaBean.itemChangeTipoOrigCongresal()}" process="@this" />
+        <f:selectItem itemLabel="Por Comision" itemValue="COMIS" />
+        <f:selectItem itemLabel="Por Congresista" itemValue="CONGR" />
+    </p:selectOneRadio>
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid id="grComCong" style="text-align: left;">
+    
+    <h:panelGrid columns="3"  rendered="#{bandejaBean.mostrarCongresales and bandejaBean.mostrarComisiones}" >    
+    <p:outputLabel value="Comisi&oacute;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:510px" value="#{bandejaBean.codcom}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.listaComisiones}" var="com" itemLabel="#{com.vDescom}" itemValue="#{com.vCodcom}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3"  rendered="#{bandejaBean.mostrarCongresales and bandejaBean.mostrarCongresistas}" >    
+    <p:outputLabel value="Congresista&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:320px" value="#{bandejaBean.codcong}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.listaCongresistas}" var="cong" itemLabel="#{cong.vNomcong}" itemValue="#{cong.vCodcong}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    </h:panelGrid>
+    
+    <h:panelGrid columns="3"  rendered="#{bandejaBean.mostrarCongresales}" >
+    
+    <p:outputLabel value="Cargo Congresal" />
+    <h:selectOneMenu style="width:320px" value="#{bandejaBean.codcargocong}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{bandejaBean.listaCargosCongresales}" var="congt" itemLabel="#{congt.vDescarcon}" itemValue="#{congt.nCodcarcon}" />
+    </h:selectOneMenu>    
+    <p:outputLabel value="" />
+    
+    <p:outputLabel value="Oficial Mayor" />
+    <p:selectBooleanCheckbox value="#{bandejaBean.oficialMayor}" />
+    <p:outputLabel value="" />
+    
+    </h:panelGrid>
+    
+    </h:panelGrid>
+    
+    <!-- fin -->
+	
+	<h:panelGrid columns="3" >       	
+	 
+    <p:outputLabel value=""  rendered="#{bandejaBean.mostrarFieldsTupa}" />
+	<p:inputTextarea rows="3" cols="77" value="#{bandejaBean.tupaDes}" id="tupades" rendered="#{bandejaBean.mostrarFieldsTupa}" disabled="true"/>
+	<p:outputLabel value=""  rendered="#{bandejaBean.mostrarFieldsTupa}" disabled="#{menuBean.formDisable}" />
+	
+	<p:outputLabel value="Requisitos" rendered="#{bandejaBean.mostrarFieldsTupa}" id="lbl1" />
+	<p:selectManyCheckbox rendered="#{bandejaBean.mostrarFieldsTupa}" id="requisitos" value="#{bandejaBean.reqChoice}">
+		<f:selectItems value="#{bandejaBean.requisitosTupaSeleccionado}" var="tipo" itemLabel="#{tipo.vDesreq}" itemValue="#{tipo.nNumreq}" />        
+    </p:selectManyCheckbox>
+    <p:outputLabel value="" rendered="#{bandejaBean.mostrarFieldsTupa}" id="lbl2" />
+	
+	<p:outputLabel value="Dependencia" />	
+	<p:autoComplete id="acSimple" value="#{bandejaBean.txt1}" completeMethod="#{bandejaBean.completeText}" size="80" disabled="#{menuBean.formDisable or bandejaBean.mostrarFieldsTupa}" minQueryLength="3" >
+	<p:ajax event="itemSelect" listener="#{bandejaBean.onItemSelect}" update="growl" />
+	</p:autoComplete>
+	<p:outputLabel value="" />
+	
+	<p:outputLabel value="Nro. de Folios" />
+    <p:inputText style="width: 60px" value="#{bandejaBean.nroFolios}" disabled="#{menuBean.formDisable}" onkeypress="return soloNumeros(event);"/>
+    <p:outputLabel value="" />
+	
+	<p:outputLabel value="Asunto" />
+	<p:inputTextarea rows="7" cols="77" value="#{bandejaBean.asunto}" disabled="#{menuBean.formDisable}" onkeyup="this.value = this.value.toUpperCase();" />
+	<p:outputLabel value="" />
+	
+	<p:outputLabel value="Observaciones&nbsp;" />
+	<p:inputTextarea rows="7" cols="77" value="#{bandejaBean.observaciones}" disabled="#{menuBean.formDisable}" onkeyup="this.value = this.value.toUpperCase();" />
+	<p:outputLabel value="" />
+	
+    </h:panelGrid>
+    
+    <h:panelGrid columns="4" >
+	
+	<p:outputLabel value="Prioridad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <h:selectOneMenu style="width:120px" value="#{bandejaBean.prioridad}" disabled="#{menuBean.formDisable}">                    
+        <f:selectItem itemLabel="NORMAL" itemValue="#{0}" />
+        <f:selectItem itemLabel="URGENTE" itemValue="#{1}" />
+        <f:selectItem itemLabel="MUY URGENTE" itemValue="#{2}" />       
+    </h:selectOneMenu>
+    <p:outputLabel value="Clasificación" rendered="false" />
+    <h:selectOneMenu style="width:120px" disabled="#{menuBean.formDisable}" rendered="false">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItem itemLabel="CONFIDENCIAL" itemValue="#{1}" />
+        <f:selectItem itemLabel="NO CONFIDENCIAL" itemValue="#{2}" />               
+    </h:selectOneMenu>
+	
+	</h:panelGrid>
+	
+	</p:fieldset>
+	 	
+	 	
+	</p:fieldset>
+	 	
+	
+		<center>
+     	<h:panelGrid columns="2" style="text-align: center;">
+     		 <p:commandButton value="Actualizar" icon="icon-disk" rendered="true" action="#{bandejaBean.grabar}" update="@form"/>     		 
+     		 <p:commandButton value="Imprimir" icon="icon-print" rendered="true" action="#{bandejaBean.imprimir}" onclick="this.form.target = '_blank'" ajax="false" />      		 
+    	</h:panelGrid>
+    	</center>
+    	
+    	<p:commandButton value="&nbsp;Aceptar" action="#{bandejaBean.activaRucODni}"
+								 id="btnIngresar" widgetVar="btnIngresar" style="display:none" update="growl,apepat,apemat,nombres,razonsoc,@form,:dlgRefFormIni" />								 	    	
+								 
+		<p:commandButton value="&nbsp;Aceptar" action="#{registrarBean.activaTupa}"
+								 id="btnIngresar2" widgetVar="btnIngresar2" style="display:none" update="tupades,acSimple,requisitos,lbl1,lbl2,@form" />
+								 
+		<p:commandButton icon="icon-search" action="#{registrarBean.dialogReferenciaIni()}" style="display:none"
+								 id="lupaOculta" onkeydown="" />
+    	
+    	
+	</h:form>
+		
+	<script type="text/javascript">  
+       //<![CDATA[
+       	function fn_ingresar(){
+       		document.getElementById("formInicio:btnIngresar").click();
+   	    }
+       	function fn_ingresar2(){
+       		document.getElementById("formInicio:btnIngresar2").click();
+   	    }
+       	function fn_ingresar3(){
+       		document.getElementById("formInicio:lupaOculta").click();
+   	    }		
+       	function fn_enterDNI(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar();
+       		}
+       	}	
+       	function fn_enterTUPA(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar2();
+       		}
+       	}
+       	function fn_enterDireccion(){
+       		if (event.keyCode == 13 ){//CUANDO ES ENTER
+       			fn_ingresar3();
+       		}
+       	}	
+ 		//]]>
+	</script> 	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <h:form id="dlgRefForm">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Nro. de Orden de inspección: " />
+	               <p:inputText value="#{bandejaBean.ordInsNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.ordInsAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" />
+	               
+	               <p:outputLabel value="Nro. de Acta de inspección: " />
+	               <p:inputText value="#{bandejaBean.actInsNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.actInsAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" />
+	               
+	               <p:outputLabel value="Nro. de Expediente Sancionador: " />
+	               <p:inputText value="#{bandejaBean.expSanNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.expSanAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" />
+	               
+	               <p:outputLabel value="Nro. de Resolución de 1era Instancia: " />
+	               <p:inputText value="#{bandejaBean.res1erNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.res1erAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" />
+	               
+	               <p:outputLabel value="Nro. de Resolución de 2da Instancia: " />
+	               <p:inputText value="#{bandejaBean.res2daNro}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.res2daAnio}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" />
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{bandejaBean.buscarI}" update=":dlgRefForm" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{bandejaBean.asociacionPorInspeccion}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja de ruta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniohr} - #{item.vNrohr}"/>
+	            </p:column>
+	            <p:column headerText="Nro Orden" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniooic} - #{item.vNrooic}"/>
+	            </p:column>
+	            <p:column headerText="Nro Acta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAnioacta} - #{item.vNroacta}"/>
+	            </p:column>                    
+	            <p:column headerText="Dependencia Acta" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepacta}"/>
+	            </p:column>
+	            <p:column headerText="Expediente" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAnioexpsanc} - #{item.vNroexpsan}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Expediente" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepexpsan}"/>
+	            </p:column>
+	            <p:column headerText="Resolución 1era Instancia" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniores1ra} - #{item.vNrores1ra}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Resolución 1era" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepres1ra}"/>
+	            </p:column>
+	            <p:column headerText="Resolución 2da Instancia" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniores2da} - #{item.vNrores2da}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Resolución 2da" style="width:80px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDesdepres2da}"/>
+	            </p:column>
+	            <p:column headerText="Opción" >
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{bandejaBean.selectReferenciaI(item)}" oncomplete="dialogWidget.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>		
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+        <p:panelGrid id="output" columns="2" columnClasses="label, value">
+            <h:outputText value="Simple:" />
+            <h:outputText value="#{bandejaBean.txt1}" />            
+        </p:panelGrid>
+    </p:dialog>     
+    
+    <p:dialog widgetVar="dialogWidgetTupa" modal="true">
+		   <h:form id="dlgRefFormTupa">
+		   	<p:fieldset style="text-align: left;" legend="Seleccionar TUPA">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Descripción" />
+	               <p:inputText value="#{registrarBean.desTupaPopUp}" style="width: 150px" />
+	               <p:outputLabel value="Código" />
+	               <p:inputText value="#{registrarBean.codTupaPopUp}" style="width: 70px" />	               	               
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{registrarBean.buscarTupa}" update=":dlgRefFormTupa" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.listaProcedimientoPopUp}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Código" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vCodtupa}"/>
+	            </p:column>
+	            <p:column headerText="Descripción" style="width:270px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vDestupa}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="width:70px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectTupa(item.vCodtupa,item.vDestupa, item)}" oncomplete="dialogWidgetTupa.hide();" process="@this" update=":formInicio:tupades,:formInicio:acSimple,:formInicio:requisitos,:formInicio:lbl1,:formInicio:lbl2,:formInicio" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>   								
+	
+	<p:dialog widgetVar="dialogWidgetIni" modal="true">
+		   <h:form id="dlgRefFormIni">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="2" >
+	               <p:outputLabel value="Remitente:&nbsp;" />	               
+	               <p:outputLabel value="#{registrarBean.entidadSeleccionada.vDesnombre}" />	               	               	               
+	           </h:panelGrid>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{registrarBean.asociacionPorPersona}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja de Ruta" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vAniohoja} - #{item.registro.vNumhoja}"/>
+	            </p:column>
+	            <p:column headerText="Trámite" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.tramite.vDestram}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vNumdocref}"/>
+	            </p:column>
+	            <p:column headerText="Asunto" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.registro.vAsuntodetallado}"/>
+	            </p:column>	           
+	            <p:column headerText="Destino" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.dependenciaDestino.vDesdep}"/>
+	            </p:column>
+	            <p:column headerText="Fecha de Emisión" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{registrarBean.getFormatDate(item.registro.dFecreg)}"/>
+	            </p:column> 
+	            <p:column headerText="Opción" style="width:70px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{registrarBean.selectReferencia(item)}" oncomplete="dialogWidgetIni.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidgetHR" modal="true">
+		   <h:form id="dlgRefFormHR">
+		   	<p:fieldset style="text-align: left;" legend="Asociar">
+	           <h:panelGrid columns="4" >
+	               <p:outputLabel value="Hoja de Ruta: " />
+	               <p:inputText  value="#{bandejaBean.hojaHR}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />
+	               <p:outputLabel value=" - " />
+	               <p:inputText value="#{bandejaBean.anioHR}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />	               	              
+	           </h:panelGrid>
+	           <center>
+	           <p:commandButton value="Buscar" icon="ui-icon-search" action="#{bandejaBean.buscarHR}" update=":dlgRefFormHR,:formInicio:growl" />
+	           </center>
+	        </p:fieldset>   	    
+	        
+	        <p:dataTable id="datatable" value="#{bandejaBean.asociacionPorHR}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="5"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="5,20,40,100">
+	            <p:column headerText="Hoja de Ruta" style="width:95px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_HOJA}"/>
+	            </p:column>
+	            <p:column headerText="Trámite" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESTRAM}"/>
+	            </p:column>
+	            <p:column headerText="Remitente" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESDEPORI}"/>
+	            </p:column>
+	            <p:column headerText="Dependencia Origen" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTORI}"/>
+	            </p:column>	            	            
+	            <p:column headerText="Dependencia Destino" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTDES}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DOCUMENTO}"/>
+	            </p:column>
+	            <p:column headerText="Acciones" style="width:40px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPROVEIDO}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Emisión" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECEMISION}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Recepción" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECRECEP}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Modif." style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECMOD}"/>
+	            </p:column>
+	            <p:column headerText="Motivo Atención" style="width:50px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_MOTIVO}"/>
+	            </p:column> 
+	            <p:column headerText="Opción" style="width:50px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-radio-off" 
+	                                 title="SELECCIONAR" action="#{bandejaBean.selectReferencia(item.V_HOJA)}" oncomplete="dialogWidgetHR.hide();" process="@this" update=":formInicio:hruta0,:formInicio:hruta1,:formInicio:acSimple" />
+	            </p:column>
+	        </p:dataTable>
+	                       	                
+		   </h:form>
+	</p:dialog>	
+		
+	</ui:define>
+</ui:composition>	
+</html>	

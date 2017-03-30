@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="GENERAR CARGO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="3" cellpadding="5" >
+	<p:outputLabel for="button" value="Fecha:" />
+    <p:calendar id="button" showOn="button" size="10" value="#{distribucionBean.curDate}" pattern="dd/MM/yyyy" locale="es" navigator="true" disabled="true" />
+    <p:outputLabel value="" />    
+    
+    <p:outputLabel for="dep" value="Dependencia:" />
+    <h:selectOneMenu id="dep" style="width:120px" value="#{distribucionBean.selectAllDep}" >             
+        <f:selectItem itemLabel="--TODOS--" itemValue="#{true}" />
+        <f:selectItem itemLabel="SELECCIONAR" itemValue="#{false}" />  
+        <p:ajax event="change" update="@form" />   
+    </h:selectOneMenu>
+    
+    
+    
+    <!-- <p:selectCheckboxMenu id="menu" value="#{distribucionBean.selectedDependencias}" label="Dependencias"
+                          filter="true" filterMatchMode="startsWith" panelStyle="width:570px">        
+        <f:selectItems value="#{registrarBean.listaDependencia}" var="tipo" itemLabel="#{tipo.vDesdep}" itemValue="#{tipo.nNumdep} #{tipo.vDesdep}" />
+    </p:selectCheckboxMenu>
+    <p:commandLink value="Seleccionar" update="display" /> -->            
+    
+	</h:panelGrid>
+	
+	<center>
+	<p:commandButton value="Generar Cargo" icon="ui-icon-gear" rendered="#{!distribucionBean.esGrabar}" action="#{distribucionBean.grabar}" update="@form"/>
+	<p:commandButton id="btn3" value="Imprimir" icon="ui-icon-print" rendered="#{distribucionBean.esGrabar}" action="#{distribucionBean.generarCargo}" onclick="this.form.target = '_blank'" ajax="false" />
+	</center>
+	
+	<h:panelGrid columns="1" cellpadding="5" >
+	<h:panelGroup layout="block" styleClass="selection" rendered="#{!distribucionBean.selectAllDep}">
+    <p:selectManyCheckbox id="grid111" value="#{distribucionBean.selectedDependencias}" layout="pageDirection">
+    <p:ajax event="change" update="@form" />
+        <f:selectItems value="#{registrarBean.listaDependencia}" var="tipo" itemLabel="#{tipo.vDesdep}" itemValue="#{tipo.nNumdep}" />
+    </p:selectManyCheckbox>
+    </h:panelGroup>
+	</h:panelGrid>
+	
+	<!-- <p:outputPanel id="display" style="width:250px;padding-left:5px;margin-top:10px">
+        <p:dataList value="#{distribucionBean.selectedDependencias}" var="dependencia" emptyMessage="No hay dependencias seleccionadas">
+            #{dependencia}
+        </p:dataList>
+    </p:outputPanel> -->			 	
+
+	</p:fieldset>	
+	
+	</h:form>	
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	
+	
+	
+	</ui:define>
+</ui:composition>	
+</html>	

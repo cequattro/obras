@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="RESULTADOS"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>		
+	
+	<p:dataTable id="datatable" value="#{bandejaBean.bandejaDecisor}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja Ruta" style="width:130px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.vAniohoja} - #{item.vNumhoja}"/>
+	            </p:column>
+	            <p:column headerText="Remitente" >
+	                <h:outputText value="#{item.vDesnombre}"/>
+	            </p:column>
+	            <p:column headerText="Fecha Emisión" >
+	                <h:outputText value="#{registrarBean.getFormatDate(item.dFecreg)}"/>
+	            </p:column>                    	            
+	            <p:column headerText="Estado" >
+	                <h:outputText value="#{bandejaBean.getFormatStatus(item.nFlgtrex)}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" >
+	                <p:commandButton icon="ui-icon-check" 
+	                                 title="SELECCIONAR" action="#{bandejaBean.seleccionarDecisor(item)}" />
+	            </p:column>
+	        </p:dataTable>
+	 	
+	</p:fieldset>	
+	
+	</h:form>	
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;" legend="Adjuntar PDF">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="false" />
+			 	<br/>
+			    <p:fileUpload value="#{bandejaBean.file}" mode="simple" skinSimple="true"/>
+			 
+			    <p:commandButton value="Subir" ajax="false" action="#{bandejaBean.upload}" update=":formInicio:growl" icon="ui-icon-arrowthick-1-n" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	</ui:define>
+</ui:composition>	
+</html>	

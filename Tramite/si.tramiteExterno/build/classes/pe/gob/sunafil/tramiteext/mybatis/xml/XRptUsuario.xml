@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Total">
+
+<resultMap id="reporteUsuario-out" type="hashMap">
+  
+    
+    <result column="N_NUMINT" 			jdbcType="VARCHAR" 		property="N_NUMINT"		/>
+	<result column="V_DESINT" 			jdbcType="VARCHAR" 		property="V_DESINT" 	/>
+	<result column="V_NOMUSUREG" 		jdbcType="VARCHAR" 		property="V_NOMUSUREG" 	/>
+	<result column="NOMBRE" 			jdbcType="VARCHAR" 		property="NOMBRE" 	/>
+	<result column="TOTAL" 				jdbcType="VARCHAR"		property="TOTAL" 	/>	
+       
+  </resultMap>
+  
+  <select id="reporteUsuario" resultMap="reporteUsuario-out" parameterType="hashMap">
+  	select i.n_numint, i.v_desint, t.v_nomusureg, p.v_desnombres||' '||p.v_desapepat||' '||p.v_desapemat NOMBRE, count(1) TOTAL
+	from tdmvc_registro t, tdtbc_dependencia d, tdtbc_intendencia i, SITB_USUARIO u, prtbc_personal p
+	where 
+	t.v_nomusureg=u.v_codusu
+	AND p.V_CODPERSONAL=u.v_Codpersonal
+	AND t.n_flgtrex in (0,1,2)
+	AND t.d_fecreg between #{PARAM_FI} AND #{PARAM_FF}
+	AND T.N_NUMTIPODOC='0' 
+	AND t.n_numdepdest=d.n_numdep
+	AND d.n_numint=i.n_numint 
+	<if test="PARAM_INTENDENCIA != null" >
+	AND i.n_numint=#{PARAM_INTENDENCIA}
+	</if>
+	group by i.n_numint, i.v_desint, t.v_nomusureg, p.v_desnombres||' '||p.v_desapepat||' '||p.v_desapemat, t.v_nomusureg
+	ORDER BY N_NUMINT ASC  	
+	
+  </select>
+  
+	
+</mapper>

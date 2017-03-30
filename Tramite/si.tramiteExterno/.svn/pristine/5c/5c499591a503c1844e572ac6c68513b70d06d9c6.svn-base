@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<h:form id="formInicio">
+	<h:panelGroup id="messagePanel" layout="block">
+        <p:growl id="growl" sticky="false" showDetail="true"  globalOnly="true"/>
+    </h:panelGroup>
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="DOCUMENTOS INTERNOS - SUNAFIL"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+	<h:panelGrid columns="8" >
+        <p:outputLabel value="Hoja de Ruta: " />
+        <p:inputText  value="#{regionalBean.hojaHR}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />
+        <p:outputLabel value=" - " />
+        <p:inputText value="#{regionalBean.anioHR}" onblur="this.value = this.value.toUpperCase();" style="width: 60px" onkeypress="return soloNumeros(event);" maxlength="4" />
+        <p:outputLabel value="Tipo de Documento: " />
+        <h:selectOneMenu style="width:120px" value="#{regionalBean.tipoDoc}">            
+        <f:selectItem itemLabel="---" itemValue="#{null}" />
+        <f:selectItems value="#{regionalBean.listaTipoDocTraInterno}" var="tipo" itemLabel="#{tipo.vDestipodoc}" itemValue="#{tipo.nNumtipodoc}" />        
+    </h:selectOneMenu>
+        <p:outputLabel value="Número de Documento: " />
+        <p:inputText  value="#{regionalBean.nroDoc}" onblur="this.value = this.value.toUpperCase();" style="width: 120px" onkeypress="return soloNumeros(event);" maxlength="10" />	               	              
+    </h:panelGrid>
+    <center>
+    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{regionalBean.buscar}" update="@form" />
+    <p:outputLabel rendered="#{regionalBean.listaRegional!=null}" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+    <p:commandButton value="Recepcionar Todo" icon="ui-icon-shuffle" rendered="#{regionalBean.listaRegional!=null}" title="RECEPCIONAR TODO" action="#{regionalBean.dialogReferenciaTodo()}" process="@this" update=":formUpload2" />
+    </center>
+	
+	<p:dataTable id="datatable" value="#{regionalBean.listaRegional}" 
+	                         var="item" widgetVar="usrTable"   
+	                         emptyMessage="No se encontraron resultados"
+	                         paginator="true" rows="20"  
+	                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                         rowsPerPageTemplate="20,40,100">
+	            <p:column headerText="Hoja de Ruta" style="width:95px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_HOJA}"/>
+	            </p:column>	            
+	            <p:column headerText="Dependencia Origen" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTORI}"/>
+	            </p:column>	            	            
+	            <p:column headerText="Dependencia Destino" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPERDEPENTDES}"/>
+	            </p:column>
+	            <p:column headerText="Documento" style="width:100px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DOCUMENTO}"/>
+	            </p:column>
+	            <p:column headerText="Acciones" style="width:40px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_DESPROVEIDO}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Emisión" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECEMISION}"/>
+	            </p:column>
+	            <p:column headerText="Usuario Recepción" style="width:40px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.V_NOMUSUREGMP}"/>
+	            </p:column>
+	            <p:column headerText="Fec. Recepción" style="width:70px !important; white-space: normal !important; text-align: center !important;" >
+	                <h:outputText value="#{item.D_FECRECMPF}"/>
+	            </p:column>	            
+	            <p:column headerText="Opción" style="width:50px !important; white-space: normal !important; text-align: center !important;">
+	                <p:commandButton icon="ui-icon-radio-off" rendered="#{item.N_NUMDEPRMP==null}"
+	                                 title="RECEPCIONAR" action="#{regionalBean.dialogReferencia(item)}" process="@this" update=":formUpload" />
+	                <h:outputText value="Recepcionado" rendered="#{(item.N_NUMDEPRMP!=null) and (item.V_CODCORTE==null) and (regionalBean.PGP_Permisos.v_desper.equals('OPERADOR'))}" />
+	                <h:outputText value="Recepcionado con cargo" rendered="#{(item.N_NUMDEPRMP!=null) and (item.V_CODCORTE!=null)}" />
+	                <p:commandButton icon="ui-icon-seek-prev" rendered="#{(item.N_NUMDEPRMP!=null) and (item.V_CODCORTE==null) and ((regionalBean.PGP_Permisos.v_desper.equals('ADMINISTRADOR')) or (regionalBean.PGP_Permisos.v_desper.equals('DIRECTOR')))}"
+	                                 title="EXTORNAR" action="#{regionalBean.dialogReferenciaExtornar(item)}" process="@this" update=":formUpload3" />                 
+	            </p:column>
+	        </p:dataTable>
+	        	 	
+	</p:fieldset>	
+	
+	</h:form>
+	
+	<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+	
+	<p:dialog widgetVar="dialogWidget" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="true" />
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea recepcionar #{regionalBean.itemSeleccionado.V_DOCUMENTO} de #{regionalBean.itemSeleccionado.V_DESPERDEPENTORI} con destino #{regionalBean.itemSeleccionado.V_DESPERDEPENTDES} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{regionalBean.recepcionar()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidget2" modal="true">
+		   <p:fieldset style="text-align: left;width:377px !important;" legend="Confirmar">
+			<h:form id="formUpload2" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="true" />
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/alert.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="&nbsp;&nbsp;&nbsp;Está seguro que desea recepcionar todos los registros ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{regionalBean.recepcionarTodo()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget2.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+	
+	<p:dialog widgetVar="dialogWidget3" modal="true">
+		   <p:fieldset style="text-align: left;width:477px !important;" legend="Confirmar">
+			<h:form id="formUpload3" enctype="multipart/form-data" style="text-align: center;">
+			    <p:growl id="messages" showDetail="true" rendered="true" />
+			 	<br/>
+			 	<h:panelGrid columns="2" >
+			 	<p:graphicImage value="/resources/images/principal/warning.png" />
+			 	<h:outputText style="font-weight:bold !important;" value="Está seguro que desea extornar #{regionalBean.itemExtornado.V_DOCUMENTO} de #{regionalBean.itemExtornado.V_DESPERDEPENTORI} con destino #{regionalBean.itemExtornado.V_DESPERDEPENTDES} ?"/>
+			 	</h:panelGrid>			    
+			 	<br/><br/>
+			    <p:commandButton value="Confirmar" action="#{regionalBean.extornar()}" update=":formInicio" icon="ui-icon-circle-arrow-e" oncomplete="dialogWidget3.hide();" />
+			    <br/><br/>
+			</h:form>
+			</p:fieldset>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>	
+</html>	

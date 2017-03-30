@@ -1,0 +1,19 @@
+# Formatos
+F01=HTML
+F02=PDF
+F03=XLS
+F04=CSV
+F05=XML
+
+#Imagenes
+I01=logo_mintra.png
+I02=logo_mintra_peru.jpg
+
+# Rutas
+R01=/jspDocs/reportes/
+R02=/util/images/
+
+#Archivos
+#001=ficha.jasper
+001=report_demo.jasper
+

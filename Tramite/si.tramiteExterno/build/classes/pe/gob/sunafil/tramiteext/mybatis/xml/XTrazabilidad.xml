@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Trazabilidad">
+
+<resultMap id="reporteTrazabilidad-out" type="hashMap">
+  
+    
+    <result column="v_hoja" 				jdbcType="VARCHAR" 		property="V_HOJA"		/>
+	<result column="v_desdepori" 			jdbcType="VARCHAR" 		property="V_DESDEPORI" 	/>
+	<result column="v_desdepdest" 			jdbcType="VARCHAR" 		property="V_DESDEPDEST" 	/>
+	<result column="v_documento" 			jdbcType="VARCHAR" 		property="V_DOCUMENTO" 	/>
+	<result column="V_DESPROVEIDO" 			jdbcType="VARCHAR"		property="V_DESPROVEIDO" 	/>
+	<result column="d_fecemision" 			jdbcType="VARCHAR" 		property="D_FECEMISION" 	/>
+	<result column="d_fecrecep"				jdbcType="VARCHAR" 		property="D_FECRECEP" 	/>
+	<result column="d_fecmod"				jdbcType="VARCHAR" 		property="D_FECMOD" 	/>
+	<result column="v_nomarch" 				jdbcType="VARCHAR" 		property="V_NOMARCH" 	/>
+	<result column="n_numperdest" 			jdbcType="VARCHAR" 		property="N_NUMPERDEST" 	/>
+	<result column="v_flgasig" 				jdbcType="VARCHAR" 		property="V_FLGASIG" 	/>
+	<result column="v_desperdepentdes" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTDES" 	/>
+	<result column="v_desperdepentori" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTORI" 	/>
+	<result column="n_numperori" 			jdbcType="VARCHAR" 		property="N_NUMPERORI" 	/>
+	<result column="V_DESCDOC" 				jdbcType="VARCHAR" 		property="V_DESCDOC" 	/>
+	<result column="d_fecrecepcab" 			jdbcType="VARCHAR" 		property="D_FECRECEPCAB" 	/>	
+	<result column="V_NOMUSUREG" 			jdbcType="VARCHAR" 		property="V_NOMUSUREG" 	/>
+	<result column="N_NUMDEP" 				jdbcType="VARCHAR" 		property="N_NUMDEP" 	/>
+	<result column="V_TIPDOCWEB" 			jdbcType="VARCHAR" 		property="V_TIPDOCWEB" 	/>
+	<result column="V_FLGDOCWEB" 			jdbcType="VARCHAR" 		property="V_FLGDOCWEB" 	/>
+	<result column="V_FLGANEXO" 			jdbcType="VARCHAR" 		property="V_FLGANEXO" 	/>
+    <result column="V_MOTIVO" 				jdbcType="VARCHAR" 		property="V_MOTIVO" 	/>
+       
+  </resultMap>
+  
+  <select id="reporteTrazabilidad" resultMap="reporteTrazabilidad-out" parameterType="hashMap">
+  	
+ 
+ SELECT 
+              rc.v_numhoja || ' - ' || rc.v_aniohoja as "v_hoja",
+                case
+                when rc.n_numtipodoc = 0 then e.v_desnombre
+                else case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end 
+                end
+                as "v_desdepori",                                   
+                    case                       
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS not NULL then to_char(case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep ||' - '|| p1.v_desapepat ||' '|| p.v_desapemat ||' '|| p1.v_desnombres else d.v_desdepant end )
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS  NULL then  d.v_desdep   
+                              else e.v_desnombre||'('||e.v_direntidad||')'
+                                   
+                             end 
+                                 as "v_desdepdest",                                                  
+                case
+                when rc.n_numtipodoc='0' and rc.v_tiporigen='E' then
+                td1.v_destipodoc|| ' - ' ||rc.v_numdoc  
+                else
+                td.v_codtipodoc || ' - ' || rc.v_numreg || ' - ' || rc.v_numanoreg || ' - ' || d1.v_coddep
+                end  as v_documento,                                                                                               
+                F_AGRUPA_ACCIONES_NUM(rc.v_numanoreg, rc.n_numdep, rc.n_numtipodoc, rc.v_numreg, rd.n_numitem, rd.n_numenvio) v_desproveido,                                
+                to_char(rc.D_FECEMISION, 'dd/mm/yyyy hh24:mi:ss') as "d_fecemision",                              
+                to_char(rd.d_fecrecep, 'dd/mm/yyyy hh24:mi:ss') as "d_fecrecep",                
+                to_char(rc.d_fecmod, 'dd/mm/yyyy hh24:mi:ss') as "d_fecmod",                
+                NVL(rc.v_nomarch,'SN') as "v_nomarch",
+                rd.n_numperdest as "n_numperdest",
+                rd.v_flgasig as "v_flgasig",
+                case
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'N')  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  is null)  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'S') and length(rd.n_numperdest)!= 3 then 
+                    (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end || ' - ' ||p1.v_desapepat|| ' ' ||p1.v_desapemat || ' ' ||p1.v_desnombres)
+                when (d.v_desdep is null) then (e.v_desnombre)
+                else d.v_desdep
+                end
+                as "v_desperdepentdes",
+                case
+                when (rd.n_numperori is not null)  then (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end || ' - ' ||p.v_desapepat|| ' ' ||p.v_desapemat || ' ' ||p.v_desnombres)
+                else
+                (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end)
+                end
+                as "v_desperdepentori",
+                rd.n_numperori as "n_numperori",
+                rc.v_descdoc,                
+                (select decode(to_char(count (*)),'0','','1') from tdmvc_registro rc inner join tdmvd_registro rd 
+                on  rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg where rc.v_numhoja =lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+                 
+				
+				
+				and rd.d_fecrecep is not null) as  "d_fecrecepcab",                
+                rc.v_nomusureg,
+                rc.n_numdep,
+                rc.v_tipdocweb,
+                case 
+                when substr(rc.v_descdoc,1,1) = 'S' then
+                '1'
+                when substr(rc.v_descdoc,1,1) = 'D' then
+                '2'
+                when substr(rc.v_descdoc,1,1) = 'R' then
+                '3'
+                else
+                '0'
+                end v_flgdocweb,
+                rc.v_flganexo,                
+                nvl((case when rd.v_motivoaten is not null then  rd.v_motivoaten
+                when rd.v_observacion is not null then rd.v_observacion 
+                when ts.v_coment is not null then ts.v_coment 
+                end),'-')
+                as v_motivo                
+        from tdmvc_registro       rc,
+             tdmvd_registro       rd,
+             tdtbc_tipodoctramite td,
+             tdtbc_tipodoctramite td1,
+             tdtbc_dependencia    d,
+             tdtbc_dependencia    d1,            
+             tdtbc_entidad e,
+             prtbc_personal p,
+             prtbc_personal p1,             
+             tdmv_tupasap ts             
+        where   rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg                
+                and rc.v_numanoreg = ts.v_numanoreg(+)
+                and rc.n_numdep= ts.n_numdep(+)
+                and rc.n_numtipodoc= ts.n_numtipodoc(+)
+                and rc.v_numreg=ts.v_numreg(+)                                
+                and td.n_numtipodoc = rc.n_numtipodoc
+                and rc.n_tipodoc=td1.n_numtipodoc(+)
+                and d.n_numdep(+) = rd.n_numdepdest
+                and d1.n_numdep(+) = rd.n_numdepori
+                and e.v_codentidad(+) = rd.v_codentidad
+                and to_char(LPAD(rd.n_numperori,8,'0'))=p.v_codpersonal(+)
+                and to_char(LPAD(rd.n_numperdest,8,'0'))=p1.v_codpersonal(+)
+                and rc.v_numhoja = lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+                
+				
+				
+             	order by rc.d_fecemision asc, rd.n_flgcopia
+	
+  </select>
+  
+  <select id="obtieneHoraCargo" resultType="string" parameterType="hashMap">
+	    select TO_CHAR(d_feccorte,'HH24:mi') hora 
+	    from tdmvc_corte where v_codcorte=#{PARAM_CORTE} and v_anocorte=#{PARAM_ANIO}     
+    </select>
+    
+  <select id="obtieneHoraRegistro" resultType="string" parameterType="hashMap">
+	    select TO_CHAR(d_fecreg,'HH24:mi') hora from tdmvc_registro
+		where
+		V_NUMANOREG=#{PARAM_V_NUMANOREG} and
+		N_NUMDEP=#{PARAM_N_NUMDEP} and
+		N_NUMTIPODOC=#{PARAM_N_NUMTIPODOC} and 
+		V_NUMREG=#{PARAM_V_NUMREG}    
+    </select>  
+    
+  <resultMap id="reporteTrazabilidadAsociacion-out" type="hashMap">
+  
+    
+    <result column="v_hoja" 				jdbcType="VARCHAR" 		property="V_HOJA"		/>
+	<result column="v_desdepori" 			jdbcType="VARCHAR" 		property="V_DESDEPORI" 	/>
+	<result column="v_desdepdest" 			jdbcType="VARCHAR" 		property="V_DESDEPDEST" 	/>
+	<result column="v_documento" 			jdbcType="VARCHAR" 		property="V_DOCUMENTO" 	/>
+	<result column="V_DESPROVEIDO" 			jdbcType="VARCHAR"		property="V_DESPROVEIDO" 	/>
+	<result column="d_fecemision" 			jdbcType="VARCHAR" 		property="D_FECEMISION" 	/>
+	<result column="d_fecrecep"				jdbcType="VARCHAR" 		property="D_FECRECEP" 	/>
+	<result column="d_fecmod"				jdbcType="VARCHAR" 		property="D_FECMOD" 	/>
+	<result column="v_nomarch" 				jdbcType="VARCHAR" 		property="V_NOMARCH" 	/>
+	<result column="n_numperdest" 			jdbcType="VARCHAR" 		property="N_NUMPERDEST" 	/>
+	<result column="v_flgasig" 				jdbcType="VARCHAR" 		property="V_FLGASIG" 	/>
+	<result column="v_desperdepentdes" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTDES" 	/>
+	<result column="v_desperdepentori" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTORI" 	/>
+	<result column="n_numperori" 			jdbcType="VARCHAR" 		property="N_NUMPERORI" 	/>
+	<result column="V_DESCDOC" 				jdbcType="VARCHAR" 		property="V_DESCDOC" 	/>
+	<result column="d_fecrecepcab" 			jdbcType="VARCHAR" 		property="D_FECRECEPCAB" 	/>	
+	<result column="V_NOMUSUREG" 			jdbcType="VARCHAR" 		property="V_NOMUSUREG" 	/>
+	<result column="N_NUMDEP" 				jdbcType="VARCHAR" 		property="N_NUMDEP" 	/>
+	<result column="V_TIPDOCWEB" 			jdbcType="VARCHAR" 		property="V_TIPDOCWEB" 	/>
+	<result column="V_FLGDOCWEB" 			jdbcType="VARCHAR" 		property="V_FLGDOCWEB" 	/>
+	<result column="V_FLGANEXO" 			jdbcType="VARCHAR" 		property="V_FLGANEXO" 	/>
+    <result column="V_MOTIVO" 				jdbcType="VARCHAR" 		property="V_MOTIVO" 	/>
+    <result column="n_codtram" 				jdbcType="VARCHAR" 		property="N_CODTRAM" 	/>
+    <result column="v_destram" 				jdbcType="VARCHAR" 		property="V_DESTRAM" 	/>   
+  </resultMap>
+  
+  <select id="reporteTrazabilidadAsociacion" resultMap="reporteTrazabilidadAsociacion-out" parameterType="hashMap">
+  	
+ 
+ SELECT 
+              rc.v_numhoja || ' - ' || rc.v_aniohoja as "v_hoja",
+                case
+                when rc.n_numtipodoc = 0 then e.v_desnombre
+                else case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end 
+                end
+                as "v_desdepori",                                   
+                    case                       
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS not NULL then to_char(case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep ||' - '|| p1.v_desapepat ||' '|| p.v_desapemat ||' '|| p1.v_desnombres else d.v_desdepant end )
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS  NULL then  d.v_desdep   
+                              else e.v_desnombre||'('||e.v_direntidad||')'
+                                   
+                             end 
+                                 as "v_desdepdest",                                                  
+                case
+                when rc.n_numtipodoc='0' and rc.v_tiporigen='E' then
+                td1.v_destipodoc|| ' - ' ||rc.v_numdoc  
+                else
+                td.v_codtipodoc || ' - ' || rc.v_numreg || ' - ' || rc.v_numanoreg || ' - ' || d1.v_coddep
+                end  as v_documento,                                                                                               
+                F_AGRUPA_ACCIONES_NUM(rc.v_numanoreg, rc.n_numdep, rc.n_numtipodoc, rc.v_numreg, rd.n_numitem, rd.n_numenvio) v_desproveido,                                
+                to_char(rc.D_FECEMISION, 'dd/mm/yyyy hh24:mi:ss') as "d_fecemision",                              
+                to_char(rd.d_fecrecep, 'dd/mm/yyyy hh24:mi:ss') as "d_fecrecep",                
+                to_char(rc.d_fecmod, 'dd/mm/yyyy hh24:mi:ss') as "d_fecmod",                
+                NVL(rc.v_nomarch,'SN') as "v_nomarch",
+                rd.n_numperdest as "n_numperdest",
+                rd.v_flgasig as "v_flgasig",
+                case
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'N')  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  is null)  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'S') and length(rd.n_numperdest)!= 3 then 
+                    (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end || ' - ' ||p1.v_desapepat|| ' ' ||p1.v_desapemat || ' ' ||p1.v_desnombres)
+                when (d.v_desdep is null) then (e.v_desnombre)
+                else d.v_desdep
+                end
+                as "v_desperdepentdes",
+                case
+                when (rd.n_numperori is not null)  then (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end || ' - ' ||p.v_desapepat|| ' ' ||p.v_desapemat || ' ' ||p.v_desnombres)
+                else
+                (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end)
+                end
+                as "v_desperdepentori",
+                rd.n_numperori as "n_numperori",
+                rc.v_descdoc,                
+                (select decode(to_char(count (*)),'0','','1') from tdmvc_registro rc inner join tdmvd_registro rd 
+                on  rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg where rc.v_numhoja =lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+				
+				
+				and rd.d_fecrecep is not null) as  "d_fecrecepcab",                
+                rc.v_nomusureg,
+                rc.n_numdep,
+                rc.v_tipdocweb,
+                case 
+                when substr(rc.v_descdoc,1,1) = 'S' then
+                '1'
+                when substr(rc.v_descdoc,1,1) = 'D' then
+                '2'
+                when substr(rc.v_descdoc,1,1) = 'R' then
+                '3'
+                else
+                '0'
+                end v_flgdocweb,
+                rc.v_flganexo,                
+                nvl((case when rd.v_motivoaten is not null then  rd.v_motivoaten
+                when rd.v_observacion is not null then rd.v_observacion 
+                when ts.v_coment is not null then ts.v_coment 
+                end),'-')
+                as v_motivo,
+                tra.n_codtram,
+                tra.v_destram                
+        from tdmvc_registro       rc,
+             tdmvd_registro       rd,
+             tdtbc_tipodoctramite td,
+             tdtbc_tipodoctramite td1,
+             tdtbc_dependencia    d,
+             tdtbc_dependencia    d1,            
+             tdtbc_entidad e,
+             prtbc_personal p,
+             prtbc_personal p1,             
+             tdmv_tupasap ts,
+             tdtbc_tramite tra             
+        where   rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg                
+                and rc.v_numanoreg = ts.v_numanoreg(+)
+                and rc.n_numdep= ts.n_numdep(+)
+                and rc.n_numtipodoc= ts.n_numtipodoc(+)
+                and rc.v_numreg=ts.v_numreg(+)                                
+                and td.n_numtipodoc = rc.n_numtipodoc
+                and rc.n_tipodoc=td1.n_numtipodoc(+)
+                and d.n_numdep(+) = rd.n_numdepdest
+                and d1.n_numdep(+) = rd.n_numdepori
+                and e.v_codentidad(+) = rd.v_codentidad
+                and to_char(LPAD(rd.n_numperori,8,'0'))=p.v_codpersonal(+)
+                and to_char(LPAD(rd.n_numperdest,8,'0'))=p1.v_codpersonal(+)
+                and rc.v_numhoja = lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+                and rc.n_codtram=tra.n_codtram(+)
+				
+				
+             	order by rc.d_fecemision asc, rd.n_flgcopia
+	
+  </select>  
+  
+  <resultMap id="reporteTrazabilidadRegional-out" type="hashMap">
+  
+    
+    <result column="v_hoja" 				jdbcType="VARCHAR" 		property="V_HOJA"		/>
+	<result column="v_desdepori" 			jdbcType="VARCHAR" 		property="V_DESDEPORI" 	/>
+	<result column="v_desdepdest" 			jdbcType="VARCHAR" 		property="V_DESDEPDEST" 	/>
+	<result column="v_documento" 			jdbcType="VARCHAR" 		property="V_DOCUMENTO" 	/>
+	<result column="V_DESPROVEIDO" 			jdbcType="VARCHAR"		property="V_DESPROVEIDO" 	/>
+	<result column="d_fecemision" 			jdbcType="VARCHAR" 		property="D_FECEMISION" 	/>
+	<result column="d_fecrecep"				jdbcType="VARCHAR" 		property="D_FECRECEP" 	/>
+	<result column="d_fecmod"				jdbcType="VARCHAR" 		property="D_FECMOD" 	/>
+	<result column="v_nomarch" 				jdbcType="VARCHAR" 		property="V_NOMARCH" 	/>
+	<result column="n_numperdest" 			jdbcType="VARCHAR" 		property="N_NUMPERDEST" 	/>
+	<result column="v_flgasig" 				jdbcType="VARCHAR" 		property="V_FLGASIG" 	/>
+	<result column="v_desperdepentdes" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTDES" 	/>
+	<result column="v_desperdepentori" 		jdbcType="VARCHAR" 		property="V_DESPERDEPENTORI" 	/>
+	<result column="n_numperori" 			jdbcType="VARCHAR" 		property="N_NUMPERORI" 	/>
+	<result column="V_DESCDOC" 				jdbcType="VARCHAR" 		property="V_DESCDOC" 	/>
+	<result column="d_fecrecepcab" 			jdbcType="VARCHAR" 		property="D_FECRECEPCAB" 	/>	
+	<result column="V_NOMUSUREG" 			jdbcType="VARCHAR" 		property="V_NOMUSUREG" 	/>
+	<result column="N_NUMDEP" 				jdbcType="VARCHAR" 		property="N_NUMDEP" 	/>
+	<result column="V_TIPDOCWEB" 			jdbcType="VARCHAR" 		property="V_TIPDOCWEB" 	/>
+	<result column="V_FLGDOCWEB" 			jdbcType="VARCHAR" 		property="V_FLGDOCWEB" 	/>
+	<result column="V_FLGANEXO" 			jdbcType="VARCHAR" 		property="V_FLGANEXO" 	/>
+    <result column="V_MOTIVO" 				jdbcType="VARCHAR" 		property="V_MOTIVO" 	/>
+    <result column="n_codtram" 				jdbcType="VARCHAR" 		property="N_CODTRAM" 	/>
+    <result column="v_destram" 				jdbcType="VARCHAR" 		property="V_DESTRAM" 	/>    
+    <result column="d_fecrecmp" 			jdbcType="VARCHAR" 		property="D_FECRECMP" 	/>
+    <result column="n_numdeprmp" 			jdbcType="VARCHAR" 		property="N_NUMDEPRMP" 	/>    
+    <result column="v_numanoreg" 			jdbcType="VARCHAR" 		property="V_NUMANOREG" 	/>
+    <result column="n_numtipodoc" 			jdbcType="VARCHAR" 		property="N_NUMTIPODOC" 	/>
+    <result column="v_numreg"	 			jdbcType="VARCHAR" 		property="V_NUMREG" 	/>    
+    <result column="d_fecrecmpf"	 		jdbcType="VARCHAR" 		property="D_FECRECMPF" 	/>
+    <result column="v_nomusuregmp"	 		jdbcType="VARCHAR" 		property="V_NOMUSUREGMP" 	/>    
+    <result column="pkd1"	 				jdbcType="VARCHAR" 		property="PKD1" 	/>
+    <result column="pkd2"	 				jdbcType="VARCHAR" 		property="PKD2" 	/>
+    <result column="pkd3"	 				jdbcType="VARCHAR" 		property="PKD3" 	/>
+    <result column="pkd4"	 				jdbcType="VARCHAR" 		property="PKD4" 	/>
+    <result column="pkd5"	 				jdbcType="VARCHAR" 		property="PKD5" 	/>
+    <result column="pkd6"	 				jdbcType="VARCHAR" 		property="PKD6" 	/>    
+    <result column="v_codcorte"	 			jdbcType="VARCHAR" 		property="V_CODCORTE" 	/>
+    <result column="v_anocorte"	 			jdbcType="VARCHAR" 		property="V_ANOCORTE" 	/>
+  </resultMap>
+  
+  <select id="reporteTrazabilidadRegional" resultMap="reporteTrazabilidadRegional-out" parameterType="hashMap">
+  	
+ 
+ SELECT 
+              rc.v_numhoja || ' - ' || rc.v_aniohoja as "v_hoja",
+                case
+                when rc.n_numtipodoc = 0 then e.v_desnombre
+                else case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end 
+                end
+                as "v_desdepori",                                   
+                    case                       
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS not NULL then to_char(case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep ||' - '|| p1.v_desapepat ||' '|| p.v_desapemat ||' '|| p1.v_desnombres else d.v_desdepant end )
+                              when rd.v_tipdestino = 'I' AND rd.n_numperdest IS  NULL then  d.v_desdep   
+                              else e.v_desnombre||'('||e.v_direntidad||')'
+                                   
+                             end 
+                                 as "v_desdepdest",                                                  
+                case
+                when rc.n_numtipodoc='0' and rc.v_tiporigen='E' then
+                td1.v_destipodoc|| ' - ' ||rc.v_numdoc  
+                else
+                td.v_codtipodoc || ' - ' || rc.v_numreg || ' - ' || rc.v_numanoreg || ' - ' || d1.v_coddep
+                end  as v_documento,                                                                                               
+                F_AGRUPA_ACCIONES_NUM(rc.v_numanoreg, rc.n_numdep, rc.n_numtipodoc, rc.v_numreg, rd.n_numitem, rd.n_numenvio) v_desproveido,                                
+                to_char(rc.D_FECEMISION, 'dd/mm/yyyy hh24:mi:ss') as "d_fecemision",                              
+                to_char(rd.d_fecrecep, 'dd/mm/yyyy hh24:mi:ss') as "d_fecrecep",                
+                to_char(rc.d_fecmod, 'dd/mm/yyyy hh24:mi:ss') as "d_fecmod",                
+                NVL(rc.v_nomarch,'SN') as "v_nomarch",
+                rd.n_numperdest as "n_numperdest",
+                rd.v_flgasig as "v_flgasig",
+                case
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'N')  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  is null)  then case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end
+                when (d.v_desdep is not null) and (rd.v_flgasig  = 'S') and length(rd.n_numperdest)!= 3 then 
+                    (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d.v_desdep else d.v_desdepant end || ' - ' ||p1.v_desapepat|| ' ' ||p1.v_desapemat || ' ' ||p1.v_desnombres)
+                when (d.v_desdep is null) then (e.v_desnombre)
+                else d.v_desdep
+                end
+                as "v_desperdepentdes",
+                case
+                when (rd.n_numperori is not null)  then (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end || ' - ' ||p.v_desapepat|| ' ' ||p.v_desapemat || ' ' ||p.v_desnombres)
+                else
+                (case when to_char(rd.d_fectramite,'yyyymmdd') > '20100825' then d1.v_desdep else d1.v_desdepant end)
+                end
+                as "v_desperdepentori",
+                rd.n_numperori as "n_numperori",
+                rc.v_descdoc,                
+                (select decode(to_char(count (*)),'0','','1') from tdmvc_registro rc inner join tdmvd_registro rd 
+                on  rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg where rc.v_numhoja =lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+                <if test="PARAM_NTDOC != null" >
+                and rc.n_numtipodoc= #{PARAM_NTDOC}
+                </if>
+                <if test="PARAM_NREG != null" >
+                and rc.v_numreg = lpad(#{PARAM_NREG},10,'0')
+                </if>
+				
+				and rd.d_fecrecep is not null) as  "d_fecrecepcab",                
+                rc.v_nomusureg,
+                rc.n_numdep,
+                rc.v_tipdocweb,
+                case 
+                when substr(rc.v_descdoc,1,1) = 'S' then
+                '1'
+                when substr(rc.v_descdoc,1,1) = 'D' then
+                '2'
+                when substr(rc.v_descdoc,1,1) = 'R' then
+                '3'
+                else
+                '0'
+                end v_flgdocweb,
+                rc.v_flganexo,                
+                nvl((case when rd.v_motivoaten is not null then  rd.v_motivoaten
+                when rd.v_observacion is not null then rd.v_observacion 
+                when ts.v_coment is not null then ts.v_coment 
+                end),'-')
+                as v_motivo,
+                tra.n_codtram,
+                tra.v_destram,
+                rxc.d_fecrecmp,
+                rxc.n_numdeprmp,
+                rc.v_numanoreg,
+                rc.n_numtipodoc,
+                rc.v_numreg,
+                to_char(rxc.d_fecrecmp, 'dd/mm/yyyy hh24:mi:ss') as "d_fecrecmpf",
+                rxc.v_nomusureg v_nomusuregmp,
+                
+                rd.V_NUMANOREG pkd1, 
+                rd.N_NUMDEP pkd2, 
+                rd.N_NUMTIPODOC pkd3, 
+                rd.V_NUMREG pkd4, 
+                rd.N_NUMITEM pkd5, 
+                rd.N_NUMENVIO pkd6,     
+                
+                rxc.v_codcorte,
+                rxc.v_anocorte          
+        from tdmvc_registro       rc,
+             tdmvd_registro       rd,
+             tdtbc_tipodoctramite td,
+             tdtbc_tipodoctramite td1,
+             tdtbc_dependencia    d,
+             tdtbc_dependencia    d1,            
+             tdtbc_entidad e,
+             prtbc_personal p,
+             prtbc_personal p1,             
+             tdmv_tupasap ts,
+             tdtbc_tramite tra,
+             tdmvd_regxcorte rxc             
+        where   rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg                
+                and rc.v_numanoreg = ts.v_numanoreg(+)
+                and rc.n_numdep= ts.n_numdep(+)
+                and rc.n_numtipodoc= ts.n_numtipodoc(+)
+                and rc.v_numreg=ts.v_numreg(+)                                
+                and td.n_numtipodoc = rc.n_numtipodoc
+                and rc.n_tipodoc=td1.n_numtipodoc(+)
+                and d.n_numdep(+) = rd.n_numdepdest
+                and d1.n_numdep(+) = rd.n_numdepori
+                and e.v_codentidad(+) = rd.v_codentidad
+                and to_char(LPAD(rd.n_numperori,8,'0'))=p.v_codpersonal(+)
+                and to_char(LPAD(rd.n_numperdest,8,'0'))=p1.v_codpersonal(+)
+                and rc.v_numhoja = lpad(#{PARAM_HRNRO},10,'0')
+                and rc.v_aniohoja = #{PARAM_HRANIO}
+                and rc.n_codtram=tra.n_codtram(+)
+                <if test="PARAM_NTDOC != null" >
+				and rc.n_numtipodoc= #{PARAM_NTDOC}
+				</if>
+				<if test="PARAM_NREG != null" >
+				and rc.v_numreg = lpad(#{PARAM_NREG},10,'0')
+				</if>
+				
+				and rd.V_NUMANOREG=rxc.V_NUMANOREG(+)
+				and rd.N_NUMDEP=rxc.N_NUMDEP(+)
+                and rd.N_NUMTIPODOC=rxc.N_NUMTIPODOC(+) 
+                and rd.V_NUMREG=rxc.V_NUMREG(+)
+                and rd.N_NUMITEM=rxc.N_NUMITEM(+) 
+                and rd.N_NUMENVIO=rxc.N_NUMENVIO(+)
+                
+                <if test="PARAM_INTENDENCIA != null" >
+				AND d.n_numint = #{PARAM_INTENDENCIA}
+				</if>
+				
+				<if test="PARAM_INTENDENCIA != null" >
+				AND d1.n_numint <![CDATA[ <> ]]> #{PARAM_INTENDENCIA}
+				</if>               
+				
+				                
+				
+             	order by rc.d_fecemision asc, rd.n_flgcopia
+	
+  </select>
+	
+</mapper>

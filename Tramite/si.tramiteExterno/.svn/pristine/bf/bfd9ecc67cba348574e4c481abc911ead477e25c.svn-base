@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;">
+      		 <p:outputLabel value="AQUI EL MODULO NUEVO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	 	
+	<h:form id="frmListaEncuesta">
+     	<p:column colspan="4" style="text-align: right">
+	         <p:commandButton value="Salir del sistema" action="#{menuBean.efectuarSalir}" icon="icon-exit"/>  
+    	</p:column>		
+	</h:form>
+	</p:fieldset>	
+	
+		
+	</ui:define>
+</ui:composition>	
+</html>	
