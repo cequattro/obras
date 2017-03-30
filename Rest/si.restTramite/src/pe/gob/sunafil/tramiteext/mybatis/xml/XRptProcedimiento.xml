@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Administrativo">
+
+<resultMap id="reporteProcedimiento-out" type="hashMap">
+  
+    
+	<result column="V_DESINT" 			jdbcType="VARCHAR" 		property="V_DESINT" 	/>
+	<result column="V_DESDEP" 			jdbcType="VARCHAR" 		property="V_DESDEP" 	/>
+	<result column="V_DESNOMBRE" 		jdbcType="VARCHAR" 		property="V_DESNOMBRE" 	/>
+	<result column="CUR" 				jdbcType="VARCHAR"		property="CUR" 	/>	
+	<result column="D_FECREG" 			jdbcType="VARCHAR"		property="D_FECREG" 	/>
+	<result column="V_ASUNTODETALLADO" 	jdbcType="VARCHAR"		property="V_ASUNTODETALLADO" 	/>
+	<result column="V_DESTUPA" 			jdbcType="VARCHAR"		property="V_DESTUPA" 	/>
+	<result column="V_CODTUPA" 			jdbcType="VARCHAR"		property="V_CODTUPA" 	/>
+	<result column="V_DESDEPDEST" 		jdbcType="VARCHAR"		property="V_DESDEPDEST" 	/>
+	<result column="ESTADO" 			jdbcType="VARCHAR"		property="ESTADO" 	/>
+	<result column="V_NOMUSUREG" 		jdbcType="VARCHAR"		property="V_NOMUSUREG" 	/>
+       
+  </resultMap>
+  
+  <select id="reporteProcedimiento" resultMap="reporteProcedimiento-out" parameterType="hashMap">
+  	SELECT i.v_desint, d.v_desdep, V.v_desnombre,V.v_numhoja||'-'||V.v_aniohoja CUR,TO_CHAR(V.D_FECREG, 'DD/MM/YYYY HH24:MI:SS') D_FECREG, V.V_ASUNTODETALLADO, 
+	V.v_destupa, V.v_codtupa,
+	t.v_desdepdest,
+	t.bandeja ESTADO,
+	V.v_nomusureg 
+	FROM vst_consultastrex V, tdtbc_dependencia d, tdtbc_intendencia i, vst_trazabilidadtrex t
+	WHERE V.v_codtupa IS NOT NULL
+	AND V.n_numdep=d.n_numdep
+	AND d.n_numint=i.n_numint 
+	AND V.v_numanoreg=t.v_numanoreg 
+	and V.n_numdep=t.n_numdep 
+	and V.n_numtipodoc=t.n_numtipodoc 
+	and V.v_numreg=t.v_numreg
+	  
+	AND V.d_fecreg between #{PARAM_FI} AND #{PARAM_FF}
+	<if test="PARAM_INTENDENCIA != null" >
+	AND i.n_numint=#{PARAM_INTENDENCIA}
+	</if>
+	<if test="PARAM_TUPA != null" >
+	AND V.v_codtupa=#{PARAM_TUPA}
+	</if>
+	<if test="PARAM_ESTADO != null" >
+	AND V.n_flgtrex=#{PARAM_ESTADO}
+	</if>    	
+	ORDER BY V.v_codtupa, V.d_fecreg DESC  	
+	
+  </select>
+  
+  <resultMap id="reporteConsolidado-out" type="hashMap">
+  
+    
+	<result column="V_DESINT" 			jdbcType="VARCHAR" 		property="V_DESINT" 	/>
+	<result column="V_DESDEP" 			jdbcType="VARCHAR" 		property="V_DESDEP" 	/>
+	<result column="V_DESNOMBRE" 		jdbcType="VARCHAR" 		property="V_DESNOMBRE" 	/>
+	<result column="CUR" 				jdbcType="VARCHAR"		property="CUR" 	/>	
+	<result column="D_FECREG" 			jdbcType="VARCHAR"		property="D_FECREG" 	/>
+	<result column="V_ASUNTODETALLADO" 	jdbcType="VARCHAR"		property="V_ASUNTODETALLADO" 	/>
+	<result column="V_DESTRAM" 			jdbcType="VARCHAR"		property="V_DESTRAM" 	/>	
+	<result column="V_DESTUPA" 			jdbcType="VARCHAR"		property="V_DESTUPA" 	/>
+	<result column="V_CODTUPA" 			jdbcType="VARCHAR"		property="V_CODTUPA" 	/>
+	<result column="V_DESDEPDEST" 		jdbcType="VARCHAR"		property="V_DESDEPDEST" 	/>
+	<result column="ESTADO" 			jdbcType="VARCHAR"		property="ESTADO" 	/>
+	<result column="V_NOMUSUREG" 		jdbcType="VARCHAR"		property="V_NOMUSUREG" 	/>
+       
+  </resultMap>
+  
+  <select id="reporteConsolidado" resultMap="reporteConsolidado-out" parameterType="hashMap">
+  	SELECT i.v_desint, d.v_desdep, V.v_desnombre,V.v_numhoja||'-'||V.v_aniohoja CUR,TO_CHAR(V.D_FECREG, 'DD/MM/YYYY HH24:MI:SS') D_FECREG, V.V_ASUNTODETALLADO,
+  	tra.v_destram, 
+	NVL(V.v_destupa,'NO APLICA') v_destupa, 
+	NVL(V.v_codtupa,'NO APLICA') v_codtupa,
+	t.v_desdepdest,
+	t.bandeja ESTADO,
+	V.v_nomusureg,
+	
+	NVL(tiptr.v_destipodoc,' - ') v_destipodoc,
+	NVL(V.v_numdoc,' - ') v_numdoc,
+	V.n_numfolios,
+	NVL(V.v_observacion,' - ') v_observacion
+	 
+	FROM vst_consultastrex V, tdtbc_dependencia d, tdtbc_intendencia i, vst_trazabilidadtrex t, tdtbc_tramite tra, tdtbc_tipodoctramite tiptr
+	WHERE V.n_numdep=d.n_numdep
+	AND d.n_numint=i.n_numint 
+	AND V.v_numanoreg=t.v_numanoreg 
+	and V.n_numdep=t.n_numdep 
+	and V.n_numtipodoc=t.n_numtipodoc 
+	and V.v_numreg=t.v_numreg
+	
+	and V.n_codtram=tra.n_codtram(+)
+	and V.n_tipodoc=tiptr.n_numtipodoc(+)
+	  
+	AND V.d_fecreg between #{PARAM_FI} AND #{PARAM_FF}
+	<if test="PARAM_INTENDENCIA != null" >
+	AND i.n_numint=#{PARAM_INTENDENCIA}
+	</if>
+	<if test="PARAM_TUPA != null" >
+	AND V.v_codtupa=#{PARAM_TUPA}
+	</if>
+	<if test="PARAM_ESTADO != null" >
+	AND V.n_flgtrex=#{PARAM_ESTADO}
+	</if>    	
+	AND tra.v_destram IS NOT NULL
+	ORDER BY tra.v_destram, V.v_codtupa, V.d_fecreg DESC  	
+	
+  </select>
+  
+	
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Login">
+
+	<select id="listarPeriodo"  resultType="Periodo" >
+	select 
+			v_periodo, 
+			v_descripcion, 
+			d_fecinicio, 
+			d_fecfin, 
+			v_flgactivo, 
+			v_observacion 
+	from entbc_periodo
+	where 
+	v_flgactivo='A'
+	</select>
+	
+</mapper>

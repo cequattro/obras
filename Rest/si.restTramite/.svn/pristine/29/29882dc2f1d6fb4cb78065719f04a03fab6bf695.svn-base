@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Reporte">
+
+<resultMap id="reporteHojaDeRuta-out" type="hashMap">
+  
+    
+    <result column="v_hoja" 				jdbcType="VARCHAR" 		property="V_HOJA"		/>
+	<result column="v_documento" 			jdbcType="VARCHAR" 		property="V_DOCUMENTO" 	/>
+	<result column="v_asunto" 				jdbcType="VARCHAR" 		property="V_ASUNTO" 	/>
+	<result column="d_fecemision" 			jdbcType="VARCHAR" 		property="D_FECEMISION" 	/>
+	<result column="v_prioridad" 			jdbcType="VARCHAR"		property="V_PRIORIDAD" 	/>
+	<result column="n_copia" 				jdbcType="VARCHAR" 		property="N_COPIA" 	/>
+	<result column="v_desdepori"			jdbcType="VARCHAR" 		property="V_DESDEPORI" 	/>
+	<result column="v_desdepdest"			jdbcType="VARCHAR" 		property="V_DESDEPDEST" 	/>
+	<result column="v_desproveido" 			jdbcType="VARCHAR" 		property="V_DESPROVEIDO" 	/>
+	<result column="n_folios" 				jdbcType="VARCHAR" 		property="N_FOLIOS" 	/>
+	<result column="v_adesproveido" 		jdbcType="VARCHAR" 		property="V_ADESPROVEIDO" 	/>
+	<result column="v_adesproveido1" 		jdbcType="VARCHAR" 		property="V_ADESPROVEIDO1" 	/>
+	<result column="FLGSAP" 				jdbcType="VARCHAR" 		property="FLGSAP" 	/>
+	<result column="rownum" 				jdbcType="VARCHAR" 		property="ROWNUM" 	/>
+	<result column="num" 					jdbcType="VARCHAR" 		property="NUM" 	/>
+	<result column="FLGTREX" 				jdbcType="VARCHAR" 		property="FLGTREX" 	/>	
+    
+       
+  </resultMap>
+  
+  <select id="reporteHojaDeRuta" resultMap="reporteHojaDeRuta-out" parameterType="hashMap">
+  	select * from (
+     SELECT * FROM(
+        SELECT 
+                rc.v_numhoja||' - '||rc.v_aniohoja||'  '||decode(rc.v_tiporigen,'I','INT','E','') as v_hoja,               
+
+
+                case
+                when rc.n_numtipodoc='0' and rc.v_tiporigen='E' then
+                td1.v_destipodoc|| ' - ' ||rc.v_numdoc  
+                else
+                td.v_codtipodoc || ' - ' || rc.v_numreg || ' - ' || rc.v_numanoreg || ' - ' || d1.v_coddep
+                end  as v_documento,
+                
+                
+                rc.v_desasunto as v_asunto,
+                to_char(rd.d_fectramite, 'dd/mm/yyyy hh24:mi:ss') as d_fecemision,
+                decode(rc.n_tippriori,'0','NORMAL','1','URGENTE','2','MUY URGENTE') as v_prioridad,
+                decode(to_char(rd.n_flgcopia),'0','O','1','C') as n_copia,
+                
+                d1.v_desdep as v_desdepori,
+                
+                case 
+                when d.v_desdep is not null then  d.v_desdep 
+                else e.v_desnombre 
+                end
+                as v_desdepdest,   
+                
+                nvl(F_AGRUPA_ACCIONES_NUM(rc.v_numanoreg, rc.n_numdep, rc.n_numtipodoc, rc.v_numreg, rd.n_numitem, rd.n_numenvio),' ') as v_desproveido,
+                to_char(rc.n_numfolios) as n_folios,
+                
+               UF_DOCUMENTO_ACCION_NOMBRE v_adesproveido,
+               UF_DOCUMENTO_ACCION_NOMBRE1 v_adesproveido1,
+     DECODE ( (SELECT COUNT(*) FROM TDMV_TUPASAP TS WHERE TS.V_NUMANOREG = RC.V_NUMANOREG AND 
+    TS.N_NUMDEP = RC.N_NUMDEP AND TS.N_NUMTIPODOC = RC.N_NUMTIPODOC AND TS.V_NUMREG = RC.V_NUMREG), 1, '-', 0, ' ') AS FLGSAP,
+
+                rownum,
+                1 as num, DECODE(RC.N_FLGTREX, 0, '', 1, 'OBSERVADO: EL DOCUMENTO TIENE REQUISITOS TUPA INCUMPLIDOS', 2, 'NO PRESENTADO: EL DOCUMENTO SE ENCUENTRA EN ESTADO NO PRESENTADO', '') AS FLGTREX
+                
+                
+                                
+        from tdmvc_registro       rc,
+             tdmvd_registro       rd,
+             tdtbc_tipodoctramite td,
+             tdtbc_tipodoctramite td1,
+             tdtbc_dependencia    d,
+             tdtbc_dependencia    d1,             
+             tdtbc_entidad e
+        where rc.v_numreg = lpad(#{PV_NUMREG},10,'0')
+        and rc.n_numdep = #{PN_NUMDEP}
+                and rc.v_numanoreg = #{PV_NUMANOREG}
+                and rc.n_numtipodoc = #{PN_NUMTIPODOC}
+                and  rc.v_numanoreg = rd.v_numanoreg
+                and rc.n_numdep = rd.n_numdep
+                and rc.n_numtipodoc = rd.n_numtipodoc
+                and rc.v_numreg = rd.v_numreg
+                and td.n_numtipodoc = rc.n_numtipodoc
+                and rc.n_tipodoc=td1.n_numtipodoc(+)
+                and d.n_numdep(+) = rd.n_numdepdest
+                and d1.n_numdep(+) = rc.n_numdep
+                and e.v_codentidad(+) = rd.v_codentidad        
+        order by rd.d_fectramite asc, rd.n_flgcopia 
+        
+        )
+        union
+        
+        select 
+               ' ',
+               ' ',
+               ' ',
+               '',
+               ' ',
+               ' ',
+               ' ',
+               ' ',
+               ' ',
+               ' ',
+               UF_DOCUMENTO_ACCION_NOMBRE v_adesproveido,
+               UF_DOCUMENTO_ACCION_NOMBRE1 v_adesproveido1,
+    ' ',
+               level,
+               999,
+       ''  
+        from dual 
+        connect by level <![CDATA[ <= ]]> 5)
+        order by num asc, to_date(d_fecemision,'dd/mm/yyyy hh24:mi:ss') asc, n_copia
+	
+  </select>
+  
+	
+</mapper>

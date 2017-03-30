@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/sunafil/tramiteext/mybatis/configtr/config.properties" />
+
+	<typeAliases>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.SitbTdocide"  alias="SitbTdocideBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.bean.Combo"  alias="comboBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcTipodoctramite"  alias="TdtbcTipodoctramiteBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcDependencia"  alias="TdtbcDependenciaBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcTramite"  alias="TdtbcTramiteBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcIntendencia"  alias="TdtbcIntendenciaBean"/>		
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcGrupotupa"  alias="TdtbcGrupotupaBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbdTupa"  alias="TdtbdTupaBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbdReqtupa"  alias="TdtbdReqtupaBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvdRegreqtupa"  alias="TdmvdRegreqtupaBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcEntidad"  alias="TdtbcEntidadBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbdCentrolab"  alias="TdtbdCentrolabBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvcRegistro"  alias="TdmvcRegistroBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvdRegistro"  alias="TdmvdRegistroBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvdRegxcorte"  alias="TdmvdRegxcorteBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdbcDependenciasiit"  alias="TdbcDependenciasiitBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdtbcCorrelativo"  alias="TdtbcCorrelativoBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.VstBandejastrex"  alias="VstBandejastrexBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvcHojarutaKey"  alias="TdmvcHojarutaKeyBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.TdmvcCorte"  alias="TdmvcCorteBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.VstConsultastrex"  alias="VstConsultastrexBean"/>
+		<typeAlias type="pe.gob.sunafil.tramiteext.persistence.model.VstDireccionestrex"  alias="VstDireccionestrexBean"/>
+		
+    </typeAliases>
+ 
+	<environments default="development"> <!-- production/development -->
+		<!-- PARA DESARROLLO:-->
+		 
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		 
+		<!-- PARA PRODUCCION:-->
+		
+		<!-- <environment id="production">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+				<property name="data_source" value="java:jboss/datasources/DSRESTTRAMITE" />
+			</dataSource>			
+		</environment> --> 
+		
+	</environments>
+	
+	
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/SitbTdocideMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XCombos.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcTipodoctramiteMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcDependenciaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcTramiteMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcIntendenciaMapper.xml" />		 
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcGrupotupaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbdTupaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbdReqtupaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvdRegreqtupaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcEntidadMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbdCentrolabMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvcRegistroMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvdRegistroMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvdRegxcorteMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdbcDependenciasiitMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdtbcCorrelativoMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/VstBandejastrexMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvcHojarutaMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XReporte.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/TdmvcCorteMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/VstConsultastrexMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XTrazabilidad.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XRptUsuario.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/persistence/map/VstDireccionestrexMapper.xml" />
+		 <mapper resource="pe/gob/sunafil/tramiteext/mybatis/xml/XRptProcedimiento.xml" />
+	</mappers>
+</configuration>
+
