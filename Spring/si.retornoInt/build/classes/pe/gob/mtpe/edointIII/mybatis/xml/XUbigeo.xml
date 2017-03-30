@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="Ubigeo">
+
+  <select id="ListaDistritos" parameterType="Provincia" resultType="Distrito">
+		SELECT v_coddep as vCoddep,v_codpro as vCodpro,V_CODDIS AS vCoddis,V_DESDIS AS vDesdis FROM SIMINTRA1.SITB_DISTRITO WHERE V_CODDEP=#{vCoddep} AND V_CODPRO=#{vCodpro}
+		ORDER BY V_DESDIS
+	</select>
+
+	<select id="ListaProvincias" parameterType="Departamento" resultType="Provincia">
+		SELECT v_coddep as vCoddep,V_CODPRO AS vCodpro,V_DESPRO AS vDespro FROM SIMINTRA1.SITB_PROVINCIA WHERE V_CODDEP=#{vCoddep}
+		ORDER BY V_DESPRO
+	</select>
+
+	<select id="ListaDepartamentos" resultType="Departamento">
+		SELECT T.V_CODDEP AS vCoddep,T.V_DESDEP AS vDesdep FROM SIMINTRA1.SITB_DEPARTAMENTO T
+		ORDER BY T.V_DESDEP 
+	</select>
+    
+</mapper>

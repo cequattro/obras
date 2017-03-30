@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper  namespace="Logueo">
+
+<!-- 
+*** OBTIENE USUARIO ***
+*** =>  obtieneUsuario-in : Parametro(s) enviados al Oracle Package
+*** =>  obtieneUsuario-out : Parametro(s) que retorna Package
+-->
+
+     <resultMap id="obtieneUsuario-out" type="Usuario">           
+            <result property="v_codusu" 		column="v_codusu" />
+            <result property="v_passusu" 		column="v_passusu" />
+            <result property="v_flgact" 		column="v_flgact" />
+            <result property="n_admin" 			column="n_admin" />
+            <result property="v_codpersonal" 	column="v_codpersonal" />
+            <result property="v_desapepat" 		column="v_desapepat" />
+            <result property="v_desapemat" 		column="v_desapemat" />
+            <result property="v_desnombres" 	column="v_desnombres" />
+            <result property="v_codcargo" 		column="v_codcargo" />
+            <result property="v_nomcargo" 		column="v_nomcargo" />
+            <result property="v_descargo" 		column="v_descargo" />
+            <result property="v_codescala" 		column="v_codescala" />
+            <result property="v_abrvescala" 	column="v_abrvescala" />
+            <result property="v_nomescala"		column="v_nomescala" />
+            <result property="v_desescala"		column="v_desescala" />
+            <result property="v_codtipo" 		column="v_codtipo" />
+            <result property="v_destipo" 		column="v_destipo" />
+            <result property="n_numdep" 		column="n_numdep" />
+            <result property="v_coddep" 		column="v_coddep" />
+            <result property="v_desdep" 		column="v_desdep" />
+            <result property="v_desdepabr" 		column="v_desdepabr" />
+            <result property="v_codzon" 		column="v_codzon" />
+            <result property="v_nomzon" 		column="v_nomzon" />
+            <result property="v_codreg" 		column="v_codreg" />
+            <result property="v_nomreg" 		column="v_nomreg" />
+            <result property="v_codep" 			column="v_codep" />    
+     </resultMap>
+
+		<select id="obtieneUsuario" statementType="CALLABLE" parameterType="hashMap" resultMap="obtieneUsuario-out" >
+	   { call SIMINTRA1.P_ACCESO.SP_LOGIN_DATOS(
+			 #{v_usuario, mode=IN,jdbcType=VARCHAR,javaType=String}	,  
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtieneUsuario-out,javaType=ResultSet}
+		) }
+		 
+		</select>    
+ 
+<!-- 
+*** OBTIENE PERMISOS ***
+*** =>  obtieneUsuario-in : Parametro(s) enviados al Oracle Package
+*** =>  obtieneUsuario-out : Parametro(s) que retorna Package
+-->
+     <resultMap id="obtienePermisos-out" type="permisosBean">            
+            <result property="v_codsis" column="v_codsis" />
+            <result property="v_nomsis" column="v_nomsis" />
+            <result property="v_codusu" column="v_codusu" />
+            <result property="v_codper" column="v_codper" />
+            <result property="v_desper" column="v_desper" />            
+     </resultMap>
+
+    <select id="obtienePermisos"  statementType="CALLABLE" parameterType="hashMap" resultMap="obtienePermisos-out"> 
+        { call SIMINTRA1.P_ACCESO.SP_LOGIN_PERMISOS(
+			 #{v_usuario, mode=IN,jdbcType=VARCHAR,javaType=String}	, 
+			 #{v_codsis, mode=IN,jdbcType=VARCHAR,javaType=String}	,  
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtienePermisos-out,javaType=ResultSet}
+		) }
+    </select>
+
+ <!-- **************************** --> 
+ 
+<!-- 
+*** OBTIENE MENU HIJO ***
+*** =>  obtieneUsuario-in : Parametro(s) enviados al Oracle Package
+*** =>  obtieneUsuario-out : Parametro(s) que retorna Package
+-->
+  
+     <resultMap id="obtieneMenuHijo-out" type="menuHijoBean">            
+            <result property="n_nivel" 	column="n_nivel" />
+            <result property="v_codpad" column="v_codpad" />
+            <result property="v_desmen" column="v_desmen" />
+            <result property="v_url" 	column="v_url" />  
+            <result property="v_icono" 	column="v_icono" />  
+     </resultMap>
+
+    <select id="obtieneMenuHijo" statementType="CALLABLE" parameterType="hashMap" resultMap="obtieneMenuHijo-out"> 
+        { call SIMINTRA1.P_ACCESO.SP_OBT_MENU_HIJO(
+			 #{v_usuario, mode=IN,jdbcType=VARCHAR,javaType=String}	, 
+			 #{v_codsis, mode=IN,jdbcType=VARCHAR,javaType=String}	,  
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtieneMenuHijo-out,javaType=ResultSet}
+		) }
+    </select>
+
+ <!-- **************************** --> 
+ 
+<!-- 
+*** OBTIENE MENU PADRE ***
+*** =>  obtieneUsuario-in : Parametro(s) enviados al Oracle Package
+*** =>  obtieneUsuario-out : Parametro(s) que retorna Package
+-->
+    
+     <resultMap id="obtieneMenuPadre-out" type="menuPadreBean">            
+            <result property="n_orden" column="n_orden" />
+            <result property="v_menu" column="v_menu" />
+            <result property="men_padre" column="men_padre" />   
+            <result property="v_icono" column="v_icono" />   
+     </resultMap>
+
+    <select id="obtieneMenuPadre" statementType="CALLABLE" parameterType="hashMap"  resultMap="obtieneMenuPadre-out"> 
+        { call SIMINTRA1.P_ACCESO.SP_OBT_MENU_PADRE(
+			 #{v_perfil, mode=IN,jdbcType=VARCHAR,javaType=String}	, 
+			 #{v_codsis, mode=IN,jdbcType=VARCHAR,javaType=String}	,  
+	  		 #{cuLista, mode=OUT,jdbcType=CURSOR,resultMap=obtieneMenuPadre-out,javaType=ResultSet}
+		) }
+    </select>
+
+ <!-- **************************** --> 
+ 
+<!-- *** OBTIENE FECHA *** --> 
+    <select id="obtieneFecha" resultType="string">
+	    select trim(to_char(sysdate, 'Day'))||', '||to_char(sysdate, 'DD')||' de '||trim(to_char(sysdate, 'Month'))||' del '||to_char(sysdate, 'YYYY') || ' Hora: ' || TO_CHAR(sysdate,'HH24:mi') fecha 
+	    from dual     
+    </select> 
+ <!-- **************************** --> 
+  
+</mapper> 

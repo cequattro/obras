@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="pe/gob/mtpe/edointIII/mybatis/config/config.properties" />
+	
+
+	<typeAliases>		
+		
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Capacitacion"   	 alias="Capacitacion"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ciiu"   			 alias="Ciiu"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Encuesta"   		 alias="Encuesta"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Departamento"   	 alias="Departamento"/>		
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Distrito"   		 alias="Distrito"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Edad"   			 alias="Edad"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Limitacion"   		 alias="Limitacion"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Motivo"   			 alias="Motivo"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Motxdeman"   		 alias="Motxdeman"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Muestraemp"   		 alias="Muestraemp"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Nivedu"   			 alias="Nivedu"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocudemxlim"   		 alias="Ocudemxlim"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocupacion"   		 alias="Ocupacion"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocupaxdeman"   	 alias="Ocupaxdeman"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocupxcapa"   		 alias="Ocupxcapa"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocuxprofe"   		 alias="Ocuxprofe"/>		
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Profesion"   		 alias="Profesion"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Provincia"   		 alias="Provincia"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Seccion"   		 alias="Seccion"/>
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.ParamBusOcupacion"  alias="ParamBusOcupacion"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Periodo"  			 alias="Periodo"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.ParamBusReporte"  	 alias="ParamBusReporte"/>	
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Ocudemxmot"  	 	 alias="Ocudemxmot"/>
+		
+		<typeAlias type="pe.gob.mtpe.edointIII.bean.Permisos"   alias="permisosBean"/>
+    	<typeAlias type="pe.gob.mtpe.edointIII.bean.MenuHijo"   alias="menuHijoBean"/>
+    	<typeAlias type="pe.gob.mtpe.edointIII.bean.MenuPadre"  alias="menuPadreBean"/>	    	
+    	<typeAlias type="pe.gob.mtpe.edointIII.bean.Persona"    alias="Persona"/>	
+    	<typeAlias type="pe.gob.mtpe.edointIII.bean.Usuario" 	 alias="Usuario" />
+		
+		
+	</typeAliases>
+
+	
+	<environments default="development"><!-- production/development -->
+	
+		<!-- LOCAL -->
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property value="${driver}" name="driver" />
+				<property value="${url}" name="url" />
+				<property value="${username}" name="username" />
+				<property value="${password}" name="password" />
+			</dataSource>
+		</environment>
+		
+		
+		<!-- PRODUCCION JDNI 
+		<environment id="production">
+				<transactionManager type="JDBC"/>
+					<dataSource type="JNDI">
+						<property name="data_source" value="java:jboss/datasources/DSEDOINTIII" />
+					</dataSource>		
+		</environment>
+		-->	
+	</environments>
+	
+
+	
+
+
+	<!-- Lista de XML que contiene las consultas a base de Datos -->
+	<mappers>	
+		<mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XLogueo.xml" />
+		<mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XSeguridad.xml" />
+		<mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XPersona.xml" />
+		
+		 <mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XActividadEconomica.xml" />
+		 <mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XMuestraEmpresa.xml" />
+		 <mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XOcupacionProfesion.xml" />
+		 <mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XUbigeo.xml" />
+		 <mapper resource="pe/gob/mtpe/edointIII/mybatis/xml/XLogin.xml" />
+		
+	</mappers>
+</configuration>
+

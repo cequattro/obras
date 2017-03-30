@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ficha_retorno" pageWidth="595" pageHeight="1050" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8666ac2d-bd1c-4625-9c8d-a299f4de729c">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="97"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  R.V_NUMDOC,
+  T.V_DESABR    AS V_DESTDOCIDE,
+  P.V_APEMATER  AS V_APEMATER,
+  P.V_APEPATER  AS V_APEPATER,
+  P.V_NOMBRES   AS V_NOMBRES,
+  D.V_DESDEP    AS V_DESDEP,
+  V.V_DESPRO    AS V_DESPRO,
+  S.V_DESDIS    AS V_DESDIS,
+  (CASE
+      WHEN P.C_ESTCIVIL='1' THEN 'SOLTERO'
+      WHEN P.C_ESTCIVIL='2' THEN 'CASADO'
+      WHEN P.C_ESTCIVIL='3' THEN 'VIUDO'
+      WHEN P.C_ESTCIVIL='4' THEN 'DIVORCIADO'
+    END)        AS C_ESTCIVIL,
+  (CASE WHEN P.C_CODSEXO='1' THEN 'MASCULINO' ELSE 'FEMENINO' END)    AS C_CODSEXO,
+  TO_CHAR(P.D_FECNAC,'DD/MM/YYYY') AS D_FECNAC,
+  UPPER(PN.V_DESPAIS) AS V_DESPAISNA,
+  UPPER(PR.V_DESPAIS) AS V_DESPAISRS,
+  R.V_DESDIRRET,
+  P.V_TELFPER1,
+  P.V_TELFPER2,
+  P.V_EMAIL,
+  R.V_NUMHIJOS,
+  (CASE WHEN R.V_FLGDISCAP='S' THEN 'SI' ELSE 'NO' END) AS V_FLGDISCAP,
+  (CASE WHEN R.V_FLGJEFHOG='S' THEN 'SI' ELSE 'NO' END) AS V_FLGJEFHOG,
+
+  NE.V_DESNIVEDU AS V_NIVEDUEXT,
+  NP.V_DESNIVEDU AS V_NIVEDUPER,
+  F.V_DESPROF,
+
+  OP.V_DESOCUPAC AS V_DESOCUPACPER,
+  TO_CHAR(R.D_FECINIPER,'MM/YYYY') AS D_FECINIPER,
+  TO_CHAR(R.D_FECFINPER,'MM/YYYY') AS D_FECFINPER,
+  OE.V_DESOCUPAC AS V_DESOCUPACEXT,
+  TO_CHAR(R.D_FECINIEXT,'MM/YYYY') AS D_FECINIEXT,
+  TO_CHAR(R.D_FECFINEXT,'MM/YYYY') AS D_FECFINEXT,
+
+  DR1.V_DESDEP AS V_DESDEPDR1,
+  DR2.V_DESDEP AS V_DESDEPDR2,
+  TO_CHAR(R.D_FECSALPER,'MM/YYYY') AS D_FECSALPER,
+  TO_CHAR(R.D_FECRETPER,'MM/YYYY') AS D_FECRETPER,
+  (CASE WHEN R.V_FLGRETFAM='S' THEN 'SI' ELSE 'NO' END) AS V_FLGRETFAM,
+  (CASE WHEN R.V_CODSEXCON='1' THEN 'MASCULINO' ELSE 'FEMENINO' END)  AS V_CODSEXCON,
+  R.V_EDADCON,
+  TO_CHAR(R.N_CANFAMRET) AS N_CANFAMRET,
+  N.V_DESRETOR,
+
+  G1.V_DESRANGO   AS V_DESRANGOMON,
+  OD1.V_DESOCUPAC AS V_DESOCUPACDES1,
+  OD2.V_DESOCUPAC AS V_DESOCUPACDES2,
+  G2.V_DESRANGO   AS V_DESRANGOTIE
+
+
+FROM
+  RPTBC_PERSONA R
+  INNER JOIN SIMINTRA1.SITB_PERSONA P         ON(P.V_CODTDOCIDE=R.V_CODTDOCIDE AND P.V_NUMDOC=R.V_NUMDOC)
+  INNER JOIN SIMINTRA1.SITB_TDOCIDE T         ON(T.V_CODTDOCIDE=R.V_CODTDOCIDE)
+  INNER JOIN SIMINTRA1.SITB_PAIS PR           ON(PR.V_CODPAIS=R.V_CODPAISRS)
+  INNER JOIN SIMINTRA1.SITB_DEPARTAMENTO D    ON(D.V_CODDEP=P.V_CODDEPNAC)
+  INNER JOIN SIMINTRA1.SITB_PROVINCIA  V      ON(V.V_CODDEP=P.V_CODDEPNAC AND V.V_CODPRO=P.V_CODPRONAC)
+  INNER JOIN SIMINTRA1.SITB_DISTRITO S        ON(S.V_CODDEP=P.V_CODDEPNAC AND S.V_CODPRO=P.V_CODPRONAC AND S.V_CODDIS=P.V_CODDISNAC)
+  INNER JOIN SIMINTRA1.SITB_PAIS PN           ON(PN.V_CODPAIS=P.V_CODPAISNAC)
+  INNER JOIN SIMINTRA1.SITB_NIVELEDUCATI NE   ON(NE.V_CODNIVEDU=R.V_NIVEDUEXT)
+  INNER JOIN SIMINTRA1.SITB_NIVELEDUCATI NP   ON(NP.V_CODNIVEDU=R.V_NIVEDUPER)
+  INNER JOIN SIMINTRA1.SITB_PROFESION F       ON(F.V_CODPROF=R.V_CODPROF)
+  INNER JOIN SIMINTRA1.SITB_OCUPACION OP      ON(OP.V_CODOCUPAC=R.V_CODOCUPER)
+  INNER JOIN SIMINTRA1.SITB_OCUPACION OE      ON(OE.V_CODOCUPAC=R.V_CODOCUEXT)
+  INNER JOIN SIMINTRA1.SITB_DEPARTAMENTO DR1  ON(DR1.V_CODDEP=R.V_CODDEPRE1)
+  INNER JOIN SIMINTRA1.SITB_DEPARTAMENTO DR2  ON(DR2.V_CODDEP=R.V_CODDEPRE2)
+  INNER JOIN RPTBC_RETORNO N                  ON(N.V_CODRETOR=R.V_CODRETOR)
+  INNER JOIN RPTBD_RANGO G1                   ON(G1.V_CODRANGO=R.V_CODRANGO)
+  INNER JOIN SIMINTRA1.SITB_OCUPACION OD1     ON(OD1.V_CODOCUPAC=R.V_CODOCUDE1)
+  INNER JOIN SIMINTRA1.SITB_OCUPACION OD2     ON(OD2.V_CODOCUPAC=R.V_CODOCUDE2)
+  INNER JOIN RPTBD_RANGO G2                   ON(G2.V_CODRANGO=R.V_CODRANDES)
+WHERE
+  R.V_CODTDOCIDE='03'
+  AND R.V_NUMDOC='23377980']]>
+	</queryString>
+	<field name="V_NUMDOC" class="java.lang.String"/>
+	<field name="V_DESTDOCIDE" class="java.lang.String"/>
+	<field name="V_APEMATER" class="java.lang.String"/>
+	<field name="V_APEPATER" class="java.lang.String"/>
+	<field name="V_NOMBRES" class="java.lang.String"/>
+	<field name="V_DESDEP" class="java.lang.String"/>
+	<field name="V_DESPRO" class="java.lang.String"/>
+	<field name="V_DESDIS" class="java.lang.String"/>
+	<field name="C_ESTCIVIL" class="java.lang.String"/>
+	<field name="C_CODSEXO" class="java.lang.String"/>
+	<field name="D_FECNAC" class="java.lang.String"/>
+	<field name="V_DESPAISNA" class="java.lang.String"/>
+	<field name="V_DESPAISRS" class="java.lang.String"/>
+	<field name="V_DESDIRRET" class="java.lang.String"/>
+	<field name="V_TELFPER1" class="java.lang.String"/>
+	<field name="V_TELFPER2" class="java.lang.String"/>
+	<field name="V_EMAIL" class="java.lang.String"/>
+	<field name="V_NUMHIJOS" class="java.math.BigDecimal"/>
+	<field name="V_FLGDISCAP" class="java.lang.String"/>
+	<field name="V_FLGJEFHOG" class="java.lang.String"/>
+	<field name="V_NIVEDUEXT" class="java.lang.String"/>
+	<field name="V_NIVEDUPER" class="java.lang.String"/>
+	<field name="V_DESPROF" class="java.lang.String"/>
+	<field name="V_DESOCUPACPER" class="java.lang.String"/>
+	<field name="D_FECINIPER" class="java.lang.String"/>
+	<field name="D_FECFINPER" class="java.lang.String"/>
+	<field name="V_DESOCUPACEXT" class="java.lang.String"/>
+	<field name="D_FECINIEXT" class="java.lang.String"/>
+	<field name="D_FECFINEXT" class="java.lang.String"/>
+	<field name="V_DESDEPDR1" class="java.lang.String"/>
+	<field name="V_DESDEPDR2" class="java.lang.String"/>
+	<field name="D_FECSALPER" class="java.lang.String"/>
+	<field name="D_FECRETPER" class="java.lang.String"/>
+	<field name="V_FLGRETFAM" class="java.lang.String"/>
+	<field name="V_CODSEXCON" class="java.lang.String"/>
+	<field name="V_EDADCON" class="java.lang.String"/>
+	<field name="N_CANFAMRET" class="java.lang.String"/>
+	<field name="V_DESRETOR" class="java.lang.String"/>
+	<field name="V_DESRANGOMON" class="java.lang.String"/>
+	<field name="V_DESOCUPACDES1" class="java.lang.String"/>
+	<field name="V_DESOCUPACDES2" class="java.lang.String"/>
+	<field name="V_DESRANGOTIE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5605b5c3-b110-46cb-bab2-497d4e1626ad" key="staticText-2" mode="Opaque" x="10" y="45" width="535" height="28" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PLATAFORMA DE RETORNO PRODUCTIVO]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="9835394f-ce58-4f33-9db7-b95b1ed6d7b6" key="image-1" x="10" y="0" width="190" height="33"/>
+				<imageExpression><![CDATA[$P{PV_RUTA_IMAGEN}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="871" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="1" width="535" height="298" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="1" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATOS PERSONALES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="27" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Documento:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da5bc3c4-d009-45cc-98ab-ca32ded56c9e" x="106" y="27" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESTDOCIDE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="27" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[N° de Documento:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ca0b984c-bbfc-4403-8c3d-c980002bcec4" x="364" y="27" width="171" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NUMDOC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="46" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="66" width="85" height="23"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Apellido Materno:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="100" width="85" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Provincia de Lugar de Nacimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="128" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Género:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="147" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Nacimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="166" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[País de Nacimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="21" y="185" width="85" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Domicilio Actual:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="222" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Teléfono Celular:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="21" y="241" width="85" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[N° de Hijos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="273" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[¿Es jefe del hogar?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="105e3025-4885-44ef-aea3-9e645947e094" x="106" y="46" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="395c34fc-85d1-4751-bba2-29414ea24263" x="106" y="66" width="163" height="23"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_APEMATER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="45310d2c-2da6-4b76-ae00-329665af8a9b" x="106" y="100" width="163" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESPRO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d463901f-8e75-4618-b527-4478550e4c8c" x="106" y="127" width="163" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C_CODSEXO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="58bcf047-ea51-4816-a70b-b2116db3b320" x="106" y="147" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECNAC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7f3d8471-f75a-495a-8c69-f3c6c2520440" x="106" y="166" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESPAISNA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b94983fb-f1dc-47c9-b8d1-3dff94238649" x="106" y="185" width="163" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDIRRET}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d3b8b035-7648-43cc-95f5-3dced96b6fae" x="106" y="222" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_TELFPER2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="63657296-5a6b-4f82-b8ad-e136279bce8b" x="106" y="241" width="163" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NUMHIJOS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="db8b23b7-e682-4b8b-a032-0106ca2cc0f7" x="106" y="273" width="163" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGJEFHOG}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="46" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Apellido Paterno:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="66" width="96" height="23"/>
+				<box rightPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Departamento de Lugar de Nacimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="100" width="96" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Distrito de Lugar de Nacimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="127" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Estado Civil:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="166" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[País de Residencia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="186" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Teléfono Fijo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="222" width="96" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="269" y="241" width="96" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[¿Persona con discapacidad?:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2a5b4d4f-354b-4329-814c-ccf659687a72" x="364" y="46" width="171" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_APEPATER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a89a7a41-0f2a-49e8-9cd3-ac64cde12eb7" x="364" y="66" width="171" height="23"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDEP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8ffd042d-10b7-486a-a70b-0389faa40a18" x="364" y="100" width="171" height="21"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDIS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fb60c340-b185-40d6-bd41-682835b02202" x="364" y="128" width="171" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C_ESTCIVIL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cbe2b85f-2658-4229-9e9e-447c1f9e1090" x="364" y="166" width="171" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESPAISRS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="22b8cbfc-8e9b-4540-abec-de95e286df2f" x="364" y="186" width="171" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_TELFPER1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="eb6feb81-c5c4-4567-9066-b70c0c74c879" x="364" y="222" width="171" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_EMAIL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dd7fbd2a-55dc-4a6d-8016-6dd74310fe14" x="364" y="241" width="171" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGDISCAP}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="311" width="535" height="88" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="311" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NIVEL EDUCATIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="337" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Máximo Grado de Instrucción en el Extranjero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="356" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Máximo Grado de Instrucción en el Perú:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="375" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Profesión/Carrera Técnica:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2ca452d7-60a5-4efe-8f71-4af86b9bc99c" x="204" y="337" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NIVEDUEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d9a6594b-8497-4424-8e86-d3b5a144ff74" x="204" y="356" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_NIVEDUPER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f803a792-f39e-43ca-b16f-8eedf43dfd3e" x="204" y="375" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESPROF}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="409" width="535" height="108" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="409" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[EXPERIENCIA LABORAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="435" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Última Ocupación Laboral en Perú:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="454" width="80" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inicio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="205" y="454" width="80" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Cese:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="473" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Última Ocupación Laboral en el Extranjero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="205" y="492" width="80" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Cese:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="492" width="80" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inicio:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a00ea2a1-a598-419d-a12f-1dcadd9e9a67" x="204" y="435" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESOCUPACPER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1f44ccd1-c280-446f-ad94-25dcfdcd5fc9" x="102" y="454" width="103" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECINIPER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="846983bd-d46b-4266-9cd8-6ddd389936cb" x="285" y="454" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECFINPER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5dd009e0-f9d5-4514-af7e-e7f611585c58" x="204" y="473" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESOCUPACEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c7deb8ff-887c-425f-9e72-63cda7cb7528" x="102" y="492" width="103" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECINIEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c063773e-ccef-4ab9-b14d-c9e3d04b9527" x="284" y="492" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECFINEXT}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="527" width="535" height="163" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="527" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RETORNO AL PERÚ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="553" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Departamento de Retorno(opción 1):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="593" width="98" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Salida del Perú:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="204" y="593" width="139" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de Probable Retorno al Perú:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="572" width="183" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Departamento de Retorno(opción 2):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="615bf57f-3f41-447b-84ce-2f778c07c863" x="204" y="553" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDEPDR1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5b869272-dc53-44e3-9f99-de17cb7d1d56" x="204" y="572" width="331" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESDEPDR2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b8308664-778a-4daa-979b-98ca307f7075" x="120" y="593" width="85" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECSALPER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8bd2308e-80c7-4dd9-8373-07132c5cc2d5" x="343" y="593" width="192" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_FECRETPER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="612" width="98" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[¿Retornó con Familia?:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="84ce34d2-81a5-447b-835d-386388587729" x="120" y="612" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_FLGRETFAM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="648" width="155" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Otros Familiares:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="667" width="155" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[¿Por que razón planea retornar al Perú?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="79040da4-0f11-42a4-9808-8203be540d17" x="176" y="648" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{N_CANFAMRET}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="bf0029cb-fdf9-489e-a7fe-e8842ff2cf96" x="176" y="667" width="359" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESRETOR}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="700" width="535" height="87" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="700" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN LABORAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="726" width="213" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Monto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="22" y="745" width="213" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[En que ocupación considera que podría desempeñarse:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="92d2077d-51e2-4ac5-9223-aed506c8b1e1" x="235" y="726" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESRANGOMON}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="235" y="745" width="11" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[1.-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="235" y="764" width="11" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[2.-]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6a9ec52b-2cb8-447c-b85f-d2c963c3097d" x="246" y="745" width="289" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESOCUPACDES1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fbb4427e-543c-4ece-9240-35b0107566d6" x="246" y="764" width="289" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESOCUPACDES2}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="8ffb14f0-3909-4612-b901-526c8388dc81" key="rectangle-1" x="10" y="798" width="535" height="56" forecolor="#CC0000"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="da2c501c-8305-4133-929e-819c9ca9550d" key="staticText-17" mode="Opaque" x="10" y="798" width="535" height="16" forecolor="#FFFFFF" backcolor="#CC0000"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[SITUACIÓN OCUPACIONAL ACTUAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c22a6d31-381b-4a51-a3bb-e11c6b085426" key="staticText-10" x="21" y="825" width="213" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Hace cuanto tiempo está desempleado:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b5032ea7-6140-486b-8a13-9932bf37acf6" x="234" y="825" width="301" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_DESRANGOTIE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement uuid="72dc5bbd-54f9-4419-ab58-06b45801aff3" mode="Opaque" x="0" y="0" width="514" height="13" forecolor="#333333" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="edc782f9-a69c-461a-8235-674328d6b5fe" x="120" y="0" width="111" height="13" forecolor="#333333"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="3d995c06-49b7-485f-a459-5eff54879966" mode="Opaque" x="513" y="0" width="42" height="13" forecolor="#333333" backcolor="#E6E6E6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="886661da-714e-4129-bbbf-c6fe7d270be7" x="0" y="0" width="94" height="13" forecolor="#333333"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Impresión:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

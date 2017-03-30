@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper  namespace="pe.gob.mtpe.retorno.dao.ComunDao">
+
+
+ <!-- ==========================================================OCUPACION=============================================== -->
+	<resultMap id="resultOcupacion-out" type="Ocupacion" >
+    <id 	column="V_CODOCUPAC" property="vCodocupac" jdbcType="VARCHAR" />
+    <result column="V_DESOCUPAC" property="vDesocupac" jdbcType="VARCHAR" />
+    <result column="N_FLGSUNMIN" property="nFlgsunmin" jdbcType="DECIMAL" />
+    <result column="V_CODGGOCUP" property="vCodggocup" jdbcType="VARCHAR" />
+    <result column="V_FLGINEI" 	 property="vFlginei" jdbcType="VARCHAR" />
+  </resultMap>	
+
+<select id="buscarOcupacion" resultMap="resultOcupacion-out">
+	SELECT 
+		 V_CODOCUPAC,
+		 V_DESOCUPAC,
+		 N_FLGSUNMIN,
+		 V_CODGGOCUP,
+		 V_FLGINEI
+	FROM SIMINTRA1.sitb_ocupacion 
+	where 1=1
+	 
+      
+      <if test="paramBus.vDesocupac != null" >
+       AND  V_DESOCUPAC LIKE '%' || UPPER(#{paramBus.vDesocupac}) ||'%' 
+      </if>
+      
+      <if test="paramBus.vCodocupac != null" >
+       AND  V_CODOCUPAC=#{paramBus.vCodocupac}
+      </if>
+	
+</select>
+
+<!-- ==========================================================PROFESION=============================================== -->
+<resultMap id="resultProfesion-out" type="Profesion" >
+    <id 	column="V_CODPROF" 		property="vCodprof" 	jdbcType="VARCHAR" />
+    <result column="V_DESPROF" 		property="vDesprof" 	jdbcType="VARCHAR" />
+    <result column="N_FLGSUNMIN" 	property="nFlgsunmin" 	jdbcType="DECIMAL" />
+    <result column="V_CODGGPROF" 	property="vCodggprof" 	jdbcType="VARCHAR" />
+    <result column="V_FLGINEI" 		property="vFlginei" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="buscarProfesion" resultMap="resultProfesion-out" >
+	SELECT 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+  FROM  SIMINTRA1.SITB_PROFESION  p
+         
+ 	WHERE p.v_codprof not like '%5' 
+	
+	 
+      <if test="paramBus.vDesprof != null" >
+       AND p.V_DESPROF LIKE '%' || UPPER(#{paramBus.vDesprof}) ||'%'
+      </if>
+      
+      <if test="paramBus.vCodprof != null" >
+       AND p.V_CODPROF=#{paramBus.vCodprof}
+      </if>
+ 	   
+</select>
+
+<!-- ==========================================================TIPO DE DOCUMENTO===============================================where 
+		v_flgreto='S' -->
+
+<select id="listarTipoDocumento" resultType="Tdocide">
+	select 
+    v_codtdocide as vCodtdocide, 
+    v_destdocide as vDestdocide, 
+    v_desabr     as vDesabr
+ 
+  from SIMINTRA1.sitb_tdocide
+  where 
+  v_codtdocide in ('03','08')
+	
+	
+</select>
+
+<!-- ==========================================================UBIGEO=============================================== -->
+
+ <select id="ListaDistritos" resultType="Distrito">
+		SELECT v_coddep as vCoddep,v_codpro as vCodpro,V_CODDIS AS vCoddis,V_DESDIS AS vDesdis FROM SIMINTRA1.SITB_DISTRITO WHERE V_CODDEP=#{provincia.vCoddep} AND V_CODPRO=#{provincia.vCodpro}
+		ORDER BY V_DESDIS
+	</select>
+
+	<select id="ListaProvincias"  resultType="Provincia">
+		SELECT v_coddep as vCoddep,V_CODPRO AS vCodpro,V_DESPRO AS vDespro FROM SIMINTRA1.SITB_PROVINCIA WHERE V_CODDEP=#{departamento.vCoddep}
+		ORDER BY V_DESPRO
+	</select>
+
+	<select id="ListaDepartamentos" resultType="Departamento">
+		SELECT T.V_CODDEP AS vCoddep,T.V_DESDEP AS vDesdep FROM SIMINTRA1.SITB_DEPARTAMENTO T
+		ORDER BY T.V_DESDEP 
+	</select>
+	
+	<select id="listaPais" resultType="Pais">
+		select 
+			v_codpais 	as vCodpais, 
+			v_codcontin as vCodcontin, 
+			v_despais 	as vDespais
+		from simintra1.sitb_pais
+	    order by  v_despais
+	</select>
+	
+	<!-- ==========================================================discapacidad=============================================== -->
+	
+	<select id="listaDiscapacidad" resultType="Discapacidad">
+		 select 
+		 	v_coddiscap as vCoddiscap, 
+		 	v_desdiscap as vDesdiscap, 
+		 	v_estreg    as vEstreg, 
+		 	d_fecreg    as dFecreg
+		 from 
+		 	rptbc_discapacidad
+	
+	</select>
+	
+	<!-- ==========================================================NIVEL EDUCATIVO=============================================== , 
+  			v_flgsovio  as vFlgsovio-->	
+	
+	<select id="listarNivelEducativo" resultType="Niveleducati">
+		select 
+  			v_codnivedu as vCodnivedu, 
+  			v_desnivedu as vDesnivedu, 
+  			n_flgsunmin as nFlgsunmin
+		from 
+  			sitb_niveleducati
+	</select>
+	
+
+
+</mapper>

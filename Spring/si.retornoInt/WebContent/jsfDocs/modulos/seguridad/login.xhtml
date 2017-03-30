@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">	
+	<ui:define name="cabecera"/>
+	<ui:define name="menu2"/>
+	<ui:define name="datosUsuario"/>    
+    <ui:define name="pie"/>
+    <ui:define name="contenido">
+        <h:form id="formLogin">
+            <p:focus for="idUsuario"/>
+            <f:event listener="#{cargaAppBean.CargaApp}" type="preRenderView"/>
+             
+           		<div id="contenido1">
+
+  					<div id="login">
+  						<!-- INICIO PARA EDITAR CONTENIDO DE LOGIN -->
+ 						<p style="margin-bottom:5px;margin-top:13px"><h:outputLabel value="Usuario: " />
+ 							 <p:inputText id="idUsuario" 
+                                     value="#{loginBean.usuario.v_usuario}"
+                                     style="margin-right:115px;"
+                                     required="true"
+                                     requiredMessage="Ingrese usuario" /></p>
+  						<p style="margin-bottom:5px;margin-top:0px"><h:outputLabel value="Contraseña: " />
+  							<p:password id="idPassword"
+                                    value="#{loginBean.usuario.v_contrasena}"
+                                    style="margin-right:115px;"
+                                    required="true"
+                                    requiredMessage="Ingrese contraseña"/></p>
+  						<p align="center" style="margin-bottom:5px;margin-top:0px">
+							 <p:commandButton id="btnIngresar"
+                                     value="Ingresar"
+                                     process="@this :formLogin"                                                                   
+                                     action="#{loginBean.Login}"   
+                                     update=":formLogin:idUsuario,:formLogin:idPassword, :formLogin:mensajes"                                   
+                                     icon="icon-key"
+                                     
+                                      />
+                   		<p:defaultCommand target="btnIngresar" /></p>
+
+  						<!-- FIN DE EDITAR CONTENIDO DE LOGIN -->
+  						 <p:messages id="mensajes"/>
+    				</div>
+				</div>  
+				
+          
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+        </h:form>
+        <script type="text/javascript">  
+        //<![CDATA[
+    		function loginRequest(xhr, status, args) {  
+        		if(!args.validationFailed && args.loggedIn) {  
+            		 
+            		 setTimeout(function() {
+            		        window.location = args.view;
+            		      }, 500);
+        		}  
+   			 }  
+  			 //]]>
+		</script> 
+    </ui:define>
+</ui:composition>
+</html>

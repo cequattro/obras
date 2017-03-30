@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPr15" printOrder="Horizontal" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5f6a0624-3012-4881-b328-efd08a064008">
+	<property name="ireport.zoom" value="1.1000000000000054"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+
+distinct
+p.V_NUMDOC,
+dep.V_DESDEP,
+o.V_DESOCUPAC
+from
+rptbc_persona p
+inner join simintra1.sitb_departamento dep on(dep.V_CODDEP=p.V_CODDEPRE1)
+inner join simintra1.sitb_ocupacion o on(o.V_CODOCUPAC=p.V_CODOCUDE1)
+order by dep.V_DESDEP]]>
+	</queryString>
+	<field name="V_NUMDOC" class="java.lang.String"/>
+	<field name="V_DESDEP" class="java.lang.String"/>
+	<field name="V_DESOCUPAC" class="java.lang.String"/>
+	<group name="REPORTE">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d276b94e-94e4-4dcd-b83e-803a68f9d5c7" x="0" y="0" width="802" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE POTENCIALES RETORNANTES, POR OCUPACIÓN, SEGÚN DEPARTAMENTO DE RETORNO
+]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<crosstab>
+				<reportElement uuid="8517dbfd-d7e7-4e9a-9139-d1129d98e63c" x="0" y="0" width="802" height="20"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement uuid="8c3a8c27-932c-4987-b3d0-93a475a419f2" positionType="Float" mode="Opaque" x="0" y="0" width="88" height="30" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+							<box>
+								<topPen lineWidth="1.0" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+								<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+								<paragraph lineSpacing="Single"/>
+							</textElement>
+							<text><![CDATA[DEPARTAMENTO DE RETORNO]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="V_DESDEP" width="88" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{V_DESDEP}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="1e18b79f-b9dd-4276-a7c5-f80a22d97f70" style="Crosstab Data Text" x="0" y="0" width="88" height="25"/>
+								<textElement verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{V_DESDEP}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement uuid="eb078a89-379b-4b64-8661-304713a1096a" x="0" y="0" width="88" height="25"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<text><![CDATA[TOTAL]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="V_DESOCUPAC" height="30" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{V_DESOCUPAC}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="c9e60c46-a870-44de-984c-fc982d17e44b" style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="50" height="30" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+								<box>
+									<topPen lineWidth="1.0" lineColor="#000000"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{V_DESOCUPAC}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement uuid="bece46e5-7131-439c-a0e5-ba97b4544374" mode="Opaque" x="0" y="0" width="50" height="30" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+								<box>
+									<topPen lineWidth="1.0" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<text><![CDATA[TOTAL]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="V_NUMDOCMeasure" class="java.lang.Integer" calculation="Count">
+					<measureExpression><![CDATA[$F{V_NUMDOC}]]></measureExpression>
+				</measure>
+				<crosstabCell width="50" height="25">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="73280962-fc54-4bf2-8469-6a6dcd58eb61" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{V_NUMDOCMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="V_DESDEP">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="453d2eb2-99b3-40eb-89b9-756ca5d79a9e" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{V_NUMDOCMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="V_DESOCUPAC">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="49e685db-e2b0-4cd4-aa50-b72594846d19" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{V_NUMDOCMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="V_DESDEP" columnTotalGroup="V_DESOCUPAC">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="d1c4c712-289c-4050-892b-9bee6900a67d" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{V_NUMDOCMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

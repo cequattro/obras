@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;" >
+      		 <p:outputLabel value="REPORTES"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+		<h:form id="formlstReporte">
+			<p:panel id="panellstReporte" >
+				
+					<p:panelGrid id="pglstReporte" styleClass="panelBusqueda">
+						
+				<p:row >
+							<p:column  colspan="1">
+								<h:outputLabel value="Tipo de reporte"/>								
+							</p:column>
+							<p:column colspan="3">								
+								<p:selectOneMenu  	style="width: 600px;"
+													value="#{reporteBean.paramReporte.tipoReporte}"
+													required="true"
+													requiredMessage="Seleccione el reporte">
+									<f:selectItem 	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItem 	itemLabel="1.-REPORTE DE POTENCIALES RETORNANTES POR GRUPOS DE EDAD SEGUN PAIS DE RESIDENCIA" 
+													itemValue="1" />
+									<f:selectItem 	itemLabel="2.-REPORTE DE POTENCIALES RETORNANTES POR GRUPOS DE EDAD SEGUN DEPARTAMENTO DE NACIMIENTO" 
+													itemValue="2" />
+									<f:selectItem 	itemLabel="3.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN GRUPO DE EDAD" 
+													itemValue="3" />
+									<f:selectItem 	itemLabel="4.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN ESTADO CIVIL" 
+													itemValue="4" />
+									<f:selectItem 	itemLabel="5.-REPORTE DE POTENCIALES RETORNANTES POR CONDICION DE JEFE DE HOGAR SEGUN GENERO" 
+													itemValue="5" />
+									<f:selectItem 	itemLabel="6.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN MAXIMO NIVEL DE INSTRUCCION EN PERÚ" 
+													itemValue="6" />
+									<f:selectItem   itemLabel="7.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN MAXIMO NIVEL DE INSTRUCCION EN EL EXTRANJERO" 
+													itemValue="7" />
+									<f:selectItem 	itemLabel="8.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN PROFESIÓN" 
+													itemValue="8" />
+									<f:selectItem 	itemLabel="9.-REPORTE DE POTENCIALES RETORNANTES POR GRUPOS DE EDAD SEGUN DEPARTAMENTO DE RETORNO" 
+													itemValue="9" />
+									<f:selectItem 	itemLabel="10.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN NUMERO DE HIJOS" 
+													itemValue="10" />
+									<f:selectItem 	itemLabel="11.-REPORTE DE POTENCIALES RETORNANTES, POR RAZONES DE RETORNO, SEGÚN PAÍS DE PROCEDENCIA" 
+													itemValue="11" />
+									<f:selectItem 	itemLabel="12.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN TIEMPO DE DESEMPLEO" 
+													itemValue="12" />
+									<f:selectItem 	itemLabel="13.-REPORTE DE POTENCIALES RETORNANTES, POR OCUPACIÓN, SEGÚN DEPARTAMENTO DE RETORNO" 
+													itemValue="13" />
+									<f:selectItem 	itemLabel="14.-REPORTE DE POTENCIALES RETORNANTES, POR TIEMPO DE DESEMPLEO, SEGÚN PAÍS DE PROCEDENCIA" 
+													itemValue="14" />
+									
+									<f:selectItem 	itemLabel="15.-REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN TIEMPO DE DESEMPLEO" 
+													itemValue="15" />
+									<f:selectItem 	itemLabel="16.-REPORTE DE POTENCIALES RETORNANTES POR GRUPOS DE EDAD SEGUN TIEMPO DE DESEMPLEO" 
+													itemValue="16" />
+									<f:selectItem 	itemLabel="17.-REPORTE DE POTENCIALES RETORNANTES Y FAMILIARES, POR GRUPOS QUINQUENALES DE EDAD, SEGUN PAIS DE RESIDENCIA" 
+													itemValue="17" />
+									<f:selectItem 	itemLabel="18.-REPORTE DE POTENCIALES RETORNANTES Y FAMILIARES POR GENERO SEGUN DEPARTAMENTO DE RETORNO" 
+													itemValue="18" />
+									<f:selectItem 	itemLabel="19.-REPORTE DE POTENCIALES RETORNANTES Y FAMILIARES, POR GRUPOS QUINQUENALES DE EDAD, SEGUN DEPARTAMENTO DE RETORNO" 
+													itemValue="19" />
+									<f:selectItem 	itemLabel="20.-REPORTE DE POTENCIALES RETORNANTES POR GÉNERO SEGÚN TIEMPO DE PERMANENCIA EN EL EXTRANJERO" 
+													itemValue="20" />
+													
+																		        						
+								</p:selectOneMenu>
+							</p:column>
+							
+							
+						</p:row>	
+						
+					
+						<p:row >
+						
+							<p:column  >
+								<h:outputLabel value="Fecha de inicio"/>								
+							</p:column>
+							<p:column >								
+														
+								<p:inputMask mask="99/9999"  id="dFecsal"
+											 value="#{reporteBean.paramReporte.fechaInicio}"
+											 required="true"
+											 requiredMessage="Insertar fecha de inicio"/>
+								<p:watermark value="MES/AÑO" for="dFecsal"/>
+							
+							</p:column>	
+							<p:column  >
+								<h:outputLabel value="Fecha de fin"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/9999" id="dFecret"
+												value="#{reporteBean.paramReporte.fechaFin}"
+												required="true"
+												requiredMessage="Ingrese la fecha de fin"/>
+								<p:watermark value="MES/AÑO" for="dFecret"/>
+							</p:column>	
+							
+										 
+							
+						</p:row>	
+																	 
+					</p:panelGrid>
+					
+					<p:messages id="msgMensajesConsolidado"  escape="false"/>					 
+					<p:separator/>
+					<center>
+						<p:commandButton  	id="btnPDF"							  
+							  				value="Generar Reporte PDF"
+							  				icon="icon-pdf-16" 						 
+							  				action="#{reporteBean.validaParametros}"	
+							  				oncomplete="validaParametrosPDF(xhr, status, args);"			  			
+							  				update=":formlstReporte:msgMensajesConsolidado"
+							  				/>
+						<p:commandButton  	id="btnPDF1"	
+											widgetVar="btnPDF1"						  
+							  				style="display: none;"					 
+							  				action="#{reporteBean.mostrarReportePDF}"	
+							  				onclick="this.form.target='_blank'"				  			
+							  			    ajax="false" 
+							  				/>	  				
+							  				
+						<p:commandButton  	id="btnExcelr"
+											widgetVar="btnExcelr"							  
+							  				value="Generar Reporte Excel"
+							  				icon="icon_excel" 	
+							  				action="#{reporteBean.validaParametros}"	
+							  				oncomplete="validaParametrosEXCEL(xhr, status, args);"			  			
+							  				update=":formlstReporte:msgMensajesConsolidado"					  				 					  				    
+							 				/>	
+							 				
+						<p:commandButton  	id="btnExcelr1"	
+											widgetVar="btnExcelr1"							  
+							  				value="Generar Reporte Excel"
+							  				icon="icon_excel" 	
+							  				action="#{reporteBean.mostrarReporteXLS}"
+							  				onclick="this.form.target='_blank'"
+							  				ajax="false" 	
+							  				style="display: none;"					  				    
+							 				/>		 									
+					</center>
+			</p:panel>			
+		</h:form>		
+		
+		<br/>		
+			
+	
+		
+		
+		
+		
+		
+		
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+	</p:fieldset>	
+	
+		<script type="text/javascript">  
+        //<![CDATA[
+    		
+    		function validaParametrosPDF(xhr, status, args) {      			
+    			 if(!args.validationFailed && !args.error) {     				
+    				 $("#formlstReporte\\:btnPDF1").click();
+    			
+    			 }
+    			 
+   			 }
+    		
+    		function validaParametrosEXCEL(xhr, status, args) {      			
+   			 if(!args.validationFailed && !args.error) {     				
+   				 $("#formlstReporte\\:btnExcelr1").click();
+   			
+   			 }
+   			 
+  			 }
+
+    		
+    		
+  			 //]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

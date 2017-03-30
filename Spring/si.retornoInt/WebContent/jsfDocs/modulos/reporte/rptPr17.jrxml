@@ -1,0 +1,1547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPr17" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="3.4522712143932015"/>
+	<property name="ireport.x" value="542"/>
+	<property name="ireport.y" value="613"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+'Reporte 17' as "REPORTE",
+pa.v_despais  "pais",
+sum(case when pe.edad between 0 and 4 then 1 else 0 end) "de0a4",
+sum(case when pe.edad between 5 and 9 then 1 else 0 end) "de5a9",
+sum(case when pe.edad between 10 and 14 then 1 else 0 end) "de10a14",
+sum(case when pe.edad between 15 and 19 then 1 else 0 end) "de15a19",
+sum(case when pe.edad between 20 and 24 then 1 else 0 end) "de20a24",
+sum(case when pe.edad between 25 and 29 then 1 else 0 end) "de25a29",
+sum(case when pe.edad between 30 and 34 then 1 else 0 end) "de30a34",
+sum(case when pe.edad between 35 and 39 then 1 else 0 end) "de35a39",
+sum(case when pe.edad between 40 and 44 then 1 else 0 end) "de40a44",
+sum(case when pe.edad between 45 and 49 then 1 else 0 end) "de45a49",
+sum(case when pe.edad between 50 and 54 then 1 else 0 end) "de50a54",
+sum(case when pe.edad between 55 and 59 then 1 else 0 end) "de55a59",
+sum(case when pe.edad between 60 and 64 then 1 else 0 end) "de60a64",
+sum(case when pe.edad between 65 and 69 then 1 else 0 end) "de65a69",
+sum(case when pe.edad between 70 and 74 then 1 else 0 end) "de70a74",
+sum(case when pe.edad between 75 and 79 then 1 else 0 end) "de75a79",
+sum(case when pe.edad between 80 and 200 then 1 else 0 end) "de80aMas",
+count(pa.v_despais) total
+from vst_rpt_paisresxedad pe, simintra1.sitb_pais pa
+where pe.v_codpaisrs=pa.v_codpais
+group by pa.v_despais]]>
+	</queryString>
+	<field name="REPORTE" class="java.lang.String"/>
+	<field name="pais" class="java.lang.String"/>
+	<field name="de0a4" class="java.math.BigDecimal"/>
+	<field name="de5a9" class="java.math.BigDecimal"/>
+	<field name="de10a14" class="java.math.BigDecimal"/>
+	<field name="de15a19" class="java.math.BigDecimal"/>
+	<field name="de20a24" class="java.math.BigDecimal"/>
+	<field name="de25a29" class="java.math.BigDecimal"/>
+	<field name="de30a34" class="java.math.BigDecimal"/>
+	<field name="de35a39" class="java.math.BigDecimal"/>
+	<field name="de40a44" class="java.math.BigDecimal"/>
+	<field name="de45a49" class="java.math.BigDecimal"/>
+	<field name="de50a54" class="java.math.BigDecimal"/>
+	<field name="de55a59" class="java.math.BigDecimal"/>
+	<field name="de60a64" class="java.math.BigDecimal"/>
+	<field name="de65a69" class="java.math.BigDecimal"/>
+	<field name="de70a74" class="java.math.BigDecimal"/>
+	<field name="de75a79" class="java.math.BigDecimal"/>
+	<field name="de80aMas" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="tot_de0A4" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de0a4}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por0a4" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de0a4}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por5a9" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de5a9}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por10a14" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de10a14}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por15a19" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de15a19}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por20a24" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de20a24}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por25a29" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de25a29}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por30a34" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de30a34}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por35a39" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de35a39}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por40a44" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de40a44}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por45a49" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de45a49}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por50a54" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de50a54}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por55a59" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de55a59}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por60a64" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de60a64}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por65a69" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de65a69}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por70a74" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de70a74}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por75a79" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de75a79}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="por80aMas" class="java.lang.Double" resetType="Column">
+		<variableExpression><![CDATA[( $F{TOTAL}.doubleValue() == 0 ? 0: $F{de80aMas}.doubleValue()*100/$F{TOTAL}.doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de5a9" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de5a9}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de10a14" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de10a14}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de15a19" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de15a19}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de20a24" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de20a24}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de25a29" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de25a29}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de30a34" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de30a34}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de35a39" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de35a39}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de40a44" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de40a44}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de45a49" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de45a49}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de50a54" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de50a54}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de55a59" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de55a59}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de60a64" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de60a64}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de65a69" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de65a69}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de70a74" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de70a74}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de75a79" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de75a79}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_de80aMas" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{de80aMas}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_TOTAL" class="java.math.BigDecimal" resetType="Group" resetGroup="REPORTE" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por0a4" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de0A4}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por5a9" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de5a9}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por10a14" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de10a14}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por15a19" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{por15a19}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por20a24" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de20a24}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por25a29" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de25a29}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por30a34" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de30a34}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por35a39" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de35a39}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por40a44" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de40a44}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por45a49" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de45a49}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por50a54" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de50a54}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por55a59" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de55a59}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por60a64" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de60a64}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por65a69" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de65a69}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por70a74" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de70a74}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por75a79" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de75a79}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tot_por80aMas" class="java.lang.Double" resetType="Group" resetGroup="REPORTE">
+		<variableExpression><![CDATA[$V{tot_de80aMas}.doubleValue()*100/$V{tot_TOTAL}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="REPORTE">
+		<groupExpression><![CDATA[$F{REPORTE}]]></groupExpression>
+		<groupHeader>
+			<band height="96">
+				<rectangle>
+					<reportElement x="71" y="36" width="653" height="59" backcolor="#B9B8B8"/>
+				</rectangle>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="71" y="36" width="79" height="58" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[PAIS DE RESIDENCIA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="188" y="36" width="454" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[GRUPOS QUINQUENAL DE EDAD]]></text>
+				</staticText>
+				<line>
+					<reportElement x="150" y="36" width="1" height="59"/>
+				</line>
+				<line>
+					<reportElement x="214" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="151" y="57" width="573" height="1"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="153" y="57" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[0-4]]></text>
+				</staticText>
+				<line>
+					<reportElement x="151" y="79" width="573" height="1"/>
+				</line>
+				<line>
+					<reportElement x="183" y="57" width="1" height="38"/>
+				</line>
+				<staticText>
+					<reportElement x="151" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="168" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="684" y="58" width="40" height="19" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<line>
+					<reportElement x="166" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="184" y="57" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[5-9]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="216" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[10-14]]></text>
+				</staticText>
+				<line>
+					<reportElement x="245" y="57" width="1" height="37"/>
+				</line>
+				<elementGroup>
+					<line>
+						<reportElement x="198" y="79" width="1" height="16"/>
+					</line>
+					<staticText>
+						<reportElement x="183" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[N]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="199" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[%]]></text>
+					</staticText>
+				</elementGroup>
+				<line>
+					<reportElement x="229" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement x="214" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="230" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<line>
+					<reportElement x="276" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="260" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="247" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[15-19]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="261" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="245" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="307" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="291" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="278" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[20-24]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="292" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="276" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="338" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="322" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="309" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[25-29]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="323" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="307" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="369" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="353" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="340" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[30-34]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="354" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="338" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="400" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="384" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="371" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[35-39]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="385" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="369" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="431" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="415" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="402" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[40-44]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="416" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="400" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="462" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="446" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="433" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[45-49]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="447" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="431" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="493" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="477" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="464" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[50-54]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="478" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="462" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="524" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="508" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="495" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[55-59]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="509" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="493" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="555" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="539" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="526" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[60-64]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="540" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="524" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="586" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="570" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="557" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[65-69]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="571" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="555" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="617" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="601" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="588" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[70-74]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="602" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="586" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="648" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="632" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="619" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[75-79]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="633" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="617" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+				<line>
+					<reportElement x="679" y="57" width="1" height="37"/>
+				</line>
+				<line>
+					<reportElement x="663" y="79" width="1" height="16"/>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="650" y="58" width="30" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[80 A +]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="664" y="79" width="16" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[%]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="648" y="79" width="15" height="16" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[N]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<rectangle>
+					<reportElement x="71" y="0" width="653" height="20"/>
+				</rectangle>
+				<line>
+					<reportElement x="150" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="166" y="0" width="1" height="20"/>
+				</line>
+				<staticText>
+					<reportElement x="71" y="1" width="79" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="151" y="1" width="15" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de0A4}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="183" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="198" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="214" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="229" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="245" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="260" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="276" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="291" y="0" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="306" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="322" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="338" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="353" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="369" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="384" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="400" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="415" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="431" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="446" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="462" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="477" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="493" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="508" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="524" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="539" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="555" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="570" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="586" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="601" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="617" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="679" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="663" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="648" y="1" width="1" height="20"/>
+				</line>
+				<line>
+					<reportElement x="632" y="1" width="1" height="20"/>
+				</line>
+				<textField>
+					<reportElement x="184" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de5a9}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="215" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de10a14}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="277" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de20a24}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="307" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de25a29}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="246" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de15a19}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="587" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de70a74}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="556" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de65a69}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="494" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de55a59}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="370" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de35a39}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="401" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de40a44}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="432" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de45a49}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="525" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de60a64}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="339" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de30a34}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="649" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de80aMas}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="463" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de50a54}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="618" y="1" width="14" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_de75a79}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="680" y="1" width="44" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_TOTAL}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="167" y="0" width="15" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por0a4}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="261" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por15a19}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="198" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por5a9}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="353" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por30a34}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="601" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por70a74}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="415" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por40a44}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="664" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por80aMas}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="540" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por60a64}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="570" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por65a69}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="229" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por10a14}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="385" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por35a39}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="446" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por45a49}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="322" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por25a29}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="509" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por55a59}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="291" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por20a24}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="477" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por50a54}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement x="632" y="1" width="16" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{tot_por75a79}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<image>
+				<reportElement key="image-1" x="0" y="0" width="247" height="33"/>
+				<imageExpression><![CDATA[$P{PV_RUTA_IMAGEN}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="30" y="45" width="732" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE POTENCIALES RETORNANTES Y FAMILIARES, POR GRUPOS QUINQUENALES DE EDAD, SEGUN PAIS DE RESIDENCIA]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="699" y="25" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="544" y="25" width="156" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<text><![CDATA[FECHA Y HORA DE IMPRESIÓN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="694" y="0" width="58" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="752" y="0" width="47" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<rectangle>
+				<reportElement x="71" y="0" width="653" height="20"/>
+			</rectangle>
+			<line>
+				<reportElement x="150" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="166" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="183" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="198" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="214" y="0" width="1" height="20"/>
+			</line>
+			<textField>
+				<reportElement x="71" y="0" width="79" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="167" y="0" width="16" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por0a4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="1" width="15" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de0a4}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="229" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="245" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="260" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="276" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="291" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="307" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="322" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="338" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="353" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="369" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="384" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="400" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="415" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="431" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="446" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="462" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="477" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="493" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="508" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="524" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="539" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="555" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="570" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="586" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="601" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="617" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="679" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="663" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="648" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement x="632" y="0" width="1" height="20"/>
+			</line>
+			<textField>
+				<reportElement x="184" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de5a9}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de10a14}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de15a19}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="277" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de20a24}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de25a29}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="339" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de30a34}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de35a39}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de40a44}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de45a49}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de50a54}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="494" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de55a59}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="525" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de60a64}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="556" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de65a69}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="587" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de70a74}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="618" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de75a79}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="649" y="1" width="14" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de80aMas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="680" y="1" width="44" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="198" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por5a9}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="229" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por10a14}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="261" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por15a19}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="291" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por20a24}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="322" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por25a29}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="353" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por30a34}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="385" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por35a39}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="415" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por40a44}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="446" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por45a49}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="477" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por50a54}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="509" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por55a59}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="570" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por65a69}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="540" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por60a64}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="601" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por70a74}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="664" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por80aMas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement x="632" y="1" width="16" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{por75a79}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="46" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

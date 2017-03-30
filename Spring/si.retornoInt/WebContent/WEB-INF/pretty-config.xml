@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				elementFormDefault="qualified"
+				targetNamespace="http://ocpsoft.com/prettyfaces/3.3.3"
+				xmlns="http://ocpsoft.com/prettyfaces/3.3.3">
+
+<!-- =========================GENERAL============================================== -->
+   <url-mapping id="principal">
+		<pattern value="/principal" />
+		<view-id value="/faces/principal.xhtml" />
+	</url-mapping> 
+	
+  
+	<url-mapping id="fichaRetorno">
+		<pattern value="/fichaRetorno" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/mnt_fichaRetorno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="login">
+		<pattern value="/" />
+		<view-id value="/faces/jsfDocs/modulos/seguridad/login.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="retorno">
+		<pattern value="/retorno" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/mtn_retorno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="administracion">
+		<pattern value="/adm" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/lst_admRetorno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="envioCorreo">
+		<pattern value="/envioCorreo" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/mtn_correo.xhtml" />
+	</url-mapping>
+	
+	
+	<url-mapping id="preguntasFrecuentes">
+		<pattern value="/preguntasFrecuentes" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/lst_preguntaFrec.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="reportes">
+		<pattern value="/reportes" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/lst_reporte.xhtml" />
+	</url-mapping>
+	<!-- =========================SEGURIDAD============================================== -->	
+	<url-mapping id="mnt_contrasena">
+		<pattern value="/Mantenimiento/Contrasena" />
+		<view-id value="/faces/jsfDocs/modulos/seguridad/mtn_contrasena.xhtml" />
+	</url-mapping>
+
+	<url-mapping id="NewContrasena">
+		<pattern value="/Mantenimiento/NewContrasena" />
+		<view-id value="/faces/jsfDocs/modulos/seguridad/contrasena.xhtml" />
+	</url-mapping>
+	
+</pretty-config>

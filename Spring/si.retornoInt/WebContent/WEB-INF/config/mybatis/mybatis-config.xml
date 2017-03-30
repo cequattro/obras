@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Ocupacion" 		 alias="Ocupacion" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.ParamBus" 		 alias="ParamBus" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.DPersona" 		 alias="DPersona" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Profesion" 		 alias="Profesion" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Tdocide" 		 	 alias="Tdocide" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Departamento" 	 alias="Departamento" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Provincia" 		 alias="Provincia" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Distrito" 		 alias="Distrito" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Persona" 		 	 alias="Persona" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Pais" 		 	 alias="Pais" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Discapacidad" 	 alias="Discapacidad" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Niveleducati" 	 alias="Niveleducati" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Retorno" 	 		 alias="Retorno" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Rango" 	 		 alias="Rango" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Familia" 	 		 alias="Familia" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.ParamAdmRetorno" 	 alias="ParamAdmRetorno" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Pregfrec" 	 	 alias="Pregfrec" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.ParamReporte" 	 alias="ParamReporte" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Mensaje" 	 	 	 alias="Mensaje" />
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Usuario" 	 	 	 alias="Usuario" />
+		
+		<typeAlias type="pe.gob.mtpe.retorno.bean.Permisos"  		 alias="permisosBean"/>
+    	<typeAlias type="pe.gob.mtpe.retorno.bean.MenuHijo"  		 alias="menuHijoBean"/>
+    	<typeAlias type="pe.gob.mtpe.retorno.bean.MenuPadre" 		 alias="menuPadreBean"/>
+
+	</typeAliases>
+
+ 
+	<mappers>
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/PersonaMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/ComunMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/RetornoMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/ReporteMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/PrefuntaFrecuentesMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/MensajeMapper.xml" />
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/WebServiceMapper.xml" />
+		
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/LogeoMapper.xml" />		
+		<mapper resource="pe/gob/mtpe/retorno/dao/maps/SeguridadMapper.xml" />
+	</mappers>
+</configuration>
+

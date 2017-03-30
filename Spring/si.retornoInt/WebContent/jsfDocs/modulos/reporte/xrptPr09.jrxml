@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPr01" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9d05cd0e-95e7-4f80-97b4-ea1f3c41793c">
+	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#000000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dsReporte" uuid="7fd1a867-2aa0-4fa5-ab40-56243bf9cdba">
+		<queryString>
+			<![CDATA[select x.* from simintra1.vst_rep_09 x]]>
+		</queryString>
+		<field name="depto" class="java.lang.String"/>
+		<field name="joven" class="java.math.BigDecimal"/>
+		<field name="adjov" class="java.math.BigDecimal"/>
+		<field name="adult" class="java.math.BigDecimal"/>
+		<field name="adultmay" class="java.math.BigDecimal"/>
+		<field name="fechareg" class="java.sql.Timestamp"/>
+		<variable name="sumJov" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{joven}]]></variableExpression>
+		</variable>
+		<variable name="sumAdjov" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{adjov}]]></variableExpression>
+		</variable>
+		<variable name="sumAdult" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{adult}]]></variableExpression>
+		</variable>
+		<variable name="sumAdulMay" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{adultmay}]]></variableExpression>
+		</variable>
+		<variable name="sumTotal" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) )]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="P_LISTA" class="java.util.List"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37">
+			<staticText>
+				<reportElement uuid="25a19281-a4a6-4338-b3fb-479250eb97e4" x="6" y="0" width="506" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE POTENCIALES RETORNANTES POR GRUPOS DE EDAD SEGUN DEPARTAMENTO DE RETORNO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="80" splitType="Stretch">
+			<elementGroup/>
+			<staticText>
+				<reportElement uuid="730e9c45-63f1-4f3f-a711-872f578f1ba7" positionType="Float" x="291" y="20" width="70" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADULTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="964049e5-1713-460e-af70-e85f458b5cab" positionType="Float" mode="Opaque" x="24" y="0" width="127" height="80" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTAMENTO DE RETORNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c4bafa44-ec21-4b7e-bbe4-817b4ebcbe92" positionType="Float" mode="Opaque" x="151" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[JOVEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="886b9991-6dbc-4faa-a9fd-c5da6bcca791" positionType="Float" mode="Opaque" x="221" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADULTO JOVEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eb215adb-b375-4b93-8d6d-d64b7bb1911b" positionType="Float" mode="Opaque" x="291" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADULTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cca8cf85-1795-49a9-9ca6-9d484c4cd8fc" positionType="Float" mode="Opaque" x="361" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADULTO MAYOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="db213718-d322-418d-8a2e-54f21250adf0" positionType="Float" mode="Opaque" x="151" y="0" width="350" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRUPOS DE EDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e8514f4-83fc-405e-a255-7bb00815bc79" positionType="Float" mode="Opaque" x="151" y="40" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[15 - 29]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b370826-9b8b-4c1b-bc0c-42df8e0a2967" positionType="Float" mode="Opaque" x="221" y="40" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[30 - 44]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f22b3e85-98f2-4fc8-801f-029c282f7849" positionType="Float" mode="Opaque" x="291" y="40" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[45 - 59]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c2068f96-86f7-46cb-b1e2-6910b4d573f8" positionType="Float" mode="Opaque" x="361" y="40" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[60 A +]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3bafd1cc-4618-4b25-8aa0-8951dc5bacde" positionType="Float" mode="Opaque" x="151" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e7e41c16-a67d-44bd-9825-b2f4cf9236a8" positionType="Float" mode="Opaque" x="186" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e0704fd-ea27-42fc-b6a3-f279a7611b38" positionType="Float" mode="Opaque" x="221" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="de87f343-7dda-4286-bfb3-664dfeb0422f" positionType="Float" mode="Opaque" x="256" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8bd3bde-6e9a-4096-b4cf-8334a2a4c537" positionType="Float" mode="Opaque" x="291" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="15c42134-2a12-441e-9a83-c77efde2b74a" positionType="Float" mode="Opaque" x="326" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="726ef465-8954-4ba1-9918-05681d0d6315" positionType="Float" mode="Opaque" x="361" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="febe8919-7be0-4901-b605-b47741d1836d" positionType="Float" mode="Opaque" x="396" y="60" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aee2139b-d919-411d-b9be-12f2ae97d993" positionType="Float" mode="Opaque" x="431" y="40" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="684d4dd8-e7b6-4465-ba61-d18228f2641b" positionType="Float" mode="Opaque" x="431" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6c7e77a3-eff1-402b-ae00-a874542a0c6e" positionType="Float" mode="Opaque" x="431" y="60" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="5b387563-b8bd-4c03-ace8-e0c01762a921" key="table 1" style="table 1" positionType="Float" isPrintRepeatedValues="false" x="24" y="0" width="477" height="20"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dsReporte" uuid="6e74436c-f520-49b5-8a77-829ef0e6511c">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{P_LISTA})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column uuid="fa725b15-0133-4f18-97a6-d50571a20779" width="127">
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="0adee711-c732-4b27-b420-ba4b4f55b3cd" x="0" y="0" width="127" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[TOTAL]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="e6d1e4d3-1c66-4258-90f4-55e1f1f0ee90" x="0" y="0" width="127" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{depto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="195d0bf3-fc97-4717-8fdd-8cbac404430d" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="da476175-99a2-4a25-aa39-bf27d9748050" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumJov}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="659008ed-dc9c-4633-8c35-d8e94ff1c719" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{joven}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="78e70cdc-b9c8-49c3-9c08-f72262c840d0" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="ac4147ef-9e34-4280-83d5-9c00ae2d3487" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumJov}.divide($V{sumTotal},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="6c04d467-ed29-4a48-8841-3395387a9728" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{joven}.divide( $F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) ),new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="746794df-49a2-4810-b25e-34991442bca6" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="e0ac39bb-9b44-4156-b17e-62e6715627d0" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdjov}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="bf86a545-f320-4d08-a154-63c1eebdccab" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adjov}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="1490e7eb-5b95-4c6a-8f25-08bcbfe6698b" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="7a68387e-1a04-4897-96c6-7e483c48e876" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdjov}.divide($V{sumTotal},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="d95c1ba9-d2f7-4848-86fc-e95e6c160e18" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adjov}.divide( $F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) ),new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="7219df06-7417-4951-b111-4a28664834c4" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="de0b95d0-351f-4309-ac5a-deb12c5111d7" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdult}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="ae4af700-500b-49ba-8203-7b7fdd3c6579" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adult}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="0cd54926-2dc6-478a-8af2-f72159069edc" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="f2e7d81e-e88c-4957-8447-9d94d74d625c" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdult}.divide($V{sumTotal},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="b145576a-3893-4c42-ba3d-0bf63628fdd2" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adult}.divide( $F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) ),new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="9cbe60b6-6701-41e1-96b5-9115c0333534" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="2b406092-9505-4429-9b0d-0dc7cb0fd90f" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdulMay}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="108851ff-e4fa-4fa7-93d9-ae25ffb6d416" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adultmay}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="de47a659-8424-4a87-afb3-eda2a386a8a4" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="59e7b640-759a-490e-b4ba-59f5c8987b05" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumAdulMay}.divide($V{sumTotal},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="8b4b143f-6292-44ef-aad2-ca27bc9d5d20" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{adultmay}.divide( $F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) ),new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="adde7b9f-6d70-489b-9c0b-3ff3cff3dd0e" width="70">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="1854ae1c-cbed-46a3-bb78-dc7e3936c6aa" x="0" y="0" width="70" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumTotal}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="eb0823f3-c378-4b95-984b-6d515f54d5a7" mode="Transparent" x="0" y="0" width="70" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{joven}.add( $F{adjov}.add( $F{adult}.add( $F{adultmay} ) ) )]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

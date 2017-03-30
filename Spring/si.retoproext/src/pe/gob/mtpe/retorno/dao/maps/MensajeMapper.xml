@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="pe.gob.mtpe.retorno.dao.MensajeDao">
+
+	<select id="listaPreguntas" resultType="hashMap" parameterType="Persona">
+			SELECT 
+  
+			  V_TITMENSAJ,
+			  V_RESPTA 
+			 
+			FROM RPTBC_MENSAJE 
+			WHERE 
+			 V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      		 and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+			ORDER BY D_FECMENSAJ DESC
+	</select>
+	
+	<insert id="insertarMensaje" parameterType="Mensaje" >
+	<selectKey resultType="long" keyProperty="nCodmensaj" order="BEFORE">
+           SELECT SEQ_PREGUSU.Nextval FROM DUAL
+  	</selectKey>
+    insert into RPTBC_MENSAJE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nCodmensaj != null or nCodmensaj == null" >
+        N_CODMENSAJ,
+      </if>
+      <if test="vTitmensaj != null" >
+        V_TITMENSAJ,
+      </if>
+      <if test="dFecrpta != null" >
+        D_FECRPTA,
+      </if>
+      <if test="vRespta != null" >
+        V_RESPTA,
+      </if>
+      <if test="vNumdoc != null" >
+        V_NUMDOC,
+      </if>
+      <if test="vCodtdocide != null" >
+        V_CODTDOCIDE,
+      </if>
+      <if test="vEstreg != null" >
+        V_ESTREG,
+      </if>
+      <if test="dFecmensaj == null" >
+        D_FECMENSAJ,
+      </if>
+      <if test="vCodusu != null" >
+        V_CODUSU,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nCodmensaj != null or nCodmensaj == null" >
+        #{nCodmensaj,jdbcType=DECIMAL},
+      </if>
+      <if test="vTitmensaj != null" >
+        upper(#{vTitmensaj,jdbcType=VARCHAR}),
+      </if>
+      <if test="dFecrpta != null" >
+        #{dFecrpta,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vRespta != null" >
+        #{vRespta,jdbcType=VARCHAR},
+      </if>
+      <if test="vNumdoc != null" >
+        #{vNumdoc,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodtdocide != null" >
+        #{vCodtdocide,jdbcType=VARCHAR},
+      </if>
+      <if test="vEstreg != null" >
+        #{vEstreg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmensaj == null" >
+        sysdate,
+      </if>
+      <if test="vCodusu != null" >
+        upper(#{vCodusu,jdbcType=VARCHAR}),
+      </if>
+    </trim>
+  </insert>
+
+	
+</mapper>

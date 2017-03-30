@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="pe.gob.mtpe.retorno.dao.RetornoDao">
+
+	<select id="listarMotivos" resultType="Retorno">
+		select 
+			v_codretor as vCodretor, 
+			v_desretor as vDesretor, 
+			v_estreg   as vEstreg, 
+			d_fecreg   as dFecreg
+		from 
+			rptbc_retorno
+			
+			
+	
+	</select>
+	
+	<select id="CargarMotivoRetorno" resultType="Retorno" parameterType="DPersona">
+		select 
+			v_codretor as vCodretor, 
+			v_desretor as vDesretor, 
+			v_estreg   as vEstreg, 
+			d_fecreg   as dFecreg
+		from 
+			rptbc_retorno
+		where 
+			v_codretor=#{vCodretor}	
+			 
+	
+	</select>
+	
+	
+	<select id="listarRango"   resultType="Rango">
+		 select 
+		    v_codrango as vCodrango, 
+		    v_desrango as vDesrango, 
+		    v_estreg   as iEstreg, 
+		    v_tiprango as vTiprango, 
+		    d_fecreg   as dFecreg
+    	from 
+    		rptbd_rango
+    	where 
+    		v_tiprango=#{pRango.vTiprango}
+    			
+	</select>
+	
+	
+	<insert id="insertardPersona" >
+    insert into RPTBC_PERSONA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dPersona.vCodtdocide != null">
+        V_CODTDOCIDE,
+      </if>
+      <if test="dPersona.vNumdoc != null">
+        V_NUMDOC,
+      </if>
+      <if test="dPersona.vEdad != null">
+        V_EDAD,
+      </if>
+      <if test="dPersona.vCodpaisres != null">
+        V_CODPAISRS,
+      </if>
+      <if test="dPersona.nNumhijos != null">
+        V_NUMHIJOS,
+      </if>
+      <if test="dPersona.vFlgdiscap != null">
+        V_FLGDISCAP,
+      </if>
+      <if test="dPersona.vCoddiscap != null">
+        V_CODDISCAP,
+      </if>
+      <if test="dPersona.vFlgjefhog != null">
+        V_FLGJEFHOG,
+      </if>
+      <if test="dPersona.vCodniveduper != null">
+        V_NIVEDUPER,
+      </if>
+      <if test="dPersona.vCodniveduext != null">
+        V_NIVEDUEXT,
+      </if>
+      <if test="dPersona.vCodprof != null">
+        V_CODPROF,
+      </if>
+      <if test="dPersona.vEstreg != null">
+        V_ESTREG,
+      </if>
+      <if test="dPersona.dFecreg != null or dPersona.dFecreg == null">
+        D_FECREG,
+      </if>
+      <if test="dPersona.vCodocuper != null">
+        V_CODOCUPER,
+      </if>
+      <if test="dPersona.vCodocuext != null">
+        V_CODOCUEXT,
+      </if>
+      <if test="dPersona.dFeciniper != null">
+        D_FECINIPER,
+      </if>
+      <if test="dPersona.dFecfinper != null">
+        D_FECFINPER,
+      </if>
+      <if test="dPersona.dFeciniext != null">
+        D_FECINIEXT,
+      </if>
+      <if test="dPersona.dFecfinext != null">
+        D_FECFINEXT,
+      </if>
+      <if test="dPersona.vCoddepret1 != null">
+        V_CODDEPRE1,
+      </if>
+      <if test="dPersona.vCoddepret2 != null">
+        V_CODDEPRE2,
+      </if>
+      <if test="dPersona.dFecsalper != null">
+        D_FECSALPER,
+      </if>
+      <if test="dPersona.dFecretper != null">
+        D_FECRETPER,
+      </if>
+      <if test="dPersona.vFlgretfam != null">
+        V_FLGRETFAM,
+      </if>
+      <if test="dPersona.vCodsexcon != null">
+        V_CODSEXCON,
+      </if>
+      <if test="dPersona.vEdadcon != null">
+        V_EDADCON,
+      </if>
+      <if test="dPersona.nCanfamret != null">
+        N_CANFAMRET,
+      </if>
+      <if test="dPersona.vCodretor != null">
+        V_CODRETOR,
+      </if>
+      <if test="dPersona.vCodocudes1 != null">
+        V_CODOCUDE1,
+      </if>
+      <if test="dPersona.vCodocudes2 != null">
+        V_CODOCUDE2,
+      </if>
+      <if test="dPersona.vCodrandes != null">
+        V_CODRANDES,
+      </if>
+      <if test="dPersona.vCodrango != null">
+        V_CODRANGO,
+      </if>
+      
+      <if test="dPersona.vDesdirret != null">
+        v_desdirret,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dPersona.vCodtdocide != null">
+        #{dPersona.vCodtdocide,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vNumdoc != null">
+        #{dPersona.vNumdoc,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vEdad != null">
+        #{dPersona.vEdad,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodpaisres != null">
+        #{dPersona.vCodpaisres,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.nNumhijos != null">
+        #{dPersona.nNumhijos,jdbcType=DECIMAL},
+      </if>
+      <if test="dPersona.vFlgdiscap != null">
+        #{dPersona.vFlgdiscap,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCoddiscap != null">
+        #{dPersona.vCoddiscap,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vFlgjefhog != null">
+        #{dPersona.vFlgjefhog,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodniveduper != null">
+        #{dPersona.vCodniveduper,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodniveduext != null">
+        #{dPersona.vCodniveduext,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodprof != null">
+        #{dPersona.vCodprof,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vEstreg != null">
+        #{dPersona.vEstreg,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.dFecreg != null or dPersona.dFecreg == null">
+       sysdate,
+      </if>
+      <if test="dPersona.vCodocuper != null">
+        #{dPersona.vCodocuper,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodocuext != null">
+        #{dPersona.vCodocuext,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.dFeciniper != null">
+        #{dPersona.dFeciniper,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.dFecfinper != null">
+        #{dPersona.dFecfinper,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.dFeciniext != null">
+        #{dPersona.dFeciniext,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.dFecfinext != null">
+        #{dPersona.dFecfinext,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.vCoddepret1 != null">
+        #{dPersona.vCoddepret1,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCoddepret2 != null">
+        #{dPersona.vCoddepret2,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.dFecsalper != null">
+        #{dPersona.dFecsalper,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.dFecretper != null">
+        #{dPersona.dFecretper,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dPersona.vFlgretfam != null">
+        #{dPersona.vFlgretfam,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodsexcon != null">
+        #{dPersona.vCodsexcon,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vEdadcon != null">
+        #{dPersona.vEdadcon,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.nCanfamret != null">
+        #{dPersona.nCanfamret,jdbcType=DECIMAL},
+      </if>
+      <if test="dPersona.vCodretor != null">
+        #{dPersona.vCodretor,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodocudes1 != null">
+        #{dPersona.vCodocudes1,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodocudes2 != null">
+        #{dPersona.vCodocudes2,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodrandes != null">
+        #{dPersona.vCodrandes,jdbcType=VARCHAR},
+      </if>
+      <if test="dPersona.vCodrango != null">
+        #{dPersona.vCodrango,jdbcType=VARCHAR},
+      </if>
+     <if test="dPersona.vDesdirret != null">
+        upper(#{dPersona.vDesdirret,jdbcType=VARCHAR}),
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="eliminardPersona" parameterType="DPersona">
+    delete from RPTBC_PERSONA
+    	where
+    	V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      	and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </delete>
+  
+  <select id="consultaNumeroRegistros" parameterType="DPersona" resultType="int">
+  		SELECT 
+  			count(*) as numRetorno
+		FROM RPTBC_PERSONA 
+		where 
+			V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+	      	and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </select>
+
+  <select id="cargarDPersona" parameterType="DPersona" resultType="DPersona">
+  	 SELECT 
+  	 	  V_NUMDOC 			as vNumdoc,
+		  V_CODTDOCIDE		as vCodtdocide,
+		  V_EDAD			as vEdad,
+		  V_CODPAISRS		as vCodpaisres,
+		  V_NUMHIJOS		as nNumhijos,
+		  V_FLGDISCAP		as vFlgdiscap,
+		  V_CODDISCAP		as vCoddiscap,
+		  V_FLGJEFHOG		as vFlgjefhog,
+		  V_NIVEDUPER		as vCodniveduper,
+		  V_NIVEDUEXT		as vCodniveduext,
+		  V_CODPROF			as vCodprof,
+		  V_ESTREG			as vEstreg,
+		  D_FECREG			as dFecreg,
+		  V_CODOCUPER		as vCodocuper,
+		  V_CODOCUEXT		as vCodocuext,
+		  to_char(D_FECINIPER,'MM/yyyy')		as dFeciniper,
+		  to_char(D_FECFINPER,'MM/yyyy')		as dFecfinper,
+		  to_char(D_FECINIEXT,'MM/yyyy')		as dFeciniext,
+		  to_char(D_FECFINEXT,'MM/yyyy')		as dFecfinext,
+		  V_CODDEPRE1		as vCoddepret1,
+		  V_CODDEPRE2		as vCoddepret2,
+		  to_char(D_FECSALPER,'MM/yyyy')		as dFecsalper,
+		  to_char(D_FECRETPER,'MM/yyyy')		as dFecretper,
+		  V_FLGRETFAM		as vFlgretfam,
+		  V_CODSEXCON		as vCodsexcon,
+		  V_EDADCON			as vEdadcon,
+		  N_CANFAMRET		as nCanfamret,
+		  V_CODRETOR		as vCodretor,
+		  V_CODOCUDE1		as vCodocudes1,
+		  V_CODOCUDE2		as vCodocudes2,
+		  V_CODRANDES		as vCodrandes,
+		  V_CODRANGO		as vCodrango,
+		  V_DESDIRRET		as vDesdirret	
+	FROM RPTBC_PERSONA 
+	WHERE
+		 V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+	     and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </select>		
+	
+ <!-- ===============================================================FAMILIA====================================================================================== -->
+ 
+ 
+  <insert id="insertaFamilia" parameterType="Familia">
+   <selectKey resultType="int" keyProperty="nCodfam" order="BEFORE">
+           SELECT seq_familia.Nextval FROM DUAL
+  </selectKey>
+    insert into RPTBD_FAMILIA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nCodfam != null or nCodfam == null">
+        N_CODFAM,
+      </if>
+      <if test="vCodtdocide != null">
+        V_CODTDOCIDE,
+      </if>
+      <if test="vNumdoc != null">
+        V_NUMDOC,
+      </if>
+      <if test="vCodsex != null">
+        V_CODSEX,
+      </if>
+      <if test="vEdad != null">
+        V_EDAD,
+      </if>
+      <if test="vEstreg != null">
+        V_ESTREG,
+      </if>
+      <if test="dFecreg != null">
+        D_FECREG,
+      </if>
+       
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nCodfam != null or nCodfam == null">
+        #{nCodfam,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodtdocide != null">
+        #{vCodtdocide,jdbcType=VARCHAR},
+      </if>
+      <if test="vNumdoc != null">
+        #{vNumdoc,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsex != null">
+        #{vCodsex,jdbcType=VARCHAR},
+      </if>
+      <if test="vEdad != null">
+        #{vEdad,jdbcType=VARCHAR},
+      </if>
+      <if test="vEstreg != null">
+        #{vEstreg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null">
+        #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      
+    </trim>
+  </insert>
+  
+  
+  <delete id="eliminarFamilia" parameterType="DPersona">
+    delete from RPTBD_FAMILIA
+    where 
+    		V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      		and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </delete>
+  
+  <select id="cargarHijoRetorno" resultType="Familia" parameterType="DPersona">
+  	SELECT 
+		  V_NUMDOC		as vNumdoc,
+		  V_CODTDOCIDE	as vCodtdocide,
+		  N_CODFAM		as nCodfam,
+		  V_CODSEX		as vCodsex,
+		  V_EDAD		as vEdad,
+		  V_ESTREG		as vEstreg,
+		  D_FECREG		as dFecreg
+		FROM 
+			RPTBD_FAMILIA 
+		where
+			V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      		and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </select>
+	
+</mapper>

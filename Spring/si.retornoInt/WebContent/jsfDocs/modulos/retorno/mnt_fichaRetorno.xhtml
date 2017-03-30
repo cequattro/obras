@@ -1,0 +1,1581 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;white-space:pre-line;">
+      			<p:outputLabel value="PLATAFORMA DE RETORNO PRODUCTIVO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	
+		<br/>
+			
+				
+		<h:form id="formRetorno">
+		 
+		<!-- ===============================================================================P1 DATOS PERSONALES========================================================================================= -->
+		
+				<p:panel 	header="DATOS PERSONALES" 
+							id="pdatospersonales">
+					<p:panelGrid 	id="pgdatospersonales">
+						<p:row >
+							<p:column  colspan="4">
+							  <p:outputPanel > 
+								<p:messages id="msgDocumento" style="width: 100%;" escape="false"/>
+							  </p:outputPanel>								
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Tipo de Documento"
+												for="vCodtdocide"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.dpersona.vCodtdocide}"
+													required="true"
+													requiredMessage="Se requiere Tipo de Documento"
+													id="vCodtdocide">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstTipoDoc}"
+													var="tipo"
+													itemValue="#{tipo.vCodtdocide}"
+													itemLabel="#{tipo.vDestdocide}"/>	
+													
+																				        						
+								</p:selectOneMenu>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="N° de Documento"
+												for="vNumdoc"/>								
+							</p:column>
+							<p:column >		
+							 <p:outputPanel id="outvNumdoc">							
+								<p:inputText 	value="#{retornoBean.dpersona.vNumdoc}"
+												required="true"
+												requiredMessage="Se requiere numero de documento"
+												id="vNumdoc"
+												widgetVar="vNumdoc"
+												onkeypress="return #{retornoBean.nlenthNumdoc==8?'soloNumeros(event)':'soloLetrasNumeros(event)'};"
+												maxlength="#{retornoBean.nlenthNumdoc}"
+												readonly="true"
+												/>
+								
+								
+							 </p:outputPanel>							 
+								
+							</p:column>
+							
+						</p:row>	
+						 
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Nombres"
+												for="vNombres"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.persona.vNombres}"
+												id="vNombres"
+												required="true"
+												requiredMessage="Se requieren los nombres"
+												readonly="#{retornoBean.persona.vNombres==null?false:true}"
+												style="color: #{retornoBean.persona.vNombres==null?'black':'silver'};"
+												maxlength="40" onkeypress="return soloLetras(event)"
+												/>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Apellido Paterno"
+												for="vApepater"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.persona.vApepater}"
+												id="vApepater"
+												required="true"
+												requiredMessage="Se requiere "
+												readonly="#{retornoBean.persona.vApepater==null?false:true}"
+												style="color: #{retornoBean.persona.vApepater==null?'black':'silver'};"
+												maxlength="40" onkeypress="return soloLetras(event)"
+												/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Apellido Materno"
+												for="vApemater"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.persona.vApemater}"
+												id="vApemater"
+												required="true"
+												requiredMessage="Se requiere apellido materno"
+												readonly="#{retornoBean.persona.vApemater==null?false:true}"
+												style="color: #{retornoBean.persona.vApemater==null?'black':'silver'};"
+												maxlength="40" onkeypress="return soloLetras(event)"
+												/>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Departamento de Lugar de Nacimiento"
+												for="vCoddep"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.persona.vCoddepnac}"
+													id="vCoddep"
+													widgetVar="vCoddep"
+													required="true"
+													requiredMessage="Se requiere departamento de lugar de nacimiento"													
+													disabled="#{retornoBean.persona.vCoddepnac==null?false:true}"													
+													>
+									<f:selectItem  itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstDepartamento}" 
+													var="dep"
+													itemValue="#{dep.vCoddep}"
+													itemLabel="#{dep.vDesdep}"/>	
+													
+													<p:ajax event="change"
+															process="vCoddep"
+															listener="#{retornoBean.listarProvincias}"
+															update="vCoddep,:formRetorno:vCodpro"
+															/>								        						
+								</p:selectOneMenu>
+							</p:column>
+							
+						</p:row>	
+						
+						<p:row  >
+							<p:column  >
+								<p:outputLabel 	value="Provincia de Lugar de Nacimiento"
+												for="vCodpro"/>						
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													id="vCodpro"
+													widgetVar="vCodpro"
+													value="#{retornoBean.persona.vCodpronac}"
+													required="true"
+													requiredMessage="Se requiere provincia de lugar de nacimiento"
+													disabled="#{retornoBean.persona.vCodpronac==null?false:true}">
+									<f:selectItem  itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstProvincia}"
+													var="pro"
+													itemValue="#{pro.vCodpro}"
+													itemLabel="#{pro.vDespro}"/>
+													
+													<p:ajax event="change"
+															process="vCodpro"
+															listener="#{retornoBean.listarDistritos}"
+															update="vCodpro,:formRetorno:vCoddis"
+															/>
+																		        						
+								</p:selectOneMenu>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Distrito de Lugar de Nacimiento"
+												for="vCoddis"/>							
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu   	style="width: 250px;"
+													id="vCoddis"
+													widgetVar="vCoddis"
+													value="#{retornoBean.persona.vCoddisnac}"
+													required="true"
+													requiredMessage="Se requiere el distrito de lugar de nacimiento"
+													disabled="#{retornoBean.persona.vCoddisnac==null?false:true}">
+													>
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstDistrito}"
+													var="dis"
+													itemValue="#{dis.vCoddis}"
+													itemLabel="#{dis.vDesdis}"/>								        						
+								</p:selectOneMenu>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Género"
+												for="cCodsexo"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.persona.cCodsexo}"
+													id="cCodsexo"
+													required="true"
+													requiredMessage="Se requiere género"
+													disabled="#{retornoBean.persona.cCodsexo==null?false:true}">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItem itemLabel="MASCULINO" itemValue="1" />
+									<f:selectItem itemLabel="FEMENINO"  itemValue="2" />
+									<p:ajax update=":formRetorno:ouscEstcivil"/>									        						
+								</p:selectOneMenu>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Estado Civil"
+												for="cEstcivil"
+												/>								
+							</p:column>
+							<p:column >			
+							  <p:outputPanel id="ouscEstcivil">						
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.persona.cEstcivil}"
+													id="cEstcivil"
+													required="true"
+													requiredMessage="Se requiere estado civil"
+													rendered="#{retornoBean.persona.cCodsexo=='2'}"
+													disabled="#{retornoBean.persona.cEstcivil==null?false:true}">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItem itemLabel="SOLTERA" 		 itemValue="1" />
+									<f:selectItem itemLabel="CASADA	" 		 itemValue="2" />
+									<f:selectItem itemLabel="VIUDA" 		 itemValue="3" />
+									<f:selectItem itemLabel="DIVORCIADA" 	 itemValue="4" />
+																		        						
+								</p:selectOneMenu>
+								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.persona.cEstcivil}"
+													id="cEstcivil2"
+													required="true"
+													requiredMessage="Se requiere estado civil"
+													rendered="#{retornoBean.persona.cCodsexo!='2'}"
+													disabled="#{retornoBean.persona.cEstcivil==null?false:true}">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItem itemLabel="SOLTERO" 		 itemValue="1" />
+									<f:selectItem itemLabel="CASADO" 		 itemValue="2" />
+									<f:selectItem itemLabel="VIUDO" 		 itemValue="3" />
+									<f:selectItem itemLabel="DIVORCIADO" 	 itemValue="4" />
+																		        						
+								</p:selectOneMenu>
+								
+							  </p:outputPanel>	
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Fecha de Nacimiento"
+												for="dFecnac"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/99/9999" 	
+												value="#{retornoBean.persona.dFecnac}"
+												id="dFecnac"
+												required="true"
+												requiredMessage="Se requiere fecha de nacimiento"
+												converterMessage="La fecha de nacimiento no tiene formato de fecha"
+												readonly="#{retornoBean.persona.dFecnac==null?false:true}"
+												style="color: #{retornoBean.persona.dFecnac==null?'black':'silver'};">
+									<f:convertDateTime 	type="date"
+														for="dFecnac"
+														pattern="dd/MM/yyyy"/>			
+												
+								</p:inputMask>
+							</p:column>
+							<p:column  >
+								<h:outputLabel value=""/>								
+							</p:column>
+							<p:column >								
+								<h:outputLabel value=""/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="País de Nacimiento"
+												for="vCodpaisnac"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.persona.vCodpaisnac}"
+													id="vCodpaisnac"
+													required="true"
+													requiredMessage="Se requiere país de nacimiento"
+													disabled="#{retornoBean.persona.vCodpaisnac==null?false:true}">
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstPais}"
+													var="pais"
+													itemValue="#{pais.vCodpais}"
+													itemLabel="#{pais.vDespais}"/>									        						
+								</p:selectOneMenu>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="País de Residencia"
+												for="vCodpaisres"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.dpersona.vCodpaisres}"
+													id="vCodpaisres"
+													required="true"
+													requiredMessage="Se requiere país de residencia">
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstPais}"
+													var="pais"
+													itemValue="#{pais.vCodpais}"
+													itemLabel="#{pais.vDespais}"/>									        						
+								</p:selectOneMenu>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel value="Domicilio Actual" for="vDesdirret"/>								
+							</p:column>
+							<p:column >								
+								<p:inputTextarea    styleClass="cajaMediana" 
+													value="#{retornoBean.dpersona.vDesdirret}"
+													maxlength="500"
+													required="true"
+													id="vDesdirret"
+													requiredMessage="Se requiere la dirección de su domicilio actual"/>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Teléfono Fijo"
+												for="vTelfper1"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText value="#{retornoBean.persona.vTelfper1}"
+											 id="vTelfper1"
+											 required="true"
+											 requiredMessage="Se requiere teléfono fijo"
+											 maxlength="12" onkeypress="return soloNumeros(event)"/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel  value="Teléfono Celular"
+												for="vTelfper2"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	value="#{retornoBean.persona.vTelfper2}"
+												id="vTelfper2"
+												required="true"
+												requiredMessage="Se requiere teléfono celular"
+												maxlength="12"
+												onkeypress="return soloNumeros(event)"/>
+							</p:column>
+							<p:column  >
+								<p:outputLabel 	value="Correo Electrónico"
+												for="vEmail"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText styleClass="cajaMediana" 
+												 value="#{retornoBean.persona.vEmail}"
+												 id="vEmail"
+												 widgetVar="vEmail"
+												 required="true"
+												 maxlength="50"
+												 requiredMessage="Se requiere correo electrónico"												 
+												 validatorMessage="Formato de correo incorrecto, revisar si su correo tiene espacios"
+												 >
+												 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+ 
+									</p:inputText>
+									<p:watermark for="vEmail" value="micorreo@ejemplo.com"/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="N° de Hijos"
+												for="nNumhijos"
+												/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaPeque" 
+											 	value="#{retornoBean.dpersona.nNumhijos}"
+											 	id="nNumhijos"
+											 	required="true"
+											 	requiredMessage="Se requiere el N° de Hijos, en caso no tenga hijos colocar 0"
+											 	maxlength="2" 
+											 	onkeypress="return soloNumeros(event)"/>
+											 	<p:outputLabel 	style="font-weight: bold;color: red;"
+											 				 	value="Coloque 0 (cero) si no tiene hijos"/>
+							</p:column>
+							<p:column  >
+								<p:outputLabel  value="¿Persona con discapacidad?"
+												for="vFlgdiscap"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneRadio 	value="#{retornoBean.dpersona.vFlgdiscap}"
+													id="vFlgdiscap"
+													required="true"
+													requiredMessage="Se requiere que responda la pregunta ¿Persona con discapacidad?">
+									<f:selectItem itemLabel="SI" itemValue="S"/>
+									<f:selectItem itemLabel="NO" itemValue="N"/>
+									
+									
+								</p:selectOneRadio>
+							</p:column>
+							
+						</p:row>	
+						
+						<p:row >
+							<p:column  colspan="1">
+								<p:outputLabel 	value="¿Es jefe del hogar?"
+												for="vFlgjefhog"/>								
+							</p:column>
+							<p:column colspan="3">								
+								<p:selectOneRadio 	value="#{retornoBean.dpersona.vFlgjefhog}"
+													id="vFlgjefhog"
+													required="true"
+													requiredMessage="Es requerido que reponda la pregunta ¿Es jefe del hogar?">
+									<f:selectItem itemLabel="SI" itemValue="S"/>
+									<f:selectItem itemLabel="NO" itemValue="N"/>
+									
+								</p:selectOneRadio>
+							</p:column>
+							
+							
+							
+						</p:row>	
+										
+					</p:panelGrid>
+				</p:panel>
+				
+		<br/>
+	
+		<!-- ===============================================================================P2 NIVEL EDUCATIVO========================================================================================= -->
+		
+				<p:panel 	header="NIVEL EDUCATIVO" 
+							id="pniveleducativo">
+					<p:panelGrid 	id="pgniveleducativo">
+					
+						<p:row >
+							<p:column  colspan="1">
+								<p:outputLabel 	value="Máximo Grado de Instrucción en el Extranjero"
+												for="vCodniveduext"/>								
+							</p:column>
+							<p:column colspan="2">								
+																			
+								<p:selectOneMenu  	style="width: 310px;"
+													value="#{retornoBean.dpersona.vCodniveduext}"
+													id="vCodniveduext"
+													required="true"
+													requiredMessage="Se requiere Máximo Grado de Instrucción en el Extranjero"
+													>
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstNiveleducati}"
+													var="niv"
+													itemValue="#{niv.vCodnivedu}"
+													itemLabel="#{niv.vDesnivedu}"
+													/>
+																		        						
+								</p:selectOneMenu>				
+							</p:column>
+						</p:row>
+					
+						<p:row >
+							<p:column  colspan="1">
+								<p:outputLabel 	value="Máximo Grado de Instrucción en el Perú"
+												for="vCodniveduper"/>								
+							</p:column>
+							<p:column colspan="2">								
+								<p:selectOneMenu  	style="width: 310px;"
+													value="#{retornoBean.dpersona.vCodniveduper}"
+													id="vCodniveduper"
+													required="true"
+													requiredMessage="Se requiere Máximo Grado de Instrucción en el Perú"
+													>
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstNiveleducati}"
+													var="niv"
+													itemValue="#{niv.vCodnivedu}"
+													itemLabel="#{niv.vDesnivedu}"
+													/>
+																		        						
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>	
+						
+					
+							
+						<p:row >
+							<p:column  colspan="1">
+								<p:outputLabel 	value="Profesión/Carrera Técnica"
+												for="vDesprof"/>								
+							</p:column>
+							<p:column colspan="1">	
+								<p:outputPanel id="ouiDesprof">							
+									<p:inputText 	styleClass="cajaAmplia"
+													value="#{retornoBean.profesion.vDesprof}"
+													required="true"
+													id="vDesprof"
+													requiredMessage="se requiere Profesión/Carrera Técnica"
+													readonly="true"/> 
+								</p:outputPanel>
+							</p:column>	
+							<p:column colspan="1">	
+								<p:commandButton 		 id="btnBuscarProfesion"														 
+														 icon="icon-search"														  
+														 value="Buscar Profesión/Carrera Técnica" 	
+														 action="#{retornoBean.mostrarProfesion}"
+														 process="@this"
+														 update=":formBusquedaProfesion:dtBusqueProfesion"
+														 oncomplete="dlgBusquedaProfesion.show();"
+														 										
+														 />
+							</p:column>
+						</p:row>							
+					</p:panelGrid>
+				</p:panel>
+				
+		<br/>
+		
+		<!-- ===============================================================================P3 EXPERCIENCIA LABORAL==================================================================================== -->
+		
+				<p:panel 	header="EXPERIENCIA LABORAL" 
+							id="pexperiencialaboral">
+					<p:panelGrid 	id="pgexperiencialaboral">
+						<p:row >
+							<p:column  colspan="2">
+								<p:outputLabel 	value="Última Ocupación Laboral en Perú"
+												for="vDesocupac"/>								
+							</p:column>
+							<p:column colspan="2">	
+								<p:outputPanel id="ou1Desocupac">						
+								<p:inputText styleClass="cajaAmplia"
+											 value="#{retornoBean.ocupacion1.vDesocupac}"
+											 id="vDesocupac"
+											 required="true"
+											 requiredMessage="Se requiere Última Ocupación Laboral en Perú"
+											 readonly="true"/> 
+											 <p:commandButton 		 id="btnBuscarOcupacion1"														 
+														 icon="icon-search"														  
+														 value="Buscar Ocupación"			
+														 action="#{retornoBean.mostrarOcupacion}"		
+														 update=":formBusquedaOcupacion:dtBusqueOcupacion"	
+														 process="@this"											 									 
+														 oncomplete="dlgBusquedaOcupacion.show();"															 	 										
+														 >
+										<f:setPropertyActionListener target="#{retornoBean.vOcupacion}"	value="1" />
+								</p:commandButton>
+								</p:outputPanel>
+								
+							</p:column>
+								
+							 
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Fecha de Inicio"
+												for="dFeciniper"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/9999" 
+												id="dFeciniper"
+											 	value="#{retornoBean.dpersona.dFeciniper}"											 	
+											 	required="true"
+											 	requiredMessage="Se requiere fecha de inicio de la última ocupación en el Perú"
+											 	validator="validacionFecha"
+											 	validatorMessage="La fecha de inicio de la última ocupación en el Perú no cumple con el formato de fecha" />
+											 	
+								<p:watermark value="MES/AÑO"   for="dFeciniper"/>
+								 
+							</p:column>
+							
+							<p:column  >
+								<p:outputLabel 	value="Fecha de Cese"
+												for="dFecfinper"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/9999" 
+												id="dFecfinper"
+												value="#{retornoBean.dpersona.dFecfinper}"
+												required="true"
+												requiredMessage="Se requiere Fecha de Cese de la última ocupación en el Perú"
+												validator="validacionFecha"
+											 	validatorMessage="La fecha  de Cese de la última ocupación en el Perú no cumple con el formato de fecha"
+												/>
+								<p:watermark value="MES/AÑO" for="dFecfinper"/>
+							</p:column>
+							
+						</p:row>	
+						
+						<p:row >
+							<p:column  colspan="2">
+								<p:outputLabel 	value="Última Ocupación Laboral en el Extranjero"
+												for="vDesocupac2"/>								
+							</p:column>
+							<p:column colspan="2">	
+								<p:outputPanel id="ou2Desocupac">							
+									<p:inputText 	styleClass="cajaAmplia"
+													value="#{retornoBean.ocupacion2.vDesocupac}"
+													id="vDesocupac2"
+													required="true"
+													requiredMessage="Se requiere última Ocupación Laboral en el Extranjero"
+													readonly="true"/> 
+													<p:commandButton 		 
+														 id="btnBuscarOcupacionExt"														 
+														 icon="icon-search"														  
+														 value="Buscar Ocupación" 
+														 action="#{retornoBean.mostrarOcupacion}"		
+														 update=":formBusquedaOcupacion:dtBusqueOcupacion"	
+														 process="@this"			
+														 							 									 
+														 oncomplete="dlgBusquedaOcupacion.show();"									
+														 >
+										<f:setPropertyActionListener target="#{retornoBean.vOcupacion}"	value="2" />				 
+								</p:commandButton>		
+								</p:outputPanel>
+										
+												 
+														 
+							</p:column>
+						</p:row>
+								
+						<p:row >
+							<p:column  >
+								<p:outputLabel  value="Fecha de Inicio"												
+												for="dFeciniext"/>								
+							</p:column>
+							<p:column style="text-align: left;">								
+								<p:inputMask 	mask="99/9999" 
+												id="dFeciniext"
+												required="true"
+												requiredMessage="Se requiere fecha de inicio de la última Ocupación Laboral en el Extranjero"
+												value="#{retornoBean.dpersona.dFeciniext}"
+												validator="validacionFecha"
+											 	validatorMessage="La fecha  de inicio de la última Ocupación Laboral en el Extranjero no cumple con el formato de fecha"/>
+								<p:watermark value="MES/AÑO"   for="dFeciniext"/>
+							</p:column>
+							
+							<p:column  >
+								<p:outputLabel 	value="Fecha de Cese"												
+												for="dFecfinext"/>								
+							</p:column>
+							<p:column style="text-align: left;">								
+								<p:inputMask 	mask="99/9999" 
+												id="dFecfinext"
+												required="true"
+												requiredMessage="Se requiere fecha de cese de la última Ocupación Laboral en el Extranjero"
+												value="#{retornoBean.dpersona.dFecfinext}"
+												validator="validacionFecha"
+											 	validatorMessage="La fecha  de cese de la última Ocupación Laboral en el Extranjero no cumple con el formato de fecha"/>
+								<p:watermark value="MES/AÑO" for="dFecfinext"/>
+							</p:column>
+							
+						</p:row>		
+													
+					</p:panelGrid>
+				</p:panel>
+				
+		<br />
+		
+		<!-- ===============================================================================P4 RETORNO AL PERU========================================================================================= -->
+		
+				<p:panel 	header="RETORNO AL PERÚ" 
+							id="pretornoperu">
+					<p:panelGrid 	id="pgretornoperu" >
+						<p:row >
+							<p:column  colspan="2">
+								<p:outputLabel 	value="Departamento de Retorno(opción 1)"
+												for="vCoddepret1"/>								
+							</p:column>
+							<p:column colspan="2">								
+								<p:selectOneMenu  	style="width: 310px;"
+													value="#{retornoBean.dpersona.vCoddepret1}"
+													id="vCoddepret1"
+													required="true"
+													requiredMessage="Se requiere departamento de retorno(opción 1)">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstDepartamento}" 
+													var="dep"
+													itemValue="#{dep.vCoddep}"
+													itemLabel="#{dep.vDesdep}"/>									        						
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						
+						<p:row >
+							<p:column  colspan="2">
+								<p:outputLabel 	value="Departamento de Retorno(opción 2)"
+												for="vCoddepret2"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 310px;"
+													value="#{retornoBean.dpersona.vCoddepret2}"
+													required="true"
+													id="vCoddepret2"
+													requiredMessage="Se requiere departamento de retorno(opción 2)">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstDepartamento}" 
+													var="dep"
+													itemValue="#{dep.vCoddep}"
+													itemLabel="#{dep.vDesdep}"/>									        						
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						
+						<p:row >
+							<p:column  colspan="2">
+								<p:outputLabel 	value="Fecha de Salida del Perú"
+												for="dFecsalper"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/9999"  
+												id="dFecsalper"
+												required="true"
+												requiredMessage="Se requiere fecha de salida del Perú"
+												value="#{retornoBean.dpersona.dFecsalper}"
+												validator="validacionFecha"
+											 	validatorMessage="La fecha de salida del Perú no cumple con el formato de fecha"/>
+								<p:watermark value="MES/AÑO" for="dFecsalper"/>
+							</p:column>
+							
+							<p:column  >
+								<p:outputLabel 	value="Fecha de Probable Retorno al Perú"
+												for="dFecretper"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask 	mask="99/9999" 
+												id="dFecretper"
+												required="true"
+												requiredMessage="Se requiere fecha de probable retorno al Perú"
+												value="#{retornoBean.dpersona.dFecretper}"
+												validator="validacionFecha"
+											 	validatorMessage="La fecha de de probable retorno al Perú no cumple con el formato de fecha"/> 
+								<p:watermark value="MES/AÑO" for="dFecretper"/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="¿Retornó con Familia?"
+												for="vFlgretfam"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneRadio 	value="#{retornoBean.dpersona.vFlgretfam}"
+													required="true"
+													id="vFlgretfam"
+													requiredMessage="Se requiere que responda la pregunta ¿Retornó con Familia?"
+													>
+									<f:selectItem itemLabel="SI" itemValue="S"/>
+									<f:selectItem itemLabel="NO" itemValue="N"/>
+									<p:ajax event="change" update=":formRetorno:ouEsposo, :formRetorno:ouHijo"/>
+								</p:selectOneRadio>
+							</p:column>
+						</p:row>
+					
+						<p:row >
+							<p:column  colspan="4" >	
+							  <p:outputPanel id="ouEsposo">									
+								<p:fieldset legend="Esposo(a) o conviviente" 
+											rendered="#{retornoBean.dpersona.vFlgretfam=='S'}">
+									<p:panelGrid >
+										<p:row >
+											<p:column  >
+												<p:outputLabel 	value="Genero"
+																for="vCodsexcon"/>								
+											</p:column>
+											<p:column >								
+													<p:selectOneMenu  	style="width: 250px;"
+																		value="#{retornoBean.dpersona.vCodsexcon}"
+																		id="vCodsexcon"
+																		required="true"
+																		requiredMessage="Se requiere el genero del Esposo(a) o conviviente">
+														<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+														<f:selectItem itemLabel="MASCULINO" itemValue="1" />
+														<f:selectItem itemLabel="FEMENINO"  itemValue="2" />									        						
+													</p:selectOneMenu>
+											</p:column>
+											
+											<p:column  >
+												<p:outputLabel 	value="Edad"
+																for="vEdadcon"/>								
+											</p:column>
+											<p:column >								
+												<p:inputText 	styleClass="cajaPeque"
+																value="#{retornoBean.dpersona.vEdadcon}"
+																required="true"
+																id="vEdadcon"
+																requiredMessage="Se requiere la edad del esposo(a) o conviviente"
+																maxlength="2"	onkeypress="return soloNumeros(event)"/>
+											</p:column>
+											
+										</p:row>
+									</p:panelGrid>
+								</p:fieldset>
+							  </p:outputPanel>	
+							</p:column>
+						</p:row>
+						
+						<p:row  >
+							<p:column  colspan="4" >	
+							  <p:outputPanel id="ouHijo">								
+								<p:fieldset legend="Hijos"
+											rendered="#{retornoBean.dpersona.vFlgretfam=='S'}">
+									<p:panelGrid>
+										<p:row >
+											<p:column  colspan="1">
+												<p:outputLabel 	value="N° Hijos"
+																/>								
+											</p:column>
+											<p:column colspan="3" style="text-align: left;">								
+												<p:inputText    value="#{retornoBean.dpersona.nNumhijosRet}"
+																id="nNumhijosRet"
+																maxlength="2"
+																
+																onkeypress="return soloNumeros(event)"/>	
+												
+												<p:commandButton 	id="btnAgregarHijos" 
+																	icon="icon-add"
+																	actionListener="#{retornoBean.agregarHijos}"
+																	 
+																	process="nNumhijosRet, @this"
+																	update=":formRetorno:dtListaHijos"/>
+												
+											</p:column>										
+										</p:row>
+										<p:row>
+											<p:column colspan="4">
+												 
+												<p:outputLabel style="font-weight: bold;color: red;" value="Darle click a los campos en blanco de  “GÉNERO” y “EDAD”. para proceder con su registro"/>
+											</p:column>
+											
+										</p:row>
+										<p:row >
+											<p:column  colspan="4" id="cListaHijos">
+												<p:dataTable 	id="dtListaHijos" var="hijo" emptyMessage="No hay documentos para mostrar"
+						 										value="#{retornoBean.lstHijos}"
+						 										paginator="true"
+						 										paginatorPosition="bottom"
+																 rows="10"
+																 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+																 rowsPerPageTemplate="5,10,15"
+																 editable="true"
+						 										 editMode="cell" 									
+																 style="width: 500px;"
+																 >
+																 <p:column > 
+																 	<h:outputText value="Genero"/>	
+																 </p:column>
+																 <p:column style="width: 120px;"> 
+																 	 <p:cellEditor >
+									 	 								<f:facet name="output">
+									 	 									<h:inputHidden value="#{hijo.vCodsex}"/>
+									 										<h:outputText value="MASCULINO" rendered="#{hijo.vCodsex=='1'}"/>
+									 										<h:outputText value="FEMENINO"  rendered="#{hijo.vCodsex=='2'}"/>
+									 	 								</f:facet>
+									 	 								<f:facet name="input">
+									 	 									 
+									 	 									<p:selectOneMenu  	style="width: 100px;"
+																								value="#{hijo.vCodsex}">
+																				<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+																				<f:selectItem itemLabel="MASCULINO" itemValue="1" />
+																				<f:selectItem itemLabel="FEMENINO"  itemValue="2" />
+																				<p:ajax event="change" update=":formRetorno:cListaHijos"  />										        						
+																			</p:selectOneMenu>
+									 	 								</f:facet> 
+									 	 							 </p:cellEditor>	
+																 	
+																 </p:column>
+																 
+																 <p:column > 
+																 	<h:outputText value="Edad"/>	
+																 </p:column>
+																 
+																 <p:column style="width: 102px;"> 										 	
+																 	 <p:cellEditor >
+									 	 								<f:facet name="output">
+									 	 									<h:outputText value="#{hijo.vEdad}" maxlength="2"	onkeypress="return soloNumeros(event)"/>
+									 	 								</f:facet>
+									 	 								<f:facet name="input">
+									 	 									<p:inputText value="#{hijo.vEdad}" maxlength="2"	onkeypress="return soloNumeros(event)">
+									 	 										<p:ajax event="blur" update=":formRetorno:cListaHijos"  />	
+									 	 									</p:inputText>
+									 	 								</f:facet> 
+									 	 							 </p:cellEditor>	
+																 </p:column>
+																 
+																 
+																 
+														
+															
+										        
+										        </p:dataTable>
+											</p:column>										
+										</p:row>
+										
+									</p:panelGrid>
+								</p:fieldset>
+							  </p:outputPanel>	
+							</p:column>
+						</p:row>
+													
+					</p:panelGrid>
+					<p:panelGrid id="pgretornoperu2">
+					
+										<p:row id="rFamiliares">
+											<p:column  colspan="1" >
+												<p:outputLabel 	value="Otros Familiares(INGRESE CANTIDAD)"
+																for="nCanfamret"/>								
+											</p:column>
+											<p:column colspan="3">								
+												<p:inputText 	value="#{retornoBean.dpersona.nCanfamret}"
+																id="nCanfamret"
+																required="true"
+																requiredMessage="Se requiere la cantidad de otros familiares con que retornará, en caso no retorne con familiares coloque 0"
+																maxlength="2"
+																onkeypress="return soloNumeros(event)"/>	
+												<p:outputLabel 	style="font-weight: bold;color: red;"
+											 				 	value="Coloque 0 (cero) si no va a retornar con otros familiares"/>
+											</p:column>										
+										</p:row>
+										<p:row >
+											<p:column  colspan="2">
+												<p:outputLabel 	value="¿Por que razón planea retornar al Perú?"
+																for="vDesretor"/>								
+											</p:column>
+											<p:column colspan="2">	
+												<p:outputPanel id="ouDesretor">						
+													<p:inputText 	styleClass="cajaAmplia"
+																	value="#{retornoBean.motivo.vDesretor}"
+																	required="true"
+																	id="vDesretor"
+																	requiredMessage="Se requiere que responda la pregunta ¿Por que razón planea retornar al Perú?"
+																	readonly="true"/>
+													
+													
+													<p:commandButton 		id="btnBuscarRezRet"														 
+														 					icon="icon-search"														  
+														 					value="Buscar Razón" 
+														 					action="#{retornoBean.cargarMotivos}"
+														 					process="@this"
+														 					update=":formBusquedaRazon:dtBusqueRazon"
+																			oncomplete="dlgBusquedaRazon.show();"											
+														 					/>
+												</p:outputPanel>	
+											</p:column>										
+										</p:row>
+					</p:panelGrid>
+				</p:panel>
+				
+		<br/>
+		
+		<!-- ===============================================================================P5 INFORMACIÓN LABORAL========================================================================================= -->
+		
+				<p:panel 	header="INFORMACIÓN LABORAL" 
+							id="pinformacionlaboral">
+					<p:panelGrid 	id="pginformacionlaboral">
+						<p:row >
+							<p:column  colspan="4">
+								<p:outputLabel 	value="Señale el salario mínimo que estaría dispuesto a ganar mensualmente en el Perú"
+												for="vCodrangoMonto"/>								
+							</p:column>
+							
+						</p:row>	
+					
+						<p:row >
+												
+							<p:column  colspan="1">
+								<h:outputLabel value="Monto"/>								
+							</p:column>
+							<p:column colspan="3">								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.dpersona.vCodrango}"
+													id="vCodrangoMonto"
+													required="true"
+													requiredMessage="Señale el salario mínimo que estaría dispuesto a ganar mensualmente en el Perú">
+										<f:selectItem  itemLabel="--Seleccione--" itemValue="" />
+										<f:selectItems  value="#{retornoBean.lstMonto}"
+														var="mon"
+														itemValue="#{mon.vCodrango}"
+														itemLabel="#{mon.vDesrango}"/>											        						
+								</p:selectOneMenu>
+								
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  colspan="2">
+								<h:outputLabel value="En que ocupación considera que podría desempeñarse"/>								
+							</p:column>
+							<p:column colspan="2" >	
+							  <p:outputPanel id="ou3Desocupac">							
+								<p:outputLabel 	value="1.-" 
+												for="vDesocupac3"/><p:inputText 	styleClass="cajaAmplia"
+																					value="#{retornoBean.ocupacion3.vDesocupac}"
+																					required="true"
+																					requiredMessage="Se requiere en que ocupación considera que podría desempeñarse"
+																					id="vDesocupac3"
+																					readonly="true"/>
+								
+								<p:commandButton 		 id="btnBuscarOcupacion2"														 
+														 icon="icon-search"														  
+														 value="Buscar Ocupación" 														 	
+														 action="#{retornoBean.mostrarOcupacion}"	
+														 update=":formBusquedaOcupacion:dtBusqueOcupacion"	
+														 process="@this"	
+														 oncomplete="dlgBusquedaOcupacion.show();"											
+														 >
+									<f:setPropertyActionListener target="#{retornoBean.vOcupacion}"	value="3" />					 
+								</p:commandButton>
+							  </p:outputPanel>							 
+							</p:column>
+						</p:row>
+						
+						<p:row >
+							<p:column  colspan="2">
+								<h:outputLabel  value=" "
+												/>								
+							</p:column>
+							<p:column colspan="2">	
+							   <p:outputPanel id="ou4Desocupac">										
+								<p:outputLabel 	value="2.-"
+												for="vDesocupac4"/><p:inputText 	styleClass="cajaAmplia"
+																					value="#{retornoBean.ocupacion4.vDesocupac}"
+																					id="vDesocupac4"
+																					required="true"
+																					requiredMessage="Se requiere en que ocupación considera que podría desempeñarse"
+																					readonly="true"/>
+								
+								<p:commandButton 		 id="btnBuscarOcupacion3"														 
+														 icon="icon-search"														  
+														 value="Buscar Ocupación" 														
+														 action="#{retornoBean.mostrarOcupacion}"
+														 update=":formBusquedaOcupacion:dtBusqueOcupacion"	
+														 process="@this"			
+														 oncomplete="dlgBusquedaOcupacion.show();"											
+														 >
+									<f:setPropertyActionListener target="#{retornoBean.vOcupacion}"	value="4" />					 
+								</p:commandButton>						 
+								
+							   </p:outputPanel>									 
+							</p:column>
+						</p:row>
+													
+					</p:panelGrid>
+				</p:panel>
+				
+		<br/>
+		
+		<!-- ===============================================================================P6 SITUACIÓN OCUPACIONAL ACTUAL========================================================================================= -->
+		
+				<p:panel 	header="SITUACIÓN OCUPACIONAL ACTUAL" 
+							id="psituacionactual">
+					<p:panelGrid 	id="pgsituacionactual">
+						<p:row >
+							<p:column  >
+								<p:outputLabel 	value="Hace cuanto tiempo está desempleado"
+												for="vCodrandesDesem"/>								
+							</p:column>
+							<p:column >								
+								 <p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.dpersona.vCodrandes}"
+													id="vCodrandesDesem"
+													required="true"
+													requiredMessage="Se requiere hace cuanto tiempo está desempleado">
+										<f:selectItem  itemLabel="--Seleccione--" itemValue="" />
+										<f:selectItems  value="#{retornoBean.lstTiempoDesem}"
+														var="mon"
+														itemValue="#{mon.vCodrango}"
+														itemLabel="#{mon.vDesrango}"/>	
+																		        						
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>							
+					</p:panelGrid>
+				</p:panel>
+				
+		<br />
+			
+					<p:panelGrid 	id="pgBotones">
+						<p:row>
+							<p:column colspan="2">
+									<p:messages id="msgFormulario" escape="false"/>
+									<p:separator/>
+								</p:column>
+							</p:row>
+						<p:row >
+							<p:column   >
+									<p:commandButton 	id="btnBuscarGrabar"														 
+								 						icon="icon-disk"														  
+								 						value="Grabar" 	
+								 						onclick="dlgConfirmRegistroModulo.show();"							 						 
+								 						  							
+														/>					
+							</p:column>
+							<p:column >								
+								<p:commandButton 		id="btnBuscarCancelar"														 
+								 						icon="icon-cancel"														  
+								 						value="Cancelar"
+								 						onclick="dlgConfirmCancelarModulo.show();"								 														
+														/>	
+							</p:column>
+						</p:row>							
+					</p:panelGrid>
+		
+	
+	
+			<p:confirmDialog id="dlgConfirmRegistroModulo"
+							 widgetVar="dlgConfirmRegistroModulo"
+							 header="Confirmación de Registro de Formulario"
+							 message="¿Desea registrar el formulario?"
+							 severity="alert"
+							 width="350px">
+						<center >			 
+						<p:commandButton id="btnRegistroModulo"
+								 value="Confirmar"
+							  	 icon="icon-pref"
+							  	 action="#{retornoBean.registrarFormulario}"  
+								  
+								 update=":formRetorno" 
+								 oncomplete="xdlgAgradecimiento(xhr, status, args);">
+								 </p:commandButton>
+				
+								 
+						<p:commandButton value="Cancelar"                				 
+                                 onclick="dlgConfirmRegistroModulo.hide();"                                                      
+                                 icon="icon-cancel" />				 
+							 
+			   			</center>
+				</p:confirmDialog>	
+				
+			<p:confirmDialog id="dlgConfirmCancelarModulo"
+							 widgetVar="dlgConfirmCancelarModulo"
+							 header="Confirmación la cancelación del Registro"
+							 message="¿Desea cancelar el registro del formulario?"
+							 severity="alert"
+							 width="350px">
+						<center >			 
+						<p:commandButton id="btnCancelaModulo"
+								 value="Confirmar"
+							  	 icon="icon-pref"
+							  	 action="#{retornoBean.limpiarFormulario}"  
+								 immediate="true"
+								 update=":formRetorno" 
+								  
+								 oncomplete="dlgConfirmCancelarModulo.hide();">
+								 </p:commandButton>
+				
+								 
+						<p:commandButton value="Regresar"                				 
+                                 onclick="dlgConfirmCancelarModulo.hide();"                                                      
+                                 icon="icon-cancel" />				 
+							 
+			   			</center>
+				</p:confirmDialog>	
+				
+				<p:confirmDialog id="dlgConfirmRegistroPersona"
+							 widgetVar="dlgConfirmRegistroPersona"
+							 header="Registro de Persona"
+							 message="#{retornoBean.txtInsertarPersona}"
+							 severity="alert"
+							 width="350px">
+						<center >			 
+						<p:commandButton id="btnAceptaRegPersona"
+								 value="SI"
+							  	 icon="icon-pref"							  	
+							  	 process="@this" 								  
+								 oncomplete="dlgConfirmRegistroPersona.hide();">
+								 <f:setPropertyActionListener target="#{retornoBean.blnInsertarPersona}"	value="true" />
+						</p:commandButton>		 
+												
+								 
+						<p:commandButton value="NO"                				 
+                                 onclick="dlgConfirmRegistroPersona.hide();"                                                      
+                                 icon="icon-cancel" 
+                                 process="@this"
+                                 action="#{retornoBean.limpiarFormulario}"
+                                 immediate="true"
+                                 update=":formRetorno" />				 
+							 
+			   			</center>
+				</p:confirmDialog>	
+	</h:form>		
+	
+		<p:confirmDialog id="dlgAgradecimiento"
+							 widgetVar="dlgAgradecimiento"
+							 header="AGRADECIMIENTO"
+							 message="GRACIAS POR REGISTRARSE EN LA PLATAFORMA DE RETORNO PRODUCTIVO"
+							 severity="info"
+							 width="600px">
+				<center >			 
+				<p:commandButton id="btnAgradeciento"
+								 value="Aceptar"
+							  	 icon="icon-pref"						  	
+							  	 oncomplete="dlgAgradecimiento.hide();" 						  	 
+							  	 />
+								 
+							 
+							 
+			   </center>
+		</p:confirmDialog>	
+							
+
+	</p:fieldset>	
+	
+	 
+	<!-- ==========================================  DIALOG DE razon  =============================================== -->
+		
+		<h:form id="formBusquedaRazon">
+			<p:dialog 	id="dlgBusquedaRazon"
+						widgetVar="dlgBusquedaRazon"
+						modal="true"
+						resizable="false"
+						header="BUSCAR RAZÓN"
+						width="700"
+						showEffect="clip"
+						closable="true"
+						>
+				  
+					<p:dataTable    id="dtBusqueRazon" var="mot" emptyMessage="No hay Razones para mostrar"
+									value="#{retornoBean.lstMotivos}"
+						 			paginator="true"
+									paginatorPosition="bottom"
+						 			rows="10"
+						 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 			rowsPerPageTemplate="5,10,15"
+						 				 							
+									>
+							 
+							<p:column headerText="Razón">
+								<h:outputText value="#{mot.vDesretor}"/>
+							</p:column>
+							
+							<p:column headerText="Añadir" style="text-align:center;width: 10%;">
+								<p:commandButton title="Añadir" 
+												 icon="icon-add"
+												 update=":formRetorno:ouDesretor"
+												 oncomplete="dlgBusquedaRazon.hide();"		
+												 									 												  
+												>													 
+									<f:setPropertyActionListener target="#{retornoBean.motivo}"	value="#{mot}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodretor}"	value="#{mot.vCodretor}" />
+								</p:commandButton>
+							
+							
+							</p:column>		 
+						
+					</p:dataTable>
+					<br/>					 	
+					  	
+			</p:dialog>
+					
+		</h:form>
+
+		
+	<!-- ==========================================  DIALOG DE OCUPACION  =============================================== -->
+		
+		<h:form id="formBusquedaOcupacion">
+			<p:dialog 	id="dlgBusquedaOcupacion"
+						widgetVar="dlgBusquedaOcupacion"
+						modal="true"
+						resizable="false"
+						header="BUSCAR OCUPACIÓN"
+						width="700"
+						showEffect="clip"
+						closable="true"
+						>
+				
+					<p:panelGrid id="pgBusquedaOcupacion" columns="2">					
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:outputLabel value="Ocupación:&nsbp;" />										
+								</p:column>
+									
+							</p:row>
+							<p:row>								
+								<p:column>
+									<p:inputText  style="width: 400px;" value="#{retornoBean.paramBusOcupacion.vDesocupac}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<p:separator/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+								  <p:commandButton
+                                     title="Busqueda de Ocupación"
+                                     icon="icon-search"
+                                     value="Buscar"
+                                     action="#{retornoBean.buscarOcupacion}"
+                                     update=":formBusquedaOcupacion:dtBusqueOcupacion"
+                                     />
+								</p:column>
+								
+								 	
+								
+							</p:row>
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:separator/>
+					<p:messages id="msgMensajeslstBusOcu"  />
+					
+                    <br />           
+                          
+					<p:dataTable    id="dtBusqueOcupacion" 
+									value="#{retornoBean.lstOcupacion}"
+									var="ocu" 
+									emptyMessage="No hay Ocupaciones para mostrar"
+									
+						 			paginator="true"
+									paginatorPosition="bottom"
+						 			rows="10"
+						 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 			rowsPerPageTemplate="5,10,15"	 							
+									>
+							<p:column headerText="Código"  style="width: 10%">
+								<h:outputText value="#{ocu.vCodocupac}" />
+							</p:column>
+							<p:column headerText="Ocupación">
+								<h:outputText value="#{ocu.vDesocupac}" style="white-space:pre-wrap;width: 400px;"/>
+							</p:column>
+							
+							<p:column headerText="Añadir" style="text-align:center;width: 10%;">
+								<p:commandButton title="Añadir" 
+												 icon="icon-add"
+												 update=":formRetorno:ou1Desocupac"
+												 oncomplete="dlgBusquedaOcupacion.hide();"
+												 rendered="#{retornoBean.vOcupacion=='1'}"													  
+												>													 
+									<f:setPropertyActionListener target="#{retornoBean.ocupacion1}"	value="#{ocu}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodocuper}"	value="#{ocu.vCodocupac}" />
+								</p:commandButton>
+							
+							
+							 
+								<p:commandButton title="Añadir" 
+												 icon="icon-add"
+												 update=":formRetorno:ou2Desocupac"
+												 oncomplete="dlgBusquedaOcupacion.hide();"
+												 rendered="#{retornoBean.vOcupacion=='2'}"												  
+												>													 
+									<f:setPropertyActionListener target="#{retornoBean.ocupacion2}"	value="#{ocu}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodocuext}"	value="#{ocu.vCodocupac}" />
+								</p:commandButton>
+							  
+							  	<p:commandButton title="Añadir" 
+												 icon="icon-add"
+												 update=":formRetorno:ou3Desocupac"
+												 oncomplete="dlgBusquedaOcupacion.hide();"
+												 rendered="#{retornoBean.vOcupacion=='3'}"													  
+												>													 
+									<f:setPropertyActionListener target="#{retornoBean.ocupacion3}"	value="#{ocu}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodocudes1}"	value="#{ocu.vCodocupac}" />
+								</p:commandButton>
+							
+							
+							 
+								<p:commandButton title="Añadir" 
+												 icon="icon-add"
+												 update=":formRetorno:ou4Desocupac"
+												 oncomplete="dlgBusquedaOcupacion.hide();"
+												 rendered="#{retornoBean.vOcupacion=='4'}"												  
+												>													 
+									<f:setPropertyActionListener target="#{retornoBean.ocupacion4}"	value="#{ocu}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodocudes2}"	value="#{ocu.vCodocupac}" />
+								</p:commandButton>
+							  
+						</p:column>	
+					</p:dataTable>
+					<br/>					 	
+					  	
+			</p:dialog>
+					
+		</h:form>
+		
+		<!-- ==========================================  DIALOG DE PROFESION  =============================================== -->
+		
+		<h:form id="formBusquedaProfesion">
+			<p:dialog 	id="dlgBusquedaProfesion"
+						widgetVar="dlgBusquedaProfesion"
+						modal="true"
+						resizable="false"
+						header="BUSCAR PROFESIÓN/CARRERA TÉCNICA"
+						width="700"
+						showEffect="clip"
+						closable="true"
+						>
+				
+					<p:panelGrid id="pgBusquedaProfesion" columns="2">					
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:outputLabel value="Profesión/Carrera Técnica:&nsbp;" />										
+								</p:column>
+									
+							</p:row>
+							<p:row>								
+								<p:column>
+									<p:inputText  	style="width: 400px;"  
+													value="#{retornoBean.paramBus.vDesprof}"
+													/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<p:separator/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+								  <p:commandButton
+                                     title="Busqueda de Profesión/Carrera Técnica"
+                                     icon="icon-search"
+                                     value="Buscar"
+                                     action="#{retornoBean.buscarProfesion}"
+                                     update=":formBusquedaProfesion:dtBusqueProfesion"
+                                     />
+								</p:column>
+								
+								 	
+								
+							</p:row>
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:separator/>
+					<p:messages id="msgMensajeslstBusPro"  />
+					
+                    <br />           
+                          
+					<p:dataTable    id="dtBusqueProfesion" 
+									var="pro" 
+									emptyMessage="No hay Profesiones para mostrar"
+									value="#{retornoBean.lstProfesion}"
+						 			paginator="true"
+									paginatorPosition="bottom"
+						 			rows="10"
+						 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 			rowsPerPageTemplate="5,10,15"	 							
+									>
+							<p:column headerText="Código"  style="width: 10%">
+								<h:outputText value="#{pro.vCodprof}"/>
+							</p:column>
+							<p:column headerText="Profesión">
+								<h:outputText value="#{pro.vDesprof}" style="white-space:pre-wrap;width: 400px;"/>
+							</p:column>
+							
+							<p:column headerText="Añadir" style="text-align:center;width: 10%;">
+								<p:commandButton 	title="Añadir" 
+												 	icon="icon-add"
+												 	update=":formRetorno:ouiDesprof"
+												 	oncomplete="dlgBusquedaProfesion.hide();"
+												 	>
+									<f:setPropertyActionListener target="#{retornoBean.profesion}"	value="#{pro}" />
+									<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodprof}"	value="#{pro.vCodprof}" />
+								</p:commandButton>
+							</p:column>		 
+						
+					</p:dataTable>
+					<br/>					 	
+					  	
+			</p:dialog>
+					
+		</h:form>
+	
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+		<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+					header="Status" draggable="false" closable="false"
+					position="center" resizable="false">
+					<h:outputText value="Espere porfavor..." />
+					<br />
+					<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+		</p:dialog>		
+		
+	<script type="text/javascript">  
+	    function soloLetras(e){
+	        key = e.keyCode || e.which;
+	        tecla = String.fromCharCode(key).toLowerCase();
+	        letras = "abcdefghijkmnlopqrstuvwxyzáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛÑñäëïöüÄËÏÖÜ";
+	        especiales = [8,37,39,46,32];			
+	        tecla_especial = false
+	        for(var i in especiales){	        	
+	             if(key == especiales[i]){	            	
+	                 return true;	                
+	             }
+	         }
+
+	         if(letras.indexOf(tecla)==-1){
+	             return false;
+	         }
+	     }
+
+	    function soloNumeros(e){
+	        key = e.keyCode || e.which;
+	        tecla = String.fromCharCode(key).toLowerCase();
+	        letras = "0123456789";
+	        especiales = [8,37,39,46];
+
+	        tecla_especial = false
+	        for(var i in especiales){
+	             if(key == especiales[i]){
+	            	   return true;
+	             }
+	         }
+
+	         if(letras.indexOf(tecla)==-1){
+	             return false;
+	         }
+	     }
+	    function soloLetrasNumeros(e){
+	        key = e.keyCode || e.which;
+	        tecla = String.fromCharCode(key).toLowerCase();
+	        letras = "0123456789abcdefghijkmnlopqrstuvwxyz";
+	        especiales = [8,37,39,46];
+
+	        tecla_especial = false
+	        for(var i in especiales){
+	             if(key == especiales[i]){
+	            	 return true;
+	             }
+	         }
+
+	         if(letras.indexOf(tecla)==-1){
+	             return false;
+	         }
+	     }
+	    
+	    function xdlgAgradecimiento(xhr, status, args) {
+			 if(args.validationFailed==true) {   					 
+				 dlgAgradecimiento.hide();   
+				 dlgConfirmRegistroModulo.hide();
+			 }else{
+				 if(args.error==false){
+					 dlgAgradecimiento.show(); 
+					 dlgConfirmRegistroModulo.hide();
+				 }else{
+					 dlgAgradecimiento.hide(); 
+					 dlgConfirmRegistroModulo.hide();
+				 }
+			 }
+			 
+			
+		}
+		
+	    </script> 
+		
+	</ui:define>
+</ui:composition>	
+</html>	

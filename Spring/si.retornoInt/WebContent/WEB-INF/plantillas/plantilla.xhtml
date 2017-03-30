@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">PLATAFORMA DE RETORNO PRODUCTIVO</ui:insert></title>
+	<h:outputStylesheet name="principal.css" library="css" />
+	<h:outputStylesheet name="login.css" library="css" />
+	<h:outputScript name="validacion.js" library="js"/>	
+	<h:outputScript name="util.js" library="js"/>
+</h:head>
+
+<h:body onload="javascript:window.history.forward(1);">
+
+	<!-- Se va a usar Tablas para ordenarlo Se puede usar Div  -->
+
+	
+	
+	<table cellpadding="0" cellspacing="0" align="center" border="0" class="tablaPrincipal">
+		<tr>
+			<td colspan="2" style="padding: 0px; border: 1px solid black;">
+				<ui:insert name="cabecera">
+					<p:graphicImage value="/resources/images/principal/cabeceraP.png"/>
+				</ui:insert>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="2" class="controlClase" align="left">				
+					<ui:insert name="datosUsuario">
+						<h:panelGrid columns="8">
+							<h:outputLabel value="Bienvenido:" />
+							<h:outputText value="#{loginBean.PGP_Usuario.v_desnombres} #{loginBean.PGP_Usuario.v_desapepat} #{loginBean.PGP_Usuario.v_desapemat}" />
+							&nbsp;
+							<h:outputLabel value="Perfil:" />
+							<h:outputText value="#{loginBean.PGP_Permisos.v_desper}" />							
+							&nbsp;
+							<h:outputLabel value="Fecha:"/>
+							<h:outputText value="#{cargaAppBean.s_fecha}"/>														
+							
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<h:outputLabel value="Dependencia:" />
+							<h:outputText value="#{loginBean.PGP_Usuario.v_desdep}"/>
+						</h:panelGrid>
+						<h:panelGrid columns="4">
+							<h:outputLabel value="Región:" />
+							<h:outputText value="#{loginBean.PGP_Usuario.v_nomreg}"/>
+							<h:outputLabel value="Zona:" />
+							<h:outputText value="#{loginBean.PGP_Usuario.v_nomzon}"/>
+						</h:panelGrid>
+					</ui:insert>
+				
+			</td>
+		</tr>
+	
+		<tr >
+			<td colspan="2" style="padding: 0px; vertical-align: top;">				
+					<ui:insert name="menu2">
+						<h:form id="formMenu2"  styleClass="menuClase">
+							 <p:menubar model="#{menuBean.menuModel}" />						 
+						</h:form>
+					</ui:insert>
+				
+			</td>
+		</tr>	
+			
+		<tr >
+		
+			<td style="vertical-align: super;padding: 0px;" colspan="2">
+				<div id="contenido" class="contenidoClase">
+					<ui:insert name="contenido">
+					</ui:insert>
+				</div> 
+				<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+					header="Status" draggable="false" closable="false"
+					position="center" resizable="false">
+					<h:outputText value="Espere porfavor..." />
+					<br />
+					<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+				</p:dialog>
+				
+				<p:idleMonitor onactive="sessionTimeOutDialog.show();" timeout="#{session.maxInactiveInterval * 1000}" />
+            		<p:dialog header="Su sesión ha caducado" widgetVar="sessionTimeOutDialog"
+             			modal="true" fixedCenter="true" closable="false" width="400" visible="false">
+                 		<h:outputText value="Volver a entrar a la aplicación" /><br />
+                 		<input id="confirmBackToLogin" type="button" value="Aceptar"
+                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}';" />
+            		</p:dialog>
+				
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding-top: 5px;">
+				<ui:insert name="pie">
+					<fieldset style="margin: 0px;border: 1px solid #D8DCDF; "> 
+
+						<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0px;">
+							<tr>
+								<td width="6%" rowspan="2" style="vertical-align: middle;" align="center" valign="top"><p:graphicImage value="/resources/images/principal/logo_mtpe.png"/></td>
+								<td width="94%" height="19" align="left" valign="middle" class="contenido_negrita">
+										Elaborado por la Oficina de Tecnologías de la Información y Comunicaciones
+								</td>
+							</tr>
+							<tr>
+								<td height="30" align="left" valign="top" class="contenido_especial">
+										Copyright © 2016 PLATAFORMA DE RETORNO PRODUCTIVO. Todos los Derechos Reservados<br/>
+										Cualquier consulta sírvase llamar al teléfono 630-6000 anexos 
+								</td>
+							</tr>	
+						</table>
+
+					</fieldset>
+				</ui:insert>
+			</td>
+		</tr>
+	</table>
+   
+
+</h:body>
+</html>

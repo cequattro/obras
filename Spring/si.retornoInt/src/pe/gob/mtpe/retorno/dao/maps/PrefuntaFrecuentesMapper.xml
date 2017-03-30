@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper  namespace="pe.gob.mtpe.retorno.dao.PreguntaFrecuentesDao">
+	
+	<insert id="insertarPreguntaFrecuente" parameterType="Pregfrec" >
+	 <selectKey resultType="int" keyProperty="nCodprefre" order="BEFORE">
+           SELECT SEQ_PREGUNTAFRE.Nextval FROM DUAL
+  		</selectKey>
+  			
+    insert into RPTBC_PREGFREC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nCodprefre != null or nCodprefre == null" >
+        N_CODPREFRE,
+      </if>
+      <if test="vDesprefre != null" >
+        V_DESPREFRE,
+      </if>
+       <if test="vDesresp != null" >
+        v_desresp,
+      </if>
+      <if test="vEstreg != null" >
+        V_ESTREG,
+      </if>
+      <if test="vCodusu != null" >
+        V_CODUSU,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nCodprefre != null or nCodprefre == null" >
+        #{nCodprefre,jdbcType=DECIMAL},
+      </if>
+      <if test="vDesprefre != null" >
+        upper(#{vDesprefre,jdbcType=VARCHAR}),
+      </if>
+       <if test="vDesresp != null" >
+        upper(#{vDesresp,jdbcType=VARCHAR}),
+      </if>
+      <if test="vEstreg != null" >
+        #{vEstreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusu != null" >
+        #{vCodusu,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="listarPreguntas" resultType="Pregfrec">
+  	
+  	SELECT 
+		N_CODPREFRE as nCodprefre, 
+		V_DESPREFRE as vDesprefre, 
+		v_desresp   as vDesresp,
+		V_ESTREG 	as vEstreg, 
+		V_CODUSU 	as vCodusu
+	FROM 
+		RPTBC_PREGFREC
+	where 
+		V_ESTREG='A'
+			
+  	  	
+  </select>
+  
+  <update id="actualizarPregunta">
+  	 update RPTBC_PREGFREC
+      set 
+	      V_DESPREFRE = upper(#{vDesprefre,jdbcType=VARCHAR}),
+	      V_DESRESP=upper(#{vDesresp,jdbcType=VARCHAR})
+	  WHERE 
+	  	  N_CODPREFRE=#{nCodprefre,jdbcType=DECIMAL}   
+  </update>
+  
+   <update id="eliminarPregunta">
+  	 update RPTBC_PREGFREC
+      set 
+	     V_ESTREG=#{vEstreg,jdbcType=VARCHAR}  
+	  WHERE 
+	  	  N_CODPREFRE=#{nCodprefre,jdbcType=DECIMAL}   
+  </update>
+
+</mapper>

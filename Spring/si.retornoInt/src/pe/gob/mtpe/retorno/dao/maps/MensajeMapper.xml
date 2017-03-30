@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="pe.gob.mtpe.retorno.dao.MensajeDao">
+	
+	<select id="listaPreguntas" resultType="Mensaje" parameterType="Persona">
+			SELECT 
+			  N_CODMENSAJ 		as nCodmensaj,
+			  V_TITMENSAJ		as vTitmensaj,
+			  D_FECRPTA			as dFecrpta,
+			  V_RESPTA			as vRespta,
+			  V_NUMDOC			as vNumdoc,
+			  V_CODTDOCIDE		as vCodtdocide,
+			  V_ESTREG			as vEstreg,
+			  D_FECMENSAJ		as dFecmensaj,
+			  V_CODUSU			as vCodusu
+			 
+			FROM RPTBC_MENSAJE 
+			WHERE 
+			 V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      		 and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+      		 AND V_ESTREG='S'
+			ORDER BY D_FECMENSAJ DESC
+	</select>
+	
+	<select id="morstarPregunta" resultType="Mensaje" parameterType="Mensaje">
+			SELECT 
+			  N_CODMENSAJ 		as nCodmensaj,
+			  V_TITMENSAJ		as vTitmensaj,
+			  D_FECRPTA			as dFecrpta,
+			  V_RESPTA			as vRespta,
+			  V_NUMDOC			as vNumdoc,
+			  V_CODTDOCIDE		as vCodtdocide,
+			  V_ESTREG			as vEstreg,
+			  D_FECMENSAJ		as dFecmensaj,
+			  V_CODUSU			as vCodusu
+			 
+			FROM RPTBC_MENSAJE 
+			WHERE 
+			 N_CODMENSAJ = #{nCodmensaj,jdbcType=DECIMAL}
+	</select>
+	
+	 <update id="actualizarMensaje" parameterType="Mensaje" >
+    update RPTBC_MENSAJE
+    <set >
+      
+      <if test="vTitmensaj != null" >
+        V_TITMENSAJ = #{vTitmensaj,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecrpta != null" >
+        D_FECRPTA = #{dFecrpta,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vRespta != null" >
+        V_RESPTA = #{vRespta,jdbcType=VARCHAR},
+      </if>
+      <if test="vNumdoc != null" >
+        V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodtdocide != null" >
+        V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR},
+      </if>
+      <if test="vEstreg != null" >
+        V_ESTREG = #{vEstreg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmensaj != null" >
+        D_FECMENSAJ = #{dFecmensaj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vCodusu != null" >
+        V_CODUSU = #{vCodusu,jdbcType=VARCHAR},
+      </if>
+    </set>
+   where 
+   	 N_CODMENSAJ = #{nCodmensaj,jdbcType=DECIMAL}
+  </update>
+	
+	
+</mapper>

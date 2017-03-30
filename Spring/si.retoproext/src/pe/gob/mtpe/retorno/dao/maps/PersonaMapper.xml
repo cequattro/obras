@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="pe.gob.mtpe.retorno.dao.PersonaDao">
+
+
+
+<!-- ================================================================PERSONA============================================================= -->
+
+<resultMap id="resultPersona" type="Persona" >
+    <id column="V_CODTDOCIDE" 		jdbcType="VARCHAR" 		property="vCodtdocide" />
+    <id column="V_NUMDOC" 			jdbcType="VARCHAR" 		property="vNumdoc" />
+    <result column="V_APEPATER" 	jdbcType="VARCHAR" 		property="vApepater" />
+    <result column="V_APEMATER" 	jdbcType="VARCHAR" 		property="vApemater" />
+    <result column="V_NOMBRES" 		jdbcType="VARCHAR" 		property="vNombres" />
+    <result column="D_FECNAC" 		jdbcType="TIMESTAMP" 	property="dFecnac" />
+    <result column="C_CODSEXO" 		jdbcType="CHAR" 		property="cCodsexo" />
+    <result column="C_ESTCIVIL" 	jdbcType="CHAR" 		property="cEstcivil" />
+    <result column="D_FECFAC" 		jdbcType="TIMESTAMP" 	property="dFecfac" />
+    <result column="D_FECACT" 		jdbcType="TIMESTAMP" 	property="dFecact" />
+    <result column="V_CODPAIS" 		jdbcType="VARCHAR" 		property="vCodpais" />
+    <result column="C_ESTACT" 		jdbcType="CHAR" 		property="cEstact" />
+    <result column="D_FECREG" 		jdbcType="TIMESTAMP" 	property="dFecreg" />
+    <result column="D_FECMOD" 		jdbcType="TIMESTAMP" 	property="dFecmod" />
+    <result column="D_FECANUL" 		jdbcType="TIMESTAMP" 	property="dFecanul" />
+    <result column="V_CODNACION" 	jdbcType="VARCHAR" 		property="vCodnacion" />
+    <result column="V_TELFPER1" 	jdbcType="VARCHAR" 		property="vTelfper1" />
+    <result column="V_TELFPER2" 	jdbcType="VARCHAR" 		property="vTelfper2" />
+    <result column="V_EMAIL" 		jdbcType="VARCHAR" 		property="vEmail" />
+    <result column="V_CODSISREG" 	jdbcType="VARCHAR" 		property="vCodsisreg" />
+    <result column="V_FLGPLAN" 		jdbcType="CHAR" 		property="vFlgplan" />
+    <result column="V_HOSTREG" 		jdbcType="VARCHAR" 		property="vHostreg" />
+    <result column="V_HOSTMOD" 		jdbcType="VARCHAR" 		property="vHostmod" />
+    <result column="V_NOMUSUREG" 	jdbcType="VARCHAR" 		property="vNomusureg" />
+    <result column="V_NOMUSUMOD" 	jdbcType="VARCHAR" 		property="vNomusumod" />
+    <result column="V_CODPAISNAC" 	jdbcType="VARCHAR" 		property="vCodpaisnac" />
+    <result column="V_CODDEPNAC" 	jdbcType="VARCHAR" 		property="vCoddepnac" />
+    <result column="V_CODPRONAC" 	jdbcType="VARCHAR" 		property="vCodpronac" />
+    <result column="V_CODDISNAC" 	jdbcType="VARCHAR" 		property="vCoddisnac" />
+    <result column="V_CODSISMOD" 	jdbcType="VARCHAR" 		property="vCodsismod" />
+    <result column="V_FLATRADIS" 	jdbcType="VARCHAR" 		property="vFlatradis" />
+    <result column="V_FLGTIPLOC" 	jdbcType="VARCHAR" 		property="vFlgtiploc" />
+    <result column="V_FLGTIPCOM" 	jdbcType="VARCHAR" 		property="vFlgtipcom" />
+    <result column="V_FLGTIPDES" 	jdbcType="VARCHAR" 		property="vFlgtipdes" />
+    <result column="V_FLGTIPCON" 	jdbcType="VARCHAR" 		property="vFlgtipcon" />
+    <result column="V_FLGTIPSIT" 	jdbcType="VARCHAR" 		property="vFlgtipsit" />
+    <result column="V_FLGME" 		jdbcType="VARCHAR" 		property="vFlgme" />
+    <result column="V_FLGNA" 		jdbcType="VARCHAR" 		property="vFlgna" />
+    <result column="V_FLGAM" 		jdbcType="VARCHAR" 		property="vFlgam" />
+    <result column="V_CODNIVEDU" 	jdbcType="VARCHAR" 		property="vCodnivedu" />
+  </resultMap>
+  
+  <select id="buscarPersona" resultMap="resultPersona">
+  	select 
+		  	V_CODTDOCIDE, V_NUMDOC, V_APEPATER, V_APEMATER, V_NOMBRES, D_FECNAC, C_CODSEXO, C_ESTCIVIL, 
+		    D_FECFAC, D_FECACT, V_CODPAIS, C_ESTACT, D_FECREG, D_FECMOD, D_FECANUL, V_CODNACION, 
+		    V_TELFPER1, V_TELFPER2, V_EMAIL, V_CODSISREG, V_FLGPLAN, V_HOSTREG, V_HOSTMOD, V_NOMUSUREG, 
+		    V_NOMUSUMOD, V_CODPAISNAC, V_CODDEPNAC, V_CODPRONAC, V_CODDISNAC, V_CODSISMOD, V_FLATRADIS, 
+		    V_FLGTIPLOC, V_FLGTIPCOM, V_FLGTIPDES, V_FLGTIPCON, V_FLGTIPSIT, V_FLGME, V_FLGNA, 
+		    V_FLGAM, V_CODNIVEDU
+    
+    from
+    		SIMINTRA1.SITB_PERSONA
+    		
+    where 		
+  		V_CODTDOCIDE=#{persona.vCodtdocide}
+  		and V_NUMDOC=#{persona.vNumdoc}
+  </select>
+  
+  
+  <insert id="insertPersona" parameterType="Persona">
+    insert into SIMINTRA1.SITB_PERSONA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vCodtdocide != null">
+        V_CODTDOCIDE,
+      </if>
+      <if test="vNumdoc != null">
+        V_NUMDOC,
+      </if>
+      <if test="vApepater != null">
+        V_APEPATER,
+      </if>
+      <if test="vApemater != null">
+        V_APEMATER,
+      </if>
+      <if test="vNombres != null">
+        V_NOMBRES,
+      </if>
+      <if test="dFecnac != null">
+        D_FECNAC,
+      </if>
+      <if test="cCodsexo != null">
+        C_CODSEXO,
+      </if>
+      <if test="cEstcivil != null">
+        C_ESTCIVIL,
+      </if>
+      <if test="dFecfac != null">
+        D_FECFAC,
+      </if>
+      <if test="dFecact != null">
+        D_FECACT,
+      </if>
+      <if test="vCodpais != null">
+        V_CODPAIS,
+      </if>
+      <if test="cEstact != null">
+        C_ESTACT,
+      </if>
+      <if test="dFecreg != null">
+        D_FECREG,
+      </if>
+      <if test="dFecmod != null">
+        D_FECMOD,
+      </if>
+      <if test="dFecanul != null">
+        D_FECANUL,
+      </if>
+      <if test="vCodnacion != null">
+        V_CODNACION,
+      </if>
+      <if test="vTelfper1 != null">
+        V_TELFPER1,
+      </if>
+      <if test="vTelfper2 != null">
+        V_TELFPER2,
+      </if>
+      <if test="vEmail != null">
+        V_EMAIL,
+      </if>
+      <if test="vCodsisreg != null">
+        V_CODSISREG,
+      </if>
+      <if test="vFlgplan != null">
+        V_FLGPLAN,
+      </if>
+      <if test="vHostreg != null">
+        V_HOSTREG,
+      </if>
+      <if test="vHostmod != null">
+        V_HOSTMOD,
+      </if>
+      <if test="vNomusureg != null">
+        V_NOMUSUREG,
+      </if>
+      <if test="vNomusumod != null">
+        V_NOMUSUMOD,
+      </if>
+      <if test="vCodpaisnac != null">
+        V_CODPAISNAC,
+      </if>
+      <if test="vCoddepnac != null">
+        V_CODDEPNAC,
+      </if>
+      <if test="vCodpronac != null">
+        V_CODPRONAC,
+      </if>
+      <if test="vCoddisnac != null">
+        V_CODDISNAC,
+      </if>
+      <if test="vCodsismod != null">
+        V_CODSISMOD,
+      </if>
+      <if test="vFlatradis != null">
+        V_FLATRADIS,
+      </if>
+      <if test="vFlgtiploc != null">
+        V_FLGTIPLOC,
+      </if>
+      <if test="vFlgtipcom != null">
+        V_FLGTIPCOM,
+      </if>
+      <if test="vFlgtipdes != null">
+        V_FLGTIPDES,
+      </if>
+      <if test="vFlgtipcon != null">
+        V_FLGTIPCON,
+      </if>
+      <if test="vFlgtipsit != null">
+        V_FLGTIPSIT,
+      </if>
+      <if test="vFlgme != null">
+        V_FLGME,
+      </if>
+      <if test="vFlgna != null">
+        V_FLGNA,
+      </if>
+      <if test="vFlgam != null">
+        V_FLGAM,
+      </if>
+      <if test="vCodnivedu != null">
+        V_CODNIVEDU,
+      </if>
+       <if test="vFlgreniec != null">
+        v_flgreniec,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vCodtdocide != null">
+        #{vCodtdocide,jdbcType=VARCHAR},
+      </if>
+      <if test="vNumdoc != null">
+        #{vNumdoc,jdbcType=VARCHAR},
+      </if>
+      <if test="vApepater != null">
+        upper(#{vApepater,jdbcType=VARCHAR}),
+      </if>
+      <if test="vApemater != null">
+        upper(#{vApemater,jdbcType=VARCHAR}),
+      </if>
+      <if test="vNombres != null">
+        upper(#{vNombres,jdbcType=VARCHAR}),
+      </if>
+      <if test="dFecnac != null">
+        #{dFecnac,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cCodsexo != null">
+        #{cCodsexo,jdbcType=CHAR},
+      </if>
+      <if test="cEstcivil != null">
+        #{cEstcivil,jdbcType=CHAR},
+      </if>
+      <if test="dFecfac != null">
+        #{dFecfac,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecact != null">
+        #{dFecact,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vCodpais != null">
+        #{vCodpais,jdbcType=VARCHAR},
+      </if>
+      <if test="cEstact != null">
+        #{cEstact,jdbcType=CHAR},
+      </if>
+      <if test="dFecreg != null">
+        #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecmod != null">
+        #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecanul != null">
+        #{dFecanul,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vCodnacion != null">
+        #{vCodnacion,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelfper1 != null">
+        #{vTelfper1,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelfper2 != null">
+        #{vTelfper2,jdbcType=VARCHAR},
+      </if>
+      <if test="vEmail != null">
+        #{vEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsisreg != null">
+        #{vCodsisreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgplan != null">
+        #{vFlgplan,jdbcType=CHAR},
+      </if>
+      <if test="vHostreg != null">
+        #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vHostmod != null">
+        #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="vNomusureg != null">
+        #{vNomusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="vNomusumod != null">
+        #{vNomusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpaisnac != null">
+        #{vCodpaisnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddepnac != null">
+        #{vCoddepnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpronac != null">
+        #{vCodpronac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddisnac != null">
+        #{vCoddisnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsismod != null">
+        #{vCodsismod,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlatradis != null">
+        #{vFlatradis,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtiploc != null">
+        #{vFlgtiploc,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipcom != null">
+        #{vFlgtipcom,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipdes != null">
+        #{vFlgtipdes,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipcon != null">
+        #{vFlgtipcon,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipsit != null">
+        #{vFlgtipsit,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgme != null">
+        #{vFlgme,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgna != null">
+        #{vFlgna,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgam != null">
+        #{vFlgam,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodnivedu != null">
+        #{vCodnivedu,jdbcType=VARCHAR},
+      </if>
+       <if test="vFlgreniec != null">
+        #{vFlgreniec,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="actualizarPersona" parameterType="Persona">
+    update SIMINTRA1.SITB_PERSONA
+    <set>
+      <if test="vApepater != null">
+        V_APEPATER = upper(#{vApepater,jdbcType=VARCHAR}),
+      </if>
+      <if test="vApemater != null">
+        V_APEMATER = upper(#{vApemater,jdbcType=VARCHAR}),
+      </if>
+      <if test="vNombres != null">
+        V_NOMBRES = upper(#{vNombres,jdbcType=VARCHAR}),
+      </if>
+      <if test="dFecnac != null">
+        D_FECNAC = #{dFecnac,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cCodsexo != null">
+        C_CODSEXO = #{cCodsexo,jdbcType=CHAR},
+      </if>
+      <if test="cEstcivil != null">
+        C_ESTCIVIL = #{cEstcivil,jdbcType=CHAR},
+      </if>
+      <if test="dFecfac != null">
+        D_FECFAC = #{dFecfac,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecact != null">
+        D_FECACT = #{dFecact,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vCodpais != null">
+        V_CODPAIS = #{vCodpais,jdbcType=VARCHAR},
+      </if>
+      <if test="cEstact != null">
+        C_ESTACT = #{cEstact,jdbcType=CHAR},
+      </if>
+      <if test="dFecreg != null">
+        D_FECREG = #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecmod != null">
+        D_FECMOD = #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dFecanul != null">
+        D_FECANUL = #{dFecanul,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vCodnacion != null">
+        V_CODNACION = #{vCodnacion,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelfper1 != null">
+        V_TELFPER1 = #{vTelfper1,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelfper2 != null">
+        V_TELFPER2 = #{vTelfper2,jdbcType=VARCHAR},
+      </if>
+      <if test="vEmail != null">
+        V_EMAIL = #{vEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsisreg != null">
+        V_CODSISREG = #{vCodsisreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgplan != null">
+        V_FLGPLAN = #{vFlgplan,jdbcType=CHAR},
+      </if>
+      <if test="vHostreg != null">
+        V_HOSTREG = #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vHostmod != null">
+        V_HOSTMOD = #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="vNomusureg != null">
+        V_NOMUSUREG = #{vNomusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="vNomusumod != null">
+        V_NOMUSUMOD = #{vNomusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpaisnac != null">
+        V_CODPAISNAC = #{vCodpaisnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddepnac != null">
+        V_CODDEPNAC = #{vCoddepnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpronac != null">
+        V_CODPRONAC = #{vCodpronac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddisnac != null">
+        V_CODDISNAC = #{vCoddisnac,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsismod != null">
+        V_CODSISMOD = #{vCodsismod,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlatradis != null">
+        V_FLATRADIS = #{vFlatradis,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtiploc != null">
+        V_FLGTIPLOC = #{vFlgtiploc,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipcom != null">
+        V_FLGTIPCOM = #{vFlgtipcom,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipdes != null">
+        V_FLGTIPDES = #{vFlgtipdes,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipcon != null">
+        V_FLGTIPCON = #{vFlgtipcon,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgtipsit != null">
+        V_FLGTIPSIT = #{vFlgtipsit,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgme != null">
+        V_FLGME = #{vFlgme,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgna != null">
+        V_FLGNA = #{vFlgna,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgam != null">
+        V_FLGAM = #{vFlgam,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodnivedu != null">
+        V_CODNIVEDU = #{vCodnivedu,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgreniec != null">
+        v_flgreniec = #{vFlgreniec,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+      and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="consultaNumeroPersonas" parameterType="DPersona" resultType="int">
+  		SELECT 
+  			count(*) as numPersona
+		FROM simintra1.SITB_PERSONA 
+		where 
+			V_CODTDOCIDE = #{vCodtdocide,jdbcType=VARCHAR}
+	      	and V_NUMDOC = #{vNumdoc,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="verificaActuPersonaReniec" resultType="String"
+		parameterType="Persona">
+		select p.v_flgreniec as vFlgreniec from SIMINTRA1.sitb_persona p
+		where
+		p.v_numdoc=#{vNumdoc,jdbcType=VARCHAR}
+		and
+		p.v_codtdocide=#{vCodtdocide,jdbcType=VARCHAR}
+
+	</select>
+	
+	<select id="obtieneDistritoNacimiento" resultType="Distrito"  parameterType="Distrito">
+		select 
+		  v_coddep 		as vCoddep, 
+		  v_codpro 		as vCodpro, 
+		  v_coddis		as vCoddis, 
+		  v_desdis		as vDesdis, 
+		  v_abrdis		as vAbrdis, 
+		  v_codreg		as vCodreg, 
+		  v_codzon		as vCodzon, 
+		  v_coddepren	as vCoddepren, 
+		  v_codproren	as vCodproren, 
+		  v_coddisren	as vCoddisren, 
+		  v_flgact 		as vFlgact
+		from 
+		  SIMINTRA1.sitb_distrito
+		where
+			v_coddepren= #{vCoddepren,jdbcType=VARCHAR}
+		    and v_codproren= #{vCodproren,jdbcType=VARCHAR}
+		    and v_coddisren= #{vCoddisren,jdbcType=VARCHAR}
+		
+
+	</select>
+
+</mapper>

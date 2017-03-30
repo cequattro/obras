@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;text-align: center;white-space:pre-line;">
+      			<p:outputLabel value="PREGUNTAS FRECUENTES"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	
+		<br/>
+		<h:form>
+			<p:panelGrid 	id="pgPreguntas">
+						<p:row >
+							<p:column>								
+								<p:commandButton 		 id="btnRegresar"														 
+														 icon="icon_regresar"														  
+														 value="Regresar" 	
+														 action="#{preguntaFrecBean.regresarFormRetorno}"										
+														 />
+								
+							</p:column>
+						</p:row>	
+					</p:panelGrid>		
+							
+						
+						
+						<p:panelGrid>
+							<p:row>
+								<p:column >
+									<p:dataTable 	id="dtListaPregunta" var="pre" emptyMessage="No hay documentos para mostrar"
+						 										value="#{preguntaFrecBean.lstPregFrec}"
+						 										paginator="true"
+						 										paginatorPosition="bottom"
+																 rows="15"
+																 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+																 rowsPerPageTemplate="15,20,25"
+																
+																 >
+																 <p:column headerText="PREGUNTA"> 
+																 	<h:outputText value="#{pre.vDesprefre}"/>	
+																 </p:column>
+																  <p:column headerText="RESPUESTA"> 
+																 	<h:outputText value="#{pre.vDesresp}"/>	
+																 </p:column>
+																 
+									</p:dataTable>
+								</p:column>
+							</p:row>	 	
+								
+						
+						</p:panelGrid>
+							
+							
+		</h:form>
+		
+		
+									
+
+	</p:fieldset>	
+	
+
+		
+	<!-- ==========================================  DIALOG DE OCUPACION  =============================================== -->
+		
+		<h:form id="formBusquedaOcupacion">
+			<p:dialog 	id="dlgBusquedaOcupacion"
+						widgetVar="dlgBusquedaOcupacion"
+						modal="true"
+						resizable="false"
+						header="BUSCAR OCUPACIÓN"
+						width="700"
+						showEffect="clip"
+						closable="true"
+						>
+				
+					<p:panelGrid id="pgBusquedaOcupacion" columns="2">					
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:outputLabel value="Ocupación:&nsbp;" />										
+								</p:column>
+									
+							</p:row>
+							<p:row>								
+								<p:column>
+									<p:inputText  style="width: 400px;" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<p:separator/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+								  <p:commandButton
+                                     title="Busqueda de Ocupación"
+                                     icon="icon-search"
+                                     value="Buscar"
+                                    
+                                     />
+								</p:column>
+								
+								 	
+								
+							</p:row>
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:separator/>
+					<p:messages id="msgMensajeslstBusOcu"  />
+					
+                    <br />           
+                          
+					<p:dataTable    id="dtBusqueOcupacion" var="ocu" emptyMessage="No hay Ocupaciones para mostrar"
+									
+						 			paginator="true"
+									paginatorPosition="bottom"
+						 			rows="10"
+						 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 			rowsPerPageTemplate="5,10,15"	 							
+									>
+							<p:column headerText="Código"  style="width: 10%">
+								
+							</p:column>
+							<p:column headerText="Ocupación">
+								
+							</p:column>
+							
+							<p:column headerText="Añadir" style="text-align:center;width: 10%;">
+								<p:commandButton title="Añadir" icon="icon-add">
+								
+							</p:commandButton>
+							</p:column>		 
+						
+					</p:dataTable>
+					<br/>					 	
+					  	
+			</p:dialog>
+					
+		</h:form>
+		
+		<!-- ==========================================  DIALOG DE PROFESION  =============================================== -->
+		
+		<h:form id="formBusquedaProfesion">
+			<p:dialog 	id="dlgBusquedaProfesion"
+						widgetVar="dlgBusquedaProfesion"
+						modal="true"
+						resizable="false"
+						header="BUSCAR PROFESIÓN"
+						width="700"
+						showEffect="clip"
+						closable="true"
+						>
+				
+					<p:panelGrid id="pgBusquedaProfesion" columns="2">					
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:outputLabel value="Profesión:&nsbp;" />										
+								</p:column>
+									
+							</p:row>
+							<p:row>								
+								<p:column>
+									<p:inputText  style="width: 400px;" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<p:separator/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+								  <p:commandButton
+                                     title="Busqueda de Profesión"
+                                     icon="icon-search"
+                                     value="Buscar"
+                                    
+                                     />
+								</p:column>
+								
+								 	
+								
+							</p:row>
+						</p:panelGrid>
+					</p:panelGrid>
+					<p:separator/>
+					<p:messages id="msgMensajeslstBusPro"  />
+					
+                    <br />           
+                          
+					<p:dataTable    id="dtBusqueProfesion" var="ocu" emptyMessage="No hay Profesiones para mostrar"
+									
+						 			paginator="true"
+									paginatorPosition="bottom"
+						 			rows="10"
+						 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 			rowsPerPageTemplate="5,10,15"	 							
+									>
+							<p:column headerText="Código"  style="width: 10%">
+								
+							</p:column>
+							<p:column headerText="Profesión">
+								
+							</p:column>
+							
+							<p:column headerText="Añadir" style="text-align:center;width: 10%;">
+								<p:commandButton title="Añadir" icon="icon-add">
+								
+							</p:commandButton>
+							</p:column>		 
+						
+					</p:dataTable>
+					<br/>					 	
+					  	
+			</p:dialog>
+					
+		</h:form>
+	
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+		<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+					header="Status" draggable="false" closable="false"
+					position="center" resizable="false">
+					<h:outputText value="Espere porfavor..." />
+					<br />
+					<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+		</p:dialog>		
+		
+		<script type="text/javascript">  
+        //<![CDATA[
+    		 
+    		
+  			 //]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;" >
+      		 <p:outputLabel value="PREGUNTAS FRECUENTES"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	 
+		
+		<br />		
+		<h:form id="formListaltPregFrec">
+			<p:dataTable id="dtlstPregFrec" var="pre" emptyMessage="No hay registros para mostrar"
+						 value="#{preguntaFrecuentesBean.lstPregFrec}"
+						 paginator="true"
+						 paginatorPosition="bottom"
+						 rows="10"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 rowsPerPageTemplate="5,10,15"
+						>
+				
+				
+ 				
+ 				<p:column headerText="Pregunta">
+					<h:outputText value="#{pre.vDesprefre}" />
+				</p:column>	
+				
+ 				<p:column headerText="Respuesta">
+					<h:outputText value="#{pre.vDesresp}" />
+				</p:column>
+				
+			 	
+				
+				<p:column headerText="Eliminar" style="text-align: center;">
+					<p:commandButton  	id="btnEliminar"							  
+							  			icon="icon-delete"				 
+							  			oncomplete="dlgConfirmacion.show();"					  			
+							  			>
+							  <f:setPropertyActionListener target="#{preguntaFrecuentesBean.pregfrec}"	value="#{pre}" />			
+					</p:commandButton>
+				</p:column>	
+				
+				<p:column headerText="Modificar" style="text-align: center;">
+					<p:commandButton  	id="btnModificar"							  
+							  			icon="icon-edit"				 
+							  			oncomplete="dlgPregunta.show();"
+							  			update=":formPregunta:dlgPregunta"	
+							  			>
+							  	<f:setPropertyActionListener target="#{preguntaFrecuentesBean.pregfrec}"	value="#{pre}" />			
+					</p:commandButton>
+				</p:column>						
+				
+				 
+										
+				
+			</p:dataTable>
+			<p:separator/>
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+							<center>
+							
+								
+							  	<p:commandButton  	id="btnNuevo"							  
+							  						value="Nueva Pregunta"
+							  						icon="icon-add"	
+							  						action="#{preguntaFrecuentesBean.limpiarPregunta}"	
+							  						update=":formPregunta:dlgPregunta"		 
+							  				    	oncomplete="dlgPregunta.show();"		
+							  						
+							  						/>
+							  
+												
+					</center>
+					</p:column>
+				</p:row>
+			</p:panelGrid>		
+		</h:form>		
+ 
+		
+		
+		
+		<h:form id="formPregunta">
+		<p:dialog id="dlgPregunta"
+							 widgetVar="dlgPregunta"
+							 header="PREGUNTAS FRECUENTES"							 
+							 width="600px"
+							 modal="true">
+				<center >		
+				
+				<!-- ===============================================================================P1 DATOS PREGUNTA========================================================================================= -->
+		
+				<p:panel 	
+							id="pdatosPregunta" >
+					<p:panelGrid 	id="pgdatosPregunta">
+						<p:row >
+							<p:column  >
+								<h:outputLabel value="Pregunta" />								
+							</p:column>
+							<p:column >								
+								<p:inputTextarea 	styleClass="cajaAmplia"
+													value="#{preguntaFrecuentesBean.pregfrec.vDesprefre}"
+													required="true"
+													requiredMessage="Ingrese la pregunta"
+													maxlength="250"	
+													counter="tamPregunta"
+													counterTemplate="Máximo de caracteres {0}"
+													/>
+								<br/>
+								<h:outputText id="tamPregunta"/>
+							</p:column>
+						</p:row>
+						<p:row >	
+							<p:column  >
+								<h:outputLabel value="Respuesta"/>								
+							</p:column>
+							<p:column >								
+								<p:inputTextarea 	styleClass="cajaAmplia"
+													value="#{preguntaFrecuentesBean.pregfrec.vDesresp}"
+													required="true"
+													requiredMessage="Ingrese la respuesta"
+													maxlength="1000"	
+													counter="tamRespuesta"
+													counterTemplate="Máximo de caracteres {0}"
+													/>
+								<br/>
+								<h:outputText id="tamRespuesta"/>
+								
+							</p:column>
+							
+						</p:row>	
+						
+				
+										
+					</p:panelGrid>
+				</p:panel>
+				<p:separator/>
+				
+				
+				<p:commandButton  	id="btnGrabarPre"							  
+							  		icon="icon-disk"				 
+							  		value="Grabar"
+							  		action="#{preguntaFrecuentesBean.grabarPregunta}"
+							  		update=":formListaltPregFrec:dtlstPregFrec, :formPregunta:pgdatosPregunta"
+							  		oncomplete="xdlgPregunta(xhr, status, args);"
+							  		rendered="#{preguntaFrecuentesBean.pregfrec.nCodprefre==null}"
+							  		/>
+							  		
+				<p:commandButton  	id="btnModPre"							  
+							  		icon="icon-disk"				 
+							  		value="Grabar"
+							  		action="#{preguntaFrecuentesBean.modificarPregunta}"
+							  		update=":formListaltPregFrec:dtlstPregFrec, :formPregunta:pgdatosPregunta"
+							  		oncomplete="xdlgPregunta(xhr, status, args);"
+							  		rendered="#{preguntaFrecuentesBean.pregfrec.nCodprefre!=null}"
+							  		/>			  		
+					 						 
+							 
+			   </center>
+		</p:dialog>	
+		</h:form>
+		
+		
+		<h:form id="formConfirmacion">
+		<p:confirmDialog id="dlgConfirmacion"
+							 widgetVar="dlgConfirmacion"
+							 header="ELIMINAR PREGUNTA"
+							 message="¿Está seguro de eliminar la pregunta?"
+							 severity="alert"
+							  width="600px">
+				<center >			 
+				<p:commandButton id="btnConfEliminarPre"
+								 value="Confirmar"
+							  	 icon="icon-pref"	
+							  	 action="#{preguntaFrecuentesBean.eliminarPregunta}"	
+							  	 update=":formListaltPregFrec:dtlstPregFrec"
+							  	 oncomplete="dlgConfirmacion.hide();" 						  	 
+							  	 />
+								 
+				<p:commandButton value="Cancelar"                				 
+                                 onclick="dlgConfirmacion.hide();"                               
+                                 icon="icon-cancel" />				 
+							 
+			   </center>
+		</p:confirmDialog>	
+		</h:form>
+		
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+	</p:fieldset>	
+	
+		<script type="text/javascript">  
+        //<![CDATA[
+    		
+    		
+    		function xdlgPregunta(xhr, status, args) {
+    			 if(args.validationFailed==true) {       					 
+    				 dlgPregunta.show();      					  	
+					  } else {        					  	         					  
+						  dlgPregunta.hide();  
+    
+				 	}  
+    			
+			}
+ 			 
+    		
+  			 //]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

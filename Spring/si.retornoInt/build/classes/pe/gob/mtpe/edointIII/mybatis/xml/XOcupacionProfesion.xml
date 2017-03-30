@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="OcupacionProfesion">
+
+<!-- ============================================OCUPACION============================================================== -->
+<resultMap id="resultOcupaxdeman-out" type="Ocupaxdeman" >
+    <id 	column="N_COROCDEM" 	property="nCorocdem" 	jdbcType="DECIMAL" />
+    <result column="V_CODOCUPAC" 	property="vCodocupac" 	jdbcType="VARCHAR" />
+    <result column="V_PERIODO" 		property="vPeriodo" 	jdbcType="VARCHAR" />
+    <result column="N_NUMTRABA" 	property="nNumtraba" 	jdbcType="DECIMAL" />
+    <result column="N_CORNIVEDU" 	property="nCornivedu" 	jdbcType="DECIMAL" />
+    <result column="V_FLGCAP" 		property="vFlgcap" 		jdbcType="VARCHAR" />
+    <result column="N_MONREMBRU" 	property="nMonrembru" 	jdbcType="DECIMAL" />
+    <result column="V_FLGEXPLAB" 	property="vFlgexplab" 	jdbcType="VARCHAR" />
+    <result column="V_CODDEP" 		property="vCoddep" 		jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+    <result column="V_CODPRO" 		property="vCodpro" 		jdbcType="VARCHAR" />
+    <result column="N_COREDA" 		property="nCoreda" 		jdbcType="DECIMAL" />
+    <result column="N_ISEM" 		property="nIsem" 		jdbcType="DECIMAL" />
+    <result column="N_IISEM" 		property="nIisem" 		jdbcType="DECIMAL" />
+    <result column="I_GENERO" 		property="iGenero" 		jdbcType="DECIMAL" />
+    <result column="V_FLGCONDIS" 	property="vFlgcondis" 	jdbcType="VARCHAR" />
+    <result column="N_NUMTRADIS" 	property="nNumtradis" 	jdbcType="DECIMAL" />
+    <result column="V_CODEMP" 		property="vCodemp" 		jdbcType="VARCHAR" />  
+   
+    <collection    property="lstProfesion" 	column="n_corocdem" javaType="ArrayList" ofType="Ocuxprofe" 	    select="selectOcuxprofe"/>
+    <collection    property="lstCapacitacion" 	column="n_corocdem" javaType="ArrayList" ofType="Ocupxcapa" 	select="selectOcupxcapa"/>
+    <collection    property="lstLimitacion" 	column="nCorocdem=n_corocdem" javaType="ArrayList" ofType="Ocudemxlim" 	select="selectOcudemxlim"/>
+    <collection    property="lstMotivosNoC" 	column="nCorocdem=n_corocdem" javaType="ArrayList" ofType="Ocudemxmot" 	select="selectOcudemxmot"/>
+ </resultMap>
+ 
+<resultMap id="resultOcupacion-out" type="Ocupacion" >
+    <id 	column="V_CODOCUPAC" property="vCodocupac" jdbcType="VARCHAR" />
+    <result column="V_DESOCUPAC" property="vDesocupac" jdbcType="VARCHAR" />
+    <result column="N_FLGSUNMIN" property="nFlgsunmin" jdbcType="DECIMAL" />
+    <result column="V_CODGGOCUP" property="vCodggocup" jdbcType="VARCHAR" />
+    <result column="V_FLGINEI" 	 property="vFlginei" jdbcType="VARCHAR" />
+  </resultMap>	
+
+<resultMap id="resultOcuxprofe-out" type="Ocuxprofe" >
+    <id 	column="N_COROCUPRO" 	property="nCorocupro" 	jdbcType="DECIMAL" />
+    <result column="V_CODPROF" 		property="vCodprof" 	jdbcType="VARCHAR" />
+    <result column="N_COROCDEM"	 	property="nCorocdem" 	jdbcType="DECIMAL" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+<resultMap id="resultOcupxcapa-out" type="Ocupxcapa" >
+    <id 	column="N_COROCUCAP"	property="nCorocucap" 	jdbcType="DECIMAL" />
+    <result column="N_COROCDEM" 	property="nCorocdem" 	jdbcType="DECIMAL" />
+    <result column="N_CORCAP" 		property="nCorcap" 		jdbcType="DECIMAL" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  
+  <resultMap id="resultOcupacionMap-out" type="map" >  	
+    <result column="n_corocdem"		property="n_corocdem" 	/>
+    <result column="v_desdep" 		property="v_desdep"  />
+    <result column="v_despro" 		property="v_despro"  />
+    <result column="v_desocupac" 	property="v_desocupac" 	/>
+    
+    <result column="v_coddep" 		property="v_coddep"  />
+    <result column="v_codpro" 		property="v_codpro"  />
+    <result column="v_codocupac" 	property="v_codocupac" 	/>
+    
+    <result column="n_numtraba" 	property="n_numtraba" 	/>
+    <result column="profesiones" 	property="profesiones" 	/>
+    <result column="capacitaciones" property="capacitaciones"  />
+     <result column="n_monrembru" 	property="n_monrembru" 	/>
+    <result column="numTraSem" 		property="numTraSem"  />
+    
+  </resultMap>
+  
+  <resultMap id="resultOcudemxmot-out" type="Ocudemxmot" >
+    <id 	column="N_CORMOTIVO" 	property="nCormotivo" 	jdbcType="DECIMAL" />
+    <id 	column="N_COROCDEM" 	property="nCorocdem" 	jdbcType="DECIMAL" />
+    <result column="V_OBSESPECI" 	property="vObsespeci" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD"	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="selectOcupaxdeman" resultMap="resultOcupaxdeman-out" timeout="15" parameterType="Ocupaxdeman">
+SELECT 
+	 N_COROCDEM, 
+	 V_CODOCUPAC, 
+	 V_PERIODO, 
+	 N_NUMTRABA, 
+	 N_CORNIVEDU, 
+	 V_FLGCAP, 
+	 N_MONREMBRU, 
+     V_FLGEXPLAB, 
+     V_CODDEP, 
+     V_CODUSUREG, 
+     D_FECREG, 
+     V_HOSTREG, 
+     V_CODUSUMOD, 
+     D_FECMOD, 
+     V_HOSTMOD, 
+     V_CODPRO, 
+     N_COREDA, 
+     N_ISEM, 
+     N_IISEM, 
+     I_GENERO, 
+     V_FLGCONDIS, 
+     N_NUMTRADIS, 
+     V_CODEMP
+ FROM ENMVD_OCUPAXDEMAN  
+ 
+ <trim prefix="WHERE" prefixOverrides="AND |OR "> 
+	 <if test="nCorocdem != null" >
+       AND N_COROCDEM=#{nCorocdem}
+      </if>     
+
+	</trim>
+ 
+</select>
+<select id="selectOcuxprofe" resultMap="resultOcuxprofe-out" parameterType="Ocuxprofe" >
+ 	SELECT
+ 		N_COROCUPRO, 
+ 		V_CODPROF, 
+ 		N_COROCDEM, 
+ 		V_CODUSUREG, 
+ 		D_FECREG, 
+ 		V_HOSTREG, 
+ 		V_CODUSUMOD, 
+    	D_FECMOD, 
+    	V_HOSTMOD
+ 	FROM ENMVS_OCUXPROFE 	
+ 	WHERE 
+ 		 n_corocdem = #{nCorocdem}
+ </select> 
+ 
+ <select id="selectOcupxcapa" resultMap="resultOcupxcapa-out" parameterType="Ocupxcapa" >
+ 	SELECT
+ 		N_COROCUCAP, 
+ 		N_COROCDEM, 
+ 		N_CORCAP, 
+ 		V_CODUSUREG, 
+ 		D_FECREG, 
+ 		V_HOSTREG, 
+ 		V_CODUSUMOD, 
+    	D_FECMOD, 
+    	V_HOSTMOD
+ 	FROM ENMVD_OCUPXCAPA 	
+ 	WHERE 
+ 		 n_corocdem = #{nCorocdem}
+ </select> 
+ 
+
+<select id="selectOcupacion" resultMap="resultOcupacion-out" parameterType="ParamBusOcupacion" >
+	SELECT
+		 V_CODOCUPAC,
+		 V_DESOCUPAC,
+		 N_FLGSUNMIN,
+		 V_CODGGOCUP,
+		 V_FLGINEI
+	FROM VST_OCUPACION
+	<trim prefix="WHERE" prefixOverrides="AND |OR "> 
+	 <if test="vCodocupac != null and vDesocupac == null" >
+       AND V_CODOCUPAC=#{vCodocupac}
+      </if>
+      <if test="vDesocupac != null and vCodocupac == null" >
+       AND V_DESOCUPAC LIKE '%' || UPPER(#{vDesocupac}) ||'%' 
+      </if>
+       <if test="vDesocupac != null and vCodocupac != null" >
+          V_CODOCUPAC=#{vCodocupac} and V_DESOCUPAC LIKE '%' || UPPER(#{vDesocupac}) ||'%'  
+      </if>
+	</trim>
+</select>
+
+<select id="selectOcupacionVal" resultMap="resultOcupacion-out" parameterType="Ocupacion" >
+	SELECT 
+		 V_CODOCUPAC,
+		 V_DESOCUPAC,
+		 N_FLGSUNMIN,
+		 V_CODGGOCUP,
+		 V_FLGINEI
+	FROM entbc_ocupacionedo 
+	where 1=1
+	 <if test="vCodocupac != null" >
+       AND  V_CODOCUPAC=#{vCodocupac}
+      </if>
+</select>
+
+<insert id="insertOcupaxdeman" parameterType="Ocupaxdeman" >
+ <selectKey resultType="int" keyProperty="nCorocdem" order="BEFORE">
+           SELECT seq_ocudeman.Nextval FROM DUAL
+  </selectKey>
+    insert into ENMVD_OCUPAXDEMAN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nCorocdem != null" >
+        N_COROCDEM,
+      </if>
+      <if test="vCodocupac != null" >
+        V_CODOCUPAC,
+      </if>
+      <if test="vPeriodo != null" >
+        V_PERIODO,
+      </if>
+      <if test="nNumtraba != null" >
+        N_NUMTRABA,
+      </if>
+      <if test="nCornivedu != null" >
+        N_CORNIVEDU,
+      </if>
+      <if test="vFlgcap != null" >
+        V_FLGCAP,
+      </if>
+      <if test="nMonrembru != null" >
+        N_MONREMBRU,
+      </if>
+      <if test="vFlgexplab != null" >
+        V_FLGEXPLAB,
+      </if>
+      <if test="vCoddep != null" >
+        V_CODDEP,
+      </if>
+      <if test="vCodusureg != null" >
+        V_CODUSUREG,
+      </if>
+      <if test="dFecreg != null" >
+        D_FECREG,
+      </if>
+      <if test="vHostreg != null" >
+        V_HOSTREG,
+      </if>
+      <if test="vCodusumod != null" >
+        V_CODUSUMOD,
+      </if>
+      <if test="dFecmod != null" >
+        D_FECMOD,
+      </if>
+      <if test="vHostmod != null" >
+        V_HOSTMOD,
+      </if>
+      <if test="vCodpro != null" >
+        V_CODPRO,
+      </if>
+      <if test="nCoreda != null" >
+        N_COREDA,
+      </if>
+      <if test="nIsem != null" >
+        N_ISEM,
+      </if>
+      <if test="nIisem != null" >
+        N_IISEM,
+      </if>
+      <if test="iGenero != null" >
+        I_GENERO,
+      </if>
+      <if test="vFlgcondis != null" >
+        V_FLGCONDIS,
+      </if>
+      <if test="nNumtradis != null" >
+        N_NUMTRADIS,
+      </if>
+      <if test="vCodemp != null" >
+        V_CODEMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nCorocdem != null" >
+        #{nCorocdem,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodocupac != null" >
+        #{vCodocupac,jdbcType=VARCHAR},
+      </if>
+      <if test="vPeriodo != null" >
+        #{vPeriodo,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtraba != null" >
+        #{nNumtraba,jdbcType=DECIMAL},
+      </if>
+      <if test="nCornivedu != null" >
+        #{nCornivedu,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgcap != null" >
+        #{vFlgcap,jdbcType=VARCHAR},
+      </if>
+      <if test="nMonrembru != null" >
+        #{nMonrembru,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgexplab != null" >
+        #{vFlgexplab,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddep != null" >
+        #{vCoddep,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusureg != null" >
+        #{vCodusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null" >
+        #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostreg != null" >
+        #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusumod != null" >
+        #{vCodusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmod != null" >
+        #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostmod != null" >
+        #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpro != null" >
+        #{vCodpro,jdbcType=VARCHAR},
+      </if>
+      <if test="nCoreda != null" >
+        #{nCoreda,jdbcType=DECIMAL},
+      </if>
+      <if test="nIsem != null" >
+        #{nIsem,jdbcType=DECIMAL},
+      </if>
+      <if test="nIisem != null" >
+        #{nIisem,jdbcType=DECIMAL},
+      </if>
+      <if test="iGenero != null" >
+        #{iGenero,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgcondis != null" >
+        #{vFlgcondis,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtradis != null" >
+        #{nNumtradis,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodemp != null" >
+        #{vCodemp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+<update id="updateOcupaxdeman" parameterType="Ocupaxdeman" >
+    update ENMVD_OCUPAXDEMAN
+    <set >
+      <if test="nCorocdem != null" >
+        N_COROCDEM = #{nCorocdem,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodocupac != null" >
+        V_CODOCUPAC = #{vCodocupac,jdbcType=VARCHAR},
+      </if>
+      <if test="vPeriodo != null" >
+        V_PERIODO = #{vPeriodo,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtraba != null" >
+        N_NUMTRABA = #{nNumtraba,jdbcType=DECIMAL},
+      </if>
+      <if test="nCornivedu != null" >
+        N_CORNIVEDU = #{nCornivedu,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgcap != null" >
+        V_FLGCAP = #{vFlgcap,jdbcType=VARCHAR},
+      </if>
+      <if test="nMonrembru != null" >
+        N_MONREMBRU = #{nMonrembru,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgexplab != null" >
+        V_FLGEXPLAB = #{vFlgexplab,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddep != null" >
+        V_CODDEP = #{vCoddep,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusureg != null" >
+        V_CODUSUREG = #{vCodusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null" >
+        D_FECREG = #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostreg != null" >
+        V_HOSTREG = #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusumod != null" >
+        V_CODUSUMOD = #{vCodusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmod != null" >
+        D_FECMOD = #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostmod != null" >
+        V_HOSTMOD = #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpro != null" >
+        V_CODPRO = #{vCodpro,jdbcType=VARCHAR},
+      </if>
+      <if test="nCoreda != null" >
+        N_COREDA = #{nCoreda,jdbcType=DECIMAL},
+      </if>
+      <if test="nIsem != null" >
+        N_ISEM = #{nIsem,jdbcType=DECIMAL},
+      </if>
+      <if test="nIisem != null" >
+        N_IISEM = #{nIisem,jdbcType=DECIMAL},
+      </if>
+      <if test="iGenero != null" >
+        I_GENERO = #{iGenero,jdbcType=DECIMAL},
+      </if>
+      <if test="vFlgcondis != null" >
+        V_FLGCONDIS = #{vFlgcondis,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtradis != null" >
+        N_NUMTRADIS = #{nNumtradis,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodemp != null" >
+        V_CODEMP = #{vCodemp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where N_COROCDEM = #{nCorocdem,jdbcType=DECIMAL}
+  </update>
+  
+  <delete id="deleteOcupaxdeman" parameterType="Ocupaxdeman" >
+    delete from ENMVD_OCUPAXDEMAN
+    where n_corocdem = #{nCorocdem}
+  </delete>
+ 
+<insert id="insertOcuxprofe" parameterType="java.util.List" >
+     INSERT ALL   
+    	<foreach collection="list" item="Ocuxprofe" >    	 
+    	into ENMVS_OCUXPROFE (N_COROCUPRO, V_CODPROF, N_COROCDEM, 
+      		V_CODUSUREG, D_FECREG, V_HOSTREG, 
+     		V_CODUSUMOD, D_FECMOD, V_HOSTMOD)
+    	values (#{Ocuxprofe.nCorocupro,jdbcType=DECIMAL}, #{Ocuxprofe.vCodprof,jdbcType=VARCHAR},  #{Ocuxprofe.nCorocdem,jdbcType=DECIMAL}, 
+      			#{Ocuxprofe.vCodusureg,jdbcType=VARCHAR}, #{Ocuxprofe.dFecreg,jdbcType=TIMESTAMP}, #{Ocuxprofe.vHostreg,jdbcType=VARCHAR}, 
+     			#{Ocuxprofe.vCodusumod,jdbcType=VARCHAR}, #{Ocuxprofe.dFecmod,jdbcType=TIMESTAMP}, #{Ocuxprofe.vHostmod,jdbcType=VARCHAR})
+    	</foreach>
+    SELECT * FROM DUAL
+  </insert>
+  
+  <delete id="deleteOcuxprofe" parameterType="Ocuxprofe" >
+    delete from ENMVS_OCUXPROFE
+    where n_corocdem = #{nCorocdem}
+  </delete>
+  
+
+<!-- ============================================================================================================================== --> 
+<insert id="insertOcudemxmotn" parameterType="java.util.List" >
+     INSERT ALL
+    	<foreach collection="list" item="Ocudemxmot" >
+    		 into ENMVS_OCUDEMXMOT (N_CORMOTIVO, N_COROCDEM, V_OBSESPECI, 
+      V_CODUSUREG, D_FECREG, V_HOSTREG, 
+      V_CODUSUMOD, D_FECMOD, V_HOSTMOD
+      )
+    values (#{Ocudemxmot.nCormotivo,jdbcType=DECIMAL}, #{Ocudemxmot.nCorocdem,jdbcType=DECIMAL}, #{Ocudemxmot.vObsespeci,jdbcType=VARCHAR}, 
+      #{Ocudemxmot.vCodusureg,jdbcType=VARCHAR}, #{Ocudemxmot.dFecreg,jdbcType=TIMESTAMP}, #{Ocudemxmot.vHostreg,jdbcType=VARCHAR}, 
+      #{Ocudemxmot.vCodusumod,jdbcType=VARCHAR}, #{Ocudemxmot.dFecmod,jdbcType=TIMESTAMP}, #{Ocudemxmot.vHostmod,jdbcType=VARCHAR}
+      )
+    	</foreach>
+    SELECT * FROM DUAL
+</insert>
+
+  <delete id="deleteOcudemxmotn" parameterType="Ocudemxmot" >
+    delete from ENMVS_OCUDEMXMOT
+    where N_COROCDEM = #{nCorocdem,jdbcType=DECIMAL}
+      
+  </delete>
+    
+  	<select id="selectOcudemxmot" resultMap="resultOcudemxmot-out" parameterType="Ocudemxmot" >
+  		SELECT
+  			N_CORMOTIVO, 
+  			N_COROCDEM ,   			 
+  			V_OBSESPECI, 
+  			V_CODUSUREG, 
+  			D_FECREG, 
+  			V_HOSTREG, 
+    		V_CODUSUMOD, 
+    		D_FECMOD, 
+    		V_HOSTMOD
+  		from enmvs_ocudemxmot
+    	 where 	N_COROCDEM = #{nCorocdem,jdbcType=DECIMAL}
+      		 
+  	
+  	</select>
+  	
+  	<!-- ============================================================================================================================ -->
+
+
+  
+  <select id="selectOcupacionMap" resultMap="resultOcupacionMap-out" parameterType="Encuesta">
+  		SELECT 
+      c.n_corocdem as n_corocdem,
+      d.v_desdep as v_desdep, 
+      p.v_despro as v_despro,
+      o.v_desocupac as v_desocupac,
+      
+      d.v_coddep as v_coddep, 
+      p.v_codpro as v_codpro,
+      o.v_codocupac as v_codocupac,
+      
+      c.n_numtraba as n_numtraba,
+      fnc_profesioned(n_corocdem) as profesiones,
+      fnc_capacitacioned(n_corocdem) AS capacitaciones,
+      c.n_monrembru as n_monrembru,          
+          ('I: '||c.n_iisem||' '||'II: '||c.n_isem) as numTraSem
+    FROM enmvd_ocupaxdeman c inner join entbc_ocupacionedo o on(o.v_codocupac=c.v_codocupac)
+         inner join simintra1.sitb_provincia p on(p.v_coddep=c.v_coddep and p.v_codpro=c.v_codpro)
+         inner join simintra1.sitb_departamento d on(d.v_coddep=p.v_coddep)
+		where 
+			c.v_periodo=#{vPeriodo}
+			and c.v_codemp=#{vCodemp}
+  		
+  </select>
+
+  <insert id="insertOcupacion" parameterType="Ocupacion" >
+   <selectKey resultType="String" keyProperty="vCodocupac" order="BEFORE">
+         select
+			SEQ_OCUPACIONEDO.Nextval
+			from
+			DUAL
+   </selectKey>
+    insert into ENTBC_OCUPACIONEDO (V_CODOCUPAC, V_DESOCUPAC, N_FLGSUNMIN, 
+      V_CODGGOCUP, V_FLGINEI)
+    values (#{vCodocupac,jdbcType=VARCHAR}, upper(#{vDesocupac,jdbcType=VARCHAR}), #{nFlgsunmin,jdbcType=DECIMAL}, 
+      #{vCodggocup,jdbcType=VARCHAR}, #{vFlginei,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertOcupacionxCodigo" parameterType="Ocupacion" >   
+    insert into ENTBC_OCUPACIONEDO (V_CODOCUPAC, V_DESOCUPAC, N_FLGSUNMIN, 
+      V_CODGGOCUP, V_FLGINEI)
+    values (#{vCodocupac,jdbcType=VARCHAR}, upper(#{vDesocupac,jdbcType=VARCHAR}), #{nFlgsunmin,jdbcType=DECIMAL}, 
+      #{vCodggocup,jdbcType=VARCHAR}, #{vFlginei,jdbcType=VARCHAR})
+  </insert>
+
+<!-- ==========================================================PROFESION=============================================== -->
+<resultMap id="resultProfesion-out" type="Profesion" >
+    <id 	column="V_CODPROF" 		property="vCodprof" 	jdbcType="VARCHAR" />
+    <result column="V_DESPROF" 		property="vDesprof" 	jdbcType="VARCHAR" />
+    <result column="N_FLGSUNMIN" 	property="nFlgsunmin" 	jdbcType="DECIMAL" />
+    <result column="V_CODGGPROF" 	property="vCodggprof" 	jdbcType="VARCHAR" />
+    <result column="V_FLGINEI" 		property="vFlginei" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 
+  	<select id="selectProfesion" resultMap="resultProfesion-out" >
+	SELECT 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+  FROM  VST_PROFESION p
+        LEFT JOIN enmvs_ocuxprofe o ON(o.v_codprof=p.v_codprof)       
+         
+ 	WHERE p.v_codprof not like '%5' 
+	
+	 <if test="vCodprof != null">
+       AND p.V_CODPROF=#{vCodprof}
+      </if>
+      <if test="vDesprof != null">
+       AND p.V_DESPROF LIKE '%' || UPPER(#{vDesprof}) ||'%'
+      </if>
+ 	 <if test="nCorocdem != null">
+       AND o.n_corocdem=#{nCorocdem}
+      </if>
+   
+      
+ group by 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+	
+ 
+</select>
+   -->
+   
+   <select id="selectProfesion" resultMap="resultProfesion-out" >
+	SELECT 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+  FROM  VST_PROFESION p
+        LEFT JOIN enmvs_ocuxprofe o ON(o.v_codprof=p.v_codprof)       
+         
+ 	
+   <trim prefix="WHERE" prefixOverrides="AND |OR ">
+
+			
+	 <if test="vCodprof != null">
+       AND p.V_CODPROF=#{vCodprof}
+      </if>
+      <if test="vDesprof != null">
+       AND p.V_DESPROF LIKE '%' || UPPER(#{vDesprof}) ||'%'
+      </if>
+ 	 <if test="nCorocdem != null">
+       AND o.n_corocdem=#{nCorocdem}
+      </if>
+			
+
+   </trim>
+      
+ group by 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+	
+ 
+</select>
+  
+  
+
+<select id="selectProfesionVal" resultMap="resultProfesion-out" >
+	SELECT 
+      p.V_CODPROF, 
+      p.V_DESPROF, 
+      p.N_FLGSUNMIN, 
+      p.V_CODGGPROF, 
+      p.V_FLGINEI
+  FROM  ENTBC_PROFESIONEDO p 
+  where 	 
+        p.V_CODPROF=#{vCodprof}
+     
+	
+ 
+</select>
+
+<insert id="insertProfesion" parameterType="Profesion" >
+	<selectKey resultType="String" keyProperty="vCodprof" order="BEFORE">
+          select 
+			seq_profesionedo.nextval
+		  from 
+			DUAL
+   </selectKey>
+    insert into ENTBC_PROFESIONEDO (V_CODPROF, V_DESPROF, N_FLGSUNMIN, 
+      V_CODGGPROF, V_FLGINEI)
+    values (#{vCodprof,jdbcType=VARCHAR}, upper(#{vDesprof,jdbcType=VARCHAR}), #{nFlgsunmin,jdbcType=DECIMAL}, 
+      #{vCodggprof,jdbcType=VARCHAR}, #{vFlginei,jdbcType=VARCHAR})
+</insert>
+ 
+<insert id="insertProfesionXCodigo" parameterType="Profesion" >
+    insert into ENTBC_PROFESIONEDO (V_CODPROF, V_DESPROF, N_FLGSUNMIN, 
+      V_CODGGPROF, V_FLGINEI)
+    values (#{vCodprof,jdbcType=VARCHAR}, upper(#{vDesprof,jdbcType=VARCHAR}), #{nFlgsunmin,jdbcType=DECIMAL}, 
+      #{vCodggprof,jdbcType=VARCHAR}, #{vFlginei,jdbcType=VARCHAR})
+</insert>  
+  
+
+<!-- ==========================================================NIVEL EDUCATIVO========================================= -->
+<resultMap id="resultNivelEducativo-out" type="Nivedu" >
+    <id 	column="N_CORNIVEDU" property="nCornivedu"  jdbcType="DECIMAL" />
+    <result column="V_DESNIVESU" property="vDesnivesu"  jdbcType="VARCHAR" />
+    <result column="V_FLGACTIVO" 	 property="vFlgact" 	jdbcType="VARCHAR" />
+   
+  </resultMap>
+<select id="selectNivelEducativo" resultMap="resultNivelEducativo-out" >
+	SELECT 
+		  N_CORNIVEDU, 
+		  V_DESNIVESU, 
+		  V_FLGACTIVO
+		  
+	FROM  ENTBC_NIVEDU 
+	WHERE
+	 V_FLGACTIVO='A'
+	
+
+	
+</select>
+<!-- ==========================================================LIMITACION========================================= -->
+  <delete id="deleteOcudemxlim" parameterType="Ocudemxlim">
+    delete from ENMVS_OCUDEMXLIM
+    where n_corocdem=#{nCorocdem,jdbcType=DECIMAL}   
+  </delete> 
+  
+<insert id="insertListOcudemxlim" parameterType="java.util.List" >
+     INSERT ALL   
+    	<foreach collection="list" item="Ocudemxlim">    	 
+    	into ENMVS_OCUDEMXLIM (N_CORLIMIT, N_COROCDEM, V_OBSESPECI, 
+      							V_CODUSUREG, D_FECREG, V_HOSTREG, 
+     							V_CODUSUMOD, D_FECMOD, V_HOSTMOD
+      							)
+    	values (#{Ocudemxlim.nCorlimit,jdbcType=DECIMAL}, #{Ocudemxlim.nCorocdem,jdbcType=DECIMAL}, #{Ocudemxlim.vObsespeci,jdbcType=VARCHAR}, 
+      			#{Ocudemxlim.vCodusureg,jdbcType=VARCHAR}, #{Ocudemxlim.dFecreg,jdbcType=TIMESTAMP}, #{Ocudemxlim.vHostreg,jdbcType=VARCHAR}, 
+     			#{Ocudemxlim.vCodusumod,jdbcType=VARCHAR}, #{Ocudemxlim.dFecmod,jdbcType=TIMESTAMP}, #{Ocudemxlim.vHostmod,jdbcType=VARCHAR}
+      			)
+    	</foreach>
+    SELECT * FROM DUAL
+  </insert>
+ 
+  
+  <resultMap id="resultOcudemxlim-out" type="Ocudemxlim" >
+    <id 	column="N_CORLIMIT" 	property="nCorlimit" 	jdbcType="DECIMAL" />
+    <id 	column="N_COROCDEM" 	property="nCorocdem" 	jdbcType="DECIMAL" />
+    <result column="V_OBSESPECI" 	property="vObsespeci" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="selectOcudemxlim" resultMap="resultOcudemxlim-out" parameterType="Ocudemxlim">
+	SELECT 
+		  N_CORLIMIT, 
+		  N_COROCDEM, 
+		  V_OBSESPECI, 
+		  V_CODUSUREG, 
+		  D_FECREG, 
+		  V_HOSTREG, 
+		  V_CODUSUMOD, 
+    	  D_FECMOD, 
+    	  V_HOSTMOD
+	FROM  ENMVS_OCUDEMXLIM
+	 
+	<trim prefix="WHERE" prefixOverrides="AND |OR "> 	
+ 	 <if test="nCorocdem != null" >
+       n_corocdem=#{nCorocdem}
+      </if>
+	</trim>
+	
+</select>
+<!-- ==========================================================EDAD========================================= -->
+<resultMap id="resultEdad-out" type="Edad" >
+    <id 	column="N_COREDA" property="nCoreda" jdbcType="DECIMAL" />
+    <result column="V_DESEDA" property="vDeseda" jdbcType="VARCHAR" />
+    <result column="V_FLGACTIVO" property="vFlgact" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="selectEdad" resultMap="resultEdad-out" >
+	SELECT 
+		  N_COREDA, 
+		  V_DESEDA, 
+		  V_FLGACTIVO
+	FROM  ENTBC_EDAD 
+	WHERE
+	 V_FLGACTIVO='A'
+	
+</select>
+
+<!-- ==========================================================CAPACITACION========================================= -->
+<insert id="insertCapacitacion" parameterType="Capacitacion" >
+   <selectKey resultType="int" keyProperty="nCorcap" order="BEFORE">
+           SELECT SEQ_CAPACITAEDO.Nextval FROM DUAL
+   </selectKey>
+    insert into ENTBC_CAPACITACION (N_CORCAP, V_DESCAP, V_FLGACTIVO, 
+      V_CODCAP)
+    values (#{nCorcap,jdbcType=DECIMAL}, UPPER(#{vDescap,jdbcType=VARCHAR}), #{vFlgcap,jdbcType=VARCHAR}, 
+      #{vCodcap,jdbcType=VARCHAR})
+  </insert>
+ 
+ 
+ <select id="selectCapacitacion" resultType="Capacitacion" parameterType="Capacitacion">
+ 	SELECT  
+      c.N_CORCAP as nCorcap, 
+      c.V_DESCAP as vDescap, 
+      c.V_FLGACTIVO as vFlgcap, 
+      c.V_CODCAP as vCodcap
+      
+   FROM ENTBC_CAPACITACION c
+        LEFT JOIN  enmvd_ocupxcapa o on(o.n_corcap=c.n_corcap)
+   WHERE V_FLGACTIVO='A' 	
+	 <if test="nCorcap != null" >
+       AND c.N_CORCAP=#{nCorcap}
+      </if>
+      <if test="vDescap != null" >
+       AND c.V_DESCAP LIKE '%' || UPPER(#{vDescap}) ||'%'
+      </if>
+      <if test="nCorocdem != null" >
+       AND o.n_corocdem=#{nCorocdem}
+      </if>
+   group by 
+    c.N_CORCAP, 
+      c.V_DESCAP, 
+      c.V_FLGACTIVO, 
+      c.V_CODCAP 
+      
+   
+
+	
+ 	 
+ </select>
+ 
+ <insert id="insertOcupxcapa" parameterType="java.util.List" >
+     INSERT ALL
+    	<foreach collection="list" item="Ocupxcapa" >
+    	into ENMVD_OCUPXCAPA (N_COROCUCAP, N_COROCDEM, N_CORCAP, 
+      								 V_CODUSUREG, D_FECREG, V_HOSTREG, 
+      								 V_CODUSUMOD, D_FECMOD, V_HOSTMOD)
+    	values  (#{Ocupxcapa.nCorocucap,jdbcType=DECIMAL}, #{Ocupxcapa.nCorocdem,jdbcType=DECIMAL}, #{Ocupxcapa.nCorcap,jdbcType=DECIMAL}, 
+     			 #{Ocupxcapa.vCodusureg,jdbcType=VARCHAR}, #{Ocupxcapa.dFecreg,jdbcType=TIMESTAMP}, #{Ocupxcapa.vHostreg,jdbcType=VARCHAR}, 
+     			 #{Ocupxcapa.vCodusumod,jdbcType=VARCHAR}, #{Ocupxcapa.dFecmod,jdbcType=TIMESTAMP}, #{Ocupxcapa.vHostmod,jdbcType=VARCHAR}
+      )
+    	</foreach>
+    SELECT * FROM DUAL
+  </insert>
+  
+   <delete id="deleteOcupxcapa" parameterType="Ocupxcapa" >
+    delete from ENMVD_OCUPXCAPA
+    where n_corocdem = #{nCorocdem}
+  </delete>
+ 
+</mapper>

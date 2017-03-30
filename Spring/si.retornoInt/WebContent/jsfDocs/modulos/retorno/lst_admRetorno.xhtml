@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+	<p:fieldset>			
+		<p:toolbar>
+   			<p:toolbarGroup align="center" styleClass="ui-widget-header" style="border: 0px !important;" >
+      		 <p:outputLabel value="ADMINISTRACIÓN DE LA PLATAFORMA DE RETORNO PRODUCTIVO"/>
+   			</p:toolbarGroup>
+		</p:toolbar>
+	<br/>
+	
+		<h:form id="formlstRetorno">
+			<p:panel id="panellstRetorno" >
+				
+					<p:panelGrid id="pglstRetorno" styleClass="panelBusqueda">
+						
+				<p:row >
+							<p:column  >
+								<h:outputLabel value="Tipo de Documento"/>								
+							</p:column>
+							<p:column >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.paramAdmRetorno.vCodtdocide}"
+													widgetVar="vCodtdocide" 
+													id="vCodtdocide">
+									<f:selectItem itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstTipoDoc}"
+													var="tipo"
+													itemValue="#{tipo.vCodtdocide}"
+													itemLabel="#{tipo.vDestdocide}"/>	
+													
+													<p:ajax event="change"
+															process="vCodtdocide"	
+															inmediate="true"														
+															listener="#{retornoBean.tamanoNumDoc}"
+															update=":formlstRetorno:outvNumdoc"
+															/>									        						
+								</p:selectOneMenu>
+							</p:column>
+							<p:column  >
+								<h:outputLabel value="N° de Documento"/>								
+							</p:column>
+							<p:column >	
+								<p:outputPanel id="outvNumdoc">		
+									<p:inputText 	value="#{retornoBean.paramAdmRetorno.vNumdoc}"													 
+													id="vNumdoc"
+													widgetVar="vNumdoc"
+													maxlength="#{retornoBean.paramAdmRetorno.vCodtdocide=='03'?8:12}"
+													onkeypress="return #{retornoBean.paramAdmRetorno.vCodtdocide=='03'?'soloNumeros(event)':''};"
+												/>
+							 
+									</p:outputPanel>	
+							</p:column>
+							
+						</p:row>	
+						
+						<p:row >
+							<p:column  >
+								<h:outputLabel value="Nombres"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.paramAdmRetorno.vNombres}"
+												id="vNombres"
+												maxlength="40" onkeypress="return soloLetras(event)"/>
+							</p:column>
+							<p:column  >
+								<h:outputLabel value="Apellido Paterno"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.paramAdmRetorno.vApepater}"
+												id="vApepater"
+												maxlength="40" onkeypress="return soloLetras(event)"/>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row >
+							<p:column  >
+								<h:outputLabel value="Apellido Materno"/>								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaMediana"
+												value="#{retornoBean.paramAdmRetorno.vApemater}"
+												id="vApemater"
+												maxlength="20" onkeypress="return soloLetras(event)"/>
+							</p:column>
+							<p:column  >
+								<h:outputLabel value="Fecha de registro"/>								
+							</p:column>
+							<p:column >								
+								<p:inputMask mask="99/99/9999" value="#{retornoBean.paramAdmRetorno.dFecreg}"/>
+							</p:column>				 
+							
+						</p:row>	
+						
+						<p:row >
+							<p:column colspan="1" >
+								<h:outputLabel value="País"/>								
+							</p:column>
+							<p:column colspan="3" >								
+								<p:selectOneMenu  	style="width: 250px;"
+													value="#{retornoBean.paramAdmRetorno.vCodpaisres}"
+													id="vCodpaisres"
+													>
+									<f:selectItem  	itemLabel="--Seleccione--" itemValue="" />
+									<f:selectItems 	value="#{retornoBean.lstPais}"
+													var="pais"
+													itemValue="#{pais.vCodpais}"
+													itemLabel="#{pais.vDespais}"/>									        						
+								</p:selectOneMenu>
+							</p:column>	
+							
+						 
+						</p:row>
+																	 
+					</p:panelGrid>
+					
+					<p:messages id="msgMensajesConsolidado"  />					 
+					<p:separator/>
+					<center>
+						<p:commandButton  	id="btnBuscar"							  
+							  				value="Buscar"
+							  				icon="icon-search" 						 
+							  				action="#{retornoBean.listarRetorno}"  
+							  				update=":formListaltRetorno:dtlstRetorno"  
+							  				/>		  				
+						
+					
+						<p:commandButton  	id="btnLimpiar"							  
+							  				value="Limpiar"
+							  				icon="icon-escoba" 		
+							  				action="#{retornoBean.limpiarAdministracion}"
+							  				update=":formListaltRetorno:dtlstRetorno, :formlstRetorno:pglstRetorno"  				  				    
+							 				/>						
+					</center>
+			</p:panel>			
+		</h:form>		
+		
+		<br />		
+		<h:form id="formListaltRetorno">
+			<p:dataTable id="dtlstRetorno" var="ret" emptyMessage="No hay registros para mostrar"
+						 value="#{retornoBean.lstRetorno}"
+						 paginator="true"
+						 paginatorPosition="bottom"
+						 rows="10"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 rowsPerPageTemplate="5,10,15"
+						 selection="#{retornoBean.lstRetornoSel}"
+						 
+						>
+				
+				
+ 				<p:ajax event="rowSelectCheckbox" update=":formListaltRetorno:dtlstRetorno"  />
+  				<p:ajax event="rowUnselectCheckbox" update=":formListaltRetorno:dtlstRetorno" />
+ 				<p:ajax event="rowSelect" update=":formListaltRetorno:dtlstRetorno" />
+ 				<p:ajax event="rowUnselect" update=":formListaltRetorno:dtlstRetorno" />
+ 				
+ 				<p:column headerText="Tipo documento">
+					<h:outputText value="#{ret.VDESTDOCIDE}" />
+				</p:column>	
+				
+ 				<p:column headerText="Documento">
+					<h:outputText value="#{ret.VNUMDOC}" />
+				</p:column>
+				
+				<p:column headerText="Apellidos y nombres" >
+					<h:outputText value="#{ret.VNOMBRES}" />
+				</p:column>		
+				
+				<p:column headerText="Editar formulario" style="text-align: center;">
+					<p:commandButton  	id="btnVerformulario"							  
+							  						 
+							  						icon="icon-search"				 
+							  				    	action="#{retornoBean.mostrarFormulario}"		
+							  						onclick="this.form.target='_blank'" 
+							  						ajax="false"
+							  						>
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodtdocide}"	value="#{ret.V_CODTDOCIDE}" />
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vNumdoc}"		value="#{ret.VNUMDOC}" />
+					</p:commandButton>		  						
+				</p:column>	
+				
+				<p:column headerText="Ver ficha" style="text-align: center;">
+					<p:commandButton  	id="btnVerficha"							  
+							  						 
+							  						icon="icon-pdf-16"				 
+							  				    	action="#{retornoBean.mostrarFichaPDF}"		
+							  						onclick="this.form.target='_blank'" 
+							  						ajax="false"
+							  						>
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodtdocide}"	value="#{ret.V_CODTDOCIDE}" />
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vNumdoc}"		value="#{ret.VNUMDOC}" />
+					</p:commandButton>		  						
+				</p:column>		
+				
+				<p:column headerText="Preguntas" style="text-align: center;">
+					<p:commandButton  	id="btnVerPreguntas"							  
+							  						 
+							  						icon="icon-enviar-16"				 
+							  				    	action="#{retornoBean.mostrarPreguntas}"		
+							  						disabled="#{ret.NMENSAJE>0?false:true}"
+							  						oncomplete="dlgPreguntas.show();"
+							  						update=":formPreguntas"
+							  						>
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vCodtdocide}"	value="#{ret.V_CODTDOCIDE}" />
+						<f:setPropertyActionListener target="#{retornoBean.dpersona.vNumdoc}"		value="#{ret.VNUMDOC}" />
+					</p:commandButton>		  						
+				</p:column>					
+				
+				<p:column 	selectionMode="multiple" 
+							style="text-align: center;width:2%" 
+							headerText="Correo"
+							 />
+				
+										
+				
+			</p:dataTable>
+			<p:separator/>
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+							<center>
+							
+								
+							  	<p:commandButton  	id="btnNuevo"							  
+							  						value="Enviar correo"
+							  						icon="icon-add"				 
+							  				    	onclick="dlgCorreol.show();"		
+							  						action="#{retornoBean.limpiarCorreo}"
+							  						update=":formCorreol:pgdatosCorreo"
+							  						/>
+							  
+												
+					</center>
+					</p:column>
+				</p:row>
+			</p:panelGrid>		
+		</h:form>		
+	
+		
+		
+		
+		<h:form id="formCorreol">
+		<p:dialog id="dlgCorreol"
+							 widgetVar="dlgCorreol"
+							 header="ENVIO DE CORREO"							 
+							 width="600px"
+							 modal="true">
+				<center >		
+				
+				<!-- ===============================================================================P1 DATOS CORREO========================================================================================= -->
+		
+				<p:panel 	
+							id="pdatosCorreo">
+					<p:panelGrid 	id="pgdatosCorreo">
+						<p:row >
+							<p:column  >
+								<h:outputLabel value="Asunto" />								
+							</p:column>
+							<p:column >								
+								<p:inputText 	styleClass="cajaAmplia"
+												value="#{retornoBean.correo.asunto}"
+												required="true"
+												requiredMessage="Es requerido el asunto"/>	
+							</p:column>
+						</p:row>
+						<p:row >	
+							<p:column  >
+								<h:outputLabel value="Texo del correo"/>								
+							</p:column>
+							<p:column >								
+								<p:inputTextarea 	styleClass="cajaAmplia" 
+													value="#{retornoBean.correo.contenido}"
+													required="true"
+													requiredMessage="Es requerido el texo del correo"/>							
+								
+								
+							</p:column>
+							
+						</p:row>	
+						
+				
+										
+					</p:panelGrid>
+				</p:panel>
+				<p:separator/>
+				
+				
+				<p:commandButton  	id="btnEnviarCorreo"							  
+							  		icon="icon-seleccionar"				 
+							  		value="Enviar"
+							  		action="#{retornoBean.enviarCorreo}"
+							  		oncomplete="xdlgCorreol(xhr, status, args);"
+							  		update=":formCorreol:pgdatosCorreo"
+							  		/>
+					 						 
+							 
+			   </center>
+		</p:dialog>	
+		</h:form>
+		
+		<!-- ===============================================================================P2 DATOS PREGUNTA========================================================================================= -->
+		<h:form id="formPreguntas">
+			<p:dialog id="dlgPreguntas"
+							 widgetVar="dlgPreguntas"
+							 header="PREGUNTAS SIN RESPONDER"							 
+							 modal="true" 
+							 resizable="false" 							
+							 width="700"
+							 showEffect="clip" 
+							 closable="true">
+				<p:panel 	
+							id="pPreguntas">
+					<p:panelGrid 	id="pgPreguntas">
+						<p:row>
+							<p:column>
+								<p:dataTable id="dtListaPregunta" var="pre"
+									emptyMessage="No hay documentos para mostrar"
+									value="#{retornoBean.lstPreguntasUsu}" paginator="true"
+									paginatorPosition="bottom" rows="15"
+									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="15,20,25">
+									<p:column headerText="PREGUNTA">
+										<h:outputText value="#{pre.vTitmensaj}" />
+									</p:column>
+									<p:column headerText="RESPUESTA" style="text-align: center;">
+										<p:commandButton  	id="btnVerPregunta"								  						 		
+									  						icon="icon-enviar-16"				 
+									  				    	action="#{retornoBean.mostrarFormRespuesta}"	
+									  				    	oncomplete="dlgPreguntas.hide();dlgRespuesta.show();"	
+									  				    	update=":formRespuesta:pgRespuesta"					  						
+											  		>
+										<f:setPropertyActionListener target="#{retornoBean.mensaje.nCodmensaj}"	value="#{pre.nCodmensaj}" />
+										
+									</p:commandButton>		
+									</p:column>
+	
+								</p:dataTable>
+							</p:column>
+						</p:row>			
+										
+					</p:panelGrid>
+				</p:panel>
+				
+		</p:dialog>	
+		</h:form>
+		
+		
+		<h:form id="formRespuesta">
+		<p:dialog id="dlgRespuesta"
+							 widgetVar="dlgRespuesta"
+							 header="RESPUESTA"							 
+							 modal="true" 
+							 resizable="false" 							
+							 width="700"
+							 showEffect="clip" 
+							 closable="true">
+				<center >		
+				
+				<!-- ===============================================================================P1 DATOS RESPUESTA========================================================================================= -->
+		
+				<p:panel 	id="pRespuesta">
+					<p:panelGrid 	id="pgRespuesta">
+						<p:row >
+							<p:column  >
+								<h:outputLabel value="Pregunta" />								
+							</p:column>
+							<p:column >								
+								<p:outputLabel value="#{retornoBean.mensaje.vTitmensaj}"/>	
+							</p:column>
+						</p:row>
+						<p:row >	
+							<p:column  >
+								<h:outputLabel value="Texo de la respuesta"/>								
+							</p:column>
+							<p:column >								
+								<p:inputTextarea 	styleClass="cajaAmplia" 
+													value="#{retornoBean.mensaje.vRespta}"
+													required="true"
+													requiredMessage="Es requerido el texo de la respuesta"
+													maxlength="500"
+													counter="tamRespuesta"
+													counterTemplate="Máximo de caracteres {0}"
+													/>
+								<br/>
+								<h:outputText id="tamRespuesta"/>
+								
+							</p:column>
+							
+						</p:row>	
+						
+				
+										
+					</p:panelGrid>
+				</p:panel>
+				<p:separator/>
+				
+				
+				<p:commandButton  	id="btnResponder"							  
+							  		icon="icon-seleccionar"				 
+							  		value="Enviar"
+							  		action="#{retornoBean.enviarCorreoRespuesta}"
+							  		oncomplete="xdlgRespuesta(xhr, status, args);"
+							  		update=":formPreguntas:dlgPreguntas"
+							  		/>
+							  		
+				<p:commandButton  	id="btnCancelar"							  
+							  		icon="icon-cancel"				 
+							  		value="Cancelar"
+							  		oncomplete="dlgRespuesta.hide();dlgPreguntas.show();"
+							  		
+							  		/>
+					 						 
+							 
+			   </center>
+		</p:dialog>	
+		</h:form>	
+			
+		<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>  
+	</p:fieldset>	
+	
+		<script type="text/javascript">  
+        //<![CDATA[
+    		
+    		function xdlgCorreol(xhr, status, args) {
+   			 if(args.validationFailed==true) {       					 
+   						  dlgCorreol.show();      					  	
+					  } else {        					  	         					  
+						  dlgCorreol.hide();  
+   
+				 	}  
+   			
+			}
+    		function xdlgRespuesta(xhr, status, args) {
+      			 if(args.validationFailed==true) {       					 
+      					dlgRespuesta.show();      					  	
+   					  } else {        					  	         					  
+   						dlgRespuesta.hide(); 
+   						dlgPreguntas.show();
+      
+   				 	}  
+      			
+   			}
+    		  
+    	    function soloLetras(e){
+    	        key = e.keyCode || e.which;
+    	        tecla = String.fromCharCode(key).toLowerCase();
+    	        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+    	        especiales = "8-37-39-46";
+
+    	        tecla_especial = false
+    	        for(var i in especiales){
+    	             if(key == especiales[i]){
+    	                 tecla_especial = true;
+    	                 break;
+    	             }
+    	         }
+
+    	         if(letras.indexOf(tecla)==-1){
+    	             return false;
+    	         }
+    	     }
+
+    	    function soloNumeros(e){
+    	        key = e.keyCode || e.which;
+    	        tecla = String.fromCharCode(key).toLowerCase();
+    	        letras = "0123456789";
+    	        especiales = "8-37-39-46";
+
+    	        tecla_especial = false
+    	        for(var i in especiales){
+    	             if(key == especiales[i]){
+    	                 tecla_especial = true;
+    	                 break;
+    	             }
+    	         }
+
+    	         if(letras.indexOf(tecla)==-1){
+    	             return false;
+    	         }
+    	     }
+    		
+    		
+ 			 
+    		
+  			 //]]>
+		</script> 
+	</ui:define>
+</ui:composition>	
+</html>	

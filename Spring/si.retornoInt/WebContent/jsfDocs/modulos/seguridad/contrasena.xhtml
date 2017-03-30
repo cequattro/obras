@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="cabecera"/>
+	<ui:define name="menu2" />	
+	<ui:define name="datosUsuario"/>    
+    <ui:define name="pie"/>
+	<ui:define name="contenido">
+		<h:form id="formContrasena">
+		
+			<p:panel id="pContrasena" header="Cambio de Contraseña" >				
+					<p:panelGrid id="pgContrasena" columns="2" >
+					
+					<h:outputLabel value="Usuario:"/>
+					
+					<h:outputText value="#{loginBean.usuario.v_usuario}" />
+				
+					<h:outputLabel value="Contraseña Actual:"/>
+					<p:password id="id_claveAntigua" value="#{contrasenaBean.claveAntigua}"
+					required="true" requiredMessage="Ingrese su clave actual"  validatorMessage="El contraseña debe tener de 6 a 12 caracteres"
+					style="text-transform: none;"
+					>
+						<f:validateLength  minimum="3" maximum="12" for="id_claveAntigua"/>
+					</p:password>
+					
+					
+					<h:outputLabel value="Nueva Contraseña:"/>
+					<p:password id="id_clave" value="#{contrasenaBean.clave}"
+					required="true" requiredMessage="Ingrese su nueva contraseña"  validatorMessage="El contraseña debe tener de 6 a 12 caracteres"
+					feedback="true"
+					promptLabel="Ingrese Su contraseña"
+					weakLabel="Debil"
+					goodLabel="Medio"
+					strongLabel="Fuerte"
+					style="text-transform: none;"
+					>
+						<f:validateLength  minimum="6" maximum="12" for="id_clave"/>
+					</p:password>
+					
+					
+					<h:outputLabel value="Repita la nueva Contraseña:"/>
+					<p:password id="id_claveRepeticion" value="#{contrasenaBean.claveRepeticion}" required="true" requiredMessage="Ingrese repita su nueva contraseña"  validatorMessage="El contraseña debe tener de 6 a 12 caracteres"
+					feedback="true"
+					promptLabel="Ingrese Su contraseña"
+					weakLabel="Debil"
+					goodLabel="Medio"
+					strongLabel="Fuerte"
+					style="text-transform: none;"
+					>
+						<f:validateLength  minimum="6" maximum="12" for="id_claveRepeticion"/>
+					</p:password>
+					
+				
+					</p:panelGrid>
+					<p:separator/>
+					 
+				<center>		 				
+							<p:commandButton id="btnActualizar"
+											 value="Actualizar"
+											 icon="icon-update"									
+										     oncomplete="dlgConfirmacionContra.show();"
+										     process="@this :formContrasena"
+						    />
+							<p:commandButton value="Cancelar"	 								
+									 icon="icon-cancel"
+									 action="#{contrasenaBean.resetContrasena}"
+									 update=":formContrasena:pgContrasena"
+									  process="@this">
+								<p:resetInput target="pgContrasena"/>
+						    </p:commandButton>
+					     
+					
+					<p:defaultCommand target="btnActualizar" />
+					
+				</center>
+			</p:panel>
+			<p:messages id="msgsFormularioCC"/>
+		</h:form>
+		<h:form id="formConfirmacionContra">
+		<p:confirmDialog id="dlgConfirmacionContra"
+							 widgetVar="dlgConfirmacionContra"
+							 header="Cambio Contraseña"
+							 message="¿Desea cambiar la contraseña?"
+							 severity="alert"
+							  width="350px">
+				<center >			 
+				<p:commandButton id="btnConfcamContra"
+								 value="Si"
+							  	 icon="icon-update"
+							  	 action="#{contrasenaBean.cambiarContrasena}"
+							     update=":formContrasena:pContrasena, :formContrasena:msgsFormularioCC"
+							  	 oncomplete="validacionContrasena(xhr, status, args);"
+							  	 />
+								 
+				<p:commandButton value="No"                				 
+                                 oncomplete="dlgConfirmacionContra.hide();"                               
+                                 icon="icon-cancel" />				 
+							 
+			   </center>
+		</p:confirmDialog>
+		</h:form>
+		<script type="text/javascript">  
+		 //<![CDATA[
+		 	function validacionContrasena(xhr, status, args) {  
+        		if(!args.validationFailed && args.correcto) { 
+        			dlgConfirmacionContra.hide();
+        		}else{
+        			dlgConfirmacionContra.hide();
+            		} 
+    	 	} 
+		 //]]>	 
+	    </script>  
+	</ui:define>
+</ui:composition>	
+	
+</html>	

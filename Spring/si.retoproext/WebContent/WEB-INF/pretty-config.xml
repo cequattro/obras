@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				elementFormDefault="qualified"
+				targetNamespace="http://ocpsoft.com/prettyfaces/3.3.3"
+				xmlns="http://ocpsoft.com/prettyfaces/3.3.3">
+
+<!-- =========================GENERAL==============================================  -->
+
+  
+	
+	<url-mapping id="fichaRetorno">
+		<pattern value="/" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/mnt_fichaRetorno.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="preguntasFrecuentes">
+		<pattern value="/PreguntasFrecuentes" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/lst_pregfrec.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="pasePregunta">
+		<pattern value="/pasePregunta/#{preguntaBean.persona.vCodtdocide}/#{preguntaBean.persona.vNumdoc}" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/pas_pasePregunta.xhtml" />
+		<action>#{preguntaBean.redPreguntas}</action>
+	</url-mapping>
+	
+	<url-mapping id="pregunta">
+		<pattern value="/Preguntas" />
+		<view-id value="/faces/jsfDocs/modulos/retorno/lst_pregunta.xhtml" />
+	</url-mapping>
+	
+	
+</pretty-config>

@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="pe.gob.mtpe.retorno.dao.ReporteDao">
+
+<select id="mostrarReprote1" parameterType="ParamReporte" resultType="hashMap">
+select 
+a.V_DESPAIS "pais",
+sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end) "joven",
+round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end)/count(p.v_numdoc))*100,1) "porjoven",
+sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end) "adjov",
+round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradjov",
+sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end) "adult",
+round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradult",
+sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end) "adultmay",
+round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradultmay",
+count(p.v_numdoc) as total
+from
+rptbc_persona p
+inner join simintra1.sitb_pais a on (p.v_codpaisrs = a.v_codpais)
+inner join simintra1.sitb_persona ps on (p.v_numdoc = ps.v_numdoc and ps.V_CODTDOCIDE=p.V_CODTDOCIDE )
+
+
+WHERE 
+   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+group by a.v_despais
+order by a.V_DESPAIS
+</select>
+
+ 
+
+<select id="mostrarReprote2" parameterType="ParamReporte" resultType="hashMap">
+	select
+		dep1.v_desdep "depto",
+		sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end) "joven",
+		round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end)/count(p.v_numdoc))*100,1) "porjoven",
+		sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end) "adjov",
+		round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradjov",
+		sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end) "adult",
+		round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradult",
+		sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end) "adultmay",
+		round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end)/count(p.v_numdoc))*100,1) "poradultmay",
+		count(p.v_numdoc) as total
+	from rptbc_persona p
+	inner join simintra1.sitb_persona ps on p.v_numdoc = ps.v_numdoc and ps.V_CODTDOCIDE=p.V_CODTDOCIDE
+	inner join simintra1.sitb_departamento dep1 on ps.V_CODDEPNAC = dep1.v_coddep
+	
+	WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+	 
+	
+	group by dep1.v_desdep
+	order by dep1.v_desdep
+
+	
+</select>
+
+<select id="mostrarReprote3" parameterType="ParamReporte" resultType="hashMap">
+select
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 15 and 29 ) and p1.c_codsexo = 1 then 1
+	else 0
+	end) EDAD15A29MASC,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 15 and 29 ) and p1.c_codsexo = 2 then 1
+	else 0
+	end) EDAD15A29FEM,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 30 and 44 ) and p1.c_codsexo = 1 then 1
+	else 0
+	end) EDAD30A44MASC,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 30 and 44 ) and p1.c_codsexo = 2 then 1
+	else 0
+	end) EDAD30A44FEM,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 45 and 59 ) and p1.c_codsexo = 1 then 1
+	else 0
+	end) EDAD45A59MASC,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 45 and 59 ) and p1.c_codsexo = 2 then 1
+	else 0
+	end) EDAD45A59FEM,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 60 and 300 ) and p1.c_codsexo = 1 then 1
+	else 0
+	end) EDAD60AMASMASC,
+	sum(case
+	when (trunc((trunc(SYSDATE) - trunc(p1.d_fecnac))/365) between 60 and 300 ) and p1.c_codsexo = 2 then 1
+	else 0
+	end) EDAD60AMASFEM
+from rptbc_persona p
+inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and
+p.v_codtdocide = p1.v_codtdocide
+
+WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+	
+</select>
+
+<select id="mostrarReprote4" parameterType="ParamReporte" resultType="hashMap">
+   select
+    decode(p1.c_estcivil,1,'SOLTERO',2,'CASADO/CONVIVIENTE',3,'VIUDO',4,'DIVORCIADO') "ESTCIVIL",
+    (select count(a.v_numdoc) from
+    rptbc_persona a
+    inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc and
+    a.v_codtdocide = b.v_codtdocide
+    where b.c_codsexo = 1 and b.c_estcivil = p1.c_estcivil
+    and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	 and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "HOMBRES",
+    (select count(c.v_numdoc) from
+    rptbc_persona c
+    inner join simintra1.sitb_persona d on c.v_numdoc = d.v_numdoc and
+    c.v_codtdocide = d.v_codtdocide
+    where d.c_codsexo = 2 and d.c_estcivil = p1.c_estcivil
+    and to_char(c.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	and  to_char(c.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "MUJERES"
+from rptbc_persona p
+    inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and
+    p.v_codtdocide = p1.v_codtdocide
+WHERE 
+	   
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+group by p1.c_estcivil
+order by p1.c_estcivil asc
+	
+</select>
+
+<select id="mostrarReprote5" parameterType="ParamReporte" resultType="hashMap">
+  SELECT
+    decode(p1.c_codsexo,1,'HOMBRE',2,'MUJER') "GENERO",
+    (select count(a.v_numdoc) from
+    rptbc_persona a
+    inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc and
+    a.v_codtdocide = b.v_codtdocide 
+    where a.v_flgjefhog = 'S' and b.c_codsexo = p1.c_codsexo
+    and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM'))
+    "JEFESI" ,
+    (select count(c.v_numdoc) from
+    rptbc_persona c
+    inner join simintra1.sitb_persona d on c.v_numdoc = d.v_numdoc and
+    c.v_codtdocide = d.v_codtdocide 
+    where c.v_flgjefhog = 'N' and d.c_codsexo = p1.c_codsexo
+    and to_char(c.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+    and  to_char(c.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM'))
+    "JEFENO"
+  from rptbc_persona p
+    inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and
+    p.v_codtdocide = p1.v_codtdocide
+  WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+    group by p1.c_codsexo 
+  order by p1.c_codsexo asc
+	
+	
+</select>
+
+<select id="mostrarReprote6" parameterType="ParamReporte" resultType="hashMap">
+	select 
+	  ne.v_desnivedu, 
+	  (select count(x.v_numdoc) from
+	  rptbc_persona x
+	  inner join simintra1.sitb_persona y on x.v_numdoc = y.v_numdoc
+	  where 
+	  y.c_codsexo = 1 and 
+	  x.v_niveduper = ne.v_codnivedu
+	  and to_char(x.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	  and  to_char(x.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "hombres",
+	  (select count(a.v_numdoc) from
+	  rptbc_persona a
+	  inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc
+	  where 
+	  b.c_codsexo = 2 and 
+	  a.v_niveduper = ne.v_codnivedu
+	  and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	  and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "mujeres"
+from rptbc_persona p           
+inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and p.v_codtdocide = p1.v_codtdocide 
+inner join simintra1.sitb_niveleducati ne on p.v_niveduper = ne.v_codnivedu 
+WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+group by (ne.v_desnivedu,ne.v_codnivedu)
+order by ne.V_CODNIVEDU
+	
+	
+</select>
+
+<select id="mostrarReprote7" parameterType="ParamReporte" resultType="hashMap">
+select 
+	ne.v_desnivedu, 
+	(select count(x.v_numdoc) from
+	rptbc_persona x
+	inner join simintra1.sitb_persona y on x.v_numdoc = y.v_numdoc
+	where 
+	y.c_codsexo = 1 and 
+	x.v_niveduext = ne.v_codnivedu
+	and to_char(x.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+    and  to_char(x.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "hombres",
+	(select count(a.v_numdoc) from
+	rptbc_persona a
+	inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc
+	where 
+	b.c_codsexo = 2 and 
+	a.v_niveduext = ne.v_codnivedu
+	and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+    and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "mujeres"
+from rptbc_persona p           
+inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and p.v_codtdocide = p1.v_codtdocide 
+inner join simintra1.sitb_niveleducati ne on p.v_niveduext = ne.v_codnivedu 
+WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+group by (ne.v_desnivedu,ne.v_codnivedu)
+order by ne.V_CODNIVEDU
+</select>
+
+
+<select id="mostrarReprote8" parameterType="ParamReporte" resultType="hashMap">
+	select
+		prf.v_desprof,
+		(select count(x.v_numdoc) from
+		rptbc_persona x
+		inner join simintra1.sitb_persona y on x.v_numdoc = y.v_numdoc
+		where
+		y.c_codsexo = 1 and
+		x.v_codprof = prf.v_codprof
+		and to_char(x.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	    and  to_char(x.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "hombres",
+		(select count(a.v_numdoc) from
+		rptbc_persona a
+		inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc
+		where
+		b.c_codsexo = 2 and
+		a.v_codprof = prf.v_codprof
+		and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	    and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "mujeres"
+from rptbc_persona p
+inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and p.v_codtdocide = p1.v_codtdocide
+inner join simintra1.sitb_profesion prf on p.v_codprof = prf.v_codprof
+WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+group by (prf.v_desprof,  prf.v_codprof)
+ORDER BY prf.v_desprof
+</select>
+
+
+<select id="mostrarReprote9" parameterType="ParamReporte" resultType="hashMap">
+select
+	dep1.v_desdep "depto",
+	(select count(e.v_numdoc) from
+	rptbc_persona e
+	inner join simintra1.sitb_persona f on e.v_numdoc = f.v_numdoc
+	where
+	e.v_coddepre1 = dep1.v_coddep and
+	trunc((trunc(SYSDATE) - trunc(f.d_fecnac))/365) between 15 and 29
+	and to_char(e.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+    and  to_char(e.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "joven",
+	
+	(select count(x.v_numdoc) from
+	rptbc_persona x
+	inner join simintra1.sitb_persona y on x.v_numdoc = y.v_numdoc
+	where
+	x.v_coddepre1 = dep1.v_coddep and
+	trunc((trunc(SYSDATE) - trunc(y.d_fecnac))/365) between 30 and 44
+	and to_char(x.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+    and  to_char(x.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "adjov",
+	
+	(select count(a.v_numdoc) from
+	rptbc_persona a
+	inner join simintra1.sitb_persona b on a.v_numdoc = b.v_numdoc
+	where
+	a.v_coddepre1 = dep1.v_coddep and
+	trunc((trunc(SYSDATE) - trunc(b.d_fecnac))/365) between 45 and 59
+	and to_char(a.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	and  to_char(a.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "adult",
+	
+	(select count(c.v_numdoc) from
+	rptbc_persona c
+	inner join simintra1.sitb_persona d on c.v_numdoc = d.v_numdoc
+	where
+	c.v_coddepre1 = dep1.v_coddep and
+	trunc((trunc(SYSDATE) - trunc(d.d_fecnac))/365) between 60 and 300
+	and to_char(c.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	and  to_char(c.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')) "adultmay"
+
+from rptbc_persona p
+inner join simintra1.sitb_persona p1 on p.v_numdoc = p1.v_numdoc and p1.V_CODTDOCIDE=p.V_CODTDOCIDE
+inner join simintra1.sitb_departamento dep1 on p.v_coddepre1 = dep1.v_coddep
+WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+group by dep1.v_desdep, dep1.v_coddep
+ORDER BY dep1.v_desdep
+</select>
+
+<select id="mostrarReprote10" parameterType="ParamReporte" resultType="hashMap">
+	select
+		t.v_numhijos,
+		sum(case
+		when p.c_codsexo = 1 then 1
+		else 0
+		end) NROHHOMBRE,
+		sum(case
+		when p.c_codsexo = 2 then 1
+		else 0
+		end) NROHMUJER
+	from
+	rptbc_persona t
+	inner join simintra1.sitb_persona p on t.v_numdoc = p.v_numdoc
+	and t.V_CODTDOCIDE=p.V_CODTDOCIDE 
+	WHERE 
+	   to_char(t.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(t.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+	group by (p.c_codsexo,t.v_numhijos) order by t.v_numhijos asc
+		
+</select>
+
+<select id="mostrarReprote11" parameterType="ParamReporte" resultType="hashMap">
+select 
+		a.V_DESPAIS AS V_DESPAIS,
+		ret.V_DESRETOR AS V_DESRETOR
+from
+		rptbc_persona p
+		inner join simintra1.sitb_pais a on (p.v_codpaisrs = a.v_codpais)
+		INNER JOIN RPTBC_RETORNO ret on(ret.V_CODRETOR=p.V_CODRETOR)
+WHERE 
+   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+
+
+order by a.V_DESPAIS
+</select>
+
+<select id="mostrarReprote12" parameterType="ParamReporte" resultType="hashMap">
+	select 
+		o.v_desocupac, 
+		sum(case
+		when p.c_codsexo = 1 then 1
+		else 0
+		end) hombre,
+		sum(case
+		when p.c_codsexo = 2 then 1
+		else 0
+		end) mujer 
+	from 
+	rptbc_persona t
+	inner join simintra1.sitb_persona p on t.v_numdoc = p.v_numdoc and t.v_codtdocide = p.v_codtdocide
+	inner join simintra1.sitb_ocupacion o on t.v_codocuper = o.v_codocupac
+	inner join rptbd_rango r on t.v_codrango = r.v_codrango
+	WHERE 
+	   to_char(t.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(t.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+	group by o.v_desocupac
+	order by o.v_desocupac
+</select>
+
+<select id="mostrarReprote13" parameterType="ParamReporte" resultType="hashMap">
+select
+	
+	distinct
+	p.V_NUMDOC,
+	dep.V_DESDEP,
+	o.V_DESOCUPAC
+from
+	rptbc_persona p
+	inner join simintra1.sitb_departamento dep on(dep.V_CODDEP=p.V_CODDEPRE1)
+	inner join simintra1.sitb_ocupacion o on(o.V_CODOCUPAC=p.V_CODOCUDE1)
+WHERE 
+	     to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')  
+order by dep.V_DESDEP
+</select>
+
+<select id="mostrarReprote14" parameterType="ParamReporte" resultType="hashMap">
+select
+		a.V_DESPAIS,
+		RA.V_DESRANGO
+		from
+		rptbc_persona p
+		inner join simintra1.sitb_pais a on (p.v_codpaisrs = a.v_codpais)
+		INNER JOIN RPTBD_RANGO RA ON(RA.V_CODRANGO=p.V_CODRANDES)
+  WHERE 
+	   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+	   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')   
+ 
+	order by a.V_DESPAIS
+</select>
+
+
+<select id="mostrarReprote15" parameterType="ParamReporte" resultType="hashMap">
+	select 'reporte15' "REPORTE",
+	       tot.homb "TOT_HOMBRES",
+	       tot.muj "TOT_MUJERES",
+	       tot.total "TOTAL_GENERAL",
+	       r.v_codrango,r.v_desrango as "RANGO",
+	       SUM(DECODE(PS.C_CODSEXO,1,1,0)) "HOMBRES",
+	       SUM(DECODE(PS.C_CODSEXO,2,1,0)) "MUJERES",
+	       COUNT(ps.c_codsexo) "TOTAL"
+	  from rptbd_rango r,rptbc_persona p,  simintra1.sitb_persona ps, 
+	       (
+	        select sum(decode(spt.c_codsexo, 1, 1, 0)) HOMB,
+	               sum(decode(spt.c_codsexo, 2, 1, 0)) MUJ,
+	               count(spt.c_codsexo) total
+	          from rptbc_persona rpt, simintra1.sitb_persona spt
+	         where rpt.v_numdoc = spt.v_numdoc
+	           and rpt.v_codtdocide = spt.v_codtdocide
+	        ) tot
+	
+	 where r.v_codrango = p.v_codrandes(+)
+	   and p.v_numdoc = ps.v_numdoc(+)
+	   and p.v_codtdocide = ps.v_codtdocide(+)
+	   and r.v_tiprango=2
+	   AND 
+   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+	GROUP BY r.v_codrango,r.v_desrango,tot.homb,tot.muj,tot.total
+	order by r.v_codrango
+</select>
+
+
+<select id="mostrarReprote16" parameterType="ParamReporte" resultType="hashMap">
+	
+select  'Reporte 16' as "REPORTE",r.v_codrango,r.v_desrango as "RANGO",
+
+        sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end) "joven",
+        decode (count(p.v_numdoc),0,0,
+               round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 15 and 29 then 1 else 0 end)/count(p.v_numdoc))*100,1)
+               ) "porjoven",
+
+        sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end) "adjov",
+        decode (count(p.v_numdoc),0,0,
+               round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 30 and 44 then 1 else 0 end)/count(p.v_numdoc))*100,1)
+               ) "poradjov",
+
+        sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end) "adult",
+        decode (count(p.v_numdoc),0,0,
+                round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 45 and 59 then 1 else 0 end)/count(p.v_numdoc))*100,1)
+               ) "poradult",
+
+        sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end) "adultmay",
+        decode (count(p.v_numdoc),0,0,
+               round((sum(case when trunc((trunc(SYSDATE) - trunc(ps.d_fecnac))/365) between 60 and 300 then 1 else 0 end)/count(p.v_numdoc))*100,1)
+               ) "poradultmay",
+
+        count(p.v_numdoc) as total
+  from rptbd_rango r,rptbc_persona p,  simintra1.sitb_persona ps
+ where r.v_codrango = p.v_codrandes(+)
+   and p.v_numdoc = ps.v_numdoc(+)
+   and p.v_codtdocide = ps.v_codtdocide(+)
+   and r.v_tiprango=2
+   AND 
+   to_char(p.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(p.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+GROUP BY r.v_codrango,r.v_desrango
+order by r.v_codrango
+</select>
+	
+<select id="mostrarReprote17" parameterType="ParamReporte" resultType="hashMap">
+	select
+	'Reporte 17' as "REPORTE",
+	pa.v_despais  "pais",
+	sum(case when pe.edad between 0 and 4 then 1 else 0 end) "de0a4",
+	sum(case when pe.edad between 5 and 9 then 1 else 0 end) "de5a9",
+	sum(case when pe.edad between 10 and 14 then 1 else 0 end) "de10a14",
+	sum(case when pe.edad between 15 and 19 then 1 else 0 end) "de15a19",
+	sum(case when pe.edad between 20 and 24 then 1 else 0 end) "de20a24",
+	sum(case when pe.edad between 25 and 29 then 1 else 0 end) "de25a29",
+	sum(case when pe.edad between 30 and 34 then 1 else 0 end) "de30a34",
+	sum(case when pe.edad between 35 and 39 then 1 else 0 end) "de35a39",
+	sum(case when pe.edad between 40 and 44 then 1 else 0 end) "de40a44",
+	sum(case when pe.edad between 45 and 49 then 1 else 0 end) "de45a49",
+	sum(case when pe.edad between 50 and 54 then 1 else 0 end) "de50a54",
+	sum(case when pe.edad between 55 and 59 then 1 else 0 end) "de55a59",
+	sum(case when pe.edad between 60 and 64 then 1 else 0 end) "de60a64",
+	sum(case when pe.edad between 65 and 69 then 1 else 0 end) "de65a69",
+	sum(case when pe.edad between 70 and 74 then 1 else 0 end) "de70a74",
+	sum(case when pe.edad between 75 and 79 then 1 else 0 end) "de75a79",
+	sum(case when pe.edad between 80 and 200 then 1 else 0 end) "de80aMas",
+	count(pa.v_despais) total
+	from vst_rpt_paisresxedad pe, simintra1.sitb_pais pa
+	where pe.v_codpaisrs=pa.v_codpais
+	AND 
+   to_char(pe.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(pe.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+	group by pa.v_despais
+    order by pa.v_despais
+</select>
+
+<select id="mostrarReprote18" parameterType="ParamReporte" resultType="hashMap">
+	select
+	'Reporte 18' as "REPORTE",
+	de.v_desdep  "departamento",
+	sum(decode(pe.c_codsexo,1,1,0)) "HOMBRES",
+	sum(decode(pe.c_codsexo,2,1,0)) "MUJERES",
+	count(de.v_desdep) total
+	from vst_rpt_depretconfamxgen pe, simintra1.sitb_departamento de
+	where pe.v_coddepre=de.v_coddep
+	AND 
+   to_char(pe.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(pe.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+	group by de.v_desdep
+   order by de.v_desdep
+</select>
+
+<select id="mostrarReprote19" parameterType="ParamReporte" resultType="hashMap">
+	select 
+	'Reporte 19' as "REPORTE",
+	de.v_desdep  "departamento",
+	sum(case when pe.edad between 0 and 4 then 1 else 0 end) "de0a4",
+	sum(case when pe.edad between 5 and 9 then 1 else 0 end) "de5a9",
+	sum(case when pe.edad between 10 and 14 then 1 else 0 end) "de10a14",
+	sum(case when pe.edad between 15 and 19 then 1 else 0 end) "de15a19",
+	sum(case when pe.edad between 20 and 24 then 1 else 0 end) "de20a24",
+	sum(case when pe.edad between 25 and 29 then 1 else 0 end) "de25a29",
+	sum(case when pe.edad between 30 and 34 then 1 else 0 end) "de30a34",
+	sum(case when pe.edad between 35 and 39 then 1 else 0 end) "de35a39",
+	sum(case when pe.edad between 40 and 44 then 1 else 0 end) "de40a44",
+	sum(case when pe.edad between 45 and 49 then 1 else 0 end) "de45a49",
+	sum(case when pe.edad between 50 and 54 then 1 else 0 end) "de50a54",
+	sum(case when pe.edad between 55 and 59 then 1 else 0 end) "de55a59",
+	sum(case when pe.edad between 60 and 64 then 1 else 0 end) "de60a64",
+	sum(case when pe.edad between 65 and 69 then 1 else 0 end) "de65a69",
+	sum(case when pe.edad between 70 and 74 then 1 else 0 end) "de70a74",
+	sum(case when pe.edad between 75 and 79 then 1 else 0 end) "de75a79",
+	sum(case when pe.edad between 80 and 200 then 1 else 0 end) "de80aMas",
+	count(de.v_desdep) total
+	from vst_rpt_depretornconfam pe, simintra1.sitb_departamento de
+	where pe.v_coddepre=de.v_coddep
+	AND 
+   to_char(pe.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+   and  to_char(pe.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM') 
+ 
+	group by de.v_desdep
+order by de.v_desdep
+</select>
+
+<select id="mostrarReprote20" resultType="hashMap">
+	
+	select 'reporte20' "REPORTE",
+         tot.D_FECSALPER as  RANGO,
+         tot.homb  "HOMBRES",
+          tot.muj "MUJERES",
+          tot.total TOTAL
+
+	  from
+	       (
+	        select
+                 trunc((trunc(SYSDATE) - trunc(rpt.D_FECSALPER))/365) as  D_FECSALPER,
+                 sum(decode(spt.c_codsexo, 1, 1, 0)) HOMB,
+	               sum(decode(spt.c_codsexo, 2, 1, 0)) MUJ,
+	               count(spt.c_codsexo) total
+	          from rptbc_persona rpt, simintra1.sitb_persona spt
+	         where rpt.v_numdoc = spt.v_numdoc
+	           and rpt.v_codtdocide = spt.v_codtdocide	           
+	           AND 
+			   to_char(rpt.D_FECREG,'YYYYMM') <![CDATA[>=]]>to_char( TO_DATE(#{fechaInicio,jdbcType=VARCHAR}),'YYYYMM') 
+			   and  to_char(rpt.D_FECREG,'YYYYMM')  <![CDATA[<=]]> to_char(TO_DATE(#{fechaFin,jdbcType=VARCHAR}),'YYYYMM')
+             group by rpt.D_FECSALPER
+	        ) tot
+
+
+
+     	GROUP BY tot.homb,tot.muj,tot.total,tot.D_FECSALPER
+      ORDER BY tot.D_FECSALPER 
+	
+</select>
+	
+		
+	 
+	
+</mapper>

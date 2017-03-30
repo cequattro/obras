@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="pe.gob.mtpe.retorno.dao.LoginDao">
+
+
+<!-- =====================================================RESULT=================================================================== -->
+
+<resultMap id="muestraemp-out" type="Muestraemp" >  
+    <id 	column="V_CODEMP" 		property="vCodemp" 		jdbcType="VARCHAR" />
+    <id 	column="V_PERIODO" 		property="vPeriodo" 	jdbcType="VARCHAR" />
+    <result column="V_DESRAZONS" 	property="vDesrazons" 	jdbcType="VARCHAR" />
+    <result column="V_DIREMP" 		property="vDiremp" 		jdbcType="VARCHAR" />
+    <result column="V_TELEMP" 		property="vTelemp" 		jdbcType="VARCHAR" />
+    <result column="N_NUMTRABPE" 	property="nNumtrabpe" 	jdbcType="DECIMAL" />
+    <result column="V_CODDIS" 		property="vCoddis" 		jdbcType="VARCHAR" />
+    <result column="V_CODPRO" 		property="vCodpro" 		jdbcType="VARCHAR" />
+    <result column="V_CODDEP" 		property="vCoddep" 		jdbcType="VARCHAR" />
+    <result column="V_CODSEC" 		property="vCodsec" 		jdbcType="VARCHAR" />
+    <result column="V_CODCIIU" 		property="vCodciiu" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+    <result column="N_NUMTRABSE" 	property="nNumtrabse" 	jdbcType="DECIMAL" />
+    <result column="V_CODTELEMP" 	property="vCodtelemp" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="encuesta-out" type="Encuesta" >
+    <id 	column="V_CODEMP" 		property="vCodemp" 		jdbcType="VARCHAR" />
+    <id 	column="V_PERIODO" 		property="vPeriodo" 	jdbcType="VARCHAR" />
+    <result column="V_APENOM" 		property="vApenom" 		jdbcType="VARCHAR" />
+    <result column="V_CARGO" 		property="vCargo" 		jdbcType="VARCHAR" />
+    <result column="V_EMAIL" 		property="vEmail" 		jdbcType="VARCHAR" />
+    <result column="V_TELFIJO" 		property="vTelfijo" 	jdbcType="VARCHAR" />
+    <result column="V_CODTELFIJ" 	property="vCodtelfij" 	jdbcType="VARCHAR" />
+    <result column="V_TELMOVIL" 	property="vTelmovil" 	jdbcType="VARCHAR" />
+    <result column="V_FLGCONPER"	property="vFlgconper" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+    <result column="V_ESTADO" 		property="vEstado" 		jdbcType="VARCHAR" />
+    <result column="D_FECENV" 		property="dFecenv" 		jdbcType="TIMESTAMP" />
+    
+    <collection property="lstMotivoSel" 	column="vPeriodo=v_periodo, vCodemp=v_codemp" javaType="ArrayList" ofType="Motxdeman" 	select="selectMotxdeman"/>   
+  </resultMap>
+
+<!-- ====================================================ENCUESTA ========================================================================== -->
+<select id="obtenerEncuesta" resultMap="encuesta-out" timeout="15" parameterType="Encuesta">
+SELECT 
+	V_CODEMP, 
+	V_PERIODO, 
+	V_APENOM, 
+	V_CARGO, 
+	V_EMAIL, 
+	V_TELFIJO, 
+	V_CODTELFIJ, 
+	V_TELMOVIL, 
+    V_FLGCONPER, 
+    V_CODUSUREG, 
+    D_FECREG, 
+    V_HOSTREG, 
+    V_CODUSUMOD, 
+    D_FECMOD, 
+    V_HOSTMOD, 
+    V_ESTADO, 
+    D_FECENV
+FROM
+	 ENMVC_ENCUESTA
+WHERE
+	v_periodo=#{vPeriodo} 
+	AND v_codemp=#{vCodemp}
+</select>
+
+
+<select id="countEncuesta" parameterType="Encuesta" resultType="int" >
+    select count(*) from ENMVC_ENCUESTA
+    where 1=1
+    <if test="vCodemp != null" >
+       AND  v_codemp=#{vCodemp,jdbcType=VARCHAR}
+      </if>
+      <if test="vPeriodo != null" >
+       AND V_PERIODO=#{vPeriodo,jdbcType=VARCHAR}
+      </if>
+     
+  </select>
+
+
+	
+	<select id="obtenerMuestra" parameterType="Muestraemp"  resultMap="muestraemp-out">
+		select 
+  			V_CODEMP, 
+  			V_PERIODO, 
+  			V_DESRAZONS, 
+  			V_DIREMP, 
+  			V_TELEMP, 
+  			N_NUMTRABPE, 
+  			V_CODDIS, 
+  			V_CODPRO, 
+    		V_CODDEP, 
+    		V_CODSEC, 
+    		V_CODCIIU,
+    		V_CODUSUREG, 
+    		D_FECREG, 
+    		V_HOSTREG, 
+    		V_CODUSUMOD, 
+    		D_FECMOD, 
+    	    V_HOSTMOD, 
+    	    N_NUMTRABSE, 
+    	    V_CODTELEMP
+ 		from enmvx_muestraemp
+		where v_periodo=#{vPeriodo} 
+		  and v_codemp=#{vCodemp}
+	</select>
+	
+	
+    
+</mapper>

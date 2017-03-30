@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantillas/plantilla.xhtml">
+	<ui:define name="contenido">
+		<p:fieldset>
+			<p:toolbar>
+				<p:toolbarGroup align="center" styleClass="ui-widget-header"
+					style="border: 0px !important;text-align: center;white-space:pre-line;">
+					<p:outputLabel value="PREGUNTAS" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br/>
+
+			<h:form id="formPregunta">
+				<p:panelGrid id="pgPreguntas">
+					<p:row>
+						<p:column>
+							<p:outputLabel 	style="font-weight: bold;"
+											value="Bienvenido(a): #{preguntaBean.persona.vApepater} #{preguntaBean.persona.vApemater} #{preguntaBean.persona.vNombres}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:commandButton 	id="btnPreguntar" 
+												icon="icon_pregunta_frecuente" 
+												value="Nueva Pregunta"
+												action="#{preguntaBean.nuevaPregunta}"
+												oncomplete="dlgdatosPregunta.show();"
+												update=":formdatosPregunta" />
+
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:dataTable id="dtListaPregunta" var="pre"
+								emptyMessage="No hay documentos para mostrar"
+								value="#{preguntaBean.lstPreguntasUsu}" paginator="true"
+								paginatorPosition="bottom" rows="15"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="15,20,25">
+								<p:column headerText="PREGUNTA">
+									<h:outputText value="#{pre.V_TITMENSAJ}" />
+								</p:column>
+								<p:column headerText="RESPUESTA">
+									<h:outputText value="#{pre.V_RESPTA}" />
+								</p:column>
+
+							</p:dataTable>
+						</p:column>
+					</p:row>
+
+
+				</p:panelGrid>
+
+
+			</h:form>
+
+
+
+
+		</p:fieldset>
+
+
+
+		<!-- ==========================================  DIALOG DE pregunta  =============================================== -->
+
+		<h:form id="formdatosPregunta">
+			<p:dialog 	id="dlgdatosPregunta" 
+						widgetVar="dlgdatosPregunta"
+						modal="true" 
+						resizable="false" 
+						header="PREGUNTA" 
+						width="700"
+						showEffect="clip" 
+						closable="true">
+
+				<p:panel id="pdatosPregunta">
+					<p:panelGrid id="pgdatosPregunta">
+						
+						<p:row>
+							<p:column>
+								<h:outputLabel value="Texo de la pregunta" />
+							</p:column>
+							<p:column>
+								<p:inputTextarea 	styleClass="cajaAmplia"
+													value="#{preguntaBean.mensaje.vTitmensaj}" 
+													required="true"
+													requiredMessage="Es requerido el texo de la pregunta" 
+													maxlength="70"
+													counter="tamPregunta"
+													counterTemplate="Máximo de caracteres {0}"
+													/>
+								<br/>
+								<h:outputText id="tamPregunta"/>					
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:panel>
+				<p:separator />
+
+
+				<p:commandButton 	id="btnEnviarPregunta" 
+									icon="icon-seleccionar"
+									value="Enviar" 
+									action="#{preguntaBean.enviarPregunta}"
+									oncomplete="xdlgPregunta(xhr, status, args);"
+									update=":formdatosPregunta:pgdatosPregunta, :formPregunta:dtListaPregunta" />
+
+
+
+			</p:dialog>
+		</h:form>
+
+
+		
+
+		
+
+
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+		<p:dialog showHeader="false" modal="true" widgetVar="statusDialog"
+			header="Status" draggable="false" closable="false" position="center"
+			resizable="false">
+			<h:outputText value="Espere porfavor..." />
+			<br />
+			<p:graphicImage value="/resources/images/iconos/Ajaxloading.gif" />
+		</p:dialog>
+
+		<script type="text/javascript">
+			//<![CDATA[
+			       	function xdlgPregunta(xhr, status, args) {
+		   			 if(args.validationFailed==true) {       					 
+		   						  dlgdatosPregunta.show();      					  	
+							  } else {        					  	         					  
+								  dlgdatosPregunta.hide();  
+		   
+						 	}  
+		   			
+					}    
+			           
+
+			//]]>
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

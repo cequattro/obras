@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+/*body {
+	margin-left: 50px;
+	margin-top: 50px;
+	margin-right: 50px;
+	margin-bottom: 50px;
+}
+a:link {
+	color: #da251d;
+}
+a:visited {
+	color: #FF888B;
+}
+a:hover {
+	color: #da251d;
+}
+a:active {
+	color: #da251d;
+}*/
+#contenido1 {
+	margin: auto;
+	height: 400px;
+	width: 600px;
+	background-image:url(./../../resources/images/principal/login.jpg);*/
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	text-align:justify;
+	}
+#login {
+	margin-top:240px;
+	margin-left:30px;
+	float: left;
+	height: 100px;
+	width: 357px;
+	text-align:right;
+	}
+
+.olvido
+{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-align:center;
+	margin-top:10px;
+	margin-bottom:10px;
+	}
+	.texto_chico
+{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:10px;
+	color:#000;
+	}

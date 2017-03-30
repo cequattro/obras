@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPr03" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f3f5d6e9-9eda-414c-a86b-b3b19a16b936">
+	<property name="ireport.zoom" value="1.331000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dsReporte" uuid="ab30e0eb-a0a5-4863-bb21-40a509953299">
+		<field name="V_DESNIVEDU" class="java.lang.String"/>
+		<field name="hombres" class="java.math.BigDecimal"/>
+		<field name="mujeres" class="java.math.BigDecimal"/>
+		<field name="D_FECREG" class="java.sql.Timestamp"/>
+		<variable name="sumHombres" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{hombres}]]></variableExpression>
+		</variable>
+		<variable name="sumMujer" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{mujeres}]]></variableExpression>
+		</variable>
+		<variable name="sumTotal" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{hombres}.add( $F{mujeres} )]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="P_LISTA" class="java.util.List"/>
+	<parameter name="PV_RUTA_IMAGEN" class="java.lang.String"/>
+	<parameter name="PV_RUTA_IMAGEN_1" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="139" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="063b113d-55d6-4b4c-86db-801cc1985ee0" x="21" y="89" width="506" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE POTENCIALES RETORNANTES POR GENERO SEGUN MAXIMO NIVEL DE INSTRUCCION EN EL EXTRANJERO]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="9835394f-ce58-4f33-9db7-b95b1ed6d7b6" key="image-1" x="1" y="0" width="247" height="33"/>
+				<imageExpression><![CDATA[$P{PV_RUTA_IMAGEN}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="9b8b8e00-1933-446d-bb16-59124a0ebc82" x="421" y="0" width="58" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="faf840c0-5565-4b1d-95a6-75e607a829da" x="479" y="0" width="47" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="a6b42fbc-3de0-46cf-a5b7-e35a2b4753c1" x="426" y="20" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6e7313de-dc50-45da-9e94-a48a88fc1df5" x="271" y="20" width="156" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<text><![CDATA[FECHA Y HORA DE IMPRESIÓN:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="61">
+			<staticText>
+				<reportElement uuid="c142ec6c-7e5f-4f5b-88b9-7ff24117cef3" positionType="Float" mode="Opaque" x="68" y="0" width="195" height="60" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAXIMO GRADO DE INSTRUCCION EN EL EXTRANJERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="425bb9a0-8521-40e3-9b36-72125b886c92" positionType="Float" mode="Opaque" x="263" y="40" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68b69147-70ec-4320-a69c-350ba1a68990" positionType="Float" mode="Opaque" x="263" y="0" width="216" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb8c375a-26f1-49fd-b777-9cce22611912" positionType="Float" mode="Opaque" x="263" y="20" width="70" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0d5b5f1d-a69f-41ab-b8e6-2be8cecc43ad" positionType="Float" mode="Opaque" x="333" y="20" width="71" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MUJERES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ac629826-aec4-4cd9-9d40-446bceae6fed" positionType="Float" mode="Opaque" x="404" y="20" width="75" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="621e4162-e3bb-4c49-8aa4-5b8ef52e402c" positionType="Float" mode="Opaque" x="298" y="40" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6b4a62be-d5b6-4a84-a1f1-1e1a1cebc73b" positionType="Float" mode="Opaque" x="333" y="40" width="36" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b98486c-f16b-4bca-9774-d430f969a3d8" positionType="Float" mode="Opaque" x="369" y="40" width="35" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59305102-5358-41f3-aa4d-115634ddefb8" positionType="Float" mode="Opaque" x="404" y="40" width="75" height="20" forecolor="#FFFFFF" backcolor="#B9B8B8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="8f1d65e8-9028-4833-b523-f3b0ccc41b26" key="table 1" style="table 1" x="68" y="0" width="411" height="20"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dsReporte" uuid="a4780caf-ec36-451f-a6dc-3c45feed8c35">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{P_LISTA})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column uuid="85e77636-29ad-41c3-8183-e80f65a1f646" width="195">
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6721713f-3859-4644-845b-451e275667e0" x="0" y="0" width="195" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[TOTAL]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="cae65679-09f9-476f-b11a-ccaf570de454" x="0" y="0" width="195" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{V_DESNIVEDU}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="815141ee-42a2-4cb0-9e63-4e7a285e9a3e" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="3cc458c2-b5e4-4832-a396-8b7e4b991f2e" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumHombres}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="e85b793d-1242-41db-8fa1-eb0b32bdfb49" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{hombres}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="0f5b9cbd-538c-4bee-aafa-b1e149fcb077" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="f4522518-91a4-439a-8433-f85effbf494d" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[100]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField evaluationTime="Auto" pattern="" isBlankWhenNull="false">
+								<reportElement uuid="e6c366bd-56a1-4e5e-ac5e-ce998f405110" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{hombres}.divide($V{sumHombres},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="cb7fc693-b62a-4f0f-9368-39e2d6643e5c" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="70610013-e905-402c-a6bc-47b9fa9c2820" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumMujer}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="be163206-f52b-4619-8600-bdd8d046c267" x="0" y="0" width="35" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{mujeres}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="0f6d6ade-0ead-40ea-a395-7d8128cf38dd" width="35">
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="73c16fe2-4873-4192-afab-adbebce0a185" x="0" y="0" width="35" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[100]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField evaluationTime="Auto" pattern="" isBlankWhenNull="false">
+								<reportElement uuid="4bacd943-d8f9-4637-b373-25852b9a61c0" mode="Transparent" x="0" y="0" width="35" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{mujeres}.divide($V{sumMujer},new MathContext(6, RoundingMode.HALF_EVEN) ).multiply( new BigDecimal(100) ).setScale(2, BigDecimal.ROUND_HALF_UP)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="871a4db3-d426-44dd-9d11-5f3325839cdf" width="74">
+						<jr:tableFooter height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="dcd03491-0db3-4de9-b411-91fab52b0498" x="0" y="0" width="74" height="30"/>
+								<box>
+									<leftPen lineWidth="0.5"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{sumTotal}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="3737cc7d-a9d0-4255-a60b-de7ca5dd67ed" mode="Transparent" x="0" y="0" width="74" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{hombres}.add( $F{mujeres} )]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

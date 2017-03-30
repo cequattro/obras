@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper  namespace="pe.gob.mtpe.retorno.dao.PreguntaFrecuentesDao">
+
+  <select id="listarPreguntas" resultType="Pregfrec">
+  	
+  	SELECT 
+		N_CODPREFRE as nCodprefre, 
+		V_DESPREFRE as vDesprefre, 
+		v_desresp   as vDesresp,
+		V_ESTREG 	as vEstreg, 
+		V_CODUSU 	as vCodusu
+	FROM 
+		RPTBC_PREGFREC
+	where 
+		V_ESTREG='A'
+			
+  	  	
+  </select>
+
+</mapper>	

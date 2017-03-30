@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper  namespace="MuestraEmpresa">
+
+
+<!-- =====================================================RESULT=================================================================== -->
+
+<resultMap id="muestraemp-out" type="Muestraemp" >  
+    <id 	column="V_CODEMP" 		property="vCodemp" 		jdbcType="VARCHAR" />
+    <id 	column="V_PERIODO" 		property="vPeriodo" 	jdbcType="VARCHAR" />
+    <result column="V_DESRAZONS" 	property="vDesrazons" 	jdbcType="VARCHAR" />
+    <result column="V_DIREMP" 		property="vDiremp" 		jdbcType="VARCHAR" />
+    <result column="V_TELEMP" 		property="vTelemp" 		jdbcType="VARCHAR" />
+    <result column="N_NUMTRABPE" 	property="nNumtrabpe" 	jdbcType="DECIMAL" />
+    <result column="V_CODDIS" 		property="vCoddis" 		jdbcType="VARCHAR" />
+    <result column="V_CODPRO" 		property="vCodpro" 		jdbcType="VARCHAR" />
+    <result column="V_CODDEP" 		property="vCoddep" 		jdbcType="VARCHAR" />
+    <result column="V_CODSEC" 		property="vCodsec" 		jdbcType="VARCHAR" />
+    <result column="V_CODCIIU" 		property="vCodciiu" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+    <result column="N_NUMTRABSE" 	property="nNumtrabse" 	jdbcType="DECIMAL" />
+    <result column="V_CODTELEMP" 	property="vCodtelemp" 	jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="encuesta-out" type="Encuesta" >
+    <id 	column="V_CODEMP" 		property="vCodemp" 		jdbcType="VARCHAR" />
+    <id 	column="V_PERIODO" 		property="vPeriodo" 	jdbcType="VARCHAR" />
+    <result column="V_APENOM" 		property="vApenom" 		jdbcType="VARCHAR" />
+    <result column="V_CARGO" 		property="vCargo" 		jdbcType="VARCHAR" />
+    <result column="V_EMAIL" 		property="vEmail" 		jdbcType="VARCHAR" />
+    <result column="V_TELFIJO" 		property="vTelfijo" 	jdbcType="VARCHAR" />
+    <result column="V_CODTELFIJ" 	property="vCodtelfij" 	jdbcType="VARCHAR" />
+    <result column="V_TELMOVIL" 	property="vTelmovil" 	jdbcType="VARCHAR" />
+    <result column="V_FLGCONPER"	property="vFlgconper" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	jdbcType="VARCHAR" />
+    <result column="D_FECREG" 		property="dFecreg" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTREG" 		property="vHostreg" 	jdbcType="VARCHAR" />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	jdbcType="VARCHAR" />
+    <result column="D_FECMOD" 		property="dFecmod" 		jdbcType="TIMESTAMP" />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	jdbcType="VARCHAR" />
+    <result column="V_ESTADO" 		property="vEstado" 		jdbcType="VARCHAR" />
+    <result column="D_FECENV" 		property="dFecenv" 		jdbcType="TIMESTAMP" />
+    
+    <collection property="lstMotivoSel" 	column="vPeriodo=v_periodo, vCodemp=v_codemp" javaType="ArrayList" ofType="Motxdeman" 	select="selectMotxdeman"/>   
+  </resultMap>
+
+<!-- ====================================================ENCUESTA ========================================================================== -->
+<select id="obtenerEncuesta" resultMap="encuesta-out" timeout="15" parameterType="Encuesta">
+SELECT 
+	V_CODEMP,
+	V_PERIODO,
+	V_APENOM,
+	V_CARGO,
+	V_EMAIL,
+	V_TELFIJO,
+	V_CODTELFIJ,
+	V_TELMOVIL,
+    V_FLGCONPER,
+    V_CODUSUREG,
+    D_FECREG,
+    V_HOSTREG,
+    V_CODUSUMOD,
+    D_FECMOD,
+    V_HOSTMOD,
+    V_ESTADO,
+    D_FECENV
+FROM
+	 ENMVC_ENCUESTA
+WHERE
+	v_periodo=#{vPeriodo} 
+	AND v_codemp=#{vCodemp}
+</select>
+
+<update id="updateEncuesta" parameterType="Encuesta" >
+    update ENMVC_ENCUESTA
+     <set>
+      <if test="vCodemp != null" >
+        V_CODEMP = #{vCodemp,jdbcType=VARCHAR},
+      </if>
+      <if test="vPeriodo != null" >
+        V_PERIODO = #{vPeriodo,jdbcType=VARCHAR},
+      </if>
+      <if test="vApenom != null" >
+        V_APENOM = upper(#{vApenom,jdbcType=VARCHAR}),
+      </if>
+      <if test="vCargo != null" >
+        V_CARGO = upper(#{vCargo,jdbcType=VARCHAR}),
+      </if>
+      <if test="vEmail != null" >
+        V_EMAIL = upper(#{vEmail,jdbcType=VARCHAR}),
+      </if>
+      <if test="vTelfijo != null" >
+        V_TELFIJO = #{vTelfijo,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodtelfij != null" >
+        V_CODTELFIJ = #{vCodtelfij,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelmovil != null" >
+        V_TELMOVIL = #{vTelmovil,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgconper != null" >
+        V_FLGCONPER = #{vFlgconper,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusureg != null" >
+        V_CODUSUREG = #{vCodusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null" >
+        D_FECREG = #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostreg != null" >
+        V_HOSTREG = #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusumod != null" >
+        V_CODUSUMOD = #{vCodusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmod != null" >
+        D_FECMOD = #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostmod != null">
+        V_HOSTMOD = #{vHostmod,jdbcType=VARCHAR},
+      </if>      
+      <if test="vEstado != null" >
+        V_ESTADO = #{vEstado,jdbcType=VARCHAR},
+      </if>      
+      <if test="dFecenv != null" >
+        D_FECENV = decode(D_FECENV,null,#{dFecenv,jdbcType=TIMESTAMP},D_FECENV),
+      </if>
+   	</set>
+    where v_codemp = #{vCodemp,jdbcType=VARCHAR}
+      and V_PERIODO = #{vPeriodo,jdbcType=VARCHAR}
+  </update>
+
+<select id="countEncuesta" parameterType="Encuesta" resultType="int" >
+    select count(*) from ENMVC_Encuesta
+    where 1=1
+    <if test="vCodemp != null" >
+       AND  v_codemp=#{vCodemp,jdbcType=VARCHAR}
+      </if>
+      <if test="vPeriodo != null" >
+       AND V_PERIODO=#{vPeriodo,jdbcType=VARCHAR}
+      </if>
+     
+  </select>
+<insert id="insertEncuesta" parameterType="Encuesta" >
+    insert into ENMVC_ENCUESTA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test="vCodemp != null" >
+        V_CODEMP,
+      </if>
+      <if test="vPeriodo != null" >
+        V_PERIODO,
+      </if>
+      <if test="vApenom != null" >
+        V_APENOM,
+      </if>
+      <if test="vCargo != null" >
+        V_CARGO,
+      </if>
+      <if test="vEmail != null" >
+        V_EMAIL,
+      </if>
+      <if test="vTelfijo != null" >
+        V_TELFIJO,
+      </if>
+      <if test="vCodtelfij != null" >
+        V_CODTELFIJ,
+      </if>
+      <if test="vTelmovil != null" >
+        V_TELMOVIL,
+      </if>
+      <if test="vFlgconper != null" >
+        V_FLGCONPER,
+      </if>
+      <if test="vCodusureg != null" >
+        V_CODUSUREG,
+      </if>
+      <if test="dFecreg != null" >
+        D_FECREG,
+      </if>
+      <if test="vHostreg != null" >
+        V_HOSTREG,
+      </if>
+      <if test="vCodusumod != null" >
+        V_CODUSUMOD,
+      </if>
+      <if test="dFecmod != null" >
+        D_FECMOD,
+      </if>
+      <if test="vHostmod != null" >
+        V_HOSTMOD,
+      </if>
+      <if test="vEstado != null" >
+        V_ESTADO,
+      </if>
+      <if test="dFecenv != null" >
+        D_FECENV,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vCodemp != null" >
+        #{vCodemp,jdbcType=VARCHAR},
+      </if>
+      <if test="vPeriodo != null" >
+        #{vPeriodo,jdbcType=VARCHAR},
+      </if>
+      <if test="vApenom != null" >
+        upper(#{vApenom,jdbcType=VARCHAR}),
+      </if>
+      <if test="vCargo != null" >
+        upper(#{vCargo,jdbcType=VARCHAR}),
+      </if>
+      <if test="vEmail != null" >
+        upper(#{vEmail,jdbcType=VARCHAR}),
+      </if>
+      <if test="vTelfijo != null" >
+        #{vTelfijo,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodtelfij != null" >
+        #{vCodtelfij,jdbcType=VARCHAR},
+      </if>
+      <if test="vTelmovil != null" >
+        #{vTelmovil,jdbcType=VARCHAR},
+      </if>
+      <if test="vFlgconper != null" >
+        #{vFlgconper,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusureg != null" >
+        #{vCodusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null" >
+        #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostreg != null" >
+        #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusumod != null" >
+        #{vCodusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmod != null" >
+        #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostmod != null" >
+        #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="vEstado != null" >
+        #{vEstado,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecenv != null" >
+        #{dFecenv,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+ <!-- ====================================================MUESTRA ========================================================================== -->
+ <update id="updateMuestra" parameterType="Muestraemp" >
+    update ENMVX_MUESTRAEMP
+    <set >
+      <if test="vCodemp != null" >
+        V_CODEMP = #{vCodemp,jdbcType=VARCHAR},
+      </if>
+      <if test="vPeriodo != null" >
+        V_PERIODO = #{vPeriodo,jdbcType=VARCHAR},
+      </if>
+      <if test="vDesrazons != null" >
+        V_DESRAZONS = UPPER(#{vDesrazons,jdbcType=VARCHAR}),
+      </if>
+      <if test="vDiremp != null" >
+        V_DIREMP =UPPER( #{vDiremp,jdbcType=VARCHAR}),
+      </if>
+      <if test="vTelemp != null" >
+        V_TELEMP = #{vTelemp,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtrabpe != null" >
+        N_NUMTRABPE = #{nNumtrabpe,jdbcType=DECIMAL},
+      </if>
+      <if test="vCoddis != null" >
+        V_CODDIS = #{vCoddis,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodpro != null" >
+        V_CODPRO = #{vCodpro,jdbcType=VARCHAR},
+      </if>
+      <if test="vCoddep != null" >
+        V_CODDEP = #{vCoddep,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodsec != null" >
+        V_CODSEC = #{vCodsec,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodciiu != null" >
+        V_CODCIIU = #{vCodciiu,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusureg != null" >
+        V_CODUSUREG = #{vCodusureg,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecreg != null" >
+        D_FECREG = #{dFecreg,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostreg != null" >
+        V_HOSTREG = #{vHostreg,jdbcType=VARCHAR},
+      </if>
+      <if test="vCodusumod != null" >
+        V_CODUSUMOD = #{vCodusumod,jdbcType=VARCHAR},
+      </if>
+      <if test="dFecmod != null" >
+        D_FECMOD = #{dFecmod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vHostmod != null" >
+        V_HOSTMOD = #{vHostmod,jdbcType=VARCHAR},
+      </if>
+      <if test="nNumtrabse != null" >
+        N_NUMTRABSE = #{nNumtrabse,jdbcType=DECIMAL},
+      </if>
+      <if test="vCodtelemp != null" >
+        V_CODTELEMP = #{vCodtelemp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    	where v_codemp = #{vCodemp,jdbcType=VARCHAR}
+        and V_PERIODO = #{vPeriodo,jdbcType=VARCHAR}
+  </update>
+  <!-- ======================================================MOTIVOS ================================================================ -->
+  
+ <insert id="insertMotXDeman" parameterType="java.util.List" >
+     INSERT ALL
+    	<foreach collection="list" item="Motxdeman" >
+    	 into ENMVD_MOTXDEMAN (N_CORMOTIVO, v_codemp, V_PERIODO, 
+      			V_ESPECIFIC, V_CODUSUREG, D_FECREG, 
+     			 V_HOSTREG, V_CODUSUMOD, D_FECMOD, 
+      			V_HOSTMOD)
+   		 values(#{Motxdeman.nCormotivo,jdbcType=DECIMAL}, #{Motxdeman.vCodemp,jdbcType=VARCHAR}, #{Motxdeman.vPeriodo,jdbcType=VARCHAR}, 
+     		#{Motxdeman.vEspecific,jdbcType=VARCHAR}, #{Motxdeman.vCodusureg,jdbcType=VARCHAR}, #{Motxdeman.dFecreg,jdbcType=TIMESTAMP}, 
+      		#{Motxdeman.vHostreg,jdbcType=VARCHAR}, #{Motxdeman.vCodusumod,jdbcType=VARCHAR}, #{Motxdeman.dFecmod,jdbcType=TIMESTAMP}, 
+      		#{Motxdeman.vHostmod,jdbcType=VARCHAR})
+    	</foreach>
+    SELECT * FROM DUAL
+  </insert>
+  <delete id="deleteMotXDeman" parameterType="Motxdeman" >
+    delete from ENMVD_MOTXDEMAN
+    where 
+      v_codemp = #{vCodemp,jdbcType=VARCHAR}
+      and V_PERIODO = #{vPeriodo,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <!-- ============================================================================================================================== -->
+  
+  	<select id="selectMotxdeman" resultType="Motxdeman">
+  		SELECT
+  			N_CORMOTIVO as nCormotivo, 
+  			v_codemp as vCodemp, 
+  			V_PERIODO   as vPeriodo, 
+  			V_ESPECIFIC as vEspecific, 
+  			V_CODUSUREG as vCodusureg, 
+  			D_FECREG    as dFecreg, 
+  			V_HOSTREG   as vHostreg, 
+    		V_CODUSUMOD as vCodusumod, 
+    		D_FECMOD    as dFecmod, 
+    		V_HOSTMOD   as vHostmod
+  		from ENMVD_MOTXDEMAN
+    	where 
+      		  v_codemp = #{vCodemp,jdbcType=VARCHAR}
+      		and V_PERIODO = #{vPeriodo,jdbcType=VARCHAR} 
+  	
+  	</select>
+   	
+  	
+  <!-- ============================================================================================================================== -->
+	<select id="listarMotivos" parameterType="Motivo" resultType="Motivo">
+		select 
+			m.n_cormotivo as nCormotivo, 
+			m.v_desmotivo as vDesmotivo, 
+			m.n_orden     as nOrden, 
+			m.n_flgtipo   as nFlgtipo, 
+			m.v_flgactivo as vFlgactivo
+			from entbc_motivo m
+		where m.v_flgactivo='A'
+			and m.n_flgtipo=#{nFlgtipo}
+		order by m.n_orden
+	</select>
+	
+	<select id="listarLimitacion"  resultType="Limitacion">
+	select 
+		l.n_corlimit  as nCorlimit, 
+		l.v_deslimit  as vDeslimit, 
+		l.n_orden     as nOrden, 
+		l.v_flgactivo as vFlgactivo
+	from entbc_limitacion l
+	where 
+		l.v_flgactivo='A'
+	order by l.n_orden
+	</select>
+	
+
+	
+	<select id="obtenerMuestra" parameterType="Muestraemp"  resultMap="muestraemp-out">
+		select 
+  			V_CODEMP, 
+  			V_PERIODO, 
+  			V_DESRAZONS, 
+  			V_DIREMP, 
+  			V_TELEMP, 
+  			N_NUMTRABPE, 
+  			V_CODDIS, 
+  			V_CODPRO, 
+    		V_CODDEP, 
+    		V_CODSEC, 
+    		V_CODCIIU,
+    		V_CODUSUREG, 
+    		D_FECREG, 
+    		V_HOSTREG, 
+    		V_CODUSUMOD, 
+    		D_FECMOD, 
+    	    V_HOSTMOD, 
+    	    N_NUMTRABSE, 
+    	    V_CODTELEMP
+ 		from enmvx_muestraemp
+		where v_periodo=#{vPeriodo} 
+		  and v_codemp=#{vCodemp}
+	</select>
+	
+	<select id="listarSeccion"  resultType="Seccion">
+	select 
+		s.v_codsec as vCodsec,
+		s.v_dessec as vDessec
+	from simintra1.sitb_seccion s
+	</select>
+	
+	<select id="listarCiiu"  resultType="Ciiu" parameterType="Seccion">
+	select 
+    c.v_codciiu as vCodciiu,
+    c.v_desciiu as vDesciiu
+  	from simintra1.sitb_ciiu c
+  	where c.v_codsec=#{vCodsec}
+	</select>
+	
+	
+	
+	<select id="listarPeriodo"  resultType="Periodo" >
+		select 
+				v_periodo, 
+				v_descripcion, 
+				d_fecinicio, 
+				d_fecfin, 
+				v_flgactivo, 
+				v_observacion 
+		from entbc_periodo
+		where 
+		v_flgactivo='A'
+	</select>
+	
+	<!-- ==================================================VOUCHER===================================== -->
+	
+   <resultMap id="comprobante-out" type="hashMap" >     
+    <result column="V_CODSEC" 		property="vCodsec" 		/>
+    <result column="V_CODCIIU" 		property="vCodciiu" 	/>
+    <result column="V_CODUSUREG" 	property="vCodusureg" 	 />
+    <result column="D_FECREG" 		property="dFecreg" 		 />
+    <result column="V_HOSTREG" 		property="vHostreg" 	 />
+    <result column="V_CODUSUMOD" 	property="vCodusumod" 	 />
+    <result column="D_FECMOD" 		property="dFecmod" 		 />
+    <result column="V_HOSTMOD" 		property="vHostmod" 	 />
+    <result column="N_NUMTRABSE" 	property="nNumtrabse" 	 />
+  </resultMap> 
+    
+    <select id="comprobante"  resultMap="comprobante-out" parameterType="ParamBusReporte">
+	select p.v_periodo,p.v_descripcion, t.v_codemp,p.d_fecinicio, p.d_fecfin,
+         t.v_desrazons, TO_char(e.D_FECENV,'DD/MM/YYYY') as fecha, to_char(e.D_FECENV, 'YYYY') as v_anho  
+     from 	enmvc_encuesta e inner join enmvx_muestraemp t on(e.v_periodo=t.v_periodo and e.v_codemp=t.v_codemp)
+  			inner join entbc_periodo p on t.v_periodo=p.v_periodo
+	  where t.v_periodo=#{vPeriodo}
+      and   t.v_codemp=#{vCodemp}
+	</select>
+	
+	
+	<select id="consultaReporte" resultType="hashMap" parameterType="ParamBusReporte">
+	SELECT t.v_periodo,
+       t.v_codemp,
+       t.v_desrazons,
+       t.v_coddep,
+       (SELECT d.v_desdep FROM simintra1.sitb_departamento d WHERE t.v_coddep=d.v_coddep ) v_desdep,
+       t.v_codpro,
+       (SELECT d.v_despro FROM simintra1.sitb_provincia d WHERE t.v_coddep=d.v_coddep AND t.v_codpro=d.v_codpro ) v_despro,
+        t.v_coddis,
+       (SELECT d.v_desdis FROM simintra1.sitb_distrito d WHERE t.v_coddep=d.v_coddep AND t.v_codpro=d.v_codpro AND t.v_coddis=d.v_coddis  ) v_desdis,
+       t.v_diremp,
+       t.v_codtelemp||'-'||t.v_telemp AS VTELFEMP, 
+       t.v_codsec,
+       (SELECT s.v_dessec FROM simintra1.sitb_seccion s WHERE s.v_codsec=t.v_codsec ) v_dessec,
+       t.v_codciiu,
+       (SELECT c.v_desciiu FROM simintra1.sitb_ciiu c  WHERE c.v_codsec=t.v_codsec AND c.v_codciiu=t.v_codciiu ) v_desciiu,
+       t.n_numtrabpe,
+       dm.v_apenom,
+       UPPER(dm.v_cargo) as v_cargo,
+       dm.v_email,
+       dm.v_codtelfij||'-'||dm.v_telfijo as v_telfijo,
+       dm.v_telmovil,
+       dm.v_flgconper,
+       FNC_CREPORTE(1,t.v_periodo,t.v_codemp) v_des3233,
+       (select v_observacion from entbc_periodo where v_flgactivo='A') v_obsvperiod,
+oxd.n_corocdem as n_corocdem,
+       (SELECT d.v_desdep FROM simintra1.sitb_departamento d WHERE oxd.v_coddep=d.v_coddep ) v_desdepo,
+       (SELECT d.v_despro FROM simintra1.sitb_provincia d WHERE oxd.v_coddep=d.v_coddep AND oxd.v_codpro=d.v_codpro ) v_desproo,
+       oxd.v_codocupac,
+       (SELECT d.v_desocupac FROM entbc_ocupacionedo d WHERE oxd.v_codocupac=d.v_codocupac ) 	v_desocupac,
+       t.n_numtrabse,
+oxd.i_genero, oxd.n_coreda, oxd.n_cornivedu,
+       FNC_DREPORTE(3,oxd.n_corocdem) v_profesiones,
+       (SELECT ne.v_desnivesu FROM entbc_nivedu ne WHERE oxd.n_cornivedu=ne.n_cornivedu) as v_desnivesu,
+       FNC_DREPORTE(4,oxd.n_corocdem) v_capacitaciones,
+       oxd.v_flgcap,
+       FNC_DREPORTE(2,oxd.n_corocdem) v_discapacidad,
+       oxd.v_flgexplab,
+       oxd.n_monrembru,
+       oxd.v_flgcondis,
+       oxd.n_isem,oxd.n_iisem, oxd.n_numtradis, oxd.n_numtraba,
+      FNC_DREPORTE(5,oxd.n_corocdem) v_resp_o
+FROM  enmvx_muestraemp t
+INNER JOIN enmvc_encuesta dm ON t.v_periodo=dm.v_periodo AND t.v_codemp=dm.v_codemp
+LEFT JOIN  enmvd_ocupaxdeman oxd ON t.v_periodo=oxd.v_periodo		
+		AND t.v_codemp = decode(dm.v_flgconper,'1',oxd.v_codemp,'xxx') 
+		WHERE t.v_periodo=#{vPeriodo} AND t.v_codemp=#{vCodemp}
+	</select>
+    
+</mapper>
